@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI 应用开发 · 2026 秋季 第 3 期项目组 — 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  /* ═══ 本页专属：项目组 ═══ */
+  .sec-no {
+    width: 24px; height: 24px; border-radius: 7px; flex: none;
+    background: var(--ink); color: #fff; display: grid; place-items: center;
+    font-size: 11.5px; font-weight: 800;
+  }
+  .blog-sec-head { align-items: center; }
+  .blog-sec-head h2 { font-size: 21px; letter-spacing: -0.5px; }
+  .blog-sec-sub { max-width: 820px; }
+
+  /* ── ① 组头信息卡 ── */
+  .co-head { padding: 24px 26px 20px; margin-bottom: 34px; background: linear-gradient(120deg, #fff 40%, var(--pri-50)); border-color: #ffd9cd; }
+  .co-grid { display: grid; grid-template-columns: 96px 1fr 250px; gap: 22px; align-items: start; }
+  .co-badge .stamp { width: 88px; height: 88px; font-size: 11px; line-height: 1.25; }
+  .co-kicker { font-size: 11.5px; font-weight: 800; letter-spacing: 0.16em; color: var(--pri-600); text-transform: uppercase; margin-bottom: 9px; }
+  .co-main h1 { font-size: 29px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; }
+  .co-main h1 em { font-style: normal; color: var(--pri); }
+  .co-desc { font-size: 13.5px; color: var(--ink-2); line-height: 1.8; margin-top: 10px; max-width: 660px; }
+  .co-desc b { color: var(--ink); }
+  .co-stats { display: flex; gap: 30px; flex-wrap: wrap; margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--line); }
+  .co-stats div b { display: block; font-size: 19px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.3; }
+  .co-stats div b em { font-style: normal; font-size: 13px; color: var(--ink-soft); font-weight: 700; }
+  .co-stats div span { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
+  .co-cta { background: #fff; border: 1.5px solid #ffd9cd; border-radius: var(--r-toon); padding: 16px; box-shadow: var(--sticker); }
+  .co-seat { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 800; color: var(--fine); margin-bottom: 11px; }
+  .co-seat i { width: 7px; height: 7px; border-radius: 50%; background: var(--fine); display: block; animation: pulseDot 1.8s var(--ease-out) infinite; }
+  @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+  .co-note { font-size: 11.5px; color: var(--ink-soft); line-height: 1.7; margin-top: 11px; text-align: center; }
+  .co-mentors { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+  .mn-card { display: flex; gap: 13px; align-items: flex-start; padding: 14px 16px; background: #fff; border: 1.5px solid var(--line); border-radius: var(--r-toon); box-shadow: var(--sticker); }
+  .mn-ava { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 17px; font-weight: 800; color: #fff; flex: none; }
+  .mn-name { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; letter-spacing: -0.2px; }
+  .mn-tag { font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 999px; }
+  .mn-tag.lead { background: var(--pri); color: #fff; }
+  .mn-tag.ta { background: var(--bg-deep); color: var(--ink-2); }
+  .mn-line { font-size: 12.5px; color: var(--ink-2); line-height: 1.7; margin-top: 5px; }
+
+  /* ── ② 进度星图 ── */
+  .star-wrap { border: 2px solid var(--line); border-radius: var(--r-toon); box-shadow: var(--sticker); padding: 24px 26px 20px; background: #fff; }
+  .star-axis { position: relative; display: grid; grid-template-columns: repeat(6, 1fr); }
+  .star-axis::before { content: ''; position: absolute; top: 9px; left: calc(100% / 12); right: calc(100% / 12); height: 3px; background: var(--line-2); border-radius: 2px; }
+  .star-col { display: flex; flex-direction: column; align-items: center; }
+  .star-node { width: 21px; height: 21px; border-radius: 50%; border: 3px solid #fff; background: var(--bg-deep); position: relative; z-index: 1; }
+  .star-col.me .star-node { background: var(--pri); box-shadow: 0 0 0 5px rgba(255, 107, 74, 0.14); }
+  .star-label { font-size: 11.5px; font-weight: 700; color: var(--ink-soft); margin-top: 10px; text-align: center; line-height: 1.5; max-width: 130px; }
+  .star-label b { display: block; font-size: 10px; font-weight: 800; color: var(--ink-faint); letter-spacing: 0.1em; margin-bottom: 2px; }
+  .star-col.me .star-label { color: var(--pri-700); }
+  .star-col.me .star-label b { color: var(--pri); }
+  /* 间距按最挤的第 4 阶段（你 + 6 人 = 7 个点）算，保证宽屏下每列都只占一行 */
+  .star-dots { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 12px; min-height: 62px; align-content: flex-start; }
+  .star-dot {
+    width: 25px; height: 25px; border-radius: 50%; display: grid; place-items: center;
+    font-size: 11.5px; font-weight: 800; background: var(--bg-soft); color: var(--ink-2);
+    border: 1.5px solid var(--line); position: relative; cursor: default;
+    transition: transform 0.16s var(--ease-pop), background 0.16s;
+  }
+  .star-dot:hover { transform: scale(1.16); background: var(--pri-50); border-color: #ffd9cd; }
+  .star-dot.me { width: 33px; height: 33px; font-size: 13px; background: var(--pri); color: #fff; border-color: #fff; box-shadow: 0 3px 0 rgba(208, 74, 42, 0.35); }
+  .star-dot.me:hover { transform: none; background: var(--pri); }
+  .star-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--line); font-size: 12px; color: var(--ink-soft); }
+  .lg-dot { width: 13px; height: 13px; border-radius: 50%; display: inline-block; vertical-align: -2px; margin-right: 5px; }
+  .star-say { display: flex; align-items: center; gap: 14px; margin-top: 16px; padding: 15px 18px; background: var(--pri-50); border: 1.5px solid #ffd9cd; border-radius: var(--r-toon); flex-wrap: wrap; }
+  .star-say .big { font-size: 15px; font-weight: 800; letter-spacing: -0.3px; }
+  .star-say .big em { font-style: normal; color: var(--pri-700); }
+  .star-say .btn { margin-left: auto; }
+
+  /* ── ③ 四层验收漏斗 ── */
+  .funnel { display: flex; flex-direction: column; align-items: center; gap: 11px; }
+  .fn-layer { width: 100%; }
+  .fn-1 { width: 100%; } .fn-2 { width: 87%; } .fn-3 { width: 74%; } .fn-4 { width: 61%; }
+  .fn-card { display: grid; grid-template-columns: 46px 1fr 168px; gap: 16px; align-items: center; padding: 15px 18px; }
+  .fn-no { width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #fff; }
+  .fn-body b { font-size: 15px; font-weight: 800; letter-spacing: -0.25px; display: block; }
+  .fn-body span { font-size: 12.5px; color: var(--ink-2); line-height: 1.7; display: block; margin-top: 4px; }
+  .fn-body span em { font-style: normal; color: var(--pri-700); font-weight: 700; }
+  .fn-meta { font-size: 11.5px; color: var(--ink-soft); line-height: 1.85; text-align: right; border-left: 1px dashed var(--line); padding-left: 14px; }
+  .fn-meta b { color: var(--ink-2); font-weight: 800; }
+  .fn-tip { font-size: 12.5px; color: var(--ink-soft); text-align: center; margin-top: 4px; }
+  .fn-foot { display: flex; align-items: center; gap: 14px; margin-top: 20px; padding: 16px 20px; background: var(--bg-soft); border-radius: var(--r-toon); flex-wrap: wrap; }
+  .fn-foot .big { font-size: 14px; font-weight: 800; }
+  .fn-foot span.sub { font-size: 12.5px; color: var(--ink-2); }
+
+  /* ── ④ 答辩节 ── */
+  .dn { display: grid; grid-template-columns: 300px 1fr; gap: 0; overflow: hidden; }
+  .dn-left { padding: 22px 24px; background: var(--ink); color: #fff; display: flex; flex-direction: column; }
+  .dn-date { font-size: 34px; font-weight: 800; letter-spacing: -1.4px; line-height: 1.1; }
+  .dn-date span { font-size: 13px; font-weight: 700; letter-spacing: 0; display: block; color: rgba(255, 255, 255, 0.6); margin-top: 5px; }
+  .dn-left h3 { font-size: 17px; font-weight: 800; margin-top: 16px; letter-spacing: -0.3px; }
+  .dn-form { font-size: 12.5px; color: rgba(255, 255, 255, 0.72); line-height: 1.8; margin-top: 8px; }
+  .dn-left .btn { margin-top: auto; }
+  .dn-right { padding: 22px 24px; }
+  .dn-sub { font-size: 12px; font-weight: 800; color: var(--ink-soft); letter-spacing: 0.06em; margin-bottom: 14px; }
+  .quote { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px dashed var(--line); }
+  .quote:last-of-type { border-bottom: none; }
+  .quote .av { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: #fff; flex: none; }
+  .quote p { font-size: 13px; color: var(--ink); line-height: 1.75; }
+  .quote .meta { font-size: 11px; color: var(--ink-soft); margin-top: 5px; }
+  .dn-next { margin-top: 14px; padding: 12px 15px; background: var(--pri-50); border: 1.5px solid #ffd9cd; border-radius: var(--r-lg); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .dn-next b { font-size: 13px; font-weight: 800; }
+  .dn-next span { font-size: 12px; color: var(--ink-2); }
+  .dn-next .btn { margin-left: auto; }
+
+  /* ── ⑤ 项目墙 ── */
+  .proj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .proj-card { padding: 17px 19px; display: flex; flex-direction: column; }
+  .proj-card .pt { font-size: 15px; font-weight: 800; letter-spacing: -0.25px; }
+  .proj-card .pd { font-size: 12.5px; color: var(--ink-2); line-height: 1.72; margin-top: 7px; flex: 1; }
+  .proj-card .pm { display: flex; align-items: center; gap: 9px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line-2); font-size: 11.5px; color: var(--ink-soft); }
+  .proj-card .who { width: 25px; height: 25px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 800; color: #fff; flex: none; }
+  .stg { margin-left: auto; font-size: 10.5px; font-weight: 800; padding: 2.5px 9px; border-radius: 999px; background: var(--bg-deep); color: var(--ink-2); white-space: nowrap; }
+  .stg.done { background: var(--mint-50); color: var(--mint); }
+
+  /* ── ⑥ 组内动态 ── */
+  .feed-tl { display: grid; gap: 0; }
+  .tl-item { display: grid; grid-template-columns: 30px 1fr; gap: 0 14px; }
+  .tl-rail { position: relative; display: flex; justify-content: center; }
+  .tl-rail::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; transform: translateX(-50%); background: var(--line); }
+  .tl-item:first-child .tl-rail::before { top: 20px; }
+  .tl-item:last-child .tl-rail::before { bottom: 50%; }
+  .tl-ic { position: relative; z-index: 1; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; background: #fff; border: 2px solid var(--line); margin-top: 8px; }
+  .tl-ic.pass { border-color: var(--mint); background: var(--mint-50); color: var(--mint); }
+  .tl-ic.ask { border-color: #ffd9cd; background: var(--pri-50); }
+  .tl-ic.info { border-color: var(--line); background: var(--bg-soft); }
+  .tl-body { padding: 6px 0 16px; border-bottom: 1px dashed var(--line); }
+  .tl-item:last-child .tl-body { border-bottom: none; }
+  .tl-body p { font-size: 13.5px; color: var(--ink-2); line-height: 1.75; }
+  .tl-body p b { color: var(--ink); font-weight: 800; }
+  .tl-body .meta { font-size: 11px; color: var(--ink-faint); font-weight: 700; margin-top: 5px; letter-spacing: 0.03em; }
+  .qa-mini { margin-top: 12px; padding: 12px 14px; background: var(--bg-soft); border-radius: var(--r-lg); }
+  .qa-mini .q { font-size: 12.5px; font-weight: 700; color: var(--ink); }
+  .qa-mini .a { font-size: 12.5px; color: var(--ink-2); line-height: 1.7; margin-top: 7px; padding-top: 7px; border-top: 1px dashed var(--line); }
+  .qa-mini .who { font-size: 11px; font-weight: 800; color: var(--pri-600); margin-right: 6px; }
+
+  /* ── ⑦ 组规与合规 ── */
+  .rules { border: 2px solid var(--ink); border-radius: var(--r-toon); box-shadow: var(--sticker-lg); padding: 24px 26px 20px; background: #fff; }
+  .rules-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .rules-head h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+  .rules-head .badge { font-size: 10.5px; font-weight: 800; letter-spacing: 0.08em; background: var(--ink); color: #fff; padding: 4px 10px; border-radius: 999px; }
+  .rules-sub { font-size: 13px; color: var(--ink-2); line-height: 1.75; margin-bottom: 18px; max-width: 820px; }
+  .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .rule { display: flex; gap: 12px; padding: 15px 17px; background: var(--bg-soft); border-radius: var(--r-toon); }
+  .rule .ic { font-size: 19px; flex: none; line-height: 1.3; }
+  .rule b { font-size: 13.5px; font-weight: 800; display: block; letter-spacing: -0.2px; }
+  .rule p { font-size: 12.5px; color: var(--ink-2); line-height: 1.72; margin-top: 5px; }
+  .rule p em { font-style: normal; color: var(--pri-700); font-weight: 700; }
+  .rules-foot { margin-top: 18px; padding-top: 15px; border-top: 1px dashed var(--line); font-size: 12px; color: var(--ink-soft); line-height: 1.8; }
+
+  @media (max-width: 1080px) {
+    .co-grid { grid-template-columns: 96px 1fr; }
+    .co-cta { grid-column: 1 / -1; }
+    .proj-grid { grid-template-columns: 1fr 1fr; }
+    .dn { grid-template-columns: 1fr; }
+    .fn-card { grid-template-columns: 42px 1fr; }
+    .fn-meta { grid-column: 1 / -1; text-align: left; border-left: none; padding-left: 0; border-top: 1px dashed var(--line); padding-top: 9px; }
+    .fn-1, .fn-2, .fn-3, .fn-4 { width: 100%; }
+  }
+  @media (max-width: 720px) {
+    .co-main h1 { font-size: 23px; }
+    .co-mentors, .rules-grid { grid-template-columns: 1fr; }
+    .co-head { padding: 20px 18px 16px; }
+    .star-wrap { padding: 18px 14px 16px; }
+    .star-axis { grid-template-columns: repeat(3, 1fr); row-gap: 22px; }
+    .star-axis::before { display: none; }
+    .star-dot { width: 24px; height: 24px; font-size: 10.5px; }
+    .star-dot.me { width: 29px; height: 29px; font-size: 12px; }
+    .proj-grid { grid-template-columns: 1fr; }
+    .star-say .btn { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ 导航 ══════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="01-home.html">
+      <span class="logo-mark">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </span>
+      <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+    </a>
+    <div class="nav-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      搜索资料、路线、学长经验…
+    </div>
+    <div class="nav-actions">
+      <a class="nav-link" href="01-home.html">首页</a>
+      <a class="nav-link" href="02-explore.html">🧭 探索路线</a>
+      <a class="nav-link on" href="09-cohort.html">项目组</a>
+      <a class="nav-link" href="10-pricing.html">验收与付费</a>
+      <a class="btn btn-outline btn-sm" href="04-survey.html">登录</a>
+      <a class="btn btn-primary btn-sm" href="04-survey.html">定制我的路线</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <div class="notice">
+    <span class="nt-tag">在招</span>
+    <span>第 3 期 9/15 开班，同方向 28 人已成组，还剩 2 个席位。第 4 期 10/20 开班，预约中。</span>
+    <a href="#join">申请加入 →</a>
+  </div>
+
+  <!-- ══════════ ① 组头信息卡 ══════════ -->
+  <section class="toon-card co-head">
+    <div class="co-grid">
+      <div class="co-badge">
+        <span class="stamp">AI 应用<br />2026 秋<br />第 3 期</span>
+      </div>
+
+      <div class="co-main">
+        <div class="co-kicker">VIP 项目组 · K-04 AI 应用开发方向 · 招生中</div>
+        <h1>AI 应用开发 · <em>2026 秋季 第 3 期</em></h1>
+        <p class="co-desc">
+          路线可以因人而异，但人和人的时间不能。<b>所以同一个方向的人进同一个组</b>——
+          一起交验收、一起被辅导、一起答辩。你的路线还是你自己那条，只是这一路上有人和你走在同一段。
+        </p>
+        <div class="co-stats">
+          <div><b>28<em> / 30</em></b><span>本期人数（封顶 30）</span></div>
+          <div><b>9/15 – 10/15</b><span>本期时间 · 约 4 周</span></div>
+          <div><b>48h</b><span>助教终审反馈上限</span></div>
+          <div><b>1 + 1</b><span>主带学长 + 助教</span></div>
+        </div>
+      </div>
+
+      <div class="co-cta" id="join">
+        <div class="co-seat"><i></i>还剩 2 个席位 · 10/20 第 4 期预约中</div>
+        <a class="btn btn-primary btn-block" href="10-pricing.html">申请加入本期</a>
+        <div class="co-note">入组前需走完前 2 个阶段<br />7 天内不合适全额退，不问理由</div>
+      </div>
+    </div>
+
+    <div class="co-mentors">
+      <div class="mn-card">
+        <span class="mn-ava" style="background:linear-gradient(150deg,#ff6b4a,#d04a2a)">陈</span>
+        <span>
+          <span class="mn-name">陈学长 <span class="mn-tag lead">主带</span></span>
+          <span class="mn-line">大厂 AI 应用工程师，K-04 路线走通者。带过 4 期组，最擅长在答辩夜把你问到自己都没想过的地方——因为面试官也会这么问。</span>
+        </span>
+      </div>
+      <div class="mn-card">
+        <span class="mn-ava" style="background:linear-gradient(150deg,#10b981,#0e9c6d)">林</span>
+        <span>
+          <span class="mn-name">林学姐 <span class="mn-tag ta">助教</span></span>
+          <span class="mn-line">Agent 方向在读研究生，负责 RAG 阶段的答疑与初评复核。每周三晚固定在「检索互助桌」值班，问什么都行，包括「我这个思路是不是很蠢」。</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ ② 组内进度星图 ══════════ -->
+  <section class="blog-sec">
+    <div class="blog-sec-head"><span class="sec-no">★</span><h2>组内进度星图</h2></div>
+    <div class="blog-sec-sub">28 位组员的路线各不相同，但阶段是对齐的。所以你能看见：谁和你走在同一段路上。</div>
+
+    <div class="star-wrap">
+      <div class="star-axis">
+        <div class="star-col">
+          <span class="star-node"></span>
+          <span class="star-label"><b>STAGE 01</b>Python 工程化</span>
+          <div class="star-dots"><span class="star-dot" title="李 · 第 1 阶段">李</span><span class="star-dot" title="张 · 第 1 阶段">张</span><span class="star-dot" title="周 · 第 1 阶段">周</span></div>
+        </div>
+        <div class="star-col">
+          <span class="star-node"></span>
+          <span class="star-label"><b>STAGE 02</b>LLM 基础与 Prompt</span>
+          <div class="star-dots"><span class="star-dot" title="吴 · 第 2 阶段">吴</span><span class="star-dot" title="郑 · 第 2 阶段">郑</span><span class="star-dot" title="王 · 第 2 阶段">王</span><span class="star-dot" title="赵 · 第 2 阶段">赵</span></div>
+        </div>
+        <div class="star-col">
+          <span class="star-node"></span>
+          <span class="star-label"><b>STAGE 03</b>RAG 检索增强</span>
+          <div class="star-dots"><span class="star-dot" title="钱 · 第 3 阶段">钱</span><span class="star-dot" title="孙 · 第 3 阶段">孙</span><span class="star-dot" title="马 · 第 3 阶段">马</span><span class="star-dot" title="高 · 第 3 阶段">高</span><span class="star-dot" title="林 · 第 3 阶段">林</span></div>
+        </div>
+        <div class="star-col me">
+          <span class="star-node"></span>
+          <span class="star-label"><b>STAGE 04</b>Agent 编排与工具</span>
+          <div class="star-dots">
+            <span class="star-dot me rt-halo" title="你 · 第 4 阶段 · 第 3 周">你</span>
+            <span class="star-dot" title="何 · 第 4 阶段">何</span><span class="star-dot" title="罗 · 第 4 阶段">罗</span><span class="star-dot" title="梁 · 第 4 阶段">梁</span>
+            <span class="star-dot" title="宋 · 第 4 阶段">宋</span><span class="star-dot" title="唐 · 第 4 阶段">唐</span><span class="star-dot" title="许 · 第 4 阶段">许</span>
+          </div>
+        </div>
+        <div class="star-col">
+          <span class="star-node"></span>
+          <span class="star-label"><b>STAGE 05</b>生产化工程</span>
+          <div class="star-dots"><span class="star-dot" title="冯 · 第 5 阶段">冯</span><span class="star-dot" title="邓 · 第 5 阶段">邓</span><span class="star-dot" title="曹 · 第 5 阶段">曹</span><span class="star-dot" title="彭 · 第 5 阶段">彭</span><span class="star-dot" title="袁 · 第 5 阶段">袁</span></div>
+        </div>
+        <div class="star-col">
+          <span class="star-node"></span>
+          <span class="star-label"><b>STAGE 06</b>项目包装与求职</span>
+          <div class="star-dots"><span class="star-dot" title="蒋 · 第 6 阶段">蒋</span><span class="star-dot" title="沈 · 第 6 阶段">沈</span><span class="star-dot" title="陈 · 第 6 阶段">陈</span><span class="star-dot" title="徐 · 第 6 阶段">徐</span></div>
+        </div>
+      </div>
+
+      <div class="star-foot">
+        <span><i class="lg-dot" style="background:var(--pri)"></i>你 · 第 4 阶段「Agent 编排与工具」· 第 3 周</span>
+        <span><i class="lg-dot" style="background:var(--bg-soft);border:1.5px solid var(--line)"></i>其他组员 · 共 27 人</span>
+        <span style="margin-left:auto">数据每小时同步一次 · 阶段由你自己打卡，不强制公开</span>
+      </div>
+
+      <div class="star-say">
+        <div>
+          <div class="big">你不是一个人在走 —— <em>有 6 个人和你卡在同一阶段</em>。</div>
+          <div style="font-size:12.5px;color:var(--ink-2);margin-top:5px">
+            你们 7 个人自然构成一个研习小组：组内频道「Agent 编排互助桌」已为你打开，本周的话题是「工具调用失败时，模型应该说什么」。
+          </div>
+        </div>
+        <a class="btn btn-outline" href="#">进入互助桌 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ ③ 四层验收漏斗 ══════════ -->
+  <section class="blog-sec">
+    <div class="blog-sec-head"><span class="sec-no">验</span><h2>四层验收漏斗</h2></div>
+    <div class="blog-sec-sub">一份提交要过四道关。越往下，给你反馈的人越少、越贵——所以前面的关卡，最好你自己先过一遍。</div>
+
+    <div class="funnel">
+      <div class="fn-layer fn-1">
+        <div class="toon-card fn-card">
+          <span class="fn-no" style="background:var(--bg-deep);color:var(--ink-2)">L1</span>
+          <div class="fn-body">
+            <b>AI 初评</b>
+            <span>提交后 3 分钟内，按本阶段的验收标准逐条比对，给出分数和「缺什么」的清单。<em>它不是判官，是让你在麻烦别人之前先自己修一遍。</em></span>
+          </div>
+          <span class="fn-meta"><b>谁来做</b> 课搭验收 Agent<br /><b>耗时</b> 3 分钟 · 随提随评</span>
+        </div>
+      </div>
+
+      <div class="fn-layer fn-2">
+        <div class="toon-card fn-card">
+          <span class="fn-no" style="background:var(--mint-50);color:var(--mint)">L2</span>
+          <div class="fn-body">
+            <b>同伴互评</b>
+            <span>同阶段的其他组员来评。你会收到 2 份来自同学的评审，同时你也要评别人的 2 份。<em>学会看出别人项目里的问题，是面试时最有用的能力。</em></span>
+          </div>
+          <span class="fn-meta"><b>谁来做</b> 同阶段组员 · 2 人<br /><b>耗时</b> 24 小时内</span>
+        </div>
+      </div>
+
+      <div class="fn-layer fn-3">
+        <div class="toon-card fn-card" style="border-color:var(--pri)">
+          <span class="fn-no" style="background:var(--pri)">L3</span>
+          <div class="fn-body">
+            <b>助教终审</b>
+            <span>林学姐逐条看代码、看你的评测数据、看复盘。<em>通过会给一段可以写进简历的评语；不通过会告诉你改哪三处，改完随时重提，不额外收费。</em></span>
+          </div>
+          <span class="fn-meta"><b>谁来做</b> 助教 · 林学姐<br /><b>耗时</b> 48 小时内（平均 31h）</span>
+        </div>
+      </div>
+
+      <div class="fn-layer fn-4">
+        <div class="toon-card fn-card">
+          <span class="fn-no" style="background:var(--ink)">L4</span>
+          <div class="fn-body">
+            <b>月度答辩</b>
+            <span>每期一次，每人 8 分钟讲自己的项目 + 7 分钟问答，全场都在。<em>你会得到台下所有人的追问——这些追问，就是你面试时会遇到的问题。</em></span>
+          </div>
+          <span class="fn-meta"><b>谁来做</b> 全组 + 主带学长<br /><b>耗时</b> 每期一次 · 约 3 小时</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fn-foot">
+      <span class="big">提交本期验收</span>
+      <span class="sub">四个关卡走完，你会拿到一份带评语的验收记录——它可以贴在简历附件里，也可以直接拿去答面试官。</span>
+      <a class="btn btn-primary" href="#" style="margin-left:auto">提交本期验收 →</a>
+    </div>
+  </section>
+
+  <!-- ══════════ ④ 答辩节 ══════════ -->
+  <section class="blog-sec">
+    <div class="blog-sec-head"><span class="sec-no">★</span><h2>答辩节</h2></div>
+    <div class="blog-sec-sub">本期的高光时刻。也是每期唯一一次，所有人必须在场的时间点。</div>
+
+    <div class="toon-card dn">
+      <div class="dn-left">
+        <div class="dn-date">10/15<span>周四 20:00 · 线上，全场直播</span></div>
+        <h3>每人 8 分钟讲自己的项目<br />+ 7 分钟问答</h3>
+        <div class="dn-form">
+          28 位组员全部上台，主带学长在台下追问。讲不清楚的项目等于没做——这句话在答辩夜是字面意思。
+          上一期的 3 位同学，讲完当场就被改掉了简历里的项目描述。
+        </div>
+        <a class="btn" style="background:#fff;color:var(--ink)" href="#join">报名旁听本期 →</a>
+      </div>
+
+      <div class="dn-right">
+        <div class="dn-sub">上一期现场速记 · 3 条摘录</div>
+
+        <div class="quote">
+          <span class="av" style="background:#ff6b4a">陈</span>
+          <div>
+            <p>「你这个 85% 命中率，是你自己标的评测集吧？面试官一定会问同一句话。把标注规则也写进报告里——那比数字本身更有说服力。」</p>
+            <div class="meta">陈学长 → 罗同学 · RAG 阶段验收</div>
+          </div>
+        </div>
+
+        <div class="quote">
+          <span class="av" style="background:#6366f1">陈</span>
+          <div>
+            <p>「被问到不会的，别说『大概』。说『这个我没测过，回去补一组对照实验再答你』——这句话在面试里是加分的，含糊才是减分。」</p>
+            <div class="meta">陈学长 · 全场 · 求职冲刺环节</div>
+          </div>
+        </div>
+
+        <div class="quote">
+          <span class="av" style="background:#10b981">林</span>
+          <div>
+            <p>「你用 try/except 把整个流程包起来了，这会掩盖问题。应该按工具分别兜底，并记下失败原因——不然线上出问题你查不到是哪一步。」</p>
+            <div class="meta">林学姐 → 唐同学 · Agent 阶段验收</div>
+          </div>
+        </div>
+
+        <div class="dn-next">
+          <div>
+            <b>第 4 期 10/20 开班 · 预约中</b>
+            <span>现在预约可以先进「预备群」，提前拿到前 2 阶段的资源。</span>
+          </div>
+          <a class="btn btn-primary btn-sm" href="#join">预约第 4 期 →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ ⑤ 项目墙 ══════════ -->
+  <section class="blog-sec">
+    <div class="blog-sec-head"><span class="sec-no">墙</span><h2>项目墙</h2></div>
+    <div class="blog-sec-sub">组里正在做和已经做完的东西。点开任何一个，作者都愿意被追问。</div>
+
+    <div class="proj-grid">
+      <div class="toon-card hoverable proj-card">
+        <div class="pt">深大校园问答机器人</div>
+        <div class="pd">混合检索 + 重排 + 引用溯源，答不准会承认自己不知道。验收目标是检索命中率 ≥ 85%，附 30 条自标注评测集。</div>
+        <div class="pm"><span class="who" style="background:#ff6b4a">何</span><span>何同学</span><span class="stg">RAG 阶段</span></div>
+      </div>
+
+      <div class="toon-card hoverable proj-card">
+        <div class="pt">CI 失败自动排查 Agent</div>
+        <div class="pd">读日志、定位失败原因、给出修复建议。多工具编排 + 重试策略 + 出错时的降级路径，正在补评测集。</div>
+        <div class="pm"><span class="who" style="background:#6366f1">罗</span><span>罗同学</span><span class="stg">Agent 阶段</span></div>
+      </div>
+
+      <div class="toon-card hoverable proj-card">
+        <div class="pt">课搭周报生成器</div>
+        <div class="pd">打卡记录进去，结构稳定的周报出来。模型输出必须是 JSON，字段缺失自动重试——所有下游功能的地基。</div>
+        <div class="pm"><span class="who" style="background:#10b981">赵</span><span>赵同学</span><span class="stg done">已验收</span></div>
+      </div>
+
+      <div class="toon-card hoverable proj-card">
+        <div class="pt">培养方案冲突检测小工具</div>
+        <div class="pd">把培养方案和目标课程丢进去，输出未来四个学期的排课建议，标出会撞车的组合。给同专业的学弟学妹用过。</div>
+        <div class="pm"><span class="who" style="background:#f59e0b">郑</span><span>郑同学</span><span class="stg">LLM 基础</span></div>
+      </div>
+
+      <div class="toon-card hoverable proj-card">
+        <div class="pt">论文速读助手</div>
+        <div class="pd">上传 PDF，输出「它解决什么问题 / 怎么做的 / 有什么坑」三段式。重点是让模型承认读不懂的部分，而不是编。</div>
+        <div class="pm"><span class="who" style="background:#e8638f">梁</span><span>梁同学</span><span class="stg">RAG 阶段</span></div>
+      </div>
+
+      <div class="toon-card hoverable proj-card">
+        <div class="pt">简历诊断 Agent</div>
+        <div class="pd">按目标 JD 逐条比对简历，指出缺什么、怎么补，附改写建议。已加上成本看板和缓存，日调用从 800 次降到 210 次。</div>
+        <div class="pm"><span class="who" style="background:#575c65">蒋</span><span>蒋同学</span><span class="stg done">已验收</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ ⑥ 组内动态 ══════════ -->
+  <section class="blog-sec">
+    <div class="blog-sec-head"><span class="sec-no">动</span><h2>组内动态</h2></div>
+    <div class="blog-sec-sub">这一周五件事。不发「加油」和「打卡」，只发有用的。</div>
+
+    <div class="feed-tl">
+      <div class="tl-item">
+        <div class="tl-rail"><span class="tl-ic ask">问</span></div>
+        <div class="tl-body">
+          <p><b>宋同学提问</b>：向量库到底选 pgvector 还是 Milvus？我这量级是不是杀鸡用牛刀？</p>
+          <div class="qa-mini">
+            <div class="q">「向量库选 pgvector 还是 Milvus？」</div>
+            <div class="a"><span class="who">陈学长</span>你的量级（十万 chunk 以下）pgvector + HNSW 完全够，还省一个组件的运维。面试被问到就说「按数据量选型」——这本身就是加分回答。</div>
+          </div>
+          <div class="meta">2 小时前 · 7 人跟进</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-rail"><span class="tl-ic pass">✓</span></div>
+        <div class="tl-body">
+          <p><b>何同学通过「Agent 编排」阶段验收</b>——主带评语：「工具失败时的降级路径写得比大部分实习生的代码干净，下一个项目可以上多工具协作了。」</p>
+          <div class="meta">5 小时前 · L3 助教终审</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-rail"><span class="tl-ic info">✎</span></div>
+        <div class="tl-body">
+          <p><b>林学姐发布加餐</b>：《检索质量评测的三种做法》，配套 1 个选做任务。走 RAG 阶段的同学建议都看，尤其第二种「用模型生成问题再回归」的做法，能省掉一半标注时间。</p>
+          <div class="meta">昨天 · 资料</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-rail"><span class="tl-ic pass">✓</span></div>
+        <div class="tl-body">
+          <p><b>唐同学的生产化改造通过终审</b>，已排入 10/15 答辩节名单。他的成本看板把每次调用的费用按功能拆开了，这个做法被学长要求写进组内共享模板。</p>
+          <div class="meta">2 天前 · L3 助教终审</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-rail"><span class="tl-ic info">＋</span></div>
+        <div class="tl-body">
+          <p><b>3 位新同学入组</b>，分别从第 1、2 阶段开始。组内已经按阶段提示了结对——你和他们的阶段不重叠，暂时不会打扰到你。</p>
+          <div class="meta">3 天前 · 入组</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-rail"><span class="tl-ic info">📌</span></div>
+        <div class="tl-body">
+          <p><b>本期答辩节定档 10/15</b>，28 人全部上台。名单和顺序已发到组内公告，需要调顺序的这周五前说。</p>
+          <div class="meta">4 天前 · 公告</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ ⑦ 组规与合规声明 ══════════ -->
+  <section class="rules">
+    <div class="rules-head">
+      <h2>组规，和我们绝对不能做的事</h2>
+      <span class="badge">合规声明</span>
+    </div>
+    <p class="rules-sub">
+      这一块不放最后当小字。因为下面四条，是你在决定付钱之前就应该知道的事——尤其是前两条，我们做不到，也不会假装做得到。
+    </p>
+
+    <div class="rules-grid">
+      <div class="rule">
+        <span class="ic">🚫</span>
+        <div>
+          <b>不做就业承诺</b>
+          <p>我们不承诺任何 offer、任何薪资、任何「内推必过」。项目组能给你的是验收、反馈和一群同行的人，<em>拿结果是你的功劳，不是我们的承诺</em>。任何跟你说「包就业」的机构，都别信。</p>
+        </div>
+      </div>
+
+      <div class="rule">
+        <span class="ic">✋</span>
+        <div>
+          <b>不代做项目</b>
+          <p>代码必须你自己写。学长会帮你改、追问你、把你的标准提到面试要求，但<em>不会替你交作业</em>。答辩夜也必须到——讲不清楚的项目等于没做，这是这条路线唯一的硬规矩。</p>
+        </div>
+      </div>
+
+      <div class="rule">
+        <span class="ic">🔁</span>
+        <div>
+          <b>验收不通过，可以无限次重提</b>
+          <p>不额外收费，也不扣你的排期。被打回的通常不是能力问题，是没写清楚、没测过、没做复盘。<em>改完随时重交，直到达标为止</em>——这本就是学会一件事的正常过程。</p>
+        </div>
+      </div>
+
+      <div class="rule">
+        <span class="ic">↩️</span>
+        <div>
+          <b>7 天无理由退款</b>
+          <p>入组 7 天内，觉得节奏不合适、时间不够、或者就是不喜欢，<em>全额退，不问理由</em>。超过 7 天后按已完成的验收次数结算剩余部分，规则写在付费页里，没有隐藏条款。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="rules-foot">
+      本项目组为学习辅导与作品验收服务，不提供学历教育、不代写作业、不承诺就业结果。组内所有资料版权归原作者，转载需署名。
+      未成年人请在监护人知情下参与。对验收结果有异议的，可在组内公告提交复核申请，48 小时内给出书面答复。
+    </div>
+  </section>
+
+  <!-- ══════════ 底部 CTA ══════════ -->
+  <section style="margin-top:34px">
+    <div class="toon-card" style="padding:24px 26px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;background:linear-gradient(120deg,#fff,var(--pri-50));border-color:#ffd9cd">
+      <span style="font-size:32px">🧩</span>
+      <div>
+        <div style="font-size:18px;font-weight:800;letter-spacing:-0.4px">还没定方向？先别急着进组</div>
+        <p style="font-size:13px;color:var(--ink-2);margin-top:6px;line-height:1.75;max-width:680px">
+          项目组只对同一个方向的人开放，因为验收标准是按方向定的。如果你现在还不确定走哪条路，先花 8 个晚上走一遍探索路线——
+          用真实手感选出来的方向，进组之后也不容易半途而废。
+        </p>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-outline" href="02-explore.html">先走探索路线 →</a>
+        <a class="btn btn-primary" href="03-direction.html">先看 AI 应用开发方向 →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ══════════ 页脚 ══════════ -->
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">
+        <span class="logo-mark">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      </div>
+      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+      <p class="creed">「愿课搭陪你走过每一次选方向的焦虑，需要时也总能搭把手。」</p>
+    </div>
+    <div class="foot-col"><h4>走起来</h4><a href="02-explore.html">探索路线</a><a href="04-survey.html">定制我的路线</a><a href="03-direction.html">AI 应用开发方向</a><a href="09-cohort.html">项目组</a></div>
+    <div class="foot-col"><h4>项目组</h4><a href="#join">申请加入</a><a href="#">答辩节</a><a href="#">项目墙</a><a href="10-pricing.html">验收与付费</a></div>
+    <div class="foot-col"><h4>关于</h4><a href="#">平台理念</a><a href="#">校园认证</a><a href="#">原创保护</a><a href="#">联系我们</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 知识在校园里流动</div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

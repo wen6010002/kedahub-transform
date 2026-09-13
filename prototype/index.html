@@ -1,74 +1,286 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>课搭 2.0 · 高保真原型 — 结果型成长社区</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/tokens.css">
-<link rel="stylesheet" href="assets/app.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>课搭 2.0 原型导览 · 结果型成长社区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
 <style>
-body { background: var(--paper); }
-.cover { max-width: 1080px; margin: 0 auto; padding: clamp(40px, 7vw, 90px) clamp(20px, 4vw, 44px) 100px; }
-.cv-kicker { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .3em; color: var(--vermilion); margin-bottom: 20px; }
-.cv-kicker::before { content: ''; display: inline-block; width: 30px; height: 1px; background: var(--vermilion); vertical-align: 4px; margin-right: 12px; }
-.cover h1 { font-family: var(--f-display); font-weight: 900; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.35; }
-.cover .sub { color: var(--ink-2); margin: 18px 0 10px; max-width: 640px; line-height: 1.95; }
-.lang-strip { display: flex; gap: 12px; margin: 30px 0; flex-wrap: wrap; }
-.lang-chip { font-size: .76rem; padding: 8px 16px; border: 1px solid var(--hairline); border-radius: 999px; color: var(--ink-2); background: var(--card); }
-.lang-chip b { color: var(--vermilion); }
-.pg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 44px; }
-.pg { background: var(--card); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 20px 22px; transition: all .25s cubic-bezier(.2,.7,.2,1); display: flex; flex-direction: column; gap: 6px; min-height: 130px; }
-.pg:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); border-color: rgba(194,67,29,.35); }
-.pg .no { font-family: var(--f-mono); font-size: .6rem; letter-spacing: .2em; color: var(--vermilion); }
-.pg .t { font-family: var(--f-display); font-weight: 900; font-size: 1.02rem; margin-top: 2px; }
-.pg .d { font-size: .76rem; color: var(--ink-3); line-height: 1.7; flex: 1; }
-.pg .tag { font-size: .62rem; font-family: var(--f-mono); color: var(--ink-3); letter-spacing: .1em; }
-.pg.soul { grid-column: span 3; background: var(--indigo-night); border-color: transparent; }
-.pg.soul .t { color: #F5EEDF; font-size: 1.2rem; }
-.pg.soul .d { color: #B8AD99; }
-.pg.soul .no { color: var(--vermilion-bright); }
-.note { margin-top: 50px; padding: 22px 26px; background: var(--paper-2); border-radius: var(--radius); font-size: .82rem; color: var(--ink-2); line-height: 2; }
-.note b { color: var(--ink); }
-@media (max-width: 860px) { .pg-grid { grid-template-columns: 1fr 1fr; } .pg.soul { grid-column: span 2; } }
-@media (max-width: 560px) { .pg-grid { grid-template-columns: 1fr; } .pg.soul { grid-column: span 1; } }
+  .cv-hero { display: grid; grid-template-columns: 1fr 300px; gap: 30px; align-items: center; margin-bottom: 30px; }
+  .cv-hero .kicker { font-size: 11.5px; font-weight: 800; letter-spacing: 0.2em; color: var(--pri-600); text-transform: uppercase; margin-bottom: 10px; }
+  .cv-hero h1 { font-size: 34px; font-weight: 800; letter-spacing: -1.1px; line-height: 1.18; }
+  .cv-hero h1 em { font-style: normal; color: var(--pri); }
+  .cv-hero p { font-size: 14.5px; color: var(--ink-2); margin-top: 14px; max-width: 640px; line-height: 1.85; }
+  .cv-hero .cv-stat { display: flex; gap: 22px; margin-top: 20px; flex-wrap: wrap; }
+  .cv-hero .cv-stat div b { display: block; font-size: 21px; font-weight: 800; letter-spacing: -0.6px; }
+  .cv-hero .cv-stat div span { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
+
+  .cv-dai { text-align: center; padding: 22px 18px 18px; }
+  .cv-dai .tip { font-size: 12.5px; color: var(--ink-2); font-weight: 600; margin-top: 10px; line-height: 1.7; }
+  .cv-dai .tip b { color: var(--pri-700); }
+
+  /* 推荐动线 */
+  .cv-paths { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 38px; }
+  .cv-path { padding: 18px 18px 16px; }
+  .cv-path .ph { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; color: var(--pri-600); }
+  .cv-path h3 { font-size: 15.5px; font-weight: 800; letter-spacing: -0.3px; margin-top: 5px; }
+  .cv-path p { font-size: 12.5px; color: var(--ink-2); margin-top: 6px; line-height: 1.75; }
+  .cv-path .chain { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; margin-top: 10px; line-height: 1.9; }
+  .cv-path .chain a { color: var(--pri-700); font-weight: 700; }
+  .cv-path .chain a:hover { text-decoration: underline; }
+
+  /* 页面格 */
+  .cv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .pg { padding: 17px 18px 15px; display: flex; flex-direction: column; gap: 5px; min-height: 148px; }
+  .pg .no { font-size: 10.5px; font-weight: 800; letter-spacing: 0.16em; color: var(--ink-faint); }
+  .pg .t { font-size: 15px; font-weight: 800; letter-spacing: -0.3px; margin-top: 1px; }
+  .pg .d { font-size: 12.5px; color: var(--ink-2); line-height: 1.72; flex: 1; }
+  .pg .tag { font-size: 10.5px; font-weight: 700; color: var(--ink-soft); background: var(--bg-soft); align-self: flex-start; padding: 2px 9px; border-radius: 999px; }
+  .pg.star { border-color: #ffd9cd; background: linear-gradient(180deg, var(--pri-50), #fff 62%); }
+  .pg.star .no { color: var(--pri-600); }
+  .pg.star .tag { background: #fff; color: var(--pri-700); }
+  .pg:hover .t { color: var(--pri-600); }
+
+  .cv-note { margin-top: 40px; padding: 20px 22px; background: var(--bg-soft); border-radius: var(--r-toon); font-size: 13px; color: var(--ink-2); line-height: 1.9; }
+  .cv-note b { color: var(--ink); }
+  .cv-note a { color: var(--pri-700); font-weight: 700; }
+  .cv-note a:hover { text-decoration: underline; }
+
+  @media (max-width: 1080px) {
+    .cv-hero { grid-template-columns: 1fr; }
+    .cv-paths, .cv-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 680px) {
+    .cv-paths, .cv-grid { grid-template-columns: 1fr; }
+    .cv-hero h1 { font-size: 26px; }
+  }
 </style>
 </head>
 <body>
-<div class="cover">
-  <div class="cv-kicker rv">KEDAHUB 2.0 · HI-FI PROTOTYPE · 2026-09</div>
-  <h1 class="rv rv-d1">课搭 2.0 原型<br>结果型成长社区</h1>
-  <p class="sub rv rv-d2">十页高保真原型，覆盖完整闭环：方向科普 → 问卷 → 隐藏式 Agent 生成仪式 → 闯关式山径路线 → 节点四拍节奏 → 四层验收 → 项目组社区 → 定价。交互语言「山径 · 印记」贯穿全线。</p>
-  <div class="lang-strip rv rv-d3">
-    <span class="lang-chip">语义 · <b>等高线山径</b>（垭口=验收 云雾=未解锁 登顶=拿结果）</span>
-    <span class="lang-chip">物证 · <b>护照印章</b>（8 印记拼合登顶纹章）</span>
-    <span class="lang-chip">纪律 · <b>排印工艺</b>（纸墨朱砂 · 200ms 动效基准）</span>
-    <span class="lang-chip">原则 · <b>路线即连胜</b>（走过的路永久点亮）</span>
-  </div>
 
-  <div class="pg-grid">
-    <a class="pg soul rv" href="05-roadmap.html">
-      <span class="no">05 · 产品灵魂页 · 建议从这里开始</span>
-      <span class="t">我的路线 · 山径</span>
-      <span class="d">连续蜿蜒 SVG 山径（动态测量布局生成）· 走过段永久点亮 · 云雾遮罩预告 · 验收仪式全流程演示（静默一拍 → 逐项盖印 → 印记落章 → 路线延伸 → 云雾散开）。把当前阶段 7 个任务全部勾选，即可体验完整仪式。</span>
-      <span class="tag">交互演示页</span>
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="index.html">
+      <span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+      <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
     </a>
-    <a class="pg rv" href="01-home.html"><span class="no">01</span><span class="t">首页 · 方向导航</span><span class="d">两大方向族 16 张方向卡 · 路线票据 · 发车信息条 · 宣言带 · 资料馆降位</span><span class="tag">公开层</span></a>
-    <a class="pg rv" href="02-direction.html"><span class="no">02</span><span class="t">方向指南 · 科普页</span><span class="d">11 节固定结构 · 知识差对照 · 误区对照 · 模板预览 · 全免费可读</span><span class="tag">公开层 · SEO</span></a>
-    <a class="pg rv" href="03-survey.html"><span class="no">03</span><span class="t">情况问卷</span><span class="d">单题分屏 · 每题答「为什么问」· 键盘操作 · 滑杆实时推算 · 路线式进度</span><span class="tag">免费层</span></a>
-    <a class="pg rv" href="04-generating.html"><span class="no">04</span><span class="t">生成仪式</span><span class="d">隐藏 Agent 的前台：工序日志逐条浮现 · 路线装配 · 落章仪式 · 可跳过</span><span class="tag">免费层</span></a>
-    <a class="pg rv" href="06-node.html"><span class="no">06</span><span class="t">节点详情 · 四拍节奏</span><span class="d">学（编辑部式资源）→ 练（输入/输出色标）→ 创（作品提交）→ 验（待闭合环）· 卡壳时刻向导 · 免修申请</span><span class="tag">免费层</span></a>
-    <a class="pg rv" href="07-library.html"><span class="no">07</span><span class="t">资料馆</span><span class="d">1.0 遗产降位承接 · 资料为路线服务的新关系说明</span><span class="tag">公开层</span></a>
-    <a class="pg rv" href="08-cohort.html"><span class="no">08</span><span class="t">项目组 · VIP 社区</span><span class="d">组内进度星图（同阶段自然成组）· 四层验收队列 · 答辩节 · 项目墙 · 组规</span><span class="tag">付费层</span></a>
-    <a class="pg rv" href="09-pricing.html"><span class="no">09</span><span class="t">定价</span><span class="d">知识免费 / 结果付费 · 三档 + 按次验收 · 合规红线内建</span><span class="tag">付费层</span></a>
+    <div class="nav-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      搜索资料、路线、学长经验…
+    </div>
+    <div class="nav-actions">
+      <a class="nav-link" href="01-home.html">首页</a>
+      <a class="nav-link" href="02-explore.html">🧭 探索路线</a>
+      <a class="nav-link" href="09-cohort.html">项目组</a>
+      <a class="nav-link" href="10-pricing.html">验收与付费</a>
+      <a class="btn btn-outline btn-sm" href="04-survey.html">登录</a>
+      <a class="btn btn-primary btn-sm" href="04-survey.html">定制我的路线</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- ══════════ 封面 ══════════ -->
+  <header class="cv-hero">
+    <div>
+      <div class="kicker">Kedahub 2.0 · Hi-Fi Prototype · 2026-09</div>
+      <h1>课搭 2.0 原型导览<br />首页还是资料馆，<em>只是它长出了两条腿</em>。</h1>
+      <p>
+        十页高保真原型，覆盖一条完整闭环：<strong>资料馆首页 → 新生探索路线 → 定制问卷 → 隐藏式生成 →
+        我的路线 → 关卡四拍 → 资料库 → 项目组 → 验收与付费</strong>。
+      </p>
+      <p style="margin-top:10px">
+        视觉语言没有换。还是白底橙、宽幅信息流、<strong>大学生成长社区</strong>——
+        新增的只有一套路线积木：贴纸节点、手绘路径、落章仪式，和一个叫小搭的橙色小人。
+      </p>
+      <div class="cv-stat">
+        <div><b>10</b><span>页面 · 纯 HTML 零构建</span></div>
+        <div><b>8</b><span>站探索路线（免费）</span></div>
+        <div><b>4</b><span>层验收漏斗</span></div>
+        <div><b>1</b><span>个付费点：结果验收</span></div>
+      </div>
+    </div>
+
+    <div class="toon-card cv-dai">
+      <svg width="86" height="86" viewBox="0 0 64 64" class="dai-bob">
+        <rect x="19" y="47" width="9" height="11" rx="4.5" fill="#d04a2a" />
+        <rect x="36" y="47" width="9" height="11" rx="4.5" fill="#d04a2a" />
+        <rect x="8" y="9" width="48" height="44" rx="16" fill="#ff6b4a" />
+        <circle cx="24" cy="29" r="4.2" fill="#fff" /><circle cx="40" cy="29" r="4.2" fill="#fff" />
+        <circle cx="25" cy="30" r="2.2" fill="#1a1d23" /><circle cx="41" cy="30" r="2.2" fill="#1a1d23" />
+        <path d="M27 39q5 5 10 0" stroke="#1a1d23" stroke-width="2.4" fill="none" stroke-linecap="round" />
+      </svg>
+      <div class="tip">我是<b>小搭</b>，原型里的向导。<br />点下面任意一张卡就能进去。</div>
+    </div>
+  </header>
+
+  <div class="bm-rule"></div>
+
+  <!-- ══════════ 三条推荐动线 ══════════ -->
+  <section style="margin-top:28px">
+    <div class="blog-sec-head"><h2>只有十分钟？走这三条动线</h2></div>
+    <div class="blog-sec-sub">按你关心的问题选，不用按顺序看</div>
+
+    <div class="cv-paths">
+      <div class="toon-card cv-path">
+        <div class="ph">动线 A · 我想看产品长什么样</div>
+        <h3>一条路从「不知道选什么」走到「拿到认可」</h3>
+        <p>最能说明转型的就是这条线：新生进来看不见"选方向"，只看见八次动手。</p>
+        <div class="chain">
+          <a href="01-home.html">资料馆首页</a> →
+          <a href="02-explore.html">探索路线</a> →
+          <a href="06-roadmap.html">我的路线</a> →
+          <a href="10-pricing.html">验收与付费</a>
+        </div>
+      </div>
+
+      <div class="toon-card cv-path">
+        <div class="ph">动线 B · 我想看交互做得怎么样</div>
+        <h3>两个可点的仪式：落章，和勾任务</h3>
+        <p>02 页点「完成这一站」，看印章砸下、路径生长、云雾散开。<br />06 页勾满一个关卡的任务，看印记落章。</p>
+        <div class="chain">
+          <a href="02-explore.html">探索路线</a> ·
+          <a href="06-roadmap.html">我的路线</a> ·
+          <a href="05-generating.html">生成仪式</a>
+        </div>
+      </div>
+
+      <div class="toon-card cv-path">
+        <div class="ph">动线 C · 我想看新生具体做什么</div>
+        <h3>八站，八个小作品</h3>
+        <p>从终端那个黑窗口，到脚本、Git、前端、服务器、数据库、AI 调用、模型训练——每一站都必须做出东西。</p>
+        <div class="chain">
+          <a href="02-explore.html">8 站全景</a> ·
+          <a href="07-node.html">关卡四拍</a> ·
+          <a href="03-direction.html">方向科普样板</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 全部页面 ══════════ -->
+  <section>
+    <div class="blog-sec-head"><h2>全部十页</h2><span class="bs-more">按用户旅程排序</span></div>
+    <div class="blog-sec-sub">带 ★ 的是这一版的旗舰页，也是改动最大、最值得点开的三页</div>
+
+    <div class="cv-grid">
+      <a class="toon-card hoverable pg star" href="01-home.html">
+        <span class="no">01 · 首页</span>
+        <span class="t">★ 资料馆（首页不变）</span>
+        <span class="d">课搭原来那套白底橙宽幅版式一字未改。变的是排序：新生提示条 → 刊头 → <b>路线入口</b> → 信息差专栏 → 资料库 / 路线模板双区。</span>
+        <span class="tag">公开层</span>
+      </a>
+
+      <a class="toon-card hoverable pg star" href="02-explore.html">
+        <span class="no">02 · 大一探索路线</span>
+        <span class="t">★ 把计算机摸一遍</span>
+        <span class="d">8 站、16 小时、8 个能拿出手的小作品。每站结束打一次手感分，走完得到一张手感图谱。<b>可交互</b>：点「完成这一站」看完整仪式。</span>
+        <span class="tag">免费 · 核心新增</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="03-direction.html">
+        <span class="no">03 · 方向科普</span>
+        <span class="t">信息差样板 · AI 应用开发</span>
+        <span class="d">一个方向的真相：这行到底做什么、需要什么、不需要什么、薪资区间、常见误区。不注册可读，是拉新的入口。</span>
+        <span class="tag">公开层 · SEO</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="04-survey.html">
+        <span class="no">04 · 定制问卷</span>
+        <span class="t">6 题，一屏一步</span>
+        <span class="d">方向、年级、基础、每周可投入时长、目标。答「走过探索路线」会自动预填方向倾向，滑块实时推算完成月份。</span>
+        <span class="tag">免费层</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="05-generating.html">
+        <span class="no">05 · 生成中</span>
+        <span class="t">隐藏式 Agent 的前台</span>
+        <span class="d">路径逐段生长、七条工序日志逐条浮现。全程零「AI」「大模型」「智能」字眼——它是课搭在为你排路线，不是模型在编。</span>
+        <span class="tag">免费层</span>
+      </a>
+
+      <a class="toon-card hoverable pg star" href="06-roadmap.html">
+        <span class="no">06 · 我的路线</span>
+        <span class="t">★ 6 阶段 · 24 关卡 · 调整批注</span>
+        <span class="d">关卡内是「学 → 练 → 创 → 验」四拍，每一关都必须产出一个东西。顶部挂着 Agent 的调整批注：✂️ 跳过了哪两关、➕ 插入了哪个强化关，<b>每条都能否决</b>。</span>
+        <span class="tag">免费层 · 核心新增</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="07-node.html">
+        <span class="no">07 · 关卡详情</span>
+        <span class="t">四拍节奏</span>
+        <span class="d">学（看懂）→ 练（动手）→ 创（做出东西）→ 验（确认学会了）。卡住时有分诊向导，真的走不动可以申请免修。</span>
+        <span class="tag">免费层</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="08-library.html">
+        <span class="no">08 · 资料库</span>
+        <span class="t">1.0 的遗产，原样承接</span>
+        <span class="d">分类、搜索、下载、评价全保留。新加的关系是：资料开始挂到路线上——「这一站要用到的资料」。</span>
+        <span class="tag">公开层</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="09-cohort.html">
+        <span class="no">09 · 项目组</span>
+        <span class="t">按方向分组，按月滚动</span>
+        <span class="d">组内进度星图把 28 个人铺在同一条阶段轴上，你能看见「6 人卡在第 3 阶段，和你一样」。加上四层验收漏斗、月度答辩节、项目墙。</span>
+        <span class="tag">付费层</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="10-pricing.html">
+        <span class="no">10 · 验收与付费</span>
+        <span class="t">只有一件事收费</span>
+        <span class="d">路线免费，走完也免费。收费的是「让别人认可你走完了」：单次阶段验收 ¥39 / 项目组 ¥449 / 陪跑 ¥1,299。含四条定价逻辑、单位经济、八条合规红线。</span>
+        <span class="tag">付费层</span>
+      </a>
+    </div>
+  </section>
+
+  <div class="cv-note">
+    <b>给评审的你：</b>原型是纯 HTML / CSS / JS，共享 <code>assets/kh.css</code> 一套设计令牌，双击即可打开，<b>不需要构建、不需要联网</b>（只有字体走 CDN，断网会退回系统字体，不影响布局）。<br />
+    所有数字——走过人数、通过率、价格、日期——均为演示占位。产品设计报告在 <a href="../docs/REPORT.md">docs/REPORT.md</a>，前四份调研在 <code>research/</code>。<br />
+    <b>建议用桌面浏览器看</b>，宽幅版式是课搭的原生形态；窄屏（≤900px）导航会折成可横滑的一行，也已适配。
   </div>
 
-  <div class="note rv">
-    <b>给评审的你：</b>原型为纯 HTML/CSS/JS（共享 assets/ 设计系统），直接双击打开即可，无需构建。所有数字（走过人数、通过率、价格）为演示占位。设计文档见 docs/DESIGN.md 与 docs/DESIGN-PART2.md，四份调研见 research/。
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <a class="logo" href="index.html">
+        <span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      </a>
+      <p>找资料，先来课搭。然后，我们一起把它走完。</p>
+      <div class="creed">路线免费，走完也免费。</div>
+    </div>
+    <div class="foot-col">
+      <h4>产品</h4>
+      <a href="01-home.html">资料馆首页</a>
+      <a href="02-explore.html">大一探索路线</a>
+      <a href="06-roadmap.html">我的路线</a>
+      <a href="07-node.html">关卡四拍</a>
+    </div>
+    <div class="foot-col">
+      <h4>成长</h4>
+      <a href="03-direction.html">方向科普</a>
+      <a href="08-library.html">资料库</a>
+      <a href="09-cohort.html">项目组</a>
+      <a href="10-pricing.html">验收与付费</a>
+    </div>
+    <div class="foot-col">
+      <h4>开始</h4>
+      <a href="04-survey.html">定制我的路线</a>
+      <a href="05-generating.html">看看生成过程</a>
+      <a href="../docs/REPORT.md">产品设计报告</a>
+    </div>
   </div>
-</div>
-<script src="assets/app.js"></script>
+  <div class="foot-bottom">课搭 2.0 高保真原型 · 2026-09 · 演示数据，非真实运营数字</div>
+</footer>
+
 </body>
 </html>

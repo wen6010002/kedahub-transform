@@ -1,625 +1,473 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>课搭 · 结果型成长社区 — 从「我想成为谁」到「我真的做到了」</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/tokens.css">
-<link rel="stylesheet" href="assets/app.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>课搭 · 大学生成长社区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
 <style>
-/* ============ HERO ============ */
-.hero { position: relative; padding: clamp(56px, 8vw, 110px) 0 clamp(40px, 6vw, 72px); overflow: hidden; }
-.hero-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
-.hero-kicker { display: inline-flex; align-items: center; gap: 10px; font-family: var(--f-mono); font-size: var(--t-meta); letter-spacing: .3em; color: var(--vermilion); margin-bottom: 26px; }
-.hero-kicker::before { content: ''; width: 34px; height: 1px; background: var(--vermilion); }
-.hero h1 { font-family: var(--f-display); font-weight: 900; font-size: var(--t-hero); line-height: 1.28; letter-spacing: .01em; }
-.hero h1 em { font-style: normal; color: var(--vermilion); position: relative; }
-.hero h1 em::after { content: ''; position: absolute; left: 0; right: 0; bottom: .08em; height: .14em; background: var(--vermilion-wash); z-index: -1; }
-.hero-sub { margin: 26px 0 34px; color: var(--ink-2); max-width: 520px; font-size: 1.05rem; }
-.hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
-.hero-stats { display: flex; gap: clamp(24px, 4vw, 52px); margin-top: 46px; padding-top: 26px; border-top: 1px solid var(--hairline); flex-wrap: wrap; }
-.stat .n { font-family: var(--f-latin); font-size: 1.9rem; font-weight: 600; color: var(--ink); line-height: 1.1; }
-.stat .n b { color: var(--vermilion-bright); font-weight: 600; }
-.stat .l { font-size: var(--t-meta); color: var(--ink-3); letter-spacing: .1em; margin-top: 4px; }
+  /* —— 本页专属：路线入口区 —— */
+  .gate { display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; margin-bottom: 34px; }
+  .gate-card { position: relative; overflow: hidden; padding: 22px 24px; display: flex; flex-direction: column; }
+  .gate-card h3 { font-size: 19px; font-weight: 800; letter-spacing: -0.4px; display: flex; align-items: center; gap: 8px; }
+  .gate-card p { font-size: 13px; color: var(--ink-2); margin-top: 7px; line-height: 1.7; }
+  .gate-tag {
+    align-self: flex-start; font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em;
+    padding: 3px 10px; border-radius: 999px; margin-bottom: 12px;
+  }
+  .gate-a { background: linear-gradient(150deg, #fff 0%, var(--pri-50) 100%); border-color: #ffd9cd; }
+  .gate-a .gate-tag { background: var(--pri); color: #fff; }
+  .gate-b .gate-tag { background: var(--bg-deep); color: var(--ink-2); }
+  .gate-stops { display: flex; align-items: center; gap: 0; margin: 14px 0 16px; flex-wrap: wrap; }
+  .gs {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700;
+    color: var(--ink-2); background: #fff; border: 1.5px solid var(--line);
+    padding: 4px 10px; border-radius: 999px;
+  }
+  .gs-arrow { color: var(--ink-faint); font-size: 11px; padding: 0 4px; }
+  .gate-foot { margin-top: auto; display: flex; align-items: center; gap: 10px; padding-top: 4px; }
+  .gate-dai { position: absolute; right: 16px; bottom: 12px; opacity: 0.9; }
 
-/* 竖排侧标 */
-.vertical-tag {
-  position: absolute; right: clamp(6px, 1.6vw, 22px); top: 50%; transform: translateY(-50%);
-  writing-mode: vertical-rl; font-family: var(--f-display); font-weight: 700;
-  letter-spacing: .5em; font-size: .78rem; color: var(--ink-3); opacity: .65;
-  border-left: 1px solid var(--hairline); padding-left: 14px;
-}
+  /* 信息差专栏 */
+  .gap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .gap-card { padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
+  .gap-ico { font-size: 22px; line-height: 1.2; flex: none; }
+  .gap-card b { font-size: 14px; font-weight: 800; letter-spacing: -0.2px; display: block; line-height: 1.45; }
+  .gap-card span { font-size: 12.5px; color: var(--ink-2); display: block; margin-top: 4px; line-height: 1.6; }
+  .gap-flag { font-size: 10.5px; font-weight: 800; color: var(--pri-600); letter-spacing: 0.04em; }
 
-/* 路线票据（hero 视觉锚点） */
-.ticket {
-  background: var(--card); border: 1px solid var(--hairline); border-radius: 18px;
-  box-shadow: var(--shadow-lift); position: relative; overflow: hidden;
-  transform: rotate(1.1deg); transition: transform .5s cubic-bezier(.2,.7,.2,1);
-}
-.ticket:hover { transform: rotate(0deg) translateY(-4px); }
-.ticket::before { /* 票据齿孔线 */
-  content: ''; position: absolute; left: 0; right: 0; top: 92px; height: 0;
-  border-top: 2px dashed rgba(34,28,21,.18);
-}
-.ticket-head { padding: 18px 22px 20px; display: flex; justify-content: space-between; align-items: center; }
-.ticket-head .tt { font-family: var(--f-mono); font-size: .66rem; letter-spacing: .26em; color: var(--ink-3); }
-.ticket-head .badge-free { font-size: .66rem; color: var(--spruce); border: 1px solid currentColor; border-radius: 999px; padding: 3px 10px; letter-spacing: .12em; }
-.ticket-route { display: flex; align-items: center; gap: 12px; padding: 0 22px 16px; }
-.ticket-route .from, .ticket-route .to { font-family: var(--f-display); font-weight: 900; font-size: 1.02rem; line-height: 1.3; }
-.ticket-route .from small, .ticket-route .to small { display: block; font-family: var(--f-mono); font-weight: 400; font-size: .6rem; color: var(--ink-3); letter-spacing: .2em; margin-bottom: 3px; }
-.ticket-route .arrow { flex: 1; position: relative; height: 20px; min-width: 46px; }
-.ticket-route .arrow svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.ticket-body { padding: 26px 22px 6px; }
-.stop { display: grid; grid-template-columns: 30px 1fr auto; gap: 12px; align-items: start; position: relative; padding-bottom: 20px; }
-.stop:last-child { padding-bottom: 6px; }
-.stop .dot-col { display: flex; flex-direction: column; align-items: center; align-self: stretch; }
-.stop .dot { width: 13px; height: 13px; border-radius: 50%; margin-top: 5px; z-index: 1; flex: none; }
-.stop .dot-col .seg { width: 2px; flex: 1; margin-top: 4px; }
-.stop .s-name { font-size: .9rem; font-weight: 600; line-height: 1.4; }
-.stop .s-meta { font-size: .72rem; color: var(--ink-3); margin-top: 2px; }
-.stop .s-tag { font-family: var(--f-mono); font-size: .62rem; letter-spacing: .1em; padding: 3px 8px; border-radius: 4px; white-space: nowrap; margin-top: 3px; }
-.st-passed .dot { background: var(--st-passed); box-shadow: 0 0 0 4px var(--spruce-wash); }
-.st-passed .seg { background: var(--st-passed); }
-.st-passed .s-tag { color: var(--st-passed); background: var(--spruce-wash); }
-.st-active .dot { background: var(--st-active); box-shadow: 0 0 0 4px var(--vermilion-wash); animation: pulse 2.4s ease-in-out infinite; }
-.st-active .seg { background: repeating-linear-gradient(to bottom, var(--st-active) 0 5px, transparent 5px 9px); }
-.st-active .s-tag { color: var(--vermilion); background: var(--vermilion-wash); }
-.st-locked .dot { background: var(--paper-3); box-shadow: 0 0 0 4px rgba(34,28,21,.05); }
-.st-locked .seg { background: var(--paper-3); }
-.st-locked .s-name { color: var(--ink-3); }
-.st-locked .s-tag { color: var(--ink-3); background: var(--paper-2); }
-.st-arrive .dot { background: var(--card); border: 3px solid var(--vermilion); width: 17px; height: 17px; margin-top: 3px; }
-.st-arrive .s-name { font-family: var(--f-display); font-weight: 900; }
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 4px var(--vermilion-wash); }
-  50% { box-shadow: 0 0 0 8px rgba(228,87,31,.14); }
-}
-.ticket-foot { display: flex; gap: 0; border-top: 1px solid var(--hairline-2); margin-top: 14px; }
-.ticket-foot .cell { flex: 1; padding: 13px 22px; }
-.ticket-foot .cell + .cell { border-left: 1px solid var(--hairline-2); }
-.ticket-foot .k { font-family: var(--f-mono); font-size: .6rem; letter-spacing: .2em; color: var(--ink-3); }
-.ticket-foot .v { font-weight: 700; font-size: .92rem; margin-top: 2px; }
-.ticket-foot .v .flame { color: var(--vermilion-bright); }
-
-/* ============ 发车滚动条 ============ */
-.board { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); overflow: hidden; background: var(--paper-2); }
-.board-track { display: flex; gap: 0; width: max-content; animation: boardscroll 46s linear infinite; }
-.board:hover .board-track { animation-play-state: paused; }
-@keyframes boardscroll { to { transform: translateX(-50%); } }
-.board-item { display: inline-flex; align-items: center; gap: 12px; padding: 13px 30px; font-family: var(--f-mono); font-size: .72rem; letter-spacing: .08em; color: var(--ink-2); border-right: 1px solid var(--hairline-2); white-space: nowrap; }
-.board-item .code { color: var(--vermilion); font-weight: 500; }
-.board-item .st { color: var(--spruce); }
-
-/* ============ 方向导航 ============ */
-.family-tabs { display: flex; gap: 10px; margin: 30px 0 34px; flex-wrap: wrap; }
-.family-tab {
-  display: inline-flex; align-items: center; gap: 9px; padding: 10px 20px; border-radius: 999px;
-  border: 1px solid var(--hairline); font-size: var(--t-small); font-weight: 600; color: var(--ink-2);
-  cursor: pointer; transition: all .22s; background: transparent; font-family: var(--f-body);
-}
-.family-tab .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-3); transition: background .22s; }
-.family-tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.family-tab[aria-selected="true"] .dot { background: var(--vermilion-bright); }
-.family-tab small { font-weight: 400; opacity: .65; font-family: var(--f-mono); font-size: .66rem; }
-
-.dir-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.dir-card {
-  background: var(--card); border: 1px solid var(--hairline); border-radius: var(--radius);
-  padding: 24px 24px 18px; position: relative; overflow: hidden;
-  transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s, border-color .3s;
-  display: flex; flex-direction: column; min-height: 196px;
-}
-.dir-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lift); border-color: rgba(194,67,29,.35); }
-.dir-card .code { font-family: var(--f-mono); font-size: .64rem; letter-spacing: .22em; color: var(--ink-3); display: flex; justify-content: space-between; }
-.dir-card .code .heat { color: var(--vermilion); }
-.dir-card .path { margin: 14px 0 8px; font-family: var(--f-display); font-weight: 900; font-size: 1.18rem; line-height: 1.45; position: relative; padding-bottom: 12px; }
-.dir-card .path .via { color: var(--vermilion); font-family: var(--f-latin); font-weight: 400; padding: 0 4px; }
-.dir-card .path::after { content: ''; position: absolute; left: 0; bottom: 0; width: 26px; height: 2px; background: var(--vermilion); transition: width .35s cubic-bezier(.2,.7,.2,1); }
-.dir-card:hover .path::after { width: 100%; }
-.dir-card .desc { font-size: .84rem; color: var(--ink-2); line-height: 1.65; flex: 1; }
-.dir-card .meta { display: flex; gap: 14px; margin-top: 16px; padding-top: 13px; border-top: 1px solid var(--hairline-2); font-family: var(--f-mono); font-size: .64rem; color: var(--ink-3); letter-spacing: .06em; }
-.dir-card .go { position: absolute; right: 18px; bottom: 16px; font-size: .72rem; color: var(--vermilion); opacity: 0; transform: translateX(-6px); transition: all .28s; font-weight: 600; }
-.dir-card:hover .go { opacity: 1; transform: none; }
-.dir-free-note { margin-top: 26px; display: flex; align-items: center; gap: 10px; font-size: var(--t-small); color: var(--ink-3); }
-.dir-free-note .tick { color: var(--spruce); font-weight: 700; }
-
-/* ============ 宣言带 ============ */
-.manifesto { background: var(--indigo-night); color: #EFE7D8; padding: var(--sp-section) 0; position: relative; overflow: hidden; }
-.manifesto::before {
-  content: '路'; position: absolute; right: -30px; top: 50%; transform: translateY(-50%);
-  font-family: var(--f-display); font-size: 420px; font-weight: 900; color: rgba(247,242,233,.045); line-height: 1; pointer-events: none;
-}
-.manifesto .lead { font-family: var(--f-display); font-weight: 900; font-size: var(--t-h1); line-height: 1.5; max-width: 820px; }
-.manifesto .lead em { font-style: normal; color: var(--vermilion-bright); }
-.mani-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 60px; }
-.mani-item .no { font-family: var(--f-latin); font-style: italic; font-size: 2rem; color: var(--vermilion-bright); line-height: 1; }
-.mani-item h3 { font-family: var(--f-display); font-size: 1.1rem; font-weight: 700; margin: 14px 0 10px; color: #F5EEDF; }
-.mani-item p { font-size: .88rem; color: #B8AD99; line-height: 1.8; }
-
-/* ============ 四步 ============ */
-.steps-wrap { position: relative; }
-.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; position: relative; }
-.steps::before { content: ''; position: absolute; top: 27px; left: 4%; right: 4%; height: 1px; background: repeating-linear-gradient(to right, var(--hairline) 0 7px, transparent 7px 13px); }
-.step { position: relative; text-align: left; }
-.step .pt { width: 54px; height: 54px; border-radius: 50%; background: var(--card); border: 1px solid var(--hairline); display: grid; place-items: center; font-family: var(--f-latin); font-size: 1.05rem; font-weight: 600; color: var(--vermilion); position: relative; z-index: 1; margin-bottom: 20px; box-shadow: 0 0 0 8px var(--paper); }
-.step h3 { font-family: var(--f-display); font-weight: 700; font-size: 1.08rem; margin-bottom: 8px; }
-.step p { font-size: .84rem; color: var(--ink-2); line-height: 1.75; }
-
-/* ============ 资料馆（保留位） ============ */
-.lib-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 56px); }
-.feed-row { display: grid; grid-template-columns: 92px 1fr auto; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--hairline-2); align-items: center; transition: background .2s; position: relative; }
-.feed-row:hover { background: rgba(34,28,21,.025); }
-.feed-row .cat { font-family: var(--f-mono); font-size: .62rem; letter-spacing: .14em; color: var(--vermilion); border: 1px solid currentColor; border-radius: 4px; padding: 3px 0; text-align: center; }
-.feed-row .t { font-weight: 600; font-size: .95rem; line-height: 1.5; }
-.feed-row .m { font-size: .72rem; color: var(--ink-3); margin-top: 3px; font-family: var(--f-mono); }
-.feed-row .date { font-family: var(--f-mono); font-size: .68rem; color: var(--ink-3); }
-.lib-side h3 { font-family: var(--f-display); font-size: 1.05rem; font-weight: 900; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
-.lib-side h3 .seal-mini { width: 22px; height: 22px; font-size: 11px; border-radius: 4px; }
-.rec-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--hairline-2); }
-.rec-item:last-child { border-bottom: 0; }
-.rec-item .rank { font-family: var(--f-latin); font-style: italic; font-size: 1.15rem; color: var(--ink-3); min-width: 22px; }
-.rec-item:nth-child(1) .rank, .rec-item:nth-child(2) .rank { color: var(--vermilion); }
-.rec-item .t { font-size: .84rem; font-weight: 600; line-height: 1.55; }
-.rec-item .d { font-size: .68rem; color: var(--ink-3); font-family: var(--f-mono); margin-top: 2px; }
-.lib-more { margin-top: 20px; }
-
-/* ============ 故事 ============ */
-.story-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.story-card { background: var(--paper-2); border-radius: var(--radius); padding: 30px 28px; position: relative; border: 1px solid var(--hairline-2); transition: transform .3s cubic-bezier(.2,.7,.2,1); }
-.story-card:hover { transform: translateY(-4px); }
-.story-card .q { font-family: var(--f-latin); font-size: 2.6rem; line-height: 0; color: var(--vermilion); display: block; margin: 14px 0 20px 6px; }
-.story-card blockquote { font-size: .92rem; line-height: 1.85; color: var(--ink-2); }
-.story-card blockquote b { color: var(--ink); }
-.story-card .who { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--hairline); display: flex; align-items: center; gap: 12px; }
-.story-card .ava { width: 38px; height: 38px; border-radius: 50%; background: var(--spruce-wash); color: var(--spruce); display: grid; place-items: center; font-weight: 700; font-size: .85rem; }
-.story-card .who .nm { font-weight: 700; font-size: .86rem; }
-.story-card .who .rt { font-family: var(--f-mono); font-size: .64rem; color: var(--ink-3); margin-top: 2px; }
-.story-card .arrived { position: absolute; top: 22px; right: 22px; transform: rotate(6deg); }
-.story-card .arrived .seal { width: 54px; height: 54px; font-size: .8rem; line-height: 1.25; padding: 4px; letter-spacing: .05em; }
-
-/* ============ 终章 CTA ============ */
-.finale { text-align: center; padding: var(--sp-section) 0; position: relative; }
-.finale .seal-big { width: 66px; height: 66px; font-size: 1.5rem; margin: 0 auto 30px; }
-.finale h2 { font-family: var(--f-display); font-weight: 900; font-size: var(--t-h1); line-height: 1.4; }
-.finale p { color: var(--ink-2); margin: 18px 0 34px; }
-.finale .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-
-/* ============ 响应式 ============ */
-@media (max-width: 1020px) {
-  .dir-grid { grid-template-columns: repeat(2, 1fr); }
-  .steps { grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
-  .steps::before { display: none; }
-  .story-grid, .mani-grid { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 860px) {
-  .hero-grid { grid-template-columns: 1fr; }
-  .vertical-tag { display: none; }
-  .ticket { max-width: 460px; }
-  .lib-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 600px) {
-  .dir-grid { grid-template-columns: 1fr; }
-  .story-grid, .mani-grid { grid-template-columns: 1fr; }
-  .hero-stats { gap: 20px; }
-}
+  @media (max-width: 1080px) { .gate { grid-template-columns: 1fr; } .gap-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
-<!-- ============ 顶栏 ============ -->
-<header class="topbar">
-  <div class="container topbar-inner">
-    <a class="wordmark" href="01-home.html">
-      <span class="seal-mini">课</span>
-      <span class="wm-text"><span class="wm-cn">课搭</span><span class="wm-en">KEDAHUB</span></span>
+<!-- ══════════ 导航 ══════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="01-home.html">
+      <span class="logo-mark">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </span>
+      <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
     </a>
-    <nav class="nav">
-      <a href="#fangxiang" class="on">成长方向</a>
-      <a href="07-library.html">资料馆</a>
-      <a href="05-roadmap.html">我的路线</a>
-      <a href="#gushi">抵达故事</a>
-      <a href="09-pricing.html">项目组</a>
+    <div class="nav-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      搜索资料、路线、学长经验…
+    </div>
+    <div class="nav-actions">
+      <a class="nav-link on" href="01-home.html">首页</a>
+      <a class="nav-link" href="02-explore.html">🧭 探索路线</a>
+      <a class="nav-link" href="09-cohort.html">项目组</a>
+      <a class="nav-link" href="10-pricing.html">验收与付费</a>
+      <a class="btn btn-outline btn-sm" href="04-survey.html">登录</a>
+      <a class="btn btn-primary btn-sm" href="04-survey.html">定制我的路线</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- ══════════ 顶部提示：新生优先 ══════════ -->
+  <div class="notice">
+    <span class="nt-tag">新生</span>
+    <span>还没想好学哪个方向？先花 8 个晚上把计算机摸一遍，再决定走哪条路。</span>
+    <a href="02-explore.html">开始探索 →</a>
+  </div>
+
+  <!-- ══════════ 刊头 ══════════ -->
+  <header>
+    <div class="blog-mast">
+      <div class="blog-mast-main">
+        <div class="bm-kicker">Campus Materials Blog · 校园资料博客</div>
+        <h1>找资料，先来<em>课搭</em></h1>
+        <p class="bm-tagline">
+          课程真题、留学文书、求职模板、成长路线——每一份都来自学长学姐的真实整理，署名可溯。
+        </p>
+      </div>
+      <div class="blog-mast-side">
+        2026 秋季学期 · 开学季<br />
+        共收录资料 <span class="bm-count">136</span> 份<br>成长路线 <span class="bm-count">28</span> 条
+      </div>
+    </div>
+    <div class="bm-rule"></div>
+    <nav class="blog-cats">
+      <span class="bc-label">📚 分类</span>
+      <a class="bc-chip on" href="#">全部</a>
+      <a class="bc-chip" href="#">🎓 新生引路</a>
+      <a class="bc-chip" href="#">📖 课程学习</a>
+      <a class="bc-chip" href="#">🎯 升学备考</a>
+      <a class="bc-chip" href="#">✈️ 留学申请</a>
+      <a class="bc-chip" href="#">💼 求职实习</a>
+      <a class="bc-chip" href="#">🌱 成长视野</a>
+      <a class="bc-chip" href="#">🏫 家教教案</a>
     </nav>
-    <div class="topbar-cta">
-      <a class="btn btn-ghost" href="07-library.html">资料馆</a>
-      <a class="btn btn-primary" href="02-direction.html">找到我的方向</a>
-    </div>
-  </div>
-</header>
+  </header>
 
-<!-- ============ HERO ============ -->
-<section class="hero">
-  <div class="container hero-grid">
-    <div>
-      <div class="hero-kicker rv">结果型成长社区 · 学长带路，陪你走到结果</div>
-      <h1 class="rv rv-d1">从「我想成为谁」，<br>到<em>「我真的做到了」</em>。</h1>
-      <p class="hero-sub rv rv-d2">大学生缺的从来不是资料，而是「不知道该往哪走、下一步做什么」。课搭把每一条成长路径，做成一条<b>为你定制的、可执行的路线</b>——学到哪、做什么、怎么验收，一步一步，走到结果。</p>
-      <div class="hero-cta rv rv-d3">
-        <a class="btn btn-primary" href="02-direction.html">开始定制我的路线 <span class="btn-arrow">→</span></a>
-        <a class="btn btn-ghost" href="#fangxiang">先逛逛方向指南</a>
+  <!-- ══════════ ① 路线入口（本页最高优先级） ══════════ -->
+  <section class="gate">
+    <a class="toon-card hoverable gate-card gate-a" href="02-explore.html">
+      <span class="gate-tag">大一 · 探索路线</span>
+      <h3>我还不知道自己喜欢什么</h3>
+      <p>
+        不确定方向就先别选。8 个晚上，从黑窗口到 AI 各摸一遍，每站都做出一个能拿给室友看的小东西。
+        走完你手里不是一张问卷答案，而是<strong>八次真实手感</strong>——用脚投票选出来的方向，才不容易后悔。
+      </p>
+      <div class="gate-stops">
+        <span class="gs">⌨️ 黑窗口</span><span class="gs-arrow">›</span>
+        <span class="gs">📜 脚本</span><span class="gs-arrow">›</span>
+        <span class="gs">🌿 Git</span><span class="gs-arrow">›</span>
+        <span class="gs">🖥️ 服务器</span><span class="gs-arrow">›</span>
+        <span class="gs">🗄️ 数据库</span><span class="gs-arrow">›</span>
+        <span class="gs">🤖 AI</span>
       </div>
-      <div class="hero-stats rv rv-d4">
-        <div class="stat"><div class="n"><b>9</b> 条</div><div class="l">成长方向路线</div></div>
-        <div class="stat"><div class="n"><b>135</b> 份</div><div class="l">学长整理资料</div></div>
-        <div class="stat"><div class="n">8 <span style="font-size:1rem">阶段</span></div><div class="l">平均路线长度</div></div>
-        <div class="stat"><div class="n">100%</div><div class="l">方向指南免费读</div></div>
+      <div class="gate-foot">
+        <span class="btn btn-primary">开始探索之旅</span>
+        <span style="font-size:12px;color:var(--ink-soft)">免费 · 约 16 小时 · 已 1,284 人走完</span>
       </div>
+      <span class="gate-dai">
+        <svg width="76" height="76" viewBox="0 0 64 64" class="dai-bob">
+          <rect x="19" y="47" width="9" height="11" rx="4.5" fill="#d04a2a"/>
+          <rect x="36" y="47" width="9" height="11" rx="4.5" fill="#d04a2a"/>
+          <rect x="8" y="9" width="48" height="44" rx="16" fill="#ff6b4a"/>
+          <rect x="8" y="9" width="48" height="44" rx="16" fill="url(#gd)" opacity=".35"/>
+          <circle cx="24" cy="29" r="4.2" fill="#fff"/><circle cx="40" cy="29" r="4.2" fill="#fff"/>
+          <circle cx="25" cy="30" r="2.2" fill="#1a1d23"/><circle cx="41" cy="30" r="2.2" fill="#1a1d23"/>
+          <path d="M27 39q5 5 10 0" stroke="#1a1d23" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <defs><linearGradient id="gd" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+          </linearGradient></defs>
+        </svg>
+      </span>
+    </a>
+
+    <a class="toon-card hoverable gate-card gate-b" href="04-survey.html">
+      <span class="gate-tag">已有方向</span>
+      <h3>我想走 前端 / 算法 / 后端…</h3>
+      <p>
+        选一个方向，告诉我你的年级、基础和每周能投入的时间。
+        <strong>隐藏式 Agent</strong> 会从人工验证过的路线模板里挑一条，再按你的情况逐个关卡调整——
+        该跳的跳、该补的补，生成一条只属于你的路线。
+      </p>
+      <div class="gate-foot" style="margin-top:18px">
+        <span class="btn btn-ink">定制我的路线</span>
+        <span style="font-size:12px;color:var(--ink-soft)">约 3 分钟</span>
+      </div>
+    </a>
+  </section>
+
+  <!-- ══════════ ② 信息差专栏 ══════════ -->
+  <section class="blog-sec">
+    <div class="blog-sec-head">
+      <h2>💡 信息差</h2>
+      <a class="bs-more" href="#">全部 42 篇 →</a>
+    </div>
+    <div class="blog-sec-sub">你踩的坑，学长都踩过。这些事没人会主动告诉你。</div>
+    <div class="gap-grid">
+      <a class="toon-card hoverable gap-card" href="03-direction.html">
+        <span class="gap-ico">🧭</span>
+        <span>
+          <span class="gap-flag">方向认知 · 8 分钟</span>
+          <b>计算机十几个方向，到底哪个适合我？</b>
+          <span>把"前端/后端/算法/测试/运维"拆成每天在干嘛、什么性格的人干得下去、天花板在哪。</span>
+        </span>
+      </a>
+      <a class="toon-card hoverable gap-card" href="#">
+        <span class="gap-ico">⏰</span>
+        <span>
+          <span class="gap-flag">时间线 · 6 分钟</span>
+          <b>大厂暑期实习，其实大三上就要投了</b>
+          <span>春招秋招、暑期实习、日常实习的真实时间表——错过一次，等于晚一年。</span>
+        </span>
+      </a>
+      <a class="toon-card hoverable gap-card" href="#">
+        <span class="gap-ico">🪤</span>
+        <span>
+          <span class="gap-flag">避坑 · 5 分钟</span>
+          <b>这 7 类证书和培训，别报</b>
+          <span>简历上不加分、面试官不看、还占你两个月。哪些才是真的有用。</span>
+        </span>
+      </a>
+      <a class="toon-card hoverable gap-card" href="#">
+        <span class="gap-ico">🎓</span>
+        <span>
+          <span class="gap-flag">升学 · 7 分钟</span>
+          <b>保研、考研、留学、就业，四条路的真实门槛</b>
+          <span>各自要什么、什么时候开始准备、什么人不适合——一张表说清。</span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══════════ ③ 双区：资料 / 路线模板 ══════════ -->
+  <nav class="zt-bar" aria-label="专区切换" style="display:flex;gap:8px;margin-bottom:26px;border-bottom:1px solid var(--line);padding-bottom:0">
+    <button class="zt-btn on" data-zone="works"
+      style="padding:9px 16px;font-size:13.5px;font-weight:700;border-bottom:2px solid var(--pri);color:var(--pri-600);margin-bottom:-1px;display:flex;align-items:center;gap:6px">
+      📚 资料库 <small style="font-weight:500;color:var(--ink-soft);font-size:11.5px">136 份</small>
+    </button>
+    <button class="zt-btn" data-zone="routes"
+      style="padding:9px 16px;font-size:13.5px;font-weight:700;border-bottom:2px solid transparent;color:var(--ink-soft);margin-bottom:-1px;display:flex;align-items:center;gap:6px">
+      🧭 路线模板 <small style="font-weight:500;color:var(--ink-soft);font-size:11.5px">28 条 · 可定制</small>
+    </button>
+  </nav>
+
+  <div class="blog-layout">
+    <div class="blog-main">
+
+      <!-- ── 区 A：资料库 ── -->
+      <div data-panel="works">
+        <section class="fresh-zone">
+          <div class="fresh-head">
+            <span class="fresh-ico">🎓</span>
+            <div class="fresh-title">
+              你好，2026 级新同学
+              <small>报到、选课、军训、宿舍——学长学姐把路都替你踩过了</small>
+            </div>
+          </div>
+          <div class="fresh-chips">
+            <button class="fchip on">全部</button>
+            <button class="fchip">报到流程</button>
+            <button class="fchip">宿舍生活</button>
+            <button class="fchip">英语分级</button>
+            <button class="fchip">转专业</button>
+            <button class="fchip">计算机</button>
+            <button class="fchip">竞赛</button>
+          </div>
+          <div class="feed-row" style="padding-left:0;padding-right:0">
+            <div class="feed-date"><b>01</b><small>新生引路</small></div>
+            <div>
+              <div class="feed-eyebrow">🎓 新生引路 · 通用资料 <span class="fr-pill fine">精点</span></div>
+              <div class="feed-title">计算机零基础第一课：专业到底学什么，怎么才算入门</div>
+              <div class="feed-desc">写给刚进大学的计算机新生：这个专业到底在学什么、什么才算真的入门。</div>
+            </div>
+            <div class="feed-arrow">›</div>
+          </div>
+          <div class="feed-row" style="padding-left:0;padding-right:0">
+            <div class="feed-date"><b>02</b><small>新生引路</small></div>
+            <div>
+              <div class="feed-eyebrow">🎓 新生引路 · 通用资料</div>
+              <div class="feed-title">计算机第一课</div>
+              <div class="feed-desc">大学第一学期怎么过：选课、自学路径与常见误区，学长踩过的坑都在这。</div>
+            </div>
+            <div class="feed-arrow">›</div>
+          </div>
+          <div class="feed-row" style="padding-left:0;padding-right:0;border-bottom:none">
+            <div class="feed-date"><b>03</b><small>新生引路</small></div>
+            <div>
+              <div class="feed-eyebrow">🎓 新生引路 · 通用资料</div>
+              <div class="feed-title">深大计算机学院奖学金助学金评定制度汇总</div>
+              <div class="feed-desc">深大计算机奖学金与助学金评定制度汇总，想拿奖学金先读懂规则。</div>
+            </div>
+            <div class="feed-arrow">›</div>
+          </div>
+        </section>
+
+        <section class="blog-sec">
+          <div class="blog-sec-head">
+            <h2>最新上架</h2>
+            <a class="bs-more" href="#">全部 →</a>
+          </div>
+          <div class="blog-sec-sub">按收录时间倒序，每天更新</div>
+
+          <div class="feed-row">
+            <div class="feed-date"><b>09</b><small>09月</small></div>
+            <div>
+              <div class="feed-eyebrow">📖 课程学习 · 通用资料 <span class="fr-pill free">免费</span></div>
+              <div class="feed-title">C语言基础练习题：66 题从 Hello World 到课程设计</div>
+              <div class="feed-desc">66 道题覆盖 C 语言期末全部基础语法。每题带可直接编译运行的参考代码和讲解（全部代码已用 gcc 实测编译通过）。</div>
+              <div class="feed-meta"><b>温昊璇</b><span>👁 20</span><span>⭐ 0</span><span class="tag">#C语言</span><span class="tag">#未复习</span></div>
+            </div>
+            <div class="feed-arrow">›</div>
+          </div>
+          <div class="feed-row">
+            <div class="feed-date"><b>05</b><small>09月</small></div>
+            <div>
+              <div class="feed-eyebrow">🏫 家教教案 · 通用资料 <span class="fr-pill free">免费</span></div>
+              <div class="feed-title">家教第一课</div>
+              <div class="feed-desc">第一次去家教怎么备课、怎么开场、怎么和家长相处，全流程经验。</div>
+              <div class="feed-meta"><b>温昊璇</b><span>👁 12</span><span>⭐ 1</span><span class="tag">#家教经验</span></div>
+            </div>
+            <div class="feed-arrow">›</div>
+          </div>
+          <div class="feed-row">
+            <div class="feed-date"><b>05</b><small>09月</small></div>
+            <div>
+              <div class="feed-eyebrow">🎯 升学备考 · 通用资料 <span class="fr-pill free">免费</span></div>
+              <div class="feed-title">计算机考研 408 指南</div>
+              <div class="feed-desc">408 四门课（数据结构/组成原理/操作系统/计算机网络）的复习策略与资料选择。</div>
+              <div class="feed-meta"><b>温昊璇</b><span>👁 15</span><span>⭐ 0</span><span class="tag">#考研</span></div>
+            </div>
+            <div class="feed-arrow">›</div>
+          </div>
+          <div class="feed-row">
+            <div class="feed-date"><b>05</b><small>09月</small></div>
+            <div>
+              <div class="feed-eyebrow">🌱 成长视野 · 通用资料 <span class="fr-pill free">免费</span> <span class="fr-pill fine">精点</span></div>
+              <div class="feed-title">计算机方向全景图</div>
+              <div class="feed-desc">计算机岗位方向全览：后端、前端、AI、安全、测试的技能要求与前景对比。</div>
+              <div class="feed-meta"><b>温昊璇</b><span>👁 13</span><span>⭐ 2</span><span class="tag">#方向选择</span></div>
+            </div>
+            <div class="feed-arrow">›</div>
+          </div>
+          <div class="feed-foot"><a class="btn btn-light btn-sm" href="08-library.html">浏览更早的资料 →</a></div>
+        </section>
+      </div>
+
+      <!-- ── 区 B：路线模板 ── -->
+      <div data-panel="routes" hidden>
+        <section class="blog-sec">
+          <div class="blog-sec-head">
+            <h2>路线模板</h2>
+            <a class="bs-more" href="04-survey.html">定制我的路线 →</a>
+          </div>
+          <div class="blog-sec-sub">每条路线都由已上岸的学长学姐人工验证过，再由 Agent 按你的情况调整。</div>
+
+          <a class="toon-card hoverable" href="02-explore.html"
+             style="display:flex;gap:16px;padding:18px;margin-bottom:12px;background:linear-gradient(120deg,#fff,var(--pri-50))">
+            <span style="width:56px;height:56px;border-radius:16px;background:var(--pri);display:grid;place-items:center;font-size:26px;flex:none;box-shadow:0 3px 0 rgba(208,74,42,.3)">🧭</span>
+            <span style="flex:1">
+              <b style="font-size:16px;font-weight:800;display:block">计算机探索路线 · 8 站</b>
+              <span style="font-size:13px;color:var(--ink-2);display:block;margin-top:3px">还不知道选什么方向就走这条。从黑窗口到 AI 各摸一遍，用真实手感选方向。</span>
+              <span style="display:flex;gap:12px;margin-top:8px;font-size:11.5px;color:var(--ink-soft)">
+                <span>⏱ 约 16 小时</span><span>👥 1,284 人走过</span><span class="fr-pill free">免费</span>
+              </span>
+            </span>
+          </a>
+
+          <div class="feed-row">
+            <div class="feed-date"><b>01</b><small>后端</small></div>
+            <div>
+              <div class="feed-eyebrow">💼 求职实习 · 6 阶段 24 关卡 <span class="fr-pill free">前 2 阶段免费</span></div>
+              <div class="feed-title">Java 后端成长路线：从语法到能扛住面试的项目</div>
+              <div class="feed-desc">由 3 位已上岸大厂后端的学长验证。含 4 个可写进简历的项目、每阶段的验收标准与常见挂点。</div>
+              <div class="feed-meta"><b>课搭教研组</b><span>👥 862 人在走</span><span class="tag">#Java</span><span class="tag">#Spring</span><span class="tag">#可验收</span></div>
+            </div>
+            <div class="feed-arrow">›</div>
+          </div>
+          <div class="feed-row">
+            <div class="feed-date"><b>02</b><small>算法</small></div>
+            <div>
+              <div class="feed-eyebrow">💼 求职实习 · 5 阶段 30 关卡 <span class="fr-pill free">前 2 阶段免费</span></div>
+              <div class="feed-title">算法与数据结构：从 LeetCode 100 到能过笔试</div>
+              <div class="feed-desc">按遗忘曲线排布的刷题路线，每阶段配一场模拟笔试。由拿到 SP offer 的学长验证。</div>
+              <div class="feed-meta"><b>课搭教研组</b><span>👥 731 人在走</span><span class="tag">#算法</span><span class="tag">#笔试</span></div>
+            </div>
+            <div class="feed-arrow">›</div>
+          </div>
+          <div class="feed-row">
+            <div class="feed-date"><b>03</b><small>前端</small></div>
+            <div>
+              <div class="feed-eyebrow">💼 求职实习 · 5 阶段 22 关卡 <span class="fr-pill free">前 2 阶段免费</span></div>
+              <div class="feed-title">前端成长路线：从写得出页面到写得好项目</div>
+              <div class="feed-desc">HTML/CSS → JS → 框架 → 工程化 → 项目。每阶段一个能上线给别人看的作品。</div>
+              <div class="feed-meta"><b>课搭教研组</b><span>👥 508 人在走</span><span class="tag">#前端</span><span class="tag">#React</span></div>
+            </div>
+            <div class="feed-arrow">›</div>
+          </div>
+          <div class="feed-row">
+            <div class="feed-date"><b>04</b><small>AI</small></div>
+            <div>
+              <div class="feed-eyebrow">🌱 成长视野 · 6 阶段 26 关卡 <span class="fr-pill free">前 2 阶段免费</span></div>
+              <div class="feed-title">AI 应用开发路线：会用大模型做出真东西</div>
+              <div class="feed-desc">不教你训模型，教你把模型用起来：Prompt → RAG → Agent → 上线。门槛比你想的低。</div>
+              <div class="feed-meta"><b>课搭教研组</b><span>👥 1,102 人在走</span><span class="tag">#AI</span><span class="tag">#RAG</span><span class="tag">#Agent</span></div>
+            </div>
+            <div class="feed-arrow">›</div>
+          </div>
+          <div class="feed-foot"><a class="btn btn-light btn-sm" href="#">查看全部 28 条路线 →</a></div>
+        </section>
+      </div>
+
     </div>
 
-    <!-- 路线票据：产品核心体验的预览 -->
-    <div class="rv rv-d2">
-      <article class="ticket" aria-label="专属路线预览">
-        <div class="ticket-head">
-          <span class="tt">KEDAHUB ROUTE · 专属路线</span>
-          <span class="badge-free">免费生成</span>
+    <!-- ══════════ 侧栏 ══════════ -->
+    <aside class="blog-side">
+      <div class="side-box">
+        <h3>🔥 本周路线推进榜</h3>
+        <div class="sb-sub">按本周走过的关卡数排名</div>
+        <div class="rank-item"><span class="rank-no t1">1</span><span class="rank-av" style="background:#ff6b4a">温</span><span class="rank-info"><b>温昊璇</b><span>Java 后端</span></span><span class="rank-metric">26</span></div>
+        <div class="rank-item"><span class="rank-no t2">2</span><span class="rank-av" style="background:#10b981">O</span><span class="rank-info"><b>Orion</b><span>AI 应用</span></span><span class="rank-metric">19</span></div>
+        <div class="rank-item"><span class="rank-no t3">3</span><span class="rank-av" style="background:#6366f1">m</span><span class="rank-info"><b>mro4</b><span>前端</span></span><span class="rank-metric">14</span></div>
+        <div class="rank-item"><span class="rank-no">4</span><span class="rank-av" style="background:#e8638f">y</span><span class="rank-info"><b>yyy</b><span>算法</span></span><span class="rank-metric">11</span></div>
+        <div class="rank-item"><span class="rank-no">5</span><span class="rank-av" style="background:#f59e0b">平</span><span class="rank-info"><b>平台管理员</b><span>探索路线</span></span><span class="rank-metric">9</span></div>
+      </div>
+
+      <div class="side-box" style="background:var(--pri-50);border-color:#ffd9cd">
+        <h3>🧭 还没定方向？</h3>
+        <div class="sb-sub" style="color:var(--pri-700)">先走一遍探索路线，8 站摸完再选</div>
+        <a class="btn btn-primary btn-block btn-sm" href="02-explore.html">开始探索 →</a>
+        <div style="font-size:11.5px;color:var(--pri-700);margin-top:9px;text-align:center">免费 · 约 16 小时</div>
+      </div>
+
+      <div class="side-box">
+        <h3>📢 公告</h3>
+        <div class="sb-sub">平台动态</div>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.7">
+          <b style="color:var(--ink)">2026/9/14</b><br />「探索路线」上线，大一同学建议从这里开始。
         </div>
-        <div class="ticket-route">
-          <div class="from"><small>FROM · 你现在</small>Java 后端</div>
-          <div class="arrow">
-            <svg viewBox="0 0 100 20" preserveAspectRatio="none" fill="none">
-              <path d="M0 10 H92" stroke="#C2431D" stroke-width="1.6" stroke-dasharray="4 5"/>
-              <path d="M88 4 L96 10 L88 16" stroke="#C2431D" stroke-width="1.6" fill="none"/>
-            </svg>
-          </div>
-          <div class="to"><small>TO · 目标</small>AI Agent 开发</div>
+      </div>
+
+      <div class="side-box">
+        <h3>🗂️ 资料分类</h3>
+        <div class="sb-sub">点进入目录</div>
+        <div style="font-size:12.5px">
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">🎓 新生引路 <span style="color:var(--ink-faint)">12</span></a>
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">📖 课程学习 <span style="color:var(--ink-faint)">28</span></a>
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">🎯 升学备考 <span style="color:var(--ink-faint)">24</span></a>
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">✈️ 留学申请 <span style="color:var(--ink-faint)">31</span></a>
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">💼 求职实习 <span style="color:var(--ink-faint)">22</span></a>
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">🌱 成长视野 <span style="color:var(--ink-faint)">15</span></a>
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">🏫 家教教案 <span style="color:var(--ink-faint)">4</span></a>
         </div>
-        <div class="ticket-body">
-          <div class="stop st-passed">
-            <div class="dot-col"><span class="dot"></span><span class="seg"></span></div>
-            <div><div class="s-name">Python 基础</div><div class="s-meta">基础扎实 · 已为你压缩为 2 周</div></div>
-            <span class="s-tag">已通过</span>
-          </div>
-          <div class="stop st-passed">
-            <div class="dot-col"><span class="dot"></span><span class="seg"></span></div>
-            <div><div class="s-name">LLM 基础与 Prompt 工程</div><div class="s-meta">8/12 个节点 · 验收已通过</div></div>
-            <span class="s-tag">已通过</span>
-          </div>
-          <div class="stop st-active">
-            <div class="dot-col"><span class="dot"></span><span class="seg"></span></div>
-            <div><div class="s-name">RAG 检索增强</div><div class="s-meta">正在推进 · 今日任务已打卡</div></div>
-            <span class="s-tag">进行中</span>
-          </div>
-          <div class="stop st-locked">
-            <div class="dot-col"><span class="dot"></span><span class="seg"></span></div>
-            <div><div class="s-name">Agent 开发实战</div><div class="s-meta">通过 RAG 验收后解锁</div></div>
-            <span class="s-tag">未解锁</span>
-          </div>
-          <div class="stop st-arrive">
-            <div class="dot-col"><span class="dot"></span></div>
-            <div><div class="s-name">抵达 · AI Agent Offer</div><div class="s-meta">预计 2027 年 3 月</div></div>
-          </div>
-        </div>
-        <div class="ticket-foot">
-          <div class="cell"><div class="k">进度</div><div class="v">34%</div></div>
-          <div class="cell"><div class="k">连续打卡</div><div class="v"><span class="flame">23</span> 天</div></div>
-          <div class="cell"><div class="k">下一站</div><div class="v">RAG 验收</div></div>
-        </div>
-      </article>
-    </div>
-  </div>
-  <div class="vertical-tag">結果型成長社區 · 課搭</div>
-</section>
-
-<!-- ============ 发车信息条 ============ -->
-<div class="board" aria-hidden="true">
-  <div class="board-track">
-    <span class="board-item"><span class="code">K-01</span> Java 后端实习 <span class="st">· 12 周 · 可上车</span></span>
-    <span class="board-item"><span class="code">K-02</span> 后端 → AI Agent 开发 <span class="st">· 16 周 · 热门</span></span>
-    <span class="board-item"><span class="code">K-03</span> AI 应用开发 <span class="st">· 14 周 · 可上车</span></span>
-    <span class="board-item"><span class="code">K-06</span> 产品经理 <span class="st">· 10 周 · 可上车</span></span>
-    <span class="board-item"><span class="code">G-01</span> 保研 <span class="st">· 全程陪跑</span></span>
-    <span class="board-item"><span class="code">G-02</span> 考研 408 <span class="st">· 24 周</span></span>
-    <span class="board-item"><span class="code">G-03</span> 留学申请 <span class="st">· 申请季</span></span>
-    <span class="board-item"><span class="code">K-01</span> Java 后端实习 <span class="st">· 12 周 · 可上车</span></span>
-    <span class="board-item"><span class="code">K-02</span> 后端 → AI Agent 开发 <span class="st">· 16 周 · 热门</span></span>
-    <span class="board-item"><span class="code">K-03</span> AI 应用开发 <span class="st">· 14 周 · 可上车</span></span>
-    <span class="board-item"><span class="code">K-06</span> 产品经理 <span class="st">· 10 周 · 可上车</span></span>
-    <span class="board-item"><span class="code">G-01</span> 保研 <span class="st">· 全程陪跑</span></span>
-    <span class="board-item"><span class="code">G-02</span> 考研 408 <span class="st">· 24 周</span></span>
-    <span class="board-item"><span class="code">G-03</span> 留学申请 <span class="st">· 申请季</span></span>
-  </div>
-</div>
-
-<!-- ============ 方向导航 ============ -->
-<section class="sec" id="fangxiang">
-  <div class="container">
-    <div class="sec-head rv"><span class="sec-num">01 / DIRECTIONS</span><h2 class="sec-title">先选方向，再谈努力</h2></div>
-    <p class="sec-sub rv">每一条方向指南都认真写清楚：它是什么、值不值得走、适不适合你、要走多久、常见误区是什么。<b>不需要注册，全部免费读完</b>——先想清楚，再上路。</p>
-    <hr class="sec-rule">
-
-    <div class="family-tabs rv" role="tablist" aria-label="方向分类">
-      <button class="family-tab" role="tab" aria-selected="true" data-family="job"><span class="dot"></span>实习就业 <small>CAREER</small></button>
-      <button class="family-tab" role="tab" aria-selected="false" data-family="growth"><span class="dot"></span>大学成长 <small>CAMPUS</small></button>
-    </div>
-
-    <div class="dir-grid" id="grid-job">
-      <a class="dir-card rv" href="02-direction.html">
-        <div class="code"><span>K-01</span><span class="heat">● 热门</span></div>
-        <div class="path">零基础 <span class="via">→</span> Java 后端实习</div>
-        <p class="desc">从语法到 Spring 全家桶，做出两个能写上简历的项目，拿下第一份后端实习。</p>
-        <div class="meta"><span>约 12 周</span><span>零基础可走</span><span>326 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv rv-d1" href="02-direction.html">
-        <div class="code"><span>K-02</span><span class="heat">● 最热</span></div>
-        <div class="path">Java 后端 <span class="via">→</span> AI Agent 开发</div>
-        <p class="desc">不扔掉你的后端底子：Python 补差、LLM、RAG、Agent 框架，直通 AI 应用岗。</p>
-        <div class="meta"><span>约 16 周</span><span>需后端基础</span><span>218 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv rv-d2" href="02-direction.html">
-        <div class="code"><span>K-03</span></div>
-        <div class="path">会写代码 <span class="via">→</span> AI 应用开发</div>
-        <p class="desc">LLM API、Prompt 工程、RAG、多模态——把大模型真正做成产品的那批人。</p>
-        <div class="meta"><span>约 14 周</span><span>任意语言基础</span><span>154 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv" href="02-direction.html">
-        <div class="code"><span>K-04</span></div>
-        <div class="path">零基础 <span class="via">→</span> 前端开发</div>
-        <p class="desc">从三件套到 React/Next.js，视觉可见的成长曲线，作品集即简历。</p>
-        <div class="meta"><span>约 12 周</span><span>零基础可走</span><span>291 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv rv-d1" href="02-direction.html">
-        <div class="code"><span>K-05</span></div>
-        <div class="path">数学好 <span class="via">→</span> 算法工程师</div>
-        <p class="desc">机器学习到深度学习的严格路径，适合数学底子扎实、能坐得住的人。</p>
-        <div class="meta"><span>约 24 周</span><span>需高数线代</span><span>96 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv rv-d2" href="02-direction.html">
-        <div class="code"><span>K-06</span></div>
-        <div class="path">爱折腾 <span class="via">→</span> 产品经理</div>
-        <p class="desc">需求分析、原型、数据 sense——用作品集和实习证明你懂用户。</p>
-        <div class="meta"><span>约 10 周</span><span>不限专业</span><span>203 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv" href="02-direction.html">
-        <div class="code"><span>K-07</span></div>
-        <div class="path">懂技术 <span class="via">→</span> AI 产品经理</div>
-        <p class="desc">技术型产品人的稀缺路线：懂模型能力边界，会设计 AI 功能与评估。</p>
-        <div class="meta"><span>约 12 周</span><span>技术/产品其一</span><span>87 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv rv-d1" href="02-direction.html">
-        <div class="code"><span>K-08</span></div>
-        <div class="path">任意转方向 <span class="via">→</span> 重新出发</div>
-        <p class="desc">Java 转 Python、开发转产品、运维转开发——转行不是清零，是迁移。</p>
-        <div class="meta"><span>按起点定制</span><span>已有基础</span><span>142 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv rv-d2" href="02-direction.html" style="background:var(--paper-2); border-style: dashed;">
-        <div class="code"><span>更多方向</span></div>
-        <div class="path">测试 / 数据 / 运维…</div>
-        <p class="desc">方向指南持续新增中。你想要的方向没有？告诉我们，学长来写。</p>
-        <div class="meta"><span>每周更新</span><span>欢迎提名</span></div>
-        <span class="go">提名新方向 →</span>
-      </a>
-    </div>
-
-    <div class="dir-grid" id="grid-growth" hidden>
-      <a class="dir-card rv" href="02-direction.html">
-        <div class="code"><span>G-01</span><span class="heat">● 热门</span></div>
-        <div class="path">大一/大二 <span class="via">→</span> 保研</div>
-        <p class="desc">绩点、竞赛、科研、夏令营——保研是一场三年的持久战，路线帮你排兵布阵。</p>
-        <div class="meta"><span>1–3 年</span><span>绩点为先</span><span>412 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv rv-d1" href="02-direction.html">
-        <div class="code"><span>G-02</span></div>
-        <div class="path">决定考研 <span class="via">→</span> 上岸</div>
-        <p class="desc">择校、408/数学/英语政治、复试——一条从决策到拟录取的完整路线。</p>
-        <div class="meta"><span>约 40 周</span><span>大三启动</span><span>365 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv rv-d2" href="02-direction.html">
-        <div class="code"><span>G-03</span></div>
-        <div class="path">打算留学 <span class="via">→</span> 拿 offer</div>
-        <p class="desc">GPA、语言、科研背景、选校文书——申请季前的每一步都有据可依。</p>
-        <div class="meta"><span>1–2 年</span><span>越早越好</span><span>178 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv" href="02-direction.html">
-        <div class="code"><span>G-04</span></div>
-        <div class="path">四级 425 <span class="via">→</span> 六级 550+</div>
-        <p class="desc">不背单词书的英语路线：真题驱动 + 输出训练，顺手把口语练了。</p>
-        <div class="meta"><span>约 10 周</span><span>分级定制</span><span>530 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv rv-d1" href="02-direction.html">
-        <div class="code"><span>G-05</span></div>
-        <div class="path">零基础 <span class="via">→</span> 高含金量证书</div>
-        <p class="desc">软考、教资、CPA、法考……哪些证值得考、怎么备考不耽误主线，一次说清。</p>
-        <div class="meta"><span>按证书定制</span><span>选择性走</span><span>247 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv rv-d2" href="02-direction.html">
-        <div class="code"><span>G-06</span></div>
-        <div class="path">没项目 <span class="via">→</span> 简历上的项目经历</div>
-        <p class="desc">从 0 做出一个能讲 20 分钟的项目，并且知道怎么把它讲成 20 分钟。</p>
-        <div class="meta"><span>约 8 周</span><span>任意方向</span><span>389 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv" href="02-direction.html">
-        <div class="code"><span>G-07</span></div>
-        <div class="path">想参赛 <span class="via">→</span> 省奖以上</div>
-        <p class="desc"> ACM、蓝桥杯、挑战杯、互联网+、大创——选对赛、组好队、打到位。</p>
-        <div class="meta"><span>按赛程定制</span><span>组队可行</span><span>176 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-      <a class="dir-card rv rv-d1" href="02-direction.html">
-        <div class="code"><span>G-08</span></div>
-        <div class="path">迷茫期 <span class="via">→</span> 有方向</div>
-        <p class="desc">还不知道走哪条路？用两周做一次认真的自我盘点与方向排除。</p>
-        <div class="meta"><span>约 2 周</span><span>大一大二友好</span><span>621 人走过</span></div>
-        <span class="go">读方向指南 →</span>
-      </a>
-    </div>
-
-    <div class="dir-free-note rv"><span class="tick">✓</span> 全部方向指南免费阅读，不含任何付费墙。想清楚了，再定制你的专属路线。</div>
-  </div>
-</section>
-
-<!-- ============ 宣言带 ============ -->
-<section class="manifesto">
-  <div class="container">
-    <p class="lead rv">大学生缺的从来不是资料，<br>是<em>「知道自己下一步该做什么」</em>。</p>
-    <div class="mani-grid">
-      <div class="mani-item rv"><div class="no">i.</div>
-        <h3>免费，也给真价值</h3>
-        <p>方向科普全量免费读；专属路线免费生成；前一两个阶段免费走完。付费买的不是知识封锁，是更高质量抵达。</p>
       </div>
-      <div class="mani-item rv rv-d1"><div class="no">ii.</div>
-        <h3>专业模板 + 为你定制</h3>
-        <p>每条路线的骨架由走过这条路的学长反复打磨；你的基础、时间与目标，决定这条骨架如何为你伸缩取舍。</p>
+    </aside>
+  </div>
+</main>
+
+<!-- ══════════ 页脚 ══════════ -->
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">
+        <span class="logo-mark">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
       </div>
-      <div class="mani-item rv rv-d2"><div class="no">iii.</div>
-        <h3>验收，推动执行</h3>
-        <p>每个阶段有出口标准。提交作品、通过验收、解锁下一程——不是「收藏了等于学了」，是真的走到。</p>
-      </div>
+      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+      <p class="creed">「愿课搭陪你走过每一次选方向的焦虑，需要时也总能搭把手。」</p>
     </div>
+    <div class="foot-col"><h4>探索</h4><a href="#">校园广场</a><a href="#">关注动态</a><a href="02-explore.html">探索路线</a><a href="04-survey.html">定制路线</a></div>
+    <div class="foot-col"><h4>创作者</h4><a href="#">发布作品</a><a href="#">分类浏览</a><a href="#">关注动态</a></div>
+    <div class="foot-col"><h4>关于</h4><a href="#">平台理念</a><a href="#">校园认证</a><a href="#">原创保护</a><a href="#">联系我们</a></div>
   </div>
-</section>
-
-<!-- ============ 四步 ============ -->
-<section class="sec">
-  <div class="container steps-wrap">
-    <div class="sec-head rv"><span class="sec-num">02 / HOW IT WORKS</span><h2 class="sec-title">怎么走到结果</h2></div>
-    <hr class="sec-rule">
-    <div class="steps">
-      <div class="step rv"><div class="pt">壹</div><h3>选方向</h3><p>认真读完方向指南，确认这条路值得你走、适合你走。这一步急不得。</p></div>
-      <div class="step rv rv-d1"><div class="pt">贰</div><h3>说清你的情况</h3><p>年级、基础、每天能投入的时间、想什么时候抵达。三分钟，一次说清。</p></div>
-      <div class="step rv rv-d2"><div class="pt">叁</div><h3>拿到专属路线</h3><p>课搭在专业模板上为你的情况做取舍：该跳的跳、该补的补、该加的加。</p></div>
-      <div class="step rv rv-d3"><div class="pt">肆</div><h3>走到结果</h3><p>按路线推进、每日打卡、阶段验收。学长在项目组里等你，一步一步抵达。</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 资料馆（1.0 传承） ============ -->
-<section class="sec" style="background: var(--paper-2); border-top: 1px solid var(--hairline-2); border-bottom: 1px solid var(--hairline-2);">
-  <div class="container">
-    <div class="sec-head rv"><span class="sec-num">03 / LIBRARY</span><h2 class="sec-title">资料馆</h2></div>
-    <p class="sec-sub rv">课搭的起点：学长们整理的 135 份资料仍在。它们现在嵌入每条路线的节点里——<b>资料为路线服务</b>，不再是孤岛。</p>
-    <hr class="sec-rule">
-    <div class="lib-grid">
-      <div>
-        <a class="feed-row rv" href="07-library.html">
-          <span class="cat">C 语言</span>
-          <span><span class="t">C 语言 66 题通关手册（全部编译验证）</span><span class="m">温昊璇 · 学长验证 · 免费</span></span>
-          <span class="date">09-10</span>
-        </a>
-        <a class="feed-row rv" href="07-library.html">
-          <span class="cat">保研</span>
-          <span><span class="t">保研全流程时间线：从大一绩点到夏令营拟录取</span><span class="m">c_lin 学姐 · 精品 · 免费</span></span>
-          <span class="date">09-06</span>
-        </a>
-        <a class="feed-row rv" href="07-library.html">
-          <span class="cat">面试</span>
-          <span><span class="t">后端面经大全：200+ 真题与回答框架（Java/Go/基础/场景）</span><span class="m">编辑部 · 精品 · 免费</span></span>
-          <span class="date">09-06</span>
-        </a>
-        <a class="feed-row rv" href="07-library.html">
-          <span class="cat">四六级</span>
-          <span><span class="t">四六级自救指南：30 天从 380 到 520 的实操路径</span><span class="m">c_chen 学长 · 免费</span></span>
-          <span class="date">09-06</span>
-        </a>
-        <a class="feed-row rv" href="07-library.html">
-          <span class="cat">方向选择</span>
-          <span><span class="t">计算机学生方向全景图：就业 / 保研 / 考研 / 留学怎么选</span><span class="m">编辑部 · 精品 · 免费</span></span>
-          <span class="date">09-06</span>
-        </a>
-        <div class="lib-more rv"><a class="btn btn-ghost" href="07-library.html">进入资料馆 · 135 份全部免费 <span class="btn-arrow">→</span></a></div>
-      </div>
-      <aside class="lib-side rv rv-d1">
-        <h3><span class="seal-mini" style="width:22px;height:22px;font-size:11px;border-radius:4px;display:grid;place-items:center;background:var(--vermilion);color:#FBF4E8;font-family:var(--f-display);font-weight:900;">荐</span> 本周编辑推荐</h3>
-        <a class="rec-item" href="07-library.html"><span class="rank">1</span><span><span class="t">大学路线选择：一张图看清四年</span><span class="d">下载 1.2k · 精品</span></span></a>
-        <a class="rec-item" href="07-library.html"><span class="rank">2</span><span><span class="t">Java → AI Agent 转型全景</span><span class="d">下载 986 · 新上架</span></span></a>
-        <a class="rec-item" href="07-library.html"><span class="rank">3</span><span><span class="t">计软奖学金申请攻略</span><span class="d">下载 743</span></span></a>
-        <a class="rec-item" href="07-library.html"><span class="rank">4</span><span><span class="t">深大宿舍与校园生活手册</span><span class="d">下载 690</span></span></a>
-      </aside>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 抵达故事 ============ -->
-<section class="sec" id="gushi">
-  <div class="container">
-    <div class="sec-head rv"><span class="sec-num">04 / ARRIVALS</span><h2 class="sec-title">抵达故事</h2></div>
-    <p class="sec-sub rv">走到结果的人，把路留给了后来者。</p>
-    <hr class="sec-rule">
-    <div class="story-grid">
-      <article class="story-card rv">
-        <span class="arrived"><span class="seal">已<br>抵达</span></span>
-        <span class="q">“</span>
-        <blockquote>我大二下还在迷茫，按路线走了 5 个月，<b>上周刚签了 AI 应用的日常实习</b>。最值钱的不是资料，是每个阶段都告诉我「做什么才算过关」。</blockquote>
-        <div class="who"><span class="ava">陈</span><span><span class="nm">陈同学 · 计软大二</span><span class="rt">K-02 后端→AI Agent · 走了 22 周</span></span></div>
-      </article>
-      <article class="story-card rv rv-d1">
-        <span class="arrived"><span class="seal">已<br>抵达</span></span>
-        <span class="q">“</span>
-        <blockquote>保研路线让我把大三上安排得明明白白，<b>夏令营三个营全入</b>。验收环节逼着我把科研项目做扎实，面试时全用上了。</blockquote>
-        <div class="who"><span class="ava">林</span><span><span class="nm">林同学 · 大三 · 已拟录取</span><span class="rt">G-01 保研 · 走了 18 个月</span></span></div>
-      </article>
-      <article class="story-card rv rv-d2">
-        <span class="arrived"><span class="seal">已<br>抵达</span></span>
-        <span class="q">“</span>
-        <blockquote>每天 2 小时，考研 408 路线走了 38 周，<b>初试 412</b>。打卡热力图是我这一年最舍不得删的东西。</blockquote>
-        <div class="who"><span class="ava">何</span><span><span class="nm">何同学 · 二战上岸</span><span class="rt">G-02 考研 408 · 走了 38 周</span></span></div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 终章 CTA ============ -->
-<section class="finale">
-  <div class="container">
-    <div class="seal seal-big rv">路</div>
-    <h2 class="rv rv-d1">你的下一条路线，<br>从今天开始。</h2>
-    <p class="rv rv-d2">三分钟说清你的情况，课搭还你一条能走到结果的路。</p>
-    <div class="cta-row rv rv-d3">
-      <a class="btn btn-primary" href="03-survey.html">免费生成我的专属路线 <span class="btn-arrow">→</span></a>
-      <a class="btn btn-ghost" href="02-direction.html">再看看方向</a>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 页脚 ============ -->
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <div class="wordmark" style="margin-bottom:18px">
-          <span class="seal-mini">课</span>
-          <span class="wm-text"><span class="wm-cn" style="color:#F2EADB">课搭</span><span class="wm-en" style="color:#877D6B">KEDAHUB</span></span>
-        </div>
-        <p style="font-size:.84rem; line-height:1.9; max-width:300px; color:#B0A693">学长带路，陪你走到结果。从深大出发的大学生结果型成长社区。</p>
-      </div>
-      <div><h4>方向</h4><a href="02-direction.html">实习就业</a><a href="02-direction.html">大学成长</a><a href="02-direction.html">方向指南</a><a href="03-survey.html">定制路线</a></div>
-      <div><h4>社区</h4><a href="08-cohort.html">项目组</a><a href="#gushi">抵达故事</a><a href="07-library.html">资料馆</a><a href="09-pricing.html">定价</a></div>
-      <div><h4>关于</h4><a href="#">我们是谁</a><a href="#">成为主理学长</a><a href="#">内容公约</a><a href="#">联系合作</a></div>
-    </div>
-    <div class="footer-colophon">
-      <span>© 2026 课搭 KEDAHUB · 深圳大学学生团队</span>
-      <span>资料是基础 · 路线是核心 · 验收推动执行 · 结果形成社区</span>
-    </div>
-  </div>
+  <div class="foot-bottom">© 2026 课搭 · 知识在校园里流动</div>
 </footer>
 
 <script src="assets/app.js"></script>
 <script>
-// 方向族切换
-document.querySelectorAll('.family-tab').forEach(function (tab) {
-  tab.addEventListener('click', function () {
-    document.querySelectorAll('.family-tab').forEach(function (t) { t.setAttribute('aria-selected', 'false'); });
-    tab.setAttribute('aria-selected', 'true');
-    document.getElementById('grid-job').hidden = tab.dataset.family !== 'job';
-    document.getElementById('grid-growth').hidden = tab.dataset.family !== 'growth';
+  // 双区切换
+  document.querySelectorAll('.zt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const zone = btn.dataset.zone;
+      document.querySelectorAll('.zt-btn').forEach(b => {
+        const on = b === btn;
+        b.style.borderBottomColor = on ? 'var(--pri)' : 'transparent';
+        b.style.color = on ? 'var(--pri-600)' : 'var(--ink-soft)';
+      });
+      document.querySelectorAll('[data-panel]').forEach(p => {
+        p.hidden = p.dataset.panel !== zone;
+        if (!p.hidden) { p.classList.remove('rise'); void p.offsetWidth; p.classList.add('rise'); }
+      });
+    });
   });
-});
+  // 新生 chips
+  document.querySelectorAll('.fchip').forEach(c => c.addEventListener('click', () => {
+    document.querySelectorAll('.fchip').forEach(x => x.classList.remove('on'));
+    c.classList.add('on');
+  }));
 </script>
 </body>
 </html>

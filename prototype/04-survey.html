@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>定制我的路线 · 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  /* ═══ 本页专属：定制问卷 ═══ */
+  .sv-page { padding-bottom: 118px; }
+
+  .sv-head { max-width: 1280px; margin: 0 auto 24px; }
+  .sv-kicker { font-size: 11.5px; font-weight: 800; letter-spacing: 0.22em; color: var(--pri-600); text-transform: uppercase; margin-bottom: 9px; }
+  .sv-head h1 { font-size: 30px; font-weight: 800; letter-spacing: -1px; line-height: 1.24; }
+  .sv-head h1 em { font-style: normal; color: var(--pri); }
+  .sv-head p { font-size: 14px; color: var(--ink-2); margin-top: 10px; max-width: 780px; line-height: 1.78; }
+
+  /* 顶部进度 */
+  .sv-prog { max-width: 1280px; margin: 0 auto 24px; }
+  .sv-track { height: 6px; border-radius: 999px; background: var(--bg-deep); overflow: hidden; }
+  .sv-track i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--pri), var(--pri-600)); transition: width 0.42s var(--ease-pop); }
+  .sv-pmeta { display: flex; align-items: center; gap: 9px; margin-top: 10px; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; }
+  .sv-pmeta b { color: var(--ink); font-weight: 800; font-size: 14.5px; letter-spacing: -0.3px; }
+  .sv-pmeta .sp { margin-left: auto; }
+
+  /* 两栏 */
+  .sv-layout { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 258px; gap: 30px; align-items: start; }
+  .sv-stage { min-width: 0; min-height: 440px; }
+
+  /* ── 题目 ── */
+  .q { display: none; }
+  .q.on { display: block; }
+  .q.on.in-r { animation: qInR 0.36s var(--ease-out) both; }
+  .q.on.in-l { animation: qInL 0.36s var(--ease-out) both; }
+  @keyframes qInR { from { opacity: 0; transform: translateX(26px); } to { opacity: 1; transform: none; } }
+  @keyframes qInL { from { opacity: 0; transform: translateX(-26px); } to { opacity: 1; transform: none; } }
+
+  .q-no { font-size: 11.5px; font-weight: 800; letter-spacing: 0.14em; color: var(--pri-600); margin-bottom: 9px; }
+  .q-title { font-size: 25px; font-weight: 800; letter-spacing: -0.7px; line-height: 1.32; }
+  .q-sub { font-size: 13.5px; color: var(--ink-2); margin-top: 9px; line-height: 1.78; max-width: 800px; }
+  .q-sub b { color: var(--ink); }
+
+  /* ── 选项 ── */
+  .opts { margin-top: 22px; display: grid; gap: 12px; }
+  .opts.c2 { grid-template-columns: repeat(2, 1fr); }
+  .opts.dir { grid-template-columns: repeat(4, 1fr); }
+  .opts.shake { animation: optsShake 0.4s var(--ease-out); }
+  @keyframes optsShake {
+    0%, 100% { transform: translateX(0); }
+    22% { transform: translateX(-7px); } 46% { transform: translateX(6px); }
+    70% { transform: translateX(-4px); } 88% { transform: translateX(2px); }
+  }
+
+  .opt {
+    position: relative; text-align: left; display: flex; gap: 12px; align-items: flex-start;
+    padding: 16px 18px; background: #fff; border: 2px solid var(--line);
+    border-radius: var(--r-toon); box-shadow: var(--sticker);
+    transition: transform 0.16s var(--ease-out), border-color 0.16s, box-shadow 0.16s, background 0.16s;
+  }
+  .opt:hover { transform: translateY(-3px); border-color: #ffd9cd; box-shadow: var(--sticker-lg); }
+  .opt:active { transform: scale(0.985); }
+  .opt.on { border-color: var(--pri); background: var(--pri-50); box-shadow: 0 3px 0 rgba(208, 74, 42, 0.22); }
+  .opt.pop { animation: optPop 0.38s var(--ease-pop); }
+  @keyframes optPop {
+    0% { transform: scale(0.955); } 58% { transform: scale(1.024); } 100% { transform: scale(1); }
+  }
+  .opt .oi { font-size: 24px; line-height: 1.25; flex: none; }
+  .opt .ob { min-width: 0; }
+  .opt b { font-size: 15px; font-weight: 800; letter-spacing: -0.2px; display: block; }
+  .opt .sub { font-size: 12.5px; color: var(--ink-2); display: block; margin-top: 4px; line-height: 1.66; }
+  .opt .ck {
+    position: absolute; right: 12px; top: 12px; width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--line); background: #fff; color: transparent;
+    display: grid; place-items: center; font-size: 10px; font-weight: 800;
+    transition: 0.18s var(--ease-pop);
+  }
+  .opt.on .ck { background: var(--pri); border-color: var(--pri); color: #fff; }
+  .opts.dir .opt { flex-direction: column; gap: 9px; padding: 16px 16px 18px; }
+  .opts.dir .oi { font-size: 28px; }
+  .opts.dir .opt b { font-size: 14.5px; padding-right: 22px; }
+
+  /* ── 手感图谱 / 提示卡 ── */
+  .taste-card { margin-top: 20px; padding: 18px 20px 20px; }
+  .tc-head { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 800; letter-spacing: -0.2px; flex-wrap: wrap; }
+  .tc-tag { font-size: 10.5px; font-weight: 700; color: var(--ink-soft); background: var(--bg-soft); padding: 2px 9px; border-radius: 999px; }
+  .taste { display: flex; align-items: flex-end; gap: 7px; height: 84px; margin: 16px 0 8px; }
+  .taste i { flex: 1; border-radius: 5px 5px 0 0; background: var(--pri); opacity: 0.85; display: block; }
+  .taste-lbl { display: flex; gap: 7px; font-size: 10px; color: var(--ink-soft); }
+  .taste-lbl span { flex: 1; text-align: center; }
+  .tc-note { margin-top: 15px; font-size: 12.5px; color: var(--ink-2); line-height: 1.72; background: var(--pri-50); border-radius: var(--r-lg); padding: 11px 14px; }
+  .tc-note b { color: var(--pri-700); }
+  .tc-go { margin-top: 14px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+  .pre-note {
+    display: flex; align-items: center; gap: 9px; margin-top: 20px;
+    font-size: 12.5px; font-weight: 700; color: var(--pri-700);
+    background: var(--pri-50); border: 1px dashed #ffc3b3; border-radius: var(--r-lg); padding: 10px 14px;
+  }
+  .pre-note[hidden] { display: none; }
+
+  .dir-tip {
+    display: flex; gap: 10px; align-items: flex-start; margin-top: 16px;
+    background: var(--bg-soft); border-radius: var(--r-lg); padding: 12px 14px;
+    font-size: 12.5px; color: var(--ink-2); line-height: 1.72;
+  }
+  .dir-tip[hidden] { display: none; }
+  .dir-tip b { color: var(--ink); }
+
+  /* ── 滑块题 ── */
+  .sh-top { display: flex; align-items: flex-end; gap: 22px; flex-wrap: wrap; margin-top: 26px; }
+  .sh-big { font-size: 42px; font-weight: 800; letter-spacing: -2px; line-height: 1; color: var(--pri); display: flex; align-items: baseline; gap: 2px; }
+  .sh-big u { text-decoration: none; font-size: 15px; font-weight: 800; letter-spacing: 0; color: var(--ink-soft); margin-right: 4px; }
+  .sh-big b { font-weight: 800; }
+  .sh-big i { font-style: normal; font-size: 15px; font-weight: 700; color: var(--ink-2); letter-spacing: 0; margin-left: 3px; }
+  .sh-lvl { padding-bottom: 4px; }
+  .sh-lvl b { display: block; font-size: 14.5px; font-weight: 800; letter-spacing: -0.2px; }
+  .sh-lvl span { display: block; font-size: 12.5px; color: var(--ink-soft); margin-top: 3px; }
+
+  .rng {
+    -webkit-appearance: none; appearance: none; width: 100%; height: 26px;
+    background: transparent; margin: 20px 0 0; cursor: pointer; display: block;
+  }
+  .rng::-webkit-slider-runnable-track {
+    height: 8px; border-radius: 999px;
+    background: linear-gradient(90deg, var(--pri) 0 var(--pct, 50%), var(--bg-deep) var(--pct, 50%) 100%);
+  }
+  .rng::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 26px; height: 26px; margin-top: -9px; border-radius: 50%;
+    background: #fff; border: 3px solid var(--pri); box-shadow: 0 2px 8px rgba(208, 74, 42, 0.28);
+    transition: transform 0.16s var(--ease-pop), box-shadow 0.16s;
+  }
+  .rng:hover::-webkit-slider-thumb { transform: scale(1.1); }
+  .rng:active::-webkit-slider-thumb { transform: scale(1.3); box-shadow: 0 0 0 9px rgba(255, 107, 74, 0.16); }
+  .rng::-moz-range-track { height: 8px; border-radius: 999px; background: var(--bg-deep); }
+  .rng::-moz-range-progress { height: 8px; border-radius: 999px; background: var(--pri); }
+  .rng::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 3px solid var(--pri); box-shadow: 0 2px 8px rgba(208, 74, 42, 0.28); }
+  .rng:focus-visible { outline: none; }
+  .rng:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 9px rgba(255, 107, 74, 0.18); }
+
+  .sh-ticks { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 10px; }
+  .sh-ticks span { text-align: center; font-size: 11.5px; font-weight: 600; color: var(--ink-faint); transition: 0.18s; }
+  .sh-ticks span.on { color: var(--pri-600); font-weight: 800; }
+  .sh-desc {
+    margin-top: 20px; font-size: 13px; color: var(--ink-2); line-height: 1.78;
+    background: var(--bg-soft); border-radius: var(--r-lg); padding: 13px 15px;
+  }
+  .sh-desc b { color: var(--ink); }
+
+  /* ── 侧栏 ── */
+  .sv-rail { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 16px; }
+  .sv-steps { border: 1px solid var(--line); border-radius: var(--r-lg); padding: 14px 12px 10px; background: #fff; }
+  .sv-steps h3 { font-size: 13px; font-weight: 800; letter-spacing: -0.2px; padding: 0 4px 10px; }
+  .sv-step { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: var(--r); transition: 0.16s; }
+  .sv-dot {
+    width: 22px; height: 22px; border-radius: 50%; flex: none;
+    display: grid; place-items: center; font-size: 11px; font-weight: 800;
+    background: var(--bg-deep); color: var(--ink-faint); transition: 0.22s var(--ease-pop);
+  }
+  .sv-st { font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+  .sv-step small { margin-left: auto; font-size: 11px; color: var(--ink-faint); font-weight: 600; }
+  .sv-step.on { background: var(--pri-50); }
+  .sv-step.on .sv-dot { background: var(--pri); color: #fff; transform: scale(1.08); box-shadow: 0 2px 0 rgba(208, 74, 42, 0.3); }
+  .sv-step.on .sv-st { color: var(--pri-700); font-weight: 800; }
+  .sv-step.done .sv-dot { background: var(--mint); color: #fff; }
+  .sv-step.done .sv-st { color: var(--ink-2); }
+
+  .sv-tip { padding: 16px; }
+  .sv-tip b { font-size: 13.5px; font-weight: 800; display: block; letter-spacing: -0.2px; }
+  .sv-tip p { font-size: 12.5px; color: var(--ink-2); margin-top: 6px; line-height: 1.7; }
+  .sv-keys { display: flex; gap: 6px; align-items: center; margin-top: 12px; font-size: 11.5px; color: var(--ink-soft); }
+  .sv-keys kbd {
+    font-family: var(--font); font-size: 11px; font-weight: 800; color: var(--ink-2);
+    border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 1px 6px; background: #fff;
+  }
+
+  /* ── 底部固定操作条 ── */
+  .sv-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-top: 1px solid var(--line);
+  }
+  .sv-bar-in { max-width: var(--maxw); margin: 0 auto; padding: 12px 28px; display: flex; align-items: center; gap: 12px; }
+  .sv-hint { font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+  .sv-hint.warn { color: var(--pri-700); font-weight: 700; }
+  .sv-bar .sp { margin-left: auto; }
+  .sv-count { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+  .sv-count b { color: var(--ink); font-size: 14px; }
+  .btn[disabled] { opacity: 0.42; pointer-events: none; box-shadow: none; }
+
+  @media (max-width: 1080px) {
+    .sv-layout { grid-template-columns: 1fr; }
+    .sv-rail { position: static; }
+    .opts.c2 { grid-template-columns: 1fr; }
+    .opts.dir { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .sv-head h1 { font-size: 23px; }
+    .q-title { font-size: 21px; }
+    .opts.dir { grid-template-columns: 1fr; }
+    .sv-bar-in { padding-left: 16px; padding-right: 16px; }
+    .sv-hint { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ 导航 ══════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="01-home.html">
+      <span class="logo-mark">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </span>
+      <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+    </a>
+    <div class="nav-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      搜索资料、路线、学长经验…
+    </div>
+    <div class="nav-actions">
+      <a class="nav-link" href="01-home.html">首页</a>
+      <a class="nav-link" href="02-explore.html">🧭 探索路线</a>
+      <a class="nav-link" href="09-cohort.html">项目组</a>
+      <a class="nav-link" href="10-pricing.html">验收与付费</a>
+      <a class="btn btn-outline btn-sm" href="04-survey.html">登录</a>
+      <a class="btn btn-primary btn-sm" href="04-survey.html">定制我的路线</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page sv-page">
+
+  <!-- ══════════ 页头 ══════════ -->
+  <header class="sv-head">
+    <div class="sv-kicker">Custom Route · 定制专属路线</div>
+    <h1>回答 6 个问题，<em>换一条只属于你的路线</em></h1>
+    <p>
+      这不是问卷，是排课。每一次选择都会真的改动路线里的关卡——基础好的直接跳过热身关，
+      时间少的自动把阶段拆细，走完探索路线的会拿手感数据预填方向。全部答完约 3 分钟。
+    </p>
+  </header>
+
+  <!-- ══════════ 顶部进度 ══════════ -->
+  <div class="sv-prog">
+    <div class="sv-track"><i id="progFill" style="width:16.6%"></i></div>
+    <div class="sv-pmeta">
+      <b id="progNow">第 1 题</b><span>／ 共 6 题</span>
+      <span class="sp">大约还要 3 分钟</span>
+    </div>
+  </div>
+
+  <div class="sv-layout">
+    <div class="sv-stage">
+
+      <!-- ─────────── Q1 年级 ─────────── -->
+      <section class="q on" data-q="0" data-key="grade">
+        <div class="q-no">Q1 · 年级</div>
+        <h2 class="q-title">你现在大几？</h2>
+        <p class="q-sub">同样是「想学后端」，大一和大四的排法完全不同：大一有时间打地基，大四只能直奔能写进简历的东西。<b>这一步决定路线铺几个学期。</b></p>
+        <div class="opts c2" data-key="grade">
+          <button class="opt" data-v="大一"><span class="oi">🌱</span><span class="ob"><b>大一</b><span class="sub">四年时间在你这边。路线会铺到 4 个学期，前期允许你多试一个方向。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="大二"><span class="oi">🌿</span><span class="ob"><b>大二</b><span class="sub">最关键的转折点。这一年定方向，大三上就来得及投暑期实习。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="大三"><span class="oi">🌳</span><span class="ob"><b>大三</b><span class="sub">时间开始紧。路线会砍掉铺垫，直接对着简历和面试排关卡。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="大四及以上"><span class="oi">🎓</span><span class="ob"><b>大四及以上</b><span class="sub">只排 3 个月内能变成作品和面试答案的关卡，不做长期铺垫。</span></span><span class="ck">✓</span></button>
+        </div>
+      </section>
+
+      <!-- ─────────── Q2 探索路线 ─────────── -->
+      <section class="q" data-q="1" data-key="explored">
+        <div class="q-no">Q2 · 探索情况</div>
+        <h2 class="q-title">你走完探索路线了吗？</h2>
+        <p class="q-sub">探索路线的 8 站会留下手感数据。走过的话，我们就不用猜你喜欢什么了——<b>直接按你在哪一站坐得住来排。</b></p>
+        <div class="opts c2" data-key="explored">
+          <button class="opt" data-v="走完了"><span class="oi">🧭</span><span class="ob"><b>走完了</b><span class="sub">8 站的手感数据可以直接用。选这个，下面会按你的手感预填方向。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="没有"><span class="oi">⏳</span><span class="ob"><b>还没有</b><span class="sub">没关系，先按直觉选。之后补走探索路线，路线会自动重排。</span></span><span class="ck">✓</span></button>
+        </div>
+
+        <!-- 走完了 → 手感图谱 -->
+        <div class="toon-card taste-card" id="tasteCard" hidden>
+          <div class="tc-head">🧭 你的手感图谱 <span class="tc-tag">来自探索路线 8 站的真实打分</span></div>
+          <div class="taste">
+            <i style="height:30%"></i><i style="height:66%"></i><i style="height:52%"></i><i style="height:78%"></i>
+            <i style="height:34%"></i><i style="height:58%"></i><i style="height:94%"></i><i style="height:72%"></i>
+          </div>
+          <div class="taste-lbl">
+            <span>黑窗口</span><span>脚本</span><span>Git</span><span>前端</span><span>服务器</span><span>数据库</span><span>AI</span><span>模型</span>
+          </div>
+          <div class="tc-note">
+            你在「AI」和「前端」上眼睛最亮，在「服务器」上明显坐不住（得分 34，8 站最低）。<br />
+            <b>已根据你的手感预填方向倾向：AI 应用 —— 下面第 3 题可以改。</b>
+          </div>
+        </div>
+
+        <!-- 还没有 → 建议先去走 -->
+        <div class="toon-card taste-card" id="exploreNote" hidden>
+          <div class="tc-head">⏳ 建议先花 8 个晚上走一遍探索路线</div>
+          <div class="tc-note" style="background:var(--bg-soft);color:var(--ink-2)">
+            8 站、约 16 小时、完全免费。走完你会拿到一张自己的手感图谱，那时候再来定制，
+            路线能少猜很多。<b style="color:var(--ink)">当然也可以现在跳过，直接往下选。</b>
+          </div>
+          <div class="tc-go">
+            <a class="btn btn-outline btn-sm" href="02-explore.html">去看看探索路线 →</a>
+            <span style="font-size:12px;color:var(--ink-soft)">已 1,284 人走完 · 平均 2 周</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────── Q3 方向 ─────────── -->
+      <section class="q" data-q="2" data-key="dir">
+        <div class="q-no">Q3 · 方向</div>
+        <h2 class="q-title">你想走哪个方向？</h2>
+        <p class="q-sub">选一个就够，后面还能换。下面写的是<b>这个方向每天到底在干嘛</b>，不是岗位 JD 里那些漂亮话。</p>
+
+        <div class="pre-note" id="dirPreNote" hidden>✨ 已根据你的手感图谱预填「AI 应用」，可以直接改。</div>
+
+        <div class="opts dir" data-key="dir">
+          <button class="opt" data-v="前端"><span class="oi">🎨</span><span class="ob"><b>前端</b><span class="sub">看得见的东西。写完能直接发链接给别人看，正反馈来得最快。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="后端"><span class="oi">⚙️</span><span class="ob"><b>后端</b><span class="sub">看不见但撑得住。系统怎么扛住一万人同时用，是这行的核心问题。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="算法与数据结构"><span class="oi">🧮</span><span class="ob"><b>算法与数据结构</b><span class="sub">笔试面试的硬通货。想进大厂，这块绕不过去。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="AI 应用"><span class="oi">🤖</span><span class="ob"><b>AI 应用</b><span class="sub">不训模型，把模型用起来。门槛比想象中低，但很考验你能不能做出东西。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="数据"><span class="oi">🗄️</span><span class="ob"><b>数据</b><span class="sub">从数据里找答案。SQL 是基本功，业务理解才是天花板。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="测试与运维"><span class="oi">🔧</span><span class="ob"><b>测试与运维</b><span class="sub">系统的守夜人。写得少、看得多，是最好上手也最稳的一条路。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="安全"><span class="oi">🛡️</span><span class="ob"><b>安全</b><span class="sub">攻与防。门槛高、人少，一旦入门就很难被替代。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="我还不太确定"><span class="oi">🤔</span><span class="ob"><b>我还不太确定</b><span class="sub">先不定。路线前 3 关会安排成探索关卡，摸完再定方向。</span></span><span class="ck">✓</span></button>
+        </div>
+
+        <div class="dir-tip" id="unsureTip" hidden>
+          <span style="font-size:17px">🤔</span>
+          <span>选「不太确定」完全没问题：路线会先给你排 <b>3 个探索关卡</b>（黑窗口 / 脚本 / 前端各一站，共约 5 小时），
+          走完你会拿到一张手感图谱，我们再据此重排后面的关卡，<b>进度不会浪费</b>。</span>
+        </div>
+      </section>
+
+      <!-- ─────────── Q4 基础 ─────────── -->
+      <section class="q" data-q="3" data-key="base">
+        <div class="q-no">Q4 · 基础</div>
+        <h2 class="q-title">你现在的代码基础？</h2>
+        <p class="q-sub">这一题直接决定<b>跳过多少关卡</b>。诚实选就行，选高了后面会卡住，选低了只是浪费几小时。</p>
+        <div class="opts c2" data-key="base">
+          <button class="opt" data-v="完全零基础"><span class="oi">🐣</span><span class="ob"><b>完全零基础</b><span class="sub">会先补 2 个热身关卡：命令行 + 第一个脚本，各约 1.5 小时，不写一行看不懂的代码。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="学过一点语法"><span class="oi">📗</span><span class="ob"><b>学过一点语法</b><span class="sub">跳过语法关，直接从「做出一个小东西」开始，省下约 6 小时。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="写过小项目"><span class="oi">🧩</span><span class="ob"><b>写过小项目</b><span class="sub">直接进项目关，并额外加 1 次代码复盘，帮你把小项目讲成面试故事。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="有实习经历"><span class="oi">💼</span><span class="ob"><b>有实习经历</b><span class="sub">基础阶段整体跳过，只保留进阶关卡和 2 次模拟面试，路线缩短约 40%。</span></span><span class="ck">✓</span></button>
+        </div>
+      </section>
+
+      <!-- ─────────── Q5 时间 ─────────── -->
+      <section class="q" data-q="4" data-key="hours">
+        <div class="q-no">Q5 · 时间</div>
+        <h2 class="q-title">每周能投入多少时间？</h2>
+        <p class="q-sub">不用往多了填。<b>按你真实能坚持的节奏来</b>——路线会按这个节奏算每站的间隔，填多了只会让你掉队。</p>
+
+        <div class="sh-top">
+          <div class="sh-big"><u>约</u><b id="hMonths">6</b><i>个月走完</i></div>
+          <div class="sh-lvl">
+            <b id="hLabel">6–10 小时 / 周</b>
+            <span id="hDate">按今天开始，大约 2027 年 3 月走完</span>
+          </div>
+        </div>
+
+        <input class="rng" id="rngHours" type="range" min="0" max="4" step="1" value="2" aria-label="每周可投入时间" />
+        <div class="sh-ticks" id="hTicks">
+          <span>3 小时以下</span><span>3–6 小时</span><span class="on">6–10 小时</span><span>10–20 小时</span><span>20 小时以上</span>
+        </div>
+        <p class="sh-desc" id="hDesc">
+          周末加两个晚上，这是最多人选的节奏。路线按「每周一个关卡」排，
+          能赶上大三上投暑期实习的时间线，临时有事断一周也不会掉队。
+        </p>
+      </section>
+
+      <!-- ─────────── Q6 目标 ─────────── -->
+      <section class="q" data-q="5" data-key="goal">
+        <div class="q-no">Q6 · 目标</div>
+        <h2 class="q-title">你更想要什么结果？</h2>
+        <p class="q-sub">最后一条路线的重点会不一样：求职要的是面试答案，保研要的是能写进材料的东西。<b>选一个最主要的。</b></p>
+        <div class="opts c2" data-key="goal">
+          <button class="opt" data-v="求职拿 offer"><span class="oi">💼</span><span class="ob"><b>求职拿 offer</b><span class="sub">按目标岗位倒排关卡，最后 2 关是模拟面试 + 简历打磨。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="保研考研加分"><span class="oi">🎓</span><span class="ob"><b>保研考研加分</b><span class="sub">偏向能写进材料的东西：竞赛、论文复现、可展示的项目。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="做出能拿出手的项目"><span class="oi">🚀</span><span class="ob"><b>做出能拿出手的项目</b><span class="sub">以 3 个能上线、能真的给别人用的作品为主线，验收也看这个。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="单纯想学会"><span class="oi">🧠</span><span class="ob"><b>单纯想学会</b><span class="sub">不设验收压力，按兴趣走，关卡可以随时替换成你想做的方向。</span></span><span class="ck">✓</span></button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ══════════ 侧栏：进度 + 说明 ══════════ -->
+    <aside class="sv-rail">
+      <div class="sv-steps">
+        <h3>📋 定制进度</h3>
+        <div class="sv-step on" data-s="0"><span class="sv-dot">1</span><span class="sv-st">年级</span></div>
+        <div class="sv-step" data-s="1"><span class="sv-dot">2</span><span class="sv-st">探索情况</span></div>
+        <div class="sv-step" data-s="2"><span class="sv-dot">3</span><span class="sv-st">方向</span></div>
+        <div class="sv-step" data-s="3"><span class="sv-dot">4</span><span class="sv-st">基础</span></div>
+        <div class="sv-step" data-s="4"><span class="sv-dot">5</span><span class="sv-st">每周时间</span></div>
+        <div class="sv-step" data-s="5"><span class="sv-dot">6</span><span class="sv-st">想要的结果</span></div>
+      </div>
+
+      <div class="toon-card sv-tip">
+        <b>📐 这些答案会被怎么用？</b>
+        <p>
+          28 条路线模板都由已上岸的学长人工验证过。你的答案不会从零生成一条路线，
+          而是在最接近的那条模板上<b style="color:var(--ink)">改 3–6 处</b>——该跳的跳、该补的补。
+        </p>
+        <div class="sv-keys">
+          <kbd>←</kbd><kbd>→</kbd><span>可以翻页</span>
+        </div>
+      </div>
+
+      <div class="side-box" style="background:var(--pri-50);border-color:#ffd9cd">
+        <h3>🧭 还没定方向？</h3>
+        <div class="sb-sub" style="color:var(--pri-700)">先走一遍探索路线，8 站摸完再选</div>
+        <a class="btn btn-primary btn-block btn-sm" href="02-explore.html">开始探索 →</a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<!-- ══════════ 底部固定操作条 ══════════ -->
+<div class="sv-bar">
+  <div class="sv-bar-in">
+    <button class="btn btn-outline" id="btnPrev" disabled>← 上一步</button>
+    <span class="sv-hint" id="barHint">先选一个，再继续</span>
+    <span class="sp"></span>
+    <span class="sv-count">第 <b id="barNow">1</b> / 6 题</span>
+    <button class="btn btn-primary" id="btnNext" disabled>下一步 →</button>
+  </div>
+</div>
+
+<!-- ══════════ 页脚 ══════════ -->
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">
+        <span class="logo-mark">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      </div>
+      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+      <p class="creed">「愿课搭陪你走过每一次选方向的焦虑，需要时也总能搭把手。」</p>
+    </div>
+    <div class="foot-col"><h4>探索</h4><a href="01-home.html">资料馆</a><a href="02-explore.html">探索路线</a><a href="04-survey.html">定制路线</a></div>
+    <div class="foot-col"><h4>结果服务</h4><a href="10-pricing.html">阶段验收</a><a href="09-cohort.html">项目组</a><a href="10-pricing.html">陪跑</a></div>
+    <div class="foot-col"><h4>关于</h4><a href="#">平台理念</a><a href="#">校园认证</a><a href="#">联系我们</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 知识在校园里流动</div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  /* ── 答案状态 ── */
+  const answers = { grade: null, explored: null, dir: null, base: null, hours: 2, goal: null };
+  let dirTouched = false;
+
+  const qs = [...document.querySelectorAll('.q')];
+  const TOTAL = qs.length;
+  let cur = 0;
+  let lastDir = 1; // 1 = 前进，-1 = 后退
+
+  const progFill = document.getElementById('progFill');
+  const progNow  = document.getElementById('progNow');
+  const barNow   = document.getElementById('barNow');
+  const barHint  = document.getElementById('barHint');
+  const btnPrev  = document.getElementById('btnPrev');
+  const btnNext  = document.getElementById('btnNext');
+  const steps    = [...document.querySelectorAll('.sv-step')];
+
+  function save() {
+    try { sessionStorage.setItem('kh_survey', JSON.stringify(answers)); } catch (e) {}
+  }
+
+  function answered(i) {
+    const k = qs[i].dataset.key;
+    return !k || answers[k] !== null;
+  }
+
+  /* ── 渲染 ── */
+  function render() {
+    qs.forEach((q, i) => {
+      q.classList.remove('on', 'in-r', 'in-l');
+      if (i === cur) {
+        q.classList.add('on');
+        void q.offsetWidth;
+        q.classList.add(lastDir > 0 ? 'in-r' : 'in-l');
+      }
+    });
+
+    progFill.style.width = ((cur + 1) / TOTAL * 100).toFixed(1) + '%';
+    progNow.textContent = '第 ' + (cur + 1) + ' 题';
+    barNow.textContent = cur + 1;
+
+    btnPrev.disabled = cur === 0;
+
+    const last = cur === TOTAL - 1;
+    btnNext.textContent = last ? '生成我的专属路线 →' : '下一步 →';
+
+    const ok = answered(cur);
+    btnNext.disabled = !ok;
+
+    barHint.classList.toggle('warn', !ok);
+    if (!ok) barHint.textContent = '先选一个，再继续';
+    else if (last) barHint.textContent = '生成后随时可以重排';
+    else barHint.textContent = '也可以按 → 键继续';
+
+    steps.forEach((s, i) => {
+      s.classList.toggle('on', i === cur);
+      s.classList.toggle('done', i < cur);
+      s.querySelector('.sv-dot').textContent = i < cur ? '✓' : String(i + 1);
+    });
+  }
+
+  function go(delta) {
+    const next = cur + delta;
+    if (next < 0 || next >= TOTAL) return;
+    if (delta > 0 && !answered(cur)) {
+      const box = qs[cur].querySelector('.opts');
+      if (box) { box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake'); }
+      barHint.classList.add('warn');
+      barHint.textContent = '先选一个，再继续';
+      return;
+    }
+    lastDir = delta;
+    cur = next;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  btnPrev.addEventListener('click', () => go(-1));
+  btnNext.addEventListener('click', () => {
+    if (cur === TOTAL - 1) { save(); location.href = '05-generating.html'; return; }
+    go(1);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); if (cur === TOTAL - 1) { save(); location.href = '05-generating.html'; } else go(1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+  });
+
+  /* ── 选项点击 ── */
+  function selectOpt(key, value) {
+    const box = document.querySelector('.opts[data-key="' + key + '"]');
+    if (!box) return;
+    box.querySelectorAll('.opt').forEach(b => b.classList.remove('on', 'pop'));
+    const btn = [...box.querySelectorAll('.opt')].find(b => b.dataset.v === value);
+    if (!btn) return;
+    btn.classList.add('on');
+    void btn.offsetWidth;
+    btn.classList.add('pop');
+    answers[key] = value;
+  }
+
+  document.querySelectorAll('.opts').forEach(box => {
+    const key = box.dataset.key;
+    box.querySelectorAll('.opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const v = btn.dataset.v;
+        if (key === 'dir') dirTouched = true;
+        selectOpt(key, v);
+
+        if (key === 'explored') {
+          const taste = document.getElementById('tasteCard');
+          const note  = document.getElementById('exploreNote');
+          const pre   = document.getElementById('dirPreNote');
+          if (v === '走完了') {
+            taste.hidden = false; note.hidden = true;
+            taste.classList.remove('pop-in'); void taste.offsetWidth; taste.classList.add('pop-in');
+            if (!dirTouched) {
+              selectOpt('dir', 'AI 应用');
+              pre.hidden = false;
+            }
+          } else {
+            note.hidden = false; taste.hidden = true;
+            note.classList.remove('pop-in'); void note.offsetWidth; note.classList.add('pop-in');
+            pre.hidden = true;
+          }
+        }
+
+        if (key === 'dir') {
+          document.getElementById('unsureTip').hidden = (v !== '我还不太确定');
+          // 用户手动改掉了预填方向，撤掉预填提示
+          if (v !== 'AI 应用') document.getElementById('dirPreNote').hidden = true;
+        }
+
+        save();
+        render();
+      });
+    });
+  });
+
+  /* ── Q5 滑块 ── */
+  const HOURS = [
+    { t: '3 小时以下', m: 12,
+      d: '每周大概只够推进半个关卡，路线会拉长到 12 个月。但慢不等于走不完——第一节会专门教你「20 分钟也能做一次有效练习」，先保住连续性。' },
+    { t: '3–6 小时', m: 9,
+      d: '一晚自习的量。路线按「每周半个到一个关卡」排，临时有考试周也不会断档，是兼职和社团都还撑得住的节奏。' },
+    { t: '6–10 小时', m: 6,
+      d: '周末加两个晚上，这是最多人选的节奏。路线按「每周一个关卡」排，能赶上大三上投暑期实习的时间线，断一周也不会掉队。' },
+    { t: '10–20 小时', m: 4,
+      d: '接近全职投入。路线会把两个阶段合并推进，同时保留每次的项目验收——走得快，但不能走空。' },
+    { t: '20 小时以上', m: 3,
+      d: '冲刺节奏。会额外插入 2 次模拟面试和 1 次阶段验收，避免走太快、基础不扎实，面试一问就露馅。' }
+  ];
+
+  const rng    = document.getElementById('rngHours');
+  const hMonths = document.getElementById('hMonths');
+  const hLabel  = document.getElementById('hLabel');
+  const hDate   = document.getElementById('hDate');
+  const hDesc   = document.getElementById('hDesc');
+  const ticks   = [...document.getElementById('hTicks').children];
+
+  function finishDate(m) {
+    const d = new Date();
+    d.setMonth(d.getMonth() + Math.round(m));
+    return d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月';
+  }
+
+  function updateHours() {
+    const i = +rng.value;
+    const h = HOURS[i];
+    answers.hours = i;
+    rng.style.setProperty('--pct', (i / 4 * 100) + '%');
+    hMonths.textContent = h.m;
+    hLabel.textContent = h.t + ' / 周';
+    hDate.textContent = '按今天开始，大约 ' + finishDate(h.m) + ' 走完';
+    hDesc.innerHTML = h.d;
+    ticks.forEach((s, n) => s.classList.toggle('on', n === i));
+    save();
+    render();
+  }
+
+  rng.addEventListener('input', updateHours);
+  rng.addEventListener('change', updateHours);
+  updateHours();
+
+  render();
+})();
+</script>
+</body>
+</html>

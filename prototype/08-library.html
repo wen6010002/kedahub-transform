@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>资料库 · 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  /* ══════ 刊头 ══════ */
+  .lib-mast { display: flex; align-items: flex-end; gap: 28px; flex-wrap: wrap; }
+  .lib-mast-main { flex: 1; min-width: 320px; }
+  .lh-kicker { font-size: 11.5px; font-weight: 800; letter-spacing: 0.2em; color: var(--pri-600); text-transform: uppercase; margin-bottom: 9px; }
+  .lib-mast h1 { font-size: 34px; font-weight: 800; letter-spacing: -1px; line-height: 1.15; }
+  .lib-mast .lh-tag { font-size: 14px; color: var(--ink-2); margin-top: 11px; max-width: 660px; line-height: 1.8; }
+
+  .lib-search { flex: none; width: 380px; }
+  .ls-box {
+    display: flex; align-items: center; gap: 9px; height: 44px; padding: 0 6px 0 15px;
+    border: 1.5px solid var(--line); border-radius: 999px; background: #fff; transition: 0.15s;
+  }
+  .ls-box:focus-within { border-color: var(--pri); box-shadow: 0 0 0 3px rgba(255, 107, 74, .13); }
+  .ls-box svg { color: var(--ink-faint); flex: none; }
+  .ls-box input { flex: 1; min-width: 0; border: none; background: none; height: 100%; font-size: 14px; }
+  .ls-box input::placeholder { color: var(--ink-faint); }
+  .ls-hot { font-size: 11.5px; color: var(--ink-soft); margin-top: 9px; display: flex; gap: 9px; flex-wrap: wrap; align-items: center; }
+  .ls-hot a { color: var(--ink-2); font-weight: 600; padding: 2px 9px; border-radius: 999px; background: var(--bg-soft); transition: 0.15s; }
+  .ls-hot a:hover { background: var(--pri-50); color: var(--pri-600); }
+
+  .lib-cats { margin-top: 22px; }
+  .lib-cats .bc-chip .n { font-size: 11px; opacity: 0.5; font-weight: 600; margin-left: 2px; }
+  .lib-cats .bc-chip.on .n { opacity: 0.75; }
+
+  /* ══════ 主体三栏 ══════ */
+  .lib-body { display: grid; grid-template-columns: 210px minmax(0, 1fr) 292px; gap: 32px; align-items: start; }
+
+  /* ── 左：筛选 ── */
+  .filters { position: sticky; top: 84px; }
+  .filters-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .filters-head b { font-size: 14px; font-weight: 800; }
+  .filters-head button { font-size: 11.5px; font-weight: 700; color: var(--ink-soft); }
+  .filters-head button:hover { color: var(--pri-600); }
+  .fgroup { padding-bottom: 15px; margin-bottom: 15px; border-bottom: 1px solid var(--line); }
+  .fgroup:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .fg-title { font-size: 11.5px; font-weight: 800; letter-spacing: 0.08em; color: var(--ink-soft); margin-bottom: 7px; }
+  .fopt {
+    display: flex; align-items: center; gap: 9px; width: 100%; text-align: left;
+    font-size: 13px; font-weight: 600; color: var(--ink-2);
+    padding: 6px 9px; border-radius: var(--r); transition: 0.14s;
+  }
+  .fopt:hover { background: var(--bg-soft); color: var(--ink); }
+  .fopt.on { background: var(--pri-50); color: var(--pri-700); font-weight: 800; }
+  .fopt .fo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--line); flex: none; transition: 0.14s; }
+  .fopt.on .fo-dot { background: var(--pri); }
+  .fopt .fo-n { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--ink-faint); }
+  .fopt.on .fo-n { color: var(--pri-600); }
+
+  /* ── 中：资料列表 ── */
+  .lib-list-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+  .lib-list-head h2 { font-size: 19px; font-weight: 800; letter-spacing: -0.4px; }
+  .lib-list-head .ll-count { margin-left: auto; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; }
+  .lib-list-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 10px; }
+  .lib-list { border-top: 1px solid var(--line); }
+  .feed-title code, .mk-item code { font-size: 12.5px; background: var(--bg-soft); padding: 1px 5px; border-radius: 4px; }
+
+  /* ── 分页 ── */
+  .pager { display: flex; align-items: center; gap: 14px; padding: 22px 0 4px; flex-wrap: wrap; }
+  .pg-info { font-size: 12.5px; color: var(--ink-soft); font-weight: 600; }
+  .pg-btns { margin-left: auto; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .pg-btn {
+    min-width: 32px; height: 32px; padding: 0 10px; border-radius: var(--r);
+    font-size: 13px; font-weight: 700; color: var(--ink-2); background: #fff;
+    border: 1px solid var(--line); transition: 0.14s;
+  }
+  .pg-btn:hover:not(:disabled):not(.on) { border-color: var(--pri); color: var(--pri-600); background: var(--pri-50); }
+  .pg-btn.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .pg-btn:disabled { color: var(--ink-faint); cursor: not-allowed; }
+  .pg-dots { color: var(--ink-faint); font-size: 13px; padding: 0 3px; }
+
+  /* ── 右：侧栏 ── */
+  .rank-item .rank-av.sq { border-radius: 8px; font-size: 13px; }
+  .notice-line { font-size: 12.5px; color: var(--ink-2); line-height: 1.75; padding: 7px 0; border-bottom: 1px dashed var(--line); }
+  .notice-line:last-child { border-bottom: none; }
+  .notice-line b { color: var(--ink); display: block; font-size: 11.5px; font-weight: 800; color: var(--ink-faint); letter-spacing: 0.04em; }
+  .cat-stat { display: flex; justify-content: space-between; padding: 5px 0; font-size: 12.5px; color: var(--ink-2); border-radius: var(--r); }
+  .cat-stat:hover { color: var(--pri-600); }
+  .cat-stat span:last-child { color: var(--ink-faint); font-weight: 600; }
+
+  @media (max-width: 1180px) {
+    .lib-body { grid-template-columns: 200px minmax(0, 1fr); }
+    .lib-side { grid-column: 1 / -1; position: static; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  }
+  @media (max-width: 900px) {
+    .lib-body { grid-template-columns: minmax(0, 1fr); }
+    .lib-main { min-width: 0; }
+    .feed-desc { white-space: normal; }
+    .filters { position: static; display: flex; gap: 22px; overflow-x: auto; padding-bottom: 6px; }
+    .fgroup { border-bottom: none; margin-bottom: 0; padding-bottom: 0; min-width: 148px; }
+    .lib-side { grid-template-columns: minmax(0, 1fr); }
+    .lib-search { width: 100%; }
+    .lib-mast h1 { font-size: 26px; }
+  }
+  @media (max-width: 720px) {
+    /* 窄屏导航：只留文字入口，避免顶栏横向溢出 */
+    .logo-text span { display: none; }
+    .nav-actions { gap: 2px; }
+    .nav-link { padding: 6px 8px; font-size: 12.5px; }
+    .nav-actions .btn { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ 导航 ══════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="01-home.html">
+      <span class="logo-mark">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </span>
+      <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+    </a>
+    <div class="nav-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      搜索资料、路线、学长经验…
+    </div>
+    <div class="nav-actions">
+      <a class="nav-link on" href="01-home.html">首页</a>
+      <a class="nav-link" href="02-explore.html">🧭 探索路线</a>
+      <a class="nav-link" href="09-cohort.html">项目组</a>
+      <a class="nav-link" href="10-pricing.html">验收与付费</a>
+      <a class="btn btn-outline btn-sm" href="04-survey.html">登录</a>
+      <a class="btn btn-primary btn-sm" href="04-survey.html">定制我的路线</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- ══════════ 刊头 + 搜索 ══════════ -->
+  <header>
+    <div class="lib-mast">
+      <div class="lib-mast-main">
+        <div class="lh-kicker">Library · 资料是基础，路线是核心</div>
+        <h1>资料库</h1>
+        <p class="lh-tag">
+          学长学姐整理、署名可溯的 <b>136 份</b>资料，注册就能读——精点资料用积分兑换，不花钱。
+          它们现在还有第二个身份：每一份都挂在对应路线的关卡上，你走到那一关，它就自己出现在你面前，
+          不用你先知道该搜什么词。
+        </p>
+      </div>
+      <div class="lib-search">
+        <div class="ls-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input type="search" placeholder="搜资料名、作者、标签…" />
+          <button class="btn btn-primary btn-sm">搜索</button>
+        </div>
+        <div class="ls-hot">
+          <span>大家在搜</span>
+          <a href="#">Git</a><a href="#">保研</a><a href="#">408</a><a href="#">留学文书</a><a href="#">面经</a>
+        </div>
+      </div>
+    </div>
+
+    <nav class="blog-cats lib-cats">
+      <span class="bc-label">📚 分类</span>
+      <a class="bc-chip on" href="#">全部 <span class="n">136</span></a>
+      <a class="bc-chip" href="#">🎓 新生引路 <span class="n">12</span></a>
+      <a class="bc-chip" href="#">📖 课程学习 <span class="n">28</span></a>
+      <a class="bc-chip" href="#">🎯 升学备考 <span class="n">24</span></a>
+      <a class="bc-chip" href="#">✈️ 留学申请 <span class="n">31</span></a>
+      <a class="bc-chip" href="#">💼 求职实习 <span class="n">22</span></a>
+      <a class="bc-chip" href="#">🌱 成长视野 <span class="n">15</span></a>
+      <a class="bc-chip" href="#">🏫 家教教案 <span class="n">4</span></a>
+    </nav>
+  </header>
+
+  <div class="lib-body">
+
+    <!-- ══════════ 左：筛选 ══════════ -->
+    <aside class="filters">
+      <div class="filters-head">
+        <b>筛选</b>
+        <button type="button" id="btnReset">清除</button>
+      </div>
+
+      <div class="fgroup" data-fgroup>
+        <div class="fg-title">分类</div>
+        <button class="fopt on" type="button"><span class="fo-dot"></span>全部<span class="fo-n">136</span></button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>🎓 新生引路<span class="fo-n">12</span></button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>📖 课程学习<span class="fo-n">28</span></button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>🎯 升学备考<span class="fo-n">24</span></button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>✈️ 留学申请<span class="fo-n">31</span></button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>💼 求职实习<span class="fo-n">22</span></button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>🌱 成长视野<span class="fo-n">15</span></button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>🏫 家教教案<span class="fo-n">4</span></button>
+      </div>
+
+      <div class="fgroup" data-fgroup>
+        <div class="fg-title">免费 / 精点</div>
+        <button class="fopt on" type="button"><span class="fo-dot"></span>全部</button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>免费<span class="fo-n">118</span></button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>精点<span class="fo-n">18</span></button>
+      </div>
+
+      <div class="fgroup" data-fgroup>
+        <div class="fg-title">类型</div>
+        <button class="fopt on" type="button"><span class="fo-dot"></span>全部</button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>文档</button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>习题</button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>模板</button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>图谱</button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>清单</button>
+      </div>
+
+      <div class="fgroup" data-fgroup>
+        <div class="fg-title">排序</div>
+        <button class="fopt on" type="button"><span class="fo-dot"></span>最新收录</button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>最多浏览</button>
+        <button class="fopt" type="button"><span class="fo-dot"></span>最多收藏</button>
+      </div>
+    </aside>
+
+    <!-- ══════════ 中：资料列表 ══════════ -->
+    <div class="lib-main">
+      <div class="lib-list-head">
+        <h2>全部资料</h2>
+        <span class="ll-count">共 136 份 · 按收录时间倒序</span>
+      </div>
+      <div class="lib-list-sub">点标题看简介，点作者看 TA 的其它资料。资料库里没有付费墙，精点资料用积分兑换。</div>
+
+      <div class="lib-list">
+
+        <a class="feed-row" href="#">
+          <div class="feed-date"><b>09</b><small>09月</small></div>
+          <div>
+            <div class="feed-eyebrow">📖 课程学习 · 习题 <span class="fr-pill free">免费</span></div>
+            <div class="feed-title">C语言基础练习题：66 题从 Hello World 到课程设计</div>
+            <div class="feed-desc">66 道题覆盖 C 语言期末全部基础语法。每题带可直接编译运行的参考代码和讲解（全部代码已用 gcc 实测编译通过）。</div>
+            <div class="feed-meta"><b>温昊璇</b><span>👁 1,204</span><span>⭐ 96</span><span class="tag">#C语言</span><span class="tag">#期末复习</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </a>
+
+        <a class="feed-row" href="#">
+          <div class="feed-date"><b>05</b><small>09月</small></div>
+          <div>
+            <div class="feed-eyebrow">🏫 家教教案 · 文档 <span class="fr-pill free">免费</span></div>
+            <div class="feed-title">家教第一课</div>
+            <div class="feed-desc">第一次去家教怎么备课、怎么开场、怎么和家长谈课时费——从进门到下课的全流程，包括我第一节课踩的三个坑。</div>
+            <div class="feed-meta"><b>温昊璇</b><span>👁 312</span><span>⭐ 27</span><span class="tag">#家教经验</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </a>
+
+        <a class="feed-row" href="#">
+          <div class="feed-date"><b>05</b><small>09月</small></div>
+          <div>
+            <div class="feed-eyebrow">🎯 升学备考 · 文档 <span class="fr-pill free">免费</span></div>
+            <div class="feed-title">计算机考研 408 指南</div>
+            <div class="feed-desc">408 四门课（数据结构 / 组成原理 / 操作系统 / 计算机网络）的复习顺序、每门课用什么资料、最晚什么时候必须开始。</div>
+            <div class="feed-meta"><b>温昊璇</b><span>👁 415</span><span>⭐ 41</span><span class="tag">#考研</span><span class="tag">#408</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </a>
+
+        <a class="feed-row" href="#">
+          <div class="feed-date"><b>05</b><small>09月</small></div>
+          <div>
+            <div class="feed-eyebrow">🌱 成长视野 · 图谱 <span class="fr-pill fine">精点</span></div>
+            <div class="feed-title">计算机方向全景图</div>
+            <div class="feed-desc">计算机岗位方向全览：后端、前端、AI、安全、测试的技能要求、每天在干嘛、天花板在哪，一页表格看完。</div>
+            <div class="feed-meta"><b>温昊璇</b><span>👁 1,876</span><span>⭐ 210</span><span class="tag">#方向选择</span><span class="tag">#新生必读</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </a>
+
+        <a class="feed-row" href="#">
+          <div class="feed-date"><b>28</b><small>08月</small></div>
+          <div>
+            <div class="feed-eyebrow">🌱 成长视野 · 图谱 <span class="fr-pill free">免费</span></div>
+            <div class="feed-title">大学路线选择：一张图看清四年</div>
+            <div class="feed-desc">保研、考研、留学、就业四条路的真实门槛和时间线画在一张图上。大一看到最好，大二看还来得及，大三看会很赶。</div>
+            <div class="feed-meta"><b>课搭教研组</b><span>👁 2,431</span><span>⭐ 268</span><span class="tag">#保研</span><span class="tag">#考研</span><span class="tag">#就业</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </a>
+
+        <a class="feed-row" href="#">
+          <div class="feed-date"><b>21</b><small>08月</small></div>
+          <div>
+            <div class="feed-eyebrow">🌱 成长视野 · 图谱 <span class="fr-pill free">免费</span></div>
+            <div class="feed-title">程序员世界地图</div>
+            <div class="feed-desc">从编程语言到岗位、从校园到工业界——一张图告诉你「学计算机」这句话底下到底有多少条岔路，每条岔路的入口在哪。</div>
+            <div class="feed-meta"><b>课搭教研组</b><span>👁 1,102</span><span>⭐ 154</span><span class="tag">#技术栈</span><span class="tag">#全览</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </a>
+
+        <a class="feed-row" href="#">
+          <div class="feed-date"><b>14</b><small>08月</small></div>
+          <div>
+            <div class="feed-eyebrow">🎯 升学备考 · 文档 <span class="fr-pill fine">精点</span></div>
+            <div class="feed-title">保研全流程：从大一绩点到大四拟录取</div>
+            <div class="feed-desc">完整时间线：什么时候进实验室、什么时候联系导师、夏令营材料清单长什么样，附一份可直接改的材料模板。</div>
+            <div class="feed-meta"><b>c_lin 学姐</b><span>👁 1,530</span><span>⭐ 188</span><span class="tag">#保研</span><span class="tag">#夏令营</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </a>
+
+        <a class="feed-row" href="#">
+          <div class="feed-date"><b>30</b><small>07月</small></div>
+          <div>
+            <div class="feed-eyebrow">🎓 新生引路 · 清单 <span class="fr-pill free">免费</span></div>
+            <div class="feed-title">深大计算机学院奖学金助学金评定制度汇总</div>
+            <div class="feed-desc">深大计算机学院奖学金与助学金的评定细则汇总：绩点怎么算、综测加分项有哪些、哪些材料必须在什么时间交。</div>
+            <div class="feed-meta"><b>温昊璇</b><span>👁 986</span><span>⭐ 74</span><span class="tag">#奖学金</span><span class="tag">#深大</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </a>
+
+        <a class="feed-row" href="#">
+          <div class="feed-date"><b>18</b><small>07月</small></div>
+          <div>
+            <div class="feed-eyebrow">🌱 成长视野 · 图谱 <span class="fr-pill free">免费</span></div>
+            <div class="feed-title">GitHub 淘金地图</div>
+            <div class="feed-desc">哪些仓库值得收藏、怎么从零参与一个开源项目、校招面试官真的会点开你 GitHub 看什么——按这三件事拆开讲。</div>
+            <div class="feed-meta"><b>陈学长</b><span>👁 1,344</span><span>⭐ 176</span><span class="tag">#GitHub</span><span class="tag">#开源</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </a>
+
+        <a class="feed-row" href="#">
+          <div class="feed-date"><b>22</b><small>06月</small></div>
+          <div>
+            <div class="feed-eyebrow">✈️ 留学申请 · 模板 <span class="fr-pill fine">精点</span></div>
+            <div class="feed-title">留学文书写作模板合集</div>
+            <div class="feed-desc">个人陈述、推荐信、简历共 12 份范文与逐段拆解，每篇都标了「哪一句在打动招生官、为什么这一句有效」。</div>
+            <div class="feed-meta"><b>Z 学长</b><span>👁 2,768</span><span>⭐ 342</span><span class="tag">#留学</span><span class="tag">#PS</span><span class="tag">#推荐信</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </a>
+
+        <a class="feed-row" href="#">
+          <div class="feed-date"><b>09</b><small>06月</small></div>
+          <div>
+            <div class="feed-eyebrow">📖 课程学习 · 文档 <span class="fr-pill free">免费</span></div>
+            <div class="feed-title">四六级自救指南：30 天从 380 到 520</div>
+            <div class="feed-desc">30 天每日计划表（可以直接打印），听力、阅读、写作分开讲——重点说清哪些分是能靠技巧捡回来的。</div>
+            <div class="feed-meta"><b>c_chen 学长</b><span>👁 1,690</span><span>⭐ 205</span><span class="tag">#四六级</span><span class="tag">#英语</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </a>
+
+        <a class="feed-row" href="#">
+          <div class="feed-date"><b>21</b><small>05月</small></div>
+          <div>
+            <div class="feed-eyebrow">💼 求职实习 · 清单 <span class="fr-pill fine">精点</span></div>
+            <div class="feed-title">后端面经大全：200+ 真题与回答框架</div>
+            <div class="feed-desc">Java 后端 200+ 道真实面试题，按「场景题 / 八股 / 项目追问」分类，每题给的是回答框架，不是标准答案。</div>
+            <div class="feed-meta"><b>课搭教研组</b><span>👁 3,102</span><span>⭐ 421</span><span class="tag">#Java</span><span class="tag">#面试</span><span class="tag">#真题</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </a>
+
+      </div>
+
+      <!-- ══════════ 分页 ══════════ -->
+      <div class="pager">
+        <span class="pg-info">共 136 份 · 第 1 / 12 页</span>
+        <div class="pg-btns">
+          <button class="pg-btn" disabled>‹ 上一页</button>
+          <button class="pg-btn on">1</button>
+          <button class="pg-btn">2</button>
+          <button class="pg-btn">3</button>
+          <span class="pg-dots">…</span>
+          <button class="pg-btn">12</button>
+          <button class="pg-btn">下一页 ›</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ 右：侧栏 ══════════ -->
+    <aside class="blog-side">
+
+      <div class="side-box">
+        <h3>🔥 本周收藏榜</h3>
+        <div class="sb-sub">按本周收藏数排名</div>
+        <div class="rank-item"><span class="rank-no t1">1</span><span class="rank-av sq" style="background:#ff6b4a">🎯</span><span class="rank-info"><b>保研全流程</b><span>升学备考</span></span><span class="rank-metric">188</span></div>
+        <div class="rank-item"><span class="rank-no t2">2</span><span class="rank-av sq" style="background:#10b981">🌱</span><span class="rank-info"><b>计算机方向全景图</b><span>成长视野</span></span><span class="rank-metric">210</span></div>
+        <div class="rank-item"><span class="rank-no t3">3</span><span class="rank-av sq" style="background:#6366f1">✈️</span><span class="rank-info"><b>留学文书写作模板合集</b><span>留学申请</span></span><span class="rank-metric">342</span></div>
+        <div class="rank-item"><span class="rank-no">4</span><span class="rank-av sq" style="background:#e8638f">💼</span><span class="rank-info"><b>后端面经大全</b><span>求职实习</span></span><span class="rank-metric">421</span></div>
+        <div class="rank-item"><span class="rank-no">5</span><span class="rank-av sq" style="background:#f59e0b">📖</span><span class="rank-info"><b>C语言 66 题</b><span>课程学习</span></span><span class="rank-metric">96</span></div>
+      </div>
+
+      <div class="side-box" style="background:var(--pri-50);border-color:#ffd9cd">
+        <h3>🧭 别在这儿瞎逛</h3>
+        <div class="sb-sub" style="color:var(--pri-700)">不知道要什么的时候，路线比搜索好用</div>
+        <p style="font-size:12.5px;color:var(--pri-700);line-height:1.7">
+          每条路线的每一关都挂了对应的资料。走到那一关，资料自己会递到你手上。
+        </p>
+        <a class="btn btn-primary btn-block btn-sm" style="margin-top:11px" href="02-explore.html">看看探索路线 →</a>
+      </div>
+
+      <div class="side-box">
+        <h3>📢 公告</h3>
+        <div class="sb-sub">资料库动态</div>
+        <div class="notice-line"><b>2026 / 9 / 14</b>资料库改版：每份资料现在都挂在路线的关卡上，走到那一关会自动出现。</div>
+        <div class="notice-line"><b>2026 / 9 / 10</b>新增 12 份 2026 秋季学期课程资料，含 3 份期末真题。</div>
+        <div class="notice-line"><b>2026 / 9 / 02</b>精点资料改为积分兑换，不再需要付费。</div>
+      </div>
+
+      <div class="side-box">
+        <h3>🗂️ 资料分类统计</h3>
+        <div class="sb-sub">共 136 份 · 点进入目录</div>
+        <a class="cat-stat" href="#"><span>🎓 新生引路</span><span>12</span></a>
+        <a class="cat-stat" href="#"><span>📖 课程学习</span><span>28</span></a>
+        <a class="cat-stat" href="#"><span>🎯 升学备考</span><span>24</span></a>
+        <a class="cat-stat" href="#"><span>✈️ 留学申请</span><span>31</span></a>
+        <a class="cat-stat" href="#"><span>💼 求职实习</span><span>22</span></a>
+        <a class="cat-stat" href="#"><span>🌱 成长视野</span><span>15</span></a>
+        <a class="cat-stat" href="#"><span>🏫 家教教案</span><span>4</span></a>
+      </div>
+
+    </aside>
+  </div>
+</main>
+
+<!-- ══════════ 页脚 ══════════ -->
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">
+        <span class="logo-mark">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      </div>
+      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+      <p class="creed">「愿课搭陪你走过每一次选方向的焦虑，需要时也总能搭把手。」</p>
+    </div>
+    <div class="foot-col"><h4>探索</h4><a href="01-home.html">首页</a><a href="02-explore.html">探索路线</a><a href="04-survey.html">定制路线</a><a href="08-library.html">资料库</a></div>
+    <div class="foot-col"><h4>结果服务</h4><a href="10-pricing.html">阶段验收</a><a href="09-cohort.html">项目组</a><a href="10-pricing.html">深度陪跑</a></div>
+    <div class="foot-col"><h4>关于</h4><a href="#">平台理念</a><a href="#">校园认证</a><a href="#">联系我们</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 知识在校园里流动</div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  /* 分类 chips：单选 */
+  document.querySelectorAll('.lib-cats .bc-chip').forEach(function (c) {
+    c.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelectorAll('.lib-cats .bc-chip').forEach(function (x) { x.classList.remove('on'); });
+      c.classList.add('on');
+    });
+  });
+
+  /* 筛选组：组内单选 */
+  document.querySelectorAll('[data-fgroup]').forEach(function (g) {
+    g.querySelectorAll('.fopt').forEach(function (o) {
+      o.addEventListener('click', function () {
+        g.querySelectorAll('.fopt').forEach(function (x) { x.classList.remove('on'); });
+        o.classList.add('on');
+      });
+    });
+  });
+
+  /* 清除筛选 */
+  document.getElementById('btnReset').addEventListener('click', function () {
+    document.querySelectorAll('[data-fgroup]').forEach(function (g) {
+      g.querySelectorAll('.fopt').forEach(function (x, i) { x.classList.toggle('on', i === 0); });
+    });
+  });
+
+  /* 分页：单选高亮 */
+  document.querySelectorAll('.pg-btn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (b.disabled || /上一页|下一页|‹|›/.test(b.textContent)) return;
+      document.querySelectorAll('.pg-btn').forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on');
+    });
+  });
+})();
+</script>
+</body>
+</html>

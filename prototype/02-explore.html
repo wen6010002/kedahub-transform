@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>探索路线 · 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  .ex-hero { display: grid; grid-template-columns: 1fr 320px; gap: 32px; align-items: center; margin-bottom: 34px; }
+  .ex-hero h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; }
+  .ex-hero h1 em { font-style: normal; color: var(--pri); }
+  .ex-hero p { font-size: 14.5px; color: var(--ink-2); margin-top: 12px; max-width: 620px; line-height: 1.8; }
+  .ex-hero .kicker { font-size: 11.5px; font-weight: 800; letter-spacing: 0.2em; color: var(--pri-600); text-transform: uppercase; margin-bottom: 10px; }
+
+  .ex-stat { display: flex; gap: 22px; margin-top: 22px; flex-wrap: wrap; }
+  .ex-stat div b { display: block; font-size: 22px; font-weight: 800; letter-spacing: -0.6px; }
+  .ex-stat div span { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
+
+  /* 进度卡 */
+  .ex-prog { padding: 20px; text-align: center; }
+  .ex-prog .ring { position: relative; width: 118px; height: 118px; margin: 4px auto 14px; }
+  .ex-prog .ring svg { transform: rotate(-90deg); }
+  .ex-prog .ring .num { position: absolute; inset: 0; display: grid; place-items: center; font-size: 26px; font-weight: 800; letter-spacing: -1px; }
+  .ex-prog .ring .num small { font-size: 12px; color: var(--ink-soft); font-weight: 700; }
+
+  /* ── 路线主体 ── */
+  .trail { position: relative; padding-left: 4px; }
+  .trail-svg { position: absolute; left: 0; top: 0; width: 96px; height: 100%; pointer-events: none; }
+  .stop { display: grid; grid-template-columns: 96px 1fr; gap: 0 18px; margin-bottom: 14px; position: relative; }
+  .stop-node { display: flex; align-items: flex-start; justify-content: center; padding-top: 22px; position: relative; z-index: 2; }
+
+  .stop-card { padding: 18px 20px; position: relative; overflow: hidden; }
+  .stop-card .sc-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .stop-no { font-size: 11.5px; font-weight: 800; letter-spacing: 0.08em; color: var(--ink-faint); }
+  .stop-time { font-size: 11.5px; font-weight: 700; color: var(--ink-soft); background: var(--bg-soft); padding: 2px 9px; border-radius: 999px; }
+  .stop-card h3 { font-size: 18px; font-weight: 800; letter-spacing: -0.35px; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
+  .stop-card .lead { font-size: 13.5px; color: var(--ink-2); margin-top: 5px; line-height: 1.7; }
+  .stop-out { display: flex; gap: 9px; align-items: flex-start; margin-top: 13px; background: var(--bg-soft); border-radius: var(--r-lg); padding: 10px 13px; }
+  .stop-out .lbl { font-size: 11px; font-weight: 800; color: var(--ink-soft); flex: none; letter-spacing: 0.04em; padding-top: 1px; }
+  .stop-out .val { font-size: 12.5px; color: var(--ink); font-weight: 600; line-height: 1.6; }
+  .stop-wow { display: flex; gap: 9px; align-items: flex-start; margin-top: 8px; }
+  .stop-wow .val { font-size: 12.5px; color: var(--pri-700); font-weight: 600; line-height: 1.6; }
+  .stop-act { margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  /* 手感评分 */
+  .feel { margin-top: 14px; padding-top: 13px; border-top: 1px dashed var(--line); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .feel .q { font-size: 12.5px; font-weight: 700; color: var(--ink-2); }
+  .feel-btn {
+    font-size: 12px; font-weight: 700; padding: 5px 13px; border-radius: 999px;
+    border: 1.5px solid var(--line); background: #fff; transition: 0.15s var(--ease-pop);
+  }
+  .feel-btn:hover { border-color: var(--pri); transform: translateY(-2px); }
+  .feel-btn:active { transform: scale(0.94); }
+  .feel-btn.on { background: var(--pri); border-color: var(--pri); color: #fff; box-shadow: 0 2px 0 rgba(208,74,42,.3); }
+  .feel-done { font-size: 12px; font-weight: 700; color: var(--pri-700); display: flex; align-items: center; gap: 6px; }
+
+  /* 已完成状态角标 */
+  .sc-done {
+    margin-left: auto; font-size: 11px; font-weight: 800; color: var(--mint);
+    background: var(--mint-50); padding: 3px 10px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .sc-lock { margin-left: auto; font-size: 11px; font-weight: 800; color: var(--ink-soft); background: var(--bg-deep); padding: 3px 10px; border-radius: 999px; }
+
+  .stop.is-locked .stop-card { filter: grayscale(0.35); }
+
+  /* 方向体检终点 */
+  .finish { background: var(--ink); color: #fff; border-color: var(--ink); padding: 26px 24px; margin-top: 20px; }
+  .finish h3 { color: #fff; }
+  .finish .lead { color: rgba(255,255,255,.72); }
+  .finish .stop-out { background: rgba(255,255,255,.1); }
+  .finish .stop-out .lbl { color: rgba(255,255,255,.55); }
+  .finish .stop-out .val { color: #fff; }
+
+  /* 手感图谱示例 */
+  .taste { display: flex; align-items: flex-end; gap: 7px; height: 84px; margin: 16px 0 8px; }
+  .taste i { flex: 1; border-radius: 5px 5px 0 0; background: var(--pri); opacity: .85; display: block; }
+  .taste-lbl { display: flex; gap: 7px; font-size: 10px; color: var(--ink-soft); }
+  .taste-lbl span { flex: 1; text-align: center; }
+
+  @media (max-width: 1080px) { .ex-hero { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) {
+    .stop { grid-template-columns: 52px 1fr; gap: 0 10px; }
+    .trail-svg { width: 52px; }
+    .rt-node { width: 46px; height: 46px; font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="01-home.html">
+      <span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+      <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+    </a>
+    <div class="nav-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      搜索资料、路线、学长经验…
+    </div>
+    <div class="nav-actions">
+      <a class="nav-link" href="01-home.html">首页</a>
+      <a class="nav-link on" href="02-explore.html">🧭 探索路线</a>
+      <a class="nav-link" href="09-cohort.html">项目组</a>
+      <a class="nav-link" href="10-pricing.html">验收与付费</a>
+      <a class="btn btn-outline btn-sm" href="04-survey.html">登录</a>
+      <a class="btn btn-primary btn-sm" href="04-survey.html">定制我的路线</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- ══════════ 头部 ══════════ -->
+  <header class="ex-hero">
+    <div>
+      <div class="kicker">Exploration Trail · 探索路线</div>
+      <h1>先别急着选方向，<br />先<em>把计算机摸一遍</em>。</h1>
+      <p>
+        大一是唯一一段"可以不知道自己要干什么"的时间。这条路线不教你成为谁，
+        它只做一件事：<strong>用 8 个晚上，让你亲手碰一遍计算机的每个角落</strong>，
+        然后你自己就知道该往哪走了。
+      </p>
+      <p style="margin-top:10px">
+        每一站都要做出一个小东西——不是看完视频打个勾，是<strong>真的做出来、能拿给室友看</strong>。
+        走完 8 站，你手里不是一份问卷答案，而是八次真实的手感。
+      </p>
+      <div class="ex-stat">
+        <div><b>8</b><span>站 · 每站 1.5–2.5 小时</span></div>
+        <div><b>16h</b><span>总计（约两周晚自习）</span></div>
+        <div><b>8</b><span>个能拿出手的小作品</span></div>
+        <div><b>¥0</b><span>完全免费</span></div>
+      </div>
+    </div>
+
+    <div class="toon-card ex-prog">
+      <div class="ring">
+        <svg width="118" height="118">
+          <circle cx="59" cy="59" r="50" fill="none" stroke="#ebedf0" stroke-width="9" />
+          <circle id="ringFg" cx="59" cy="59" r="50" fill="none" stroke="#ff6b4a" stroke-width="9"
+                  stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="235"
+                  style="transition: stroke-dashoffset .7s cubic-bezier(.22,.61,.36,1)" />
+        </svg>
+        <div class="num"><span id="progNum">2</span><small>/8</small></div>
+      </div>
+      <div style="font-size:13px;font-weight:700">已走过 2 站</div>
+      <div style="font-size:12px;color:var(--ink-soft);margin-top:3px">下一站：Git 时间机器</div>
+      <div style="margin-top:14px;display:flex;justify-content:center;gap:6px">
+        <span class="pp-slot on" style="width:32px;height:32px;font-size:13px">⌨️</span>
+        <span class="pp-slot on" style="width:32px;height:32px;font-size:13px">📜</span>
+        <span class="pp-slot" style="width:32px;height:32px;font-size:13px">🌿</span>
+        <span class="pp-slot" style="width:32px;height:32px;font-size:13px">🎨</span>
+        <span class="pp-slot" style="width:32px;height:32px;font-size:13px">🖥️</span>
+        <span class="pp-slot" style="width:32px;height:32px;font-size:13px">🗄️</span>
+        <span class="pp-slot" style="width:32px;height:32px;font-size:13px">🤖</span>
+        <span class="pp-slot" style="width:32px;height:32px;font-size:13px">🌌</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════ 路线 ══════════ -->
+  <div class="trail" id="trail">
+    <svg class="trail-svg" id="trailSvg" preserveAspectRatio="none">
+      <path id="pTrack" fill="none" stroke="#ebedf0" stroke-width="7" stroke-linecap="round" />
+      <path id="pDone" fill="none" stroke="#ff6b4a" stroke-width="7" stroke-linecap="round" />
+      <path id="pDash" fill="none" stroke="#b3b7be" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 14" opacity=".55" />
+    </svg>
+
+    <!-- 1 -->
+    <div class="stop is-done" data-i="0">
+      <div class="stop-node">
+        <span class="rt-node done">⌨️<span class="rt-badge">✓</span></span>
+      </div>
+      <div class="toon-card stop-card">
+        <div class="sc-top"><span class="stop-no">STOP 01</span><span class="stop-time">约 1.5 小时</span><span class="sc-done">✓ 已走过</span></div>
+        <h3>⌨️ 黑窗口</h3>
+        <div class="lead">电影里黑客敲的那个黑框，其实是电脑最老实的样子——你说什么，它就做什么。这一站让你不再怕它。</div>
+        <div class="stop-out"><span class="lbl">你会做出</span><span class="val">一条命令，把 100 个乱文件按日期改好名</span></div>
+        <div class="stop-wow"><span class="lbl">⚡ 哇时刻</span><span class="val">第一次 <code>cd</code>，电脑真的走"进"了那个文件夹</span></div>
+        <div class="feel">
+          <span class="q">这一站的手感？</span>
+          <button class="feel-btn">🔥 上头了</button>
+          <button class="feel-btn">🙂 还行</button>
+          <button class="feel-btn on">🥱 没感觉</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="stop is-done" data-i="1">
+      <div class="stop-node">
+        <span class="rt-node done">📜<span class="rt-badge">✓</span></span>
+      </div>
+      <div class="toon-card stop-card">
+        <div class="sc-top"><span class="stop-no">STOP 02</span><span class="stop-time">约 2 小时</span><span class="sc-done">✓ 已走过</span></div>
+        <h3>📜 脚本 · 让电脑替你干活</h3>
+        <div class="lead">你已经会跟电脑说话了，现在让它替你重复劳动。这一站之后，你会开始嫌弃手动做的事。</div>
+        <div class="stop-out"><span class="lbl">你会做出</span><span class="val">一个自动整理桌面的脚本：把下载文件夹里的东西按类型分好类</span></div>
+        <div class="stop-wow"><span class="lbl">⚡ 哇时刻</span><span class="val">你写的代码，干完了你本来要干一小时的事</span></div>
+        <div class="feel">
+          <span class="q">这一站的手感？</span>
+          <button class="feel-btn on">🔥 上头了</button>
+          <button class="feel-btn">🙂 还行</button>
+          <button class="feel-btn">🥱 没感觉</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 · 当前站 -->
+    <div class="stop is-active" data-i="2" id="stopActive">
+      <div class="stop-node">
+        <span class="rt-node active rt-halo pressable">🌿</span>
+      </div>
+      <div class="toon-card stop-card" style="border-color:var(--pri)">
+        <div class="sc-top"><span class="stop-no">STOP 03</span><span class="stop-time">约 1.5 小时</span><span class="sc-lock" style="background:var(--pri-50);color:var(--pri-700)">你在这里</span></div>
+        <h3>🌿 Git · 给代码一台时间机器</h3>
+        <div class="lead">所有程序员都在用的那个东西，其实只解决一个问题：让你敢改。改坏了能退回来，这就是安全感的来源。</div>
+        <div class="stop-out"><span class="lbl">你会做出</span><span class="val">你自己的第一个 GitHub 仓库，有完整的提交记录，能发链接给同学</span></div>
+        <div class="stop-wow"><span class="lbl">⚡ 哇时刻</span><span class="val">你删掉了一整个文件，一条命令把它变了回来</span></div>
+        <div class="stop-act">
+          <button class="btn btn-primary" id="btnFinish">✓ 完成这一站</button>
+          <a class="btn btn-outline" href="07-node.html">看这一站的 4 个小任务 →</a>
+          <span style="font-size:11.5px;color:var(--ink-soft);font-weight:600">共 4 个小任务 · 已做 2 个</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="stop is-locked" data-i="3">
+      <div class="stop-node"><span class="rt-node locked">🎨</span></div>
+      <div class="toon-card stop-card">
+        <div class="sc-top"><span class="stop-no">STOP 04</span><span class="stop-time">约 2.5 小时</span><span class="sc-lock">走完第 3 站解锁</span></div>
+        <h3>🎨 前端 · 让东西看得见</h3>
+        <div class="lead">前面做的东西只有你自己看得到。这一站给它一张脸，然后发出去，让别人的手机能打开。</div>
+        <div class="stop-out" style="position:relative;overflow:hidden"><span class="lbl">你会做出</span><span class="val" style="filter:blur(4.5px);user-select:none">████████████████████</span><span class="rt-mist" style="border-radius:8px"><span class="qm">？</span></span></div>
+      </div>
+    </div>
+
+    <div class="stop is-locked" data-i="4">
+      <div class="stop-node"><span class="rt-node locked">🖥️</span></div>
+      <div class="toon-card stop-card">
+        <div class="sc-top"><span class="stop-no">STOP 05</span><span class="stop-time">约 2 小时</span><span class="sc-lock">走完第 3 站解锁</span></div>
+        <h3>🖥️ 服务器 · 让你的东西被别人用到</h3>
+        <div class="lead">网页只在你自己电脑上打开不算数。这一站把它放到公网上，让任何人任何地方都能访问。</div>
+        <div class="stop-out" style="position:relative;overflow:hidden"><span class="lbl">你会做出</span><span class="val" style="filter:blur(4.5px);user-select:none">████████████████████</span><span class="rt-mist" style="border-radius:8px"><span class="qm">？</span></span></div>
+      </div>
+    </div>
+
+    <div class="stop is-locked" data-i="5">
+      <div class="stop-node"><span class="rt-node locked">🗄️</span></div>
+      <div class="toon-card stop-card">
+        <div class="sc-top"><span class="stop-no">STOP 06</span><span class="stop-time">约 2 小时</span><span class="sc-lock">走完第 3 站解锁</span></div>
+        <h3>🗄️ 数据库 · 让程序有记忆</h3>
+        <div class="lead">为什么刷新页面数据还在？为什么网站记得你是谁？这一站回答这个问题。</div>
+        <div class="stop-out" style="position:relative;overflow:hidden"><span class="lbl">你会做出</span><span class="val" style="filter:blur(4.5px);user-select:none">████████████████████</span><span class="rt-mist" style="border-radius:8px"><span class="qm">？</span></span></div>
+      </div>
+    </div>
+
+    <div class="stop is-locked" data-i="6">
+      <div class="stop-node"><span class="rt-node locked">🤖</span></div>
+      <div class="toon-card stop-card">
+        <div class="sc-top"><span class="stop-no">STOP 07</span><span class="stop-time">约 2 小时</span><span class="sc-lock">走完第 3 站解锁</span></div>
+        <h3>🤖 AI · 让程序会思考</h3>
+        <div class="lead">不用训练模型，你也能调用它。这一站你会发现：AI 应用开发的门槛，比所有人想象的都低。</div>
+        <div class="stop-out" style="position:relative;overflow:hidden"><span class="lbl">你会做出</span><span class="val" style="filter:blur(4.5px);user-select:none">████████████████████</span><span class="rt-mist" style="border-radius:8px"><span class="qm">？</span></span></div>
+      </div>
+    </div>
+
+    <div class="stop is-locked" data-i="7">
+      <div class="stop-node"><span class="rt-node locked">🌌</span></div>
+      <div class="toon-card stop-card">
+        <div class="sc-top"><span class="stop-no">STOP 08</span><span class="stop-time">约 2 小时</span><span class="sc-lock">走完第 3 站解锁</span></div>
+        <h3>🌌 模型 · 机器到底是怎么"学会"的</h3>
+        <div class="lead">亲手跑一次训练，看着准确率从 30% 爬到 90%。看懂它，你才知道 AI 能干什么、不能干什么。</div>
+        <div class="stop-out" style="position:relative;overflow:hidden"><span class="lbl">你会做出</span><span class="val" style="filter:blur(4.5px);user-select:none">████████████████████</span><span class="rt-mist" style="border-radius:8px"><span class="qm">？</span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ 终点：方向体检 ══════════ -->
+  <div class="toon-card finish" id="finish">
+    <div style="display:flex;gap:16px;align-items:flex-start">
+      <span style="font-size:34px">🩺</span>
+      <div style="flex:1">
+        <h3 style="font-size:20px;font-weight:800;letter-spacing:-0.4px">终点 · 方向体检</h3>
+        <div class="lead" style="font-size:13.5px;margin-top:6px;line-height:1.75">
+          8 站走完，你会看到一张<strong style="color:#fff">手感图谱</strong>——每一站你打的分，会告诉我们你在哪类事情上眼睛会亮。
+          这不是性格测试，是你自己走出来的证据。
+        </div>
+
+        <div class="taste">
+          <i style="height:38%"></i><i style="height:88%"></i><i style="height:62%"></i><i style="height:44%"></i>
+          <i style="height:30%"></i><i style="height:52%"></i><i style="height:96%"></i><i style="height:70%"></i>
+        </div>
+        <div class="taste-lbl">
+          <span>黑窗口</span><span>脚本</span><span>Git</span><span>前端</span><span>服务器</span><span>数据库</span><span>AI</span><span>模型</span>
+        </div>
+
+        <div class="stop-out" style="margin-top:16px">
+          <span class="lbl">体检结论</span>
+          <span class="val">
+            你在「脚本」和「AI」上眼睛最亮，在「服务器」上明显坐不住。<br />
+            <span style="color:var(--pri)">→ 推荐方向：AI 应用开发（主）· 数据工程（备）· 后端（备）</span>
+          </span>
+        </div>
+
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn btn-primary" href="04-survey.html">用这个结论，生成我的专属路线 →</a>
+          <a class="btn btn-outline" style="background:transparent;border-color:rgba(255,255,255,.3);color:#fff" href="03-direction.html">先看看这几个方向是干嘛的</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ 讲清楚它为什么这样设计 ══════════ -->
+  <section style="margin-top:46px">
+    <div class="blog-sec-head"><h2>为什么是"走一遍"而不是"做测试"</h2></div>
+    <div class="blog-sec-sub">这条路线背后的两个判断</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px" class="why-grid">
+      <div class="toon-card" style="padding:20px">
+        <div style="font-size:24px">🎯</div>
+        <b style="font-size:15px;font-weight:800;display:block;margin-top:8px">选错方向的代价，比想象中大</b>
+        <p style="font-size:13px;color:var(--ink-2);margin-top:6px;line-height:1.75">
+          很多人大二才开始怀疑自己不喜欢写代码，但那时候已经投入了一年。
+          沉没成本会让人硬撑到毕业——四年下来，做着一份不喜欢的工作。
+          <strong>越早试错，越便宜。</strong>
+        </p>
+      </div>
+      <div class="toon-card" style="padding:20px">
+        <div style="font-size:24px">🧪</div>
+        <b style="font-size:15px;font-weight:800;display:block;margin-top:8px">兴趣是做出来的，不是想出来的</b>
+        <p style="font-size:13px;color:var(--ink-2);margin-top:6px;line-height:1.75">
+          问卷问你"喜欢逻辑还是喜欢创意"，你根本答不准。
+          但做完一站之后问你"刚才那两小时难受吗"，你一定答得准。
+          <strong>用行为数据代替自我描述，是这条路线唯一的方法论。</strong>
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">
+        <span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      </div>
+      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+    </div>
+    <div class="foot-col"><h4>探索</h4><a href="01-home.html">资料馆</a><a href="02-explore.html">探索路线</a><a href="04-survey.html">定制路线</a></div>
+    <div class="foot-col"><h4>结果服务</h4><a href="10-pricing.html">阶段验收</a><a href="09-cohort.html">项目组</a><a href="10-pricing.html">陪跑</a></div>
+    <div class="foot-col"><h4>关于</h4><a href="#">平台理念</a><a href="#">校园认证</a><a href="#">联系我们</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 知识在校园里流动</div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+/* ── 手绘路径：连接所有节点 ── */
+const trail = document.getElementById('trail');
+const svg = document.getElementById('trailSvg');
+const pTrack = document.getElementById('pTrack');
+const pDone  = document.getElementById('pDone');
+const pDash  = document.getElementById('pDash');
+const NODE_X = window.innerWidth <= 720 ? 26 : 48;
+
+function drawTrail(animate) {
+  const nodes = [...document.querySelectorAll('.stop-node .rt-node')];
+  const base = trail.getBoundingClientRect();
+  const pts = nodes.map(n => {
+    const r = n.getBoundingClientRect();
+    return { x: NODE_X, y: r.top - base.top + r.height / 2 };
+  });
+  if (pts.length < 2) return;
+  // Catmull-Rom → 贝塞尔，做出柔和蜿蜒
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    const bend = 16;
+    const c1x = p1.x + (i % 2 === 0 ? bend : -bend), c1y = p1.y + (p2.y - p1.y) * 0.35;
+    const c2x = p2.x + (i % 2 === 0 ? -bend : bend), c2y = p1.y + (p2.y - p1.y) * 0.65;
+    d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${p2.x} ${p2.y}`;
+  }
+  svg.setAttribute('viewBox', `0 0 ${NODE_X * 2} ${base.height}`);
+  pTrack.setAttribute('d', d);
+  pDash.setAttribute('d', d);
+
+  // 已走过的部分：连到当前站
+  const doneCount = document.querySelectorAll('.stop.is-done').length;
+  const currentIdx = doneCount; // 当前站索引
+  const cutY = pts[Math.min(currentIdx, pts.length - 1)].y;
+  pDone.style.strokeDasharray = '2000';
+  pDone.setAttribute('d', d);
+  const total = pDone.getTotalLength();
+  const ratio = (cutY - pts[0].y) / (pts[pts.length - 1].y - pts[0].y);
+  pDone.style.strokeDasharray = total;
+  pDone.style.strokeDashoffset = animate ? total : total * (1 - Math.max(0.06, ratio));
+  if (animate) requestAnimationFrame(() => { pDone.style.strokeDashoffset = total * (1 - Math.max(0.06, ratio)); });
+}
+drawTrail(false);
+window.addEventListener('resize', () => drawTrail(false));
+
+/* ── 手感评分 ── */
+document.querySelectorAll('.feel').forEach(f => {
+  f.querySelectorAll('.feel-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      f.querySelectorAll('.feel-btn').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      b.classList.remove('wiggle'); void b.offsetWidth; b.classList.add('wiggle');
+    });
+  });
+});
+
+/* ── 完成当前站：印章 → 路径生长 → 云雾散开 → 解锁下一站 ── */
+document.getElementById('btnFinish').addEventListener('click', function () {
+  const btn = this;
+  btn.disabled = true;
+  btn.textContent = '正在记录…';
+
+  const activeStop = document.getElementById('stopActive');
+  const node = activeStop.querySelector('.rt-node');
+
+  // ① 印章落下
+  const stamp = document.createElement('div');
+  stamp.className = 'stamp slam';
+  stamp.innerHTML = 'STOP 03<br/>已走过';
+  stamp.style.cssText += 'position:absolute;right:22px;top:var(--sy,70px);z-index:5';
+  activeStop.querySelector('.stop-card').appendChild(stamp);
+  const ring = document.createElement('div');
+  ring.className = 'ink-ring';
+  ring.style.cssText = 'width:74px;height:74px;right:22px;top:70px;position:absolute;z-index:4';
+  activeStop.querySelector('.stop-card').appendChild(ring);
+
+  // ② 节点变已完成 + 一句轻声反馈
+  setTimeout(() => {
+    node.className = 'rt-node done pop-in';
+    node.innerHTML = '🌿<span class="rt-badge">✓</span>';
+    activeStop.classList.add('is-done');
+    activeStop.querySelector('.sc-lock').outerHTML = '<span class="sc-done">✓ 已走过</span>';
+    btn.outerHTML = '<span class="feel-done">✓ 已记录 · 2026-09-14</span>';
+
+    // 手感评分出现
+    const feel = document.createElement('div');
+    feel.className = 'feel rise';
+    feel.innerHTML = '<span class="q">这一站的手感？</span>' +
+      '<button class="feel-btn">🔥 上头了</button><button class="feel-btn">🙂 还行</button><button class="feel-btn">🥱 没感觉</button>';
+    activeStop.querySelector('.stop-card').appendChild(feel);
+    feel.querySelectorAll('.feel-btn').forEach(b => b.addEventListener('click', () => {
+      feel.querySelectorAll('.feel-btn').forEach(x => x.classList.remove('on'));
+      b.classList.add('on'); b.classList.remove('wiggle'); void b.offsetWidth; b.classList.add('wiggle');
+    }));
+
+    // ③ 路径生长
+    drawTrail(true);
+
+    // ④ 下一站解锁 + 云雾散开
+    const next = document.querySelector('.stop[data-i="3"]');
+    setTimeout(() => {
+      next.classList.remove('is-locked');
+      const card = next.querySelector('.stop-card');
+      card.style.borderColor = 'var(--pri)';
+      card.querySelector('.sc-lock').outerHTML = '<span class="sc-lock" style="background:var(--pri-50);color:var(--pri-700)">你在这里</span>';
+      const n2 = next.querySelector('.rt-node');
+      n2.className = 'rt-node active rt-halo pressable pop-in';
+      const mist = next.querySelector('.rt-mist');
+      mist.classList.add('gone');
+      // 顶部进度
+      document.getElementById('progNum').textContent = '3';
+      document.getElementById('ringFg').style.strokeDashoffset = 314 * (1 - 3 / 8);
+      document.querySelectorAll('.pp-slot')[2].classList.add('on');
+      document.querySelector('.ex-prog div[style*="font-weight"]').textContent = '已走过 3 站';
+      document.querySelector('.toon-card.ex-prog div:nth-child(3)').textContent = '下一站：前端 · 让东西看得见';
+      next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 520);
+  }, 260);
+});
+</script>
+</body>
+</html>

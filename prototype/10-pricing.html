@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>验收与付费 · 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  .pr-hero { text-align: center; max-width: 760px; margin: 6px auto 40px; }
+  .pr-hero .kicker { font-size: 11.5px; font-weight: 800; letter-spacing: .2em; color: var(--pri-600); text-transform: uppercase; }
+  .pr-hero h1 { font-size: 36px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.25; margin-top: 12px; }
+  .pr-hero h1 em { font-style: normal; color: var(--pri); }
+  .pr-hero p { font-size: 15px; color: var(--ink-2); margin-top: 16px; line-height: 1.85; }
+
+  /* 免费承诺条 */
+  .pledge { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;
+    background: var(--mint-50); border: 1px solid #c9f0e0; border-radius: 999px; padding: 9px 20px;
+    font-size: 13px; font-weight: 700; color: #0a7d59; margin: 0 auto 44px; width: fit-content; max-width: 100%; }
+
+  /* 价格卡 */
+  .tiers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; align-items: start; margin-bottom: 50px; }
+  .tier { padding: 22px 20px; display: flex; flex-direction: column; height: 100%; position: relative; }
+  .tier.hot { border-color: var(--pri); border-width: 2.5px; box-shadow: 0 5px 0 rgba(255,107,74,.18); }
+  .tier-tag { position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+    background: var(--pri); color: #fff; font-size: 10.5px; font-weight: 800; padding: 3px 12px; border-radius: 999px; white-space: nowrap; }
+  .tier h3 { font-size: 16px; font-weight: 800; letter-spacing: -.3px; }
+  .tier .tdesc { font-size: 12px; color: var(--ink-soft); margin-top: 4px; line-height: 1.6; min-height: 36px; }
+  .tier .price { margin: 16px 0 4px; display: flex; align-items: baseline; gap: 3px; }
+  .tier .price b { font-size: 32px; font-weight: 800; letter-spacing: -1.5px; }
+  .tier .price i { font-style: normal; font-size: 15px; font-weight: 800; }
+  .tier .price span { font-size: 12.5px; color: var(--ink-soft); font-weight: 600; margin-left: 3px; }
+  .tier .pnote { font-size: 11.5px; color: var(--mint); font-weight: 700; min-height: 18px; }
+  .tier ul { list-style: none; margin: 16px 0 0; padding: 0; flex: 1; }
+  .tier li { font-size: 12.5px; color: var(--ink-2); padding: 5px 0 5px 20px; position: relative; line-height: 1.6; }
+  .tier li::before { content: '✓'; position: absolute; left: 0; color: var(--pri); font-weight: 900; font-size: 12px; }
+  .tier li.dim { color: var(--ink-faint); }
+  .tier li.dim::before { content: '—'; color: var(--ink-faint); }
+  .tier li b { color: var(--ink); font-weight: 700; }
+  .tier .btn { margin-top: 18px; }
+
+  /* 对比表 */
+  .cmp-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-xl); margin-bottom: 50px; }
+  table.cmp { width: 100%; border-collapse: collapse; min-width: 760px; font-size: 13px; }
+  table.cmp th, table.cmp td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--line-2); }
+  table.cmp thead th { background: var(--bg-soft); font-weight: 800; font-size: 12.5px; white-space: nowrap; }
+  table.cmp tbody tr:last-child td { border-bottom: none; }
+  table.cmp td:first-child { font-weight: 700; color: var(--ink); }
+  table.cmp .yes { color: var(--mint); font-weight: 800; }
+  table.cmp .no { color: var(--ink-faint); }
+  table.cmp .em { color: var(--pri-600); font-weight: 800; }
+  table.cmp tr.sect td { background: var(--pri-50); font-weight: 800; color: var(--pri-700); font-size: 12px; letter-spacing: .04em; }
+
+  /* 场景 */
+  .scene { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 50px; }
+  .scene-c { padding: 20px; }
+  .scene-c .si { font-size: 26px; }
+  .scene-c b { display: block; font-size: 15px; font-weight: 800; margin-top: 10px; line-height: 1.5; }
+  .scene-c p { font-size: 13px; color: var(--ink-2); margin-top: 7px; line-height: 1.75; }
+  .scene-c .sug { margin-top: 12px; font-size: 12px; font-weight: 800; color: var(--pri-700);
+    background: var(--pri-50); padding: 5px 12px; border-radius: 999px; display: inline-block; }
+
+  /* 逻辑说明 */
+  .logic { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 50px; }
+  .logic-c { padding: 20px; }
+  .logic-c b { font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+  .logic-c p { font-size: 13px; color: var(--ink-2); margin-top: 8px; line-height: 1.8; }
+
+  /* 合规 */
+  .legal { background: var(--ink); color: #fff; border-radius: var(--r-toon); padding: 26px 28px; margin-bottom: 50px; }
+  .legal h2 { font-size: 18px; font-weight: 800; letter-spacing: -.4px; }
+  .legal .lg-sub { font-size: 13px; color: rgba(255,255,255,.6); margin-top: 5px; }
+  .legal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 18px; }
+  .legal-i { display: flex; gap: 10px; font-size: 13px; line-height: 1.7; color: rgba(255,255,255,.86); }
+  .legal-i span:first-child { color: var(--pri); font-weight: 900; flex: none; }
+
+  /* FAQ */
+  .faq { border: 1px solid var(--line); border-radius: var(--r-xl); overflow: hidden; margin-bottom: 30px; }
+  .fq { border-bottom: 1px solid var(--line); }
+  .fq:last-child { border-bottom: none; }
+  .fq-q { display: flex; align-items: center; gap: 12px; padding: 16px 20px; cursor: pointer; font-size: 14.5px; font-weight: 700; transition: background .15s; }
+  .fq-q:hover { background: var(--bg-soft); }
+  .fq-q .ar { margin-left: auto; color: var(--ink-faint); transition: transform .22s var(--ease-out); font-size: 13px; }
+  .fq.open .fq-q .ar { transform: rotate(90deg); }
+  .fq-a { display: none; padding: 0 20px 18px 20px; font-size: 13.5px; color: var(--ink-2); line-height: 1.85; }
+  .fq.open .fq-a { display: block; animation: rise .3s var(--ease-out) both; }
+
+  @media (max-width: 1180px) { .tiers { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 860px) {
+    .scene, .logic, .legal-grid { grid-template-columns: 1fr; }
+    .pr-hero h1 { font-size: 27px; }
+  }
+  @media (max-width: 560px) { .tiers { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="01-home.html">
+      <span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+      <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+    </a>
+    <div class="nav-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      搜索资料、路线、学长经验…
+    </div>
+    <div class="nav-actions">
+      <a class="nav-link" href="01-home.html">首页</a>
+      <a class="nav-link" href="02-explore.html">🧭 探索路线</a>
+      <a class="nav-link" href="06-roadmap.html">我的路线</a>
+      <a class="nav-link" href="09-cohort.html">项目组</a>
+      <a class="nav-link on" href="10-pricing.html">验收与付费</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- ══════════ 主张 ══════════ -->
+  <header class="pr-hero">
+    <div class="kicker">Pricing · 验收与付费</div>
+    <h1>路线免费，走完也免费。<br />只有一件事收费：<em>让别人认可你走完了</em>。</h1>
+    <p>
+      课搭不卖课、不卖资料、不卖"入门到精通"。你在这里能免费拿到一整条路线，
+      并且完整地走完它——我们不会在任何一关拦着你要钱。
+      <br /><br />
+      收费只出现在一个地方：当你做完了东西，想要一份<strong>不是自己发给自己的证明</strong>。
+    </p>
+  </header>
+
+  <div class="pledge">
+    <span>✅ 免费用户也能走完整条路线 · 我们不会在关卡中间设付费墙</span>
+  </div>
+
+  <!-- ══════════ 价格卡 ══════════ -->
+  <section class="tiers">
+
+    <div class="toon-card tier">
+      <h3>免费</h3>
+      <div class="tdesc">够你从零走到有一个能拿出手的项目</div>
+      <div class="price"><i>¥</i><b>0</b></div>
+      <div class="pnote">永久免费</div>
+      <ul>
+        <li>全部资料库（136 份）</li>
+        <li><b>计算机探索路线</b>全 8 站</li>
+        <li>一条专属路线，<b>可完整走完</b></li>
+        <li>打卡、进度、周窗口、休整券</li>
+        <li>路线推进榜、社区浏览</li>
+        <li class="dim">阶段验收（自我确认）</li>
+        <li class="dim">项目组</li>
+      </ul>
+      <a class="btn btn-outline btn-block" href="02-explore.html">现在就开始</a>
+    </div>
+
+    <div class="toon-card tier hot">
+      <span class="tier-tag">最轻的一次尝试</span>
+      <h3>单次阶段验收</h3>
+      <div class="tdesc">把"我觉得我做完了"变成一份有署名的证明</div>
+      <div class="price"><i>¥</i><b>39</b><span>/ 阶段</span></div>
+      <div class="pnote">不通过免费重提，不限次数</div>
+      <ul>
+        <li>提交你的产出（代码 / 文档 / 演示）</li>
+        <li><b>AI 初评</b>：10 分钟内给出第一轮意见</li>
+        <li><b>学长复核</b>：48 小时内出最终结论</li>
+        <li>通过 → 该阶段的<b>编号印记</b></li>
+        <li>通过 → 一份能力说明：你强在哪、下一步补哪</li>
+        <li>不通过 → <b>免费重提，不限次数</b></li>
+        <li class="dim">同伴互评与答辩</li>
+      </ul>
+      <a class="btn btn-primary btn-block" href="06-roadmap.html">去我的路线申请</a>
+    </div>
+
+    <div class="toon-card tier">
+      <h3>项目组</h3>
+      <div class="tdesc">同方向 25–30 人一期，有学长带、有同伴陪</div>
+      <div class="price"><i>¥</i><b>449</b><span>/ 期（1 个月）</span></div>
+      <div class="pnote">🎉 内测价 ¥199 · 仅限前 3 期</div>
+      <ul>
+        <li>本期<b>全部阶段验收</b>（通常 5–6 次，单买要 ¥195–234）</li>
+        <li>每周一次学长答疑（直播 + 文字）</li>
+        <li>组内进度星图：看见谁和你卡在同一关</li>
+        <li>同伴互评：被别人看过的东西才叫作品</li>
+        <li>月度<b>答辩节</b>：8 分钟讲你的项目</li>
+        <li>一个方向一个组，按月滚动开班</li>
+        <li>7 天无理由退款</li>
+      </ul>
+      <a class="btn btn-outline btn-block" href="09-cohort.html">看看本期项目组</a>
+    </div>
+
+    <div class="toon-card tier">
+      <h3>一对一陪跑</h3>
+      <div class="tdesc">有具体目标、需要有人盯着你走完的人</div>
+      <div class="price"><i>¥</i><b>1,299</b><span>/ 月</span></div>
+      <div class="pnote">每期限 10 人 · 需先通过 2 次验收</div>
+      <ul>
+        <li>每周 1 次 1v1（60 分钟，视频）</li>
+        <li>简历、项目、面试逐条改</li>
+        <li>随时文字答疑（工作日 24h 内回）</li>
+        <li>按你的目标倒排时间表</li>
+        <li><b>仅对已通过 2 次阶段验收的人开放</b></li>
+        <li class="dim">代做项目</li>
+        <li class="dim">保 offer 承诺</li>
+      </ul>
+      <a class="btn btn-outline btn-block" href="#faq">先聊聊看</a>
+    </div>
+  </section>
+
+  <!-- ══════════ 对比表 ══════════ -->
+  <section>
+    <div class="blog-sec-head"><h2>一张表看清差别</h2></div>
+    <div class="blog-sec-sub">同样的免费路线，加上不同的"被认可程度"</div>
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <thead>
+          <tr>
+            <th>你会得到</th><th>免费</th><th>单次验收 ¥39</th><th>项目组 ¥449</th><th>陪跑 ¥1299</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="sect"><td colspan="5">走路线</td></tr>
+          <tr><td>完整资料库</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>探索路线（8 站）</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>专属定制路线</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>打卡 / 进度 / 周窗口</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>路线会不会中途被锁</td><td class="no">不会</td><td class="no">不会</td><td class="no">不会</td><td class="no">不会</td></tr>
+
+          <tr class="sect"><td colspan="5">拿到认可</td></tr>
+          <tr><td>自我确认（自己打勾）</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>AI 初评意见</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>真人学长复核</td><td class="no">—</td><td class="em">48 小时内</td><td class="em">优先 24 小时</td><td class="em">随时</td></tr>
+          <tr><td>编号印记 / 能力说明</td><td class="no">—</td><td class="yes">✓ 单枚</td><td class="yes">✓ 全套</td><td class="yes">✓ 全套</td></tr>
+          <tr><td>同伴互评</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>答辩节</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+
+          <tr class="sect"><td colspan="5">有人陪着</td></tr>
+          <tr><td>学长答疑</td><td class="no">—</td><td class="no">—</td><td class="em">每周 1 次</td><td class="em">每周 1v1</td></tr>
+          <tr><td>组内进度星图</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>简历 / 面试辅导</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+
+          <tr class="sect"><td colspan="5">兜底</td></tr>
+          <tr><td>不通过怎么办</td><td class="no">—</td><td class="yes">免费重提</td><td class="yes">免费重提</td><td class="yes">免费重提</td></tr>
+          <tr><td>退款</td><td class="no">—</td><td class="yes">未评审可退</td><td class="yes">7 天无理由</td><td class="yes">7 天无理由</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══════════ 什么时候你才需要付费 ══════════ -->
+  <section>
+    <div class="blog-sec-head"><h2>什么时候你才需要付费</h2></div>
+    <div class="blog-sec-sub">大多数时候你不需要。这三种情况例外。</div>
+    <div class="scene">
+      <div class="toon-card scene-c">
+        <span class="si">📄</span>
+        <b>你要拿它去换点什么的时候</b>
+        <p>
+          简历上写"熟悉 RAG"，面试官会追问。但如果你能放一个二维码，扫开是一份带编号、有学长署名的阶段验收说明——那是完全不同的分量。
+        </p>
+        <span class="sug">→ 单次验收 ¥39</span>
+      </div>
+      <div class="toon-card scene-c">
+        <span class="si">😵</span>
+        <b>你自己走不下去的时候</b>
+        <p>
+          免费路线的完成率大概在三成。不是因为难，是因为没人知道你在走。项目组做的事情很简单：让 27 个人知道你这周该交东西了。
+        </p>
+        <span class="sug">→ 项目组 ¥449（内测 ¥199）</span>
+      </div>
+      <div class="toon-card scene-c">
+        <span class="si">🎯</span>
+        <b>你有明确 deadline 的时候</b>
+        <p>
+          大三上要投暑期实习、考研复试要讲项目、留学要交 portfolio——有具体时间点、需要有人按节奏盯你的时候，1v1 才划算。
+        </p>
+        <span class="sug">→ 陪跑 ¥1,299/月</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 定价逻辑 ══════════ -->
+  <section>
+    <div class="blog-sec-head"><h2>为什么这样定价</h2></div>
+    <div class="blog-sec-sub">把我们想清楚的四件事摊开讲</div>
+    <div class="logic">
+      <div class="toon-card logic-c">
+        <b>① 为什么路线不收费，验收收费</b>
+        <p>
+          路线是"信息"，信息在今天是免费的——你花点时间总能找到替代品，收费只会逼走用户。
+          验收是"人的时间"：学长要真的打开你的代码看半小时，这件事有成本，也正因此才有价值。
+          <strong>为一个有成本的东西收费，用户是服的。</strong>
+        </p>
+      </div>
+      <div class="toon-card logic-c">
+        <b>② 为什么不做订阅制</b>
+        <p>
+          订阅制的前提是"持续使用"。但成长是阵发性的：你可能连走两个月，然后期末停三周。
+          让用户在停下来的月份继续扣钱，是最快毁掉信任的方式。
+          <strong>按次、按期，用多少买多少。</strong>
+        </p>
+      </div>
+      <div class="toon-card logic-c">
+        <b>③ 为什么免费用户不能被卡住</b>
+        <p>
+          如果走到第 3 关弹一个"付费解锁下一关"，用户的第一反应不是掏钱，是去别的地方找免费版本，并且从此不再相信你。
+          <strong>付费墙拦不住人，只会把人推走。</strong>我们要的是"走完了，想要个证明"——那才是自愿的付费。
+        </p>
+      </div>
+      <div class="toon-card logic-c">
+        <b>④ 为什么项目组比单次验收划算这么多</b>
+        <p>
+          这是故意的。单次验收 ¥39 × 6 个阶段 = ¥234，项目组 ¥449 却多给了答疑、互评、答辩和同伴。
+          我们不希望你一次次零散地买——<strong>一次验收是交易，一期项目组才是真正的产品。</strong>
+          ¥39 的存在，是让你能用最低成本先试一次，然后自己算明白这笔账。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 合规 ══════════ -->
+  <section class="legal">
+    <h2>我们不做什么</h2>
+    <div class="lg-sub">这些承诺会写进服务条款，不是宣传语。</div>
+    <div class="legal-grid">
+      <div class="legal-i"><span>✕</span><span><strong>不做就业承诺。</strong>我们不保证任何 offer、任何薪资、任何内推机会。验收通过只代表"这份产出达到了这条路线设定的标准"。</span></div>
+      <div class="legal-i"><span>✕</span><span><strong>不代做项目、不代写代码。</strong>你的产出必须是你自己写的。发现代做，撤销验收结果且不退款。</span></div>
+      <div class="legal-i"><span>✕</span><span><strong>不提供任何形式的贷款、分期、预付费包。</strong>不诱导超前消费，不卖年卡。</span></div>
+      <div class="legal-i"><span>✕</span><span><strong>不做大额预收费。</strong>单笔最高 ¥1,299，且按月结算，随时可停。</span></div>
+      <div class="legal-i"><span>✓</span><span><strong>验收不通过可以无限次重提</strong>，不再收费。</span></div>
+      <div class="legal-i"><span>✓</span><span><strong>7 天无理由退款</strong>（项目组与陪跑），已完成的单次验收除外。</span></div>
+      <div class="legal-i"><span>✓</span><span><strong>价格公开透明</strong>，所有费用在本页写清，不存在任何隐藏收费。</span></div>
+      <div class="legal-i"><span>✓</span><span><strong>所有带组学长实名可查</strong>，包含学校、专业、当前去向，可在组页查看。</span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ FAQ ══════════ -->
+  <section>
+    <div class="blog-sec-head"><h2>常见问题</h2></div>
+    <div class="blog-sec-sub">还有疑问可以直接问我们</div>
+    <div class="faq">
+      <div class="fq">
+        <div class="fq-q">验收不通过怎么办？会一直卡着吗？<span class="ar">›</span></div>
+        <div class="fq-a">
+          不通过不会卡住你的路线。你的路线照常往下走，只是这一阶段暂时没有印记。
+          你可以按评审意见改完之后<strong>免费重新提交，不限次数</strong>。
+          实际上第一次不通过的人里，有 7 成在第二次就过了——评审意见本身就是最值钱的部分。
+        </div>
+      </div>
+      <div class="fq">
+        <div class="fq-q">我可以只买一次验收，不进项目组吗？<span class="ar">›</span></div>
+        <div class="fq-a">
+          可以。单次验收就是为"我只想试一次"设计的。
+          不过说句实话：项目组里那 27 个和你卡在同一关的人，可能比验收本身更有用。
+        </div>
+      </div>
+      <div class="fq">
+        <div class="fq-q">谁来做验收？会不会是 AI 随便打个分？<span class="ar">›</span></div>
+        <div class="fq-a">
+          四层漏斗：<strong>AI 初评</strong>（结构化意见，10 分钟内）→ <strong>同伴互评</strong>（项目组内）→
+          <strong>助教终审</strong>（真人，48 小时内，这是决定通过与否的那一层）→ <strong>月度答辩</strong>（项目组）。
+          AI 只负责第一轮的机械检查，最终结论一定是真人给的，并且署真名。
+        </div>
+      </div>
+      <div class="fq">
+        <div class="fq-q">免费用户能走完整条路线吗？中途会不会被锁？<span class="ar">›</span></div>
+        <div class="fq-a">
+          <strong>能，而且不会被锁。</strong>这是我们最在意的一条。
+          免费用户可以走完 24 关中的每一关、拿到全部资料、看到完整路线。
+          我们不在关卡之间设任何付费墙。你唯一缺的，是"别人认可你走完了"这件事。
+        </div>
+      </div>
+      <div class="fq">
+        <div class="fq-q">价格以后会涨吗？<span class="ar">›</span></div>
+        <div class="fq-a">
+          会。内测价 ¥199 只对前 3 期项目组开放，之后回到 ¥449。
+          已经购买的不受影响，按购买时的价格结算。
+        </div>
+      </div>
+      <div class="fq">
+        <div class="fq-q">我大一，什么都没学，现在付费是不是浪费钱？<span class="ar">›</span></div>
+        <div class="fq-a">
+          是。大一的同学<strong>先走完探索路线（完全免费），确定方向之后再说</strong>。
+          在你还不知道自己喜不喜欢之前，任何付费都是浪费。这也是我们把探索路线免费的原因。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 结尾 CTA -->
+  <div class="toon-card" style="padding:30px;text-align:center;background:linear-gradient(120deg,#fff,var(--pri-50));border-color:#ffd9cd">
+    <div style="font-size:26px">🧭</div>
+    <b style="font-size:20px;font-weight:800;display:block;margin-top:10px;letter-spacing:-.4px">先别管钱，先走走看</b>
+    <p style="font-size:13.5px;color:var(--ink-2);margin-top:8px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.8">
+      8 个晚上，把计算机摸一遍。走完之后你会知道自己想去哪——那时候再决定要不要为"被认可"花钱，一点都不晚。
+    </p>
+    <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <a class="btn btn-primary btn-lg" href="02-explore.html">开始探索路线</a>
+      <a class="btn btn-outline btn-lg" href="04-survey.html">我已经知道方向了</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">
+        <span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      </div>
+      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+    </div>
+    <div class="foot-col"><h4>探索</h4><a href="01-home.html">资料馆</a><a href="02-explore.html">探索路线</a><a href="04-survey.html">定制路线</a></div>
+    <div class="foot-col"><h4>结果服务</h4><a href="10-pricing.html">阶段验收</a><a href="09-cohort.html">项目组</a><a href="10-pricing.html">陪跑</a></div>
+    <div class="foot-col"><h4>关于</h4><a href="#">平台理念</a><a href="#">校园认证</a><a href="#">联系我们</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 知识在校园里流动</div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+  document.querySelectorAll('.fq-q').forEach(q => {
+    q.addEventListener('click', () => q.closest('.fq').classList.toggle('open'));
+  });
+</script>
+</body>
+</html>

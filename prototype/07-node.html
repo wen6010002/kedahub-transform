@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Git · 给代码一台时间机器 — 第 3 站 · 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  /* ══════ 关卡头 ══════ */
+  .nd-head { margin-bottom: 30px; }
+  .crumb { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; flex-wrap: wrap; margin-bottom: 20px; }
+  .crumb a:hover { color: var(--pri-600); }
+  .crumb .cr-sep { color: var(--ink-faint); }
+  .crumb b { color: var(--ink); }
+  .nd-top { display: flex; gap: 20px; align-items: flex-start; }
+  .nd-top-main { min-width: 0; flex: 1; }
+  .nd-kicker { font-size: 11.5px; font-weight: 800; letter-spacing: 0.18em; color: var(--pri-600); text-transform: uppercase; }
+  .nd-top h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1.22; margin-top: 8px; }
+  .nd-lead { font-size: 14.5px; color: var(--ink-2); margin-top: 10px; max-width: 660px; line-height: 1.8; }
+  .nd-meta { display: flex; gap: 26px; margin-top: 16px; flex-wrap: wrap; }
+  .nd-meta div b { display: block; font-size: 15px; font-weight: 800; letter-spacing: -0.3px; }
+  .nd-meta div span { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
+
+  /* ══════ 四拍 ══════ */
+  .beat { margin-bottom: 44px; scroll-margin-top: 82px; }
+  .beat-head { display: flex; align-items: center; gap: 12px; padding-top: 16px; border-top: 2px solid var(--ink); }
+  .bh-seal {
+    width: 40px; height: 40px; border-radius: 50%; flex: none;
+    display: grid; place-items: center; font-size: 17px; font-weight: 800;
+    background: #fff; border: 2.5px solid var(--ink); color: var(--ink);
+    box-shadow: var(--sticker);
+  }
+  .beat-head h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.45px; }
+  .beat-head .bh-meta { margin-left: auto; font-size: 11.5px; font-weight: 700; color: var(--ink-soft); white-space: nowrap; }
+  .beat-sub { font-size: 13px; color: var(--ink-soft); margin: 8px 0 18px; line-height: 1.75; }
+  .beat-learn .bh-seal { border-color: var(--ink); color: var(--ink); }
+  .beat-drill .bh-seal { border-color: var(--pri); color: var(--pri-600); }
+  .beat-make .bh-seal { background: var(--pri); border-color: var(--pri); color: #fff; box-shadow: 0 3px 0 rgba(208, 74, 42, .32); }
+  .beat-check .bh-seal { border-color: var(--mint); color: var(--mint); }
+
+  /* ── 第一拍 · 学 ── */
+  .res-hero {
+    display: flex; gap: 18px; padding: 22px 24px; position: relative;
+    background: linear-gradient(140deg, #fff 0%, var(--pri-50) 100%); border-color: #ffd9cd;
+  }
+  .rh-badge {
+    position: absolute; top: 0; left: 24px; transform: translateY(-50%);
+    background: var(--pri); color: #fff; font-size: 10.5px; font-weight: 800;
+    letter-spacing: 0.08em; padding: 3px 11px; border-radius: 999px;
+  }
+  .rh-ic {
+    width: 52px; height: 52px; border-radius: 14px; flex: none; display: grid; place-items: center;
+    font-size: 25px; background: #fff; border: 2px solid #ffd9cd;
+  }
+  .rh-body { flex: 1; min-width: 0; }
+  .rh-t { display: block; font-size: 18px; font-weight: 800; letter-spacing: -0.4px; line-height: 1.4; }
+  .rh-d { display: block; font-size: 13px; color: var(--ink-2); margin-top: 7px; line-height: 1.75; }
+  .rh-m { display: flex; gap: 14px; margin-top: 11px; font-size: 11.5px; color: var(--ink-soft); font-weight: 600; flex-wrap: wrap; }
+  .rh-go { align-self: center; flex: none; }
+
+  .alt-wrap { margin-top: 12px; }
+  .alt-wrap summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center; gap: 9px;
+    font-size: 13px; font-weight: 700; color: var(--ink-2);
+    padding: 12px 16px; border: 1.5px dashed var(--line); border-radius: var(--r-lg); transition: 0.15s;
+  }
+  .alt-wrap summary::-webkit-details-marker { display: none; }
+  .alt-wrap summary:hover { border-color: var(--pri); color: var(--pri-600); background: var(--pri-50); }
+  .alt-wrap summary .alt-caret { color: var(--pri); font-weight: 800; transition: transform 0.2s var(--ease-out); }
+  .alt-wrap[open] summary .alt-caret { transform: rotate(90deg); }
+  .alt-wrap summary .alt-count { margin-left: auto; font-size: 11.5px; color: var(--ink-faint); font-weight: 600; }
+  .alt-list { margin-top: 4px; }
+  .alt-row {
+    display: flex; gap: 13px; align-items: flex-start; padding: 13px 16px;
+    border-bottom: 1px solid var(--line-2); transition: background 0.15s;
+  }
+  .alt-row:last-child { border-bottom: none; }
+  .alt-row:hover { background: var(--pri-50); }
+  .alt-row .ar-kind { font-size: 19px; flex: none; line-height: 1.35; }
+  .alt-row .ar-t { font-size: 13.5px; font-weight: 700; line-height: 1.55; }
+  .alt-row .ar-d { font-size: 12px; color: var(--ink-soft); margin-top: 2px; line-height: 1.65; }
+  .alt-row .ar-m { font-size: 11.5px; color: var(--ink-faint); flex: none; white-space: nowrap; font-weight: 700; padding-top: 2px; }
+
+  /* ── 第二拍 · 练 ── */
+  .done-hint {
+    display: none; align-items: center; gap: 10px; margin-bottom: 14px;
+    background: var(--mint-50); border: 1.5px solid #b8ebd6; border-radius: var(--r-toon);
+    padding: 12px 18px; font-size: 13.5px; font-weight: 700; color: #0a7d59;
+  }
+  .done-hint.show { display: flex; animation: popIn 0.42s var(--ease-pop) both; }
+  .done-hint .dh-emoji { font-size: 19px; animation: wiggle 0.6s var(--ease-pop) both; }
+  .done-hint a { margin-left: auto; font-size: 12.5px; font-weight: 800; color: #0a7d59; white-space: nowrap; }
+  .done-hint a:hover { text-decoration: underline; }
+
+  .tasks { border: 2px solid var(--line); border-radius: var(--r-toon); box-shadow: var(--sticker); background: #fff; overflow: hidden; }
+  .task {
+    display: grid; grid-template-columns: 26px 34px minmax(0, 1fr) auto; gap: 0 13px;
+    padding: 16px 20px; border-bottom: 1px solid var(--line-2);
+    transition: background 0.28s var(--ease-out);
+  }
+  .task:last-child { border-bottom: none; }
+  .task:hover { background: var(--bg-soft); }
+  .task.done { background: var(--pri-50); }
+  .task.done:hover { background: #ffe8e0; }
+  .tk-ck {
+    width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--line);
+    background: #fff; display: grid; place-items: center; margin-top: 1px;
+    transition: 0.18s var(--ease-out); flex: none;
+  }
+  .tk-ck:hover { border-color: var(--pri); }
+  .task.done .tk-ck { background: var(--pri); border-color: var(--pri); animation: ckPop 0.34s var(--ease-pop); }
+  .tk-ck svg { width: 13px; height: 13px; }
+  .tk-ck svg path { stroke: #fff; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; fill: none;
+    stroke-dasharray: 22; stroke-dashoffset: 22; transition: stroke-dashoffset 0.28s var(--ease-out) 0.05s; }
+  .task.done .tk-ck svg path { stroke-dashoffset: 0; }
+  @keyframes ckPop { 0% { transform: scale(0.7); } 55% { transform: scale(1.16); } 100% { transform: scale(1); } }
+  .tk-no { font-size: 12px; font-weight: 800; color: var(--ink-faint); letter-spacing: 0.06em; padding-top: 4px; }
+  .task.done .tk-no { color: var(--pri); }
+  .tk-body { min-width: 0; }
+  .tk-t {
+    font-size: 14.5px; font-weight: 700; letter-spacing: -0.2px; line-height: 1.55; display: inline;
+    background-image: linear-gradient(var(--ink-faint), var(--ink-faint));
+    background-repeat: no-repeat; background-position: 0 58%; background-size: 0% 1.5px;
+    transition: background-size 0.38s var(--ease-out), color 0.3s var(--ease-out);
+  }
+  .task.done .tk-t { background-size: 100% 1.5px; color: var(--ink-soft); }
+  .tk-out { font-size: 12.5px; color: var(--ink-2); margin-top: 6px; line-height: 1.7; transition: color 0.3s; }
+  .tk-out b { color: var(--pri-700); font-weight: 800; }
+  .task.done .tk-out { color: var(--ink-soft); }
+  .tk-time { font-size: 11.5px; font-weight: 700; color: var(--ink-soft); background: var(--bg-soft); padding: 3px 10px; border-radius: 999px; white-space: nowrap; align-self: start; margin-top: 2px; }
+  .task.done .tk-time { background: #fff; }
+
+  /* ── 第三拍 · 创 ── */
+  .make-card { background: var(--ink); border-color: var(--ink); color: #fff; padding: 28px 30px; position: relative; overflow: hidden; }
+  .make-card .mk-kicker { font-size: 10.5px; font-weight: 800; letter-spacing: 0.2em; color: var(--pri); }
+  .make-card h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-top: 9px; line-height: 1.3; }
+  .make-card .mk-lead { font-size: 13.5px; color: rgba(255,255,255,.72); line-height: 1.85; margin-top: 9px; max-width: 640px; }
+  .mk-block { margin-top: 22px; }
+  .mk-lbl { font-size: 11.5px; font-weight: 800; letter-spacing: 0.08em; color: rgba(255,255,255,.5); margin-bottom: 9px; }
+  .mk-list { display: grid; gap: 8px; }
+  .mk-item { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; line-height: 1.65; color: rgba(255,255,255,.9); }
+  .mk-item .mk-tick { color: var(--pri); font-weight: 800; flex: none; font-size: 13px; padding-top: 1px; }
+  .mk-get {
+    margin-top: 20px; padding: 14px 16px; border-radius: var(--r-lg);
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.13);
+    font-size: 13px; color: rgba(255,255,255,.86); line-height: 1.8;
+  }
+  .mk-get b { color: var(--pri); }
+  .mk-act { margin-top: 22px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .mk-note { font-size: 11.5px; color: rgba(255,255,255,.45); }
+  .mk-status { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 13px; font-weight: 700; color: #7ee2b8; }
+  .mk-status a { color: rgba(255,255,255,.72); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  .mk-status a:hover { color: #fff; }
+  .make-card .stamp {
+    position: absolute; right: 26px; top: 26px;
+    background: rgba(255, 107, 74, .16); border-color: var(--pri); color: var(--pri);
+  }
+
+  /* 提交面板 */
+  .sub-dlg {
+    border: none; padding: 0; border-radius: var(--r-toon-lg); width: min(560px, calc(100vw - 36px));
+    max-height: calc(100vh - 60px); background: #fff; color: var(--ink);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .3);
+    margin: auto; /* kh.css 的 * { margin: 0 } 会覆盖 UA 的居中，这里补回来 */
+  }
+  .sub-dlg::backdrop { background: rgba(26, 29, 35, .52); backdrop-filter: blur(3px); }
+  .sub-dlg[open] { animation: popIn 0.34s var(--ease-pop) both; }
+  .sub-form { padding: 24px 26px 22px; }
+  .sd-head { display: flex; align-items: flex-start; gap: 12px; }
+  .sd-head h3 { font-size: 18px; font-weight: 800; letter-spacing: -0.35px; }
+  .sd-head .sd-sub { font-size: 12px; color: var(--ink-soft); margin-top: 3px; font-weight: 600; }
+  .sd-x { margin-left: auto; width: 30px; height: 30px; border-radius: 8px; color: var(--ink-soft); font-size: 15px; flex: none; transition: 0.15s; }
+  .sd-x:hover { background: var(--bg-soft); color: var(--ink); }
+  .sd-field { display: block; margin-top: 18px; }
+  .sd-lbl { display: block; font-size: 12.5px; font-weight: 800; margin-bottom: 7px; }
+  .sd-lbl i { font-style: normal; font-size: 11px; color: var(--ink-faint); font-weight: 600; margin-left: 4px; }
+  .sd-field input, .sd-field textarea {
+    width: 100%; border: 1.5px solid var(--line); border-radius: var(--r-lg);
+    padding: 10px 13px; font-size: 13.5px; background: #fff; resize: vertical;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .sd-field input:focus, .sd-field textarea:focus { border-color: var(--pri); box-shadow: 0 0 0 3px rgba(255, 107, 74, .14); }
+  .sd-drop {
+    border: 1.5px dashed var(--line); border-radius: var(--r-lg); padding: 20px 16px; text-align: center;
+    font-size: 13px; font-weight: 700; color: var(--ink-2); cursor: pointer; transition: 0.15s;
+  }
+  .sd-drop:hover { border-color: var(--pri); background: var(--pri-50); color: var(--pri-600); }
+  .sd-drop small { display: block; font-size: 11.5px; font-weight: 500; color: var(--ink-faint); margin-top: 5px; }
+  .sd-burner {
+    margin-top: 20px; padding: 13px 15px; border-radius: var(--r-lg);
+    background: var(--bg-soft); border: 1px solid var(--line); font-size: 12.5px; line-height: 1.75; color: var(--ink-2);
+  }
+  .sd-burner b { display: block; font-size: 12.5px; color: var(--ink); margin-bottom: 4px; }
+  .sd-burner a { color: var(--pri-700); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  .sd-foot { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .sd-foot .sd-free { font-size: 12px; color: var(--mint); font-weight: 700; }
+  .sd-foot .btn { margin-left: auto; }
+
+  /* ── 第四拍 · 验 ── */
+  .rubric { display: grid; gap: 10px; }
+  .rb {
+    display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; cursor: pointer;
+    border: 2px solid var(--line); border-radius: var(--r-toon); background: #fff;
+    box-shadow: var(--sticker); transition: 0.2s var(--ease-out);
+  }
+  .rb:hover { border-color: #ffd9cd; transform: translateY(-2px); }
+  .rb.on { border-color: var(--mint); background: var(--mint-50); }
+  .rb-ring {
+    width: 26px; height: 26px; border-radius: 50%; flex: none; margin-top: 2px;
+    border: 2.5px solid var(--line); position: relative; display: grid; place-items: center;
+    transition: border-color 0.3s var(--ease-out); background: #fff;
+  }
+  .rb:hover .rb-ring { border-color: var(--pri); }
+  .rb.on .rb-ring { border-color: var(--mint); }
+  .rb-dot {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--mint); display: block;
+    transform: scale(0); transition: transform 0.34s var(--ease-pop);
+  }
+  .rb.on .rb-dot { transform: scale(1); }
+  .rb-body { flex: 1; min-width: 0; }
+  .rb-t { font-size: 14px; font-weight: 700; line-height: 1.6; letter-spacing: -0.15px; transition: color 0.25s; }
+  .rb.on .rb-t { color: #0a7d59; }
+  .rb-d { font-size: 12.5px; color: var(--ink-soft); margin-top: 4px; line-height: 1.7; }
+  .rb-hint { font-size: 11.5px; font-weight: 800; color: var(--ink-faint); flex: none; padding-top: 4px; transition: 0.25s; }
+  .rb.on .rb-hint { color: var(--mint); }
+  .rubric-note {
+    margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--ink-soft);
+    display: flex; align-items: center; gap: 8px; transition: color 0.3s;
+  }
+  .rubric-note.done { color: #0a7d59; }
+  .rubric-note.done .rn-ico { animation: wiggle 0.6s var(--ease-pop) both; }
+
+  /* ══════ 侧栏 ══════ */
+  .prog-row { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; font-weight: 700; margin-top: 12px; }
+  .prog-row .pr-n { color: var(--ink-soft); font-weight: 600; }
+  .prog-bar { height: 6px; border-radius: 999px; background: var(--bg-deep); overflow: hidden; margin-top: 6px; }
+  .prog-bar i { display: block; height: 100%; width: 0; border-radius: 999px; background: var(--pri); transition: width 0.45s var(--ease-out); }
+  .prog-bar.mint i { background: var(--mint); }
+  .next-nav { display: grid; gap: 2px; }
+  .nn-row { display: flex; gap: 10px; align-items: center; padding: 9px 8px; border-radius: var(--r-lg); transition: 0.15s; }
+  .nn-row:hover { background: var(--pri-50); }
+  .nn-row .nn-ar { font-size: 14px; color: var(--ink-faint); flex: none; font-weight: 800; }
+  .nn-row .nn-body { min-width: 0; }
+  .nn-row .nn-k { font-size: 10.5px; font-weight: 800; letter-spacing: 0.08em; color: var(--ink-faint); }
+  .nn-row .nn-t { font-size: 13px; font-weight: 700; line-height: 1.45; }
+  .nn-row.cur { background: var(--pri-50); }
+  .nn-row.cur .nn-t { color: var(--pri-700); }
+  .nn-row.lock .nn-t { color: var(--ink-soft); }
+  .nn-row.lock:hover { background: var(--bg-soft); }
+
+  .waive-note { font-size: 12.5px; color: var(--ink-2); line-height: 1.75; }
+  .waive-done { font-size: 12.5px; font-weight: 700; color: var(--mint); line-height: 1.7; }
+
+  @media (max-width: 1080px) {
+    .nd-top { flex-direction: column; gap: 14px; }
+  }
+  @media (max-width: 720px) {
+    /* 窄屏导航：只留文字入口，避免顶栏横向溢出 */
+    .logo-text span { display: none; }
+    .nav-actions { gap: 2px; }
+    .nav-link { padding: 6px 8px; font-size: 12.5px; }
+    .nav-actions .btn { display: none; }
+    .nd-top h1 { font-size: 24px; }
+    .beat-head .bh-meta { display: none; }
+    .task { grid-template-columns: 24px minmax(0, 1fr); gap: 0 11px; padding: 15px 16px; }
+    .tk-no { display: none; }
+    .tk-time { grid-column: 2; justify-self: start; margin-top: 8px; }
+    .res-hero { flex-direction: column; }
+    .rh-go { align-self: flex-start; }
+    .make-card { padding: 22px 20px; }
+    .make-card .stamp { position: static; transform: rotate(-12deg); margin-bottom: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ 导航 ══════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="01-home.html">
+      <span class="logo-mark">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </span>
+      <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+    </a>
+    <div class="nav-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      搜索资料、路线、学长经验…
+    </div>
+    <div class="nav-actions">
+      <a class="nav-link" href="01-home.html">首页</a>
+      <a class="nav-link on" href="02-explore.html">🧭 探索路线</a>
+      <a class="nav-link" href="09-cohort.html">项目组</a>
+      <a class="nav-link" href="10-pricing.html">验收与付费</a>
+      <a class="btn btn-outline btn-sm" href="04-survey.html">登录</a>
+      <a class="btn btn-primary btn-sm" href="04-survey.html">定制我的路线</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- ══════════ 关卡头 ══════════ -->
+  <header class="nd-head">
+    <div class="crumb">
+      <a href="06-roadmap.html">我的路线</a><span class="cr-sep">/</span>
+      <a href="02-explore.html">探索路线</a><span class="cr-sep">/</span>
+      <span>第 3 站</span><span class="cr-sep">/</span>
+      <b>Git</b>
+    </div>
+    <div class="nd-top">
+      <span class="rt-node active rt-halo">🌿</span>
+      <div class="nd-top-main">
+        <div class="nd-kicker">Stop 03 · 探索路线 · 免费</div>
+        <h1>Git · 给代码一台时间机器</h1>
+        <p class="nd-lead">
+          删错代码、改崩了、想回到昨天的版本——Git 就是干这个的。它还是你和别人一起写东西的唯一方式。
+          这一关不背命令，只要求一件事：<strong>你真的在终端里敲过一遍</strong>。
+        </p>
+        <div class="nd-meta">
+          <div><b>约 1.5 小时</b><span>本关总时长</span></div>
+          <div><b>共 4 个小任务</b><span>做完有产出</span></div>
+          <div><b>1,147 人</b><span>已走过这一站</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="blog-layout">
+    <div class="blog-main">
+
+      <!-- ════════ 第一拍 · 学 ════════ -->
+      <section class="beat beat-learn">
+        <div class="beat-head">
+          <span class="bh-seal">学</span>
+          <h2>先看懂：Git 到底在解决什么问题</h2>
+          <span class="bh-meta">1 篇必读 · 约 25 分钟</span>
+        </div>
+        <div class="beat-sub">
+          这一关只有一篇是必读的。另外两份是备选——看不进文字就换视频，别在「挑资料」上耗掉半小时。
+        </div>
+
+        <a class="toon-card hoverable res-hero" href="#">
+          <span class="rh-badge">先读这个</span>
+          <span class="rh-ic">📘</span>
+          <span class="rh-body">
+            <span class="rh-t">Git：从「改崩了怎么办」到「和别人一起写」</span>
+            <span class="rh-d">
+              不讲命令大全。只讲三件事：为什么要存快照、分支到底在干什么、冲突的时候你该看哪一行。
+              每个命令后面都跟着一句「你什么时候会用到它」——读完你就能上手，不用先背完再动手。
+            </span>
+            <span class="rh-m"><span>课搭出品 · 陈学长（后端 · 走过这条路线）</span><span>📖 图文 · 约 25 分钟</span><span>免费</span></span>
+          </span>
+          <span class="rh-go"><span class="btn btn-primary">开始阅读</span></span>
+        </a>
+
+        <details class="alt-wrap">
+          <summary>
+            <span class="alt-caret">▸</span>
+            还有 2 份补充资料（主资料没讲透的时候再看）
+            <span class="alt-count">默认折叠</span>
+          </summary>
+          <div class="alt-list">
+            <div class="alt-row">
+              <span class="ar-kind">📕</span>
+              <span style="flex:1;min-width:0">
+                <span class="ar-t" style="display:block">《Pro Git》中文版 · 第 2 章「Git 基础」</span>
+                <span class="ar-d" style="display:block">官方免费书，命令覆盖最全。想系统学就啃这本，读到「撤销操作」那一节就够了。</span>
+              </span>
+              <span class="ar-m">约 50 分钟</span>
+            </div>
+            <div class="alt-row">
+              <span class="ar-kind">🎬</span>
+              <span style="flex:1;min-width:0">
+                <span class="ar-t" style="display:block">视频 · 分支到底是怎么工作的（动画演示）</span>
+                <span class="ar-d" style="display:block">15 分钟的动画把「指针在挪」这件事画出来了。看完再回去读文字，会突然通。</span>
+              </span>
+              <span class="ar-m">约 15 分钟</span>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ════════ 第二拍 · 练 ════════ -->
+      <section class="beat beat-drill" id="beat-drill">
+        <div class="beat-head">
+          <span class="bh-seal">练</span>
+          <h2>动手：四步，按顺序做</h2>
+          <span class="bh-meta">勾完 4 条解锁产出</span>
+        </div>
+        <div class="beat-sub">
+          看懂和敲过是两回事。每一步都真的在终端里做一遍——卡住了就回第一拍翻那一段，别硬扛。
+        </div>
+
+        <div class="done-hint" id="doneHint">
+          <span class="dh-emoji">🎉</span>
+          <span>练完了，可以去创造环节了</span>
+          <a href="#beat-make">去做产出 →</a>
+        </div>
+
+        <div class="tasks" id="taskList">
+          <div class="task">
+            <button class="tk-ck" type="button" aria-label="标记完成"><svg viewBox="0 0 16 16"><path d="M3 8.5 L6.4 12 L13 4.5"/></svg></button>
+            <span class="tk-no">01</span>
+            <span class="tk-body">
+              <span class="tk-t">在自己电脑上建一个仓库，把第一份文件提交上去</span>
+              <span class="tk-out"><b>→ 你会得到：</b>一个真实存在的仓库，里面躺着你的第一条提交记录（带时间和一句你写的说明）</span>
+            </span>
+            <span class="tk-time">约 15 分钟</span>
+          </div>
+
+          <div class="task">
+            <button class="tk-ck" type="button" aria-label="标记完成"><svg viewBox="0 0 16 16"><path d="M3 8.5 L6.4 12 L13 4.5"/></svg></button>
+            <span class="tk-no">02</span>
+            <span class="tk-body">
+              <span class="tk-t">故意把一个文件改崩，再用 Git 把它变回来</span>
+              <span class="tk-out"><b>→ 你会得到：</b>一次真的「后悔药」体验。删掉一整个文件、敲一条命令、文件回来了——这条命令救过所有人的命</span>
+            </span>
+            <span class="tk-time">约 20 分钟</span>
+          </div>
+
+          <div class="task">
+            <button class="tk-ck" type="button" aria-label="标记完成"><svg viewBox="0 0 16 16"><path d="M3 8.5 L6.4 12 L13 4.5"/></svg></button>
+            <span class="tk-no">03</span>
+            <span class="tk-body">
+              <span class="tk-t">开一个分支，在上面加一行字，再合并回主干</span>
+              <span class="tk-out"><b>→ 你会得到：</b>一张能画出来的分叉图（<code>git log --graph</code>），你会第一次看见「分支」长什么样</span>
+            </span>
+            <span class="tk-time">约 20 分钟</span>
+          </div>
+
+          <div class="task">
+            <button class="tk-ck" type="button" aria-label="标记完成"><svg viewBox="0 0 16 16"><path d="M3 8.5 L6.4 12 L13 4.5"/></svg></button>
+            <span class="tk-no">04</span>
+            <span class="tk-body">
+              <span class="tk-t">把仓库推到 GitHub，在网页上改一次，再拉回本地</span>
+              <span class="tk-out"><b>→ 你会得到：</b>一个能直接发给同学的公开链接，以及一次完整的「本地 ↔ 远端」往返</span>
+            </span>
+            <span class="tk-time">约 15 分钟</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ 第三拍 · 创 ════════ -->
+      <section class="beat beat-make" id="beat-make">
+        <div class="beat-head">
+          <span class="bh-seal">创</span>
+          <h2>做出东西：你的第一个仓库</h2>
+          <span class="bh-meta">这一关的产出物</span>
+        </div>
+        <div class="beat-sub">
+          这是你这一关要交出来的东西。标准是公开的，做不到就改到做到——没有「差不多就行」。
+        </div>
+
+        <div class="toon-card make-card" id="makeCard">
+          <div class="mk-kicker">DELIVERABLE · 本关产出</div>
+          <h3>一个公开的 GitHub 仓库，README 5 行说清它是什么</h3>
+          <p class="mk-lead">
+            不用是什么了不起的项目——一个记录你学习笔记的仓库就够。重要的是它<strong style="color:#fff">结构完整</strong>：
+            README 说清这是什么、怎么跑、你学到的最意外的一点；提交记录能看出你一步步做了什么。
+          </p>
+
+          <div class="mk-block">
+            <div class="mk-lbl">验收标准（3 条 · 学长按这三条看）</div>
+            <div class="mk-list">
+              <div class="mk-item"><span class="mk-tick">✓</span><span>仓库公开可访问，README 里有「这是什么 / 怎么跑 / 学到什么」三行</span></div>
+              <div class="mk-item"><span class="mk-tick">✓</span><span>提交记录 ≥ 3 条，每条说明都在讲「我做了什么」，而不是清一色 update</span></div>
+              <div class="mk-item"><span class="mk-tick">✓</span><span>有一次真实的分支合并：<code>git log --graph</code> 能画出分叉和合流</span></div>
+            </div>
+          </div>
+
+          <div class="mk-get">
+            <b>做完之后你会得到：</b>你简历上第一个能放链接的东西，也是你以后所有项目的家。
+            往后每一关的产出都会提交到这个账号下——大二找实习的时候，你的 GitHub 首页会替你说话。
+          </div>
+
+          <div class="mk-act" id="makeAct">
+            <button class="btn btn-primary btn-lg" id="btnSubmit">提交产出</button>
+            <span class="mk-note">提交后先进入自评 · 你也可以申请学长验收</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ 第四拍 · 验 ════════ -->
+      <section class="beat beat-check" id="beat-check">
+        <div class="beat-head">
+          <span class="bh-seal">验</span>
+          <h2>确认学会了：点亮的每一句都得是真的</h2>
+          <span class="bh-meta">自我确认 · 没人检查</span>
+        </div>
+        <div class="beat-sub">
+          这一拍不用提交、没人打分。它是你自己给自己的确认——手上没数之前，别点。
+        </div>
+
+        <div class="rubric" id="rubric">
+          <div class="rb">
+            <span class="rb-ring"><i class="rb-dot"></i></span>
+            <span class="rb-body">
+              <span class="rb-t" style="display:block">不看教程，我能说清 Git 到底在解决什么问题</span>
+              <span class="rb-d" style="display:block">用你自己的话，而不是背「分布式版本控制系统」这八个字。</span>
+            </span>
+            <span class="rb-hint">点我点亮</span>
+          </div>
+          <div class="rb">
+            <span class="rb-ring"><i class="rb-dot"></i></span>
+            <span class="rb-body">
+              <span class="rb-t" style="display:block">改崩文件的时候，我知道该敲哪条命令，也知道为什么是它</span>
+              <span class="rb-d" style="display:block">不是碰运气试出来的——你知道它从哪儿把文件捞回来。</span>
+            </span>
+            <span class="rb-hint">点我点亮</span>
+          </div>
+          <div class="rb">
+            <span class="rb-ring"><i class="rb-dot"></i></span>
+            <span class="rb-body">
+              <span class="rb-t" style="display:block">我能把「分支和合并」讲给一个没学过 Git 的同学听</span>
+              <span class="rb-d" style="display:block">能讲明白，才算真懂了。讲的过程中卡住的地方，就是还没通透的地方。</span>
+            </span>
+            <span class="rb-hint">点我点亮</span>
+          </div>
+        </div>
+        <div class="rubric-note" id="rubricNote">
+          <span class="rn-ico">⭕</span>
+          <span id="rubricNoteText">三条都点亮后，这一关就完成了。</span>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ══════════ 侧栏 ══════════ -->
+    <aside class="blog-side">
+
+      <div class="side-box">
+        <h3>📍 本关进度</h3>
+        <div class="sb-sub">勾选和点亮都会实时记下来</div>
+
+        <div class="prog-row"><span>小任务</span><span class="pr-n" id="numTask">0 / 4</span></div>
+        <div class="prog-bar"><i id="barTask"></i></div>
+
+        <div class="prog-row"><span>自我确认</span><span class="pr-n" id="numRing">0 / 3</span></div>
+        <div class="prog-bar mint"><i id="barRing"></i></div>
+
+        <div class="prog-row" style="margin-top:16px;padding-top:13px;border-top:1px solid var(--line)">
+          <span>本关完成度</span><span class="pr-n" id="numAll" style="color:var(--pri-600);font-weight:800">0%</span>
+        </div>
+      </div>
+
+      <div class="side-box">
+        <h3>🗺️ 路线导航</h3>
+        <div class="sb-sub">探索路线 · 共 8 站</div>
+        <div class="next-nav">
+          <a class="nn-row" href="02-explore.html">
+            <span class="nn-ar">←</span>
+            <span class="nn-body">
+              <span class="nn-k" style="display:block">上一关 · 已走过</span>
+              <span class="nn-t" style="display:block">📜 脚本 · 让电脑替你干活</span>
+            </span>
+          </a>
+          <div class="nn-row cur">
+            <span class="nn-ar">·</span>
+            <span class="nn-body">
+              <span class="nn-k" style="display:block;color:var(--pri-600)">你在这里</span>
+              <span class="nn-t" style="display:block">🌿 Git · 给代码一台时间机器</span>
+            </span>
+          </div>
+          <a class="nn-row lock" href="#">
+            <span class="nn-ar">→</span>
+            <span class="nn-body">
+              <span class="nn-k" style="display:block">下一关 · 完成本关后解锁</span>
+              <span class="nn-t" style="display:block">🎨 前端 · 让东西看得见</span>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <div class="side-box" style="background:var(--bg-soft)">
+        <h3>⏭️ 免修申请</h3>
+        <div class="sb-sub">已经会了就别浪费时间</div>
+        <div class="waive-note" id="waiveNote">
+          如果你已经用过 Git、能自己处理分支冲突，可以申请跳过这一关。
+          我们会给你一个 <b>10 分钟的小测验</b>——过了直接盖章，不用再走一遍。
+        </div>
+        <button class="btn btn-outline btn-block btn-sm" id="btnWaive" style="margin-top:11px">申请免修 →</button>
+      </div>
+
+    </aside>
+  </div>
+</main>
+
+<!-- ══════════ 提交面板 ══════════ -->
+<dialog class="sub-dlg" id="submitDlg">
+  <form class="sub-form" id="submitForm">
+    <div class="sd-head">
+      <div>
+        <h3>提交产出 · Git 时间机器</h3>
+        <div class="sd-sub">第 3 站 · 探索路线</div>
+      </div>
+      <button class="sd-x" type="button" id="btnCloseDlg" aria-label="关闭">✕</button>
+    </div>
+
+    <label class="sd-field">
+      <span class="sd-lbl">你的仓库链接 <i>必填</i></span>
+      <input type="url" id="fRepo" placeholder="https://github.com/你的用户名/仓库名" />
+    </label>
+
+    <label class="sd-field">
+      <span class="sd-lbl">一段说明 <i>3–5 句就够</i></span>
+      <textarea rows="4" id="fNote" placeholder="这一关你卡在哪、怎么解决的、哪一步最意外？这段话以后面试能直接用。"></textarea>
+    </label>
+
+    <div class="sd-field">
+      <span class="sd-lbl">截图 <i>选填 · 最多 3 张</i></span>
+      <div class="sd-drop" id="dropZone">
+        🖼 点击上传，或把截图拖进来
+        <small>README 截图、git log --graph 的截图都行</small>
+      </div>
+    </div>
+
+    <div class="sd-burner">
+      <b>提交之后会发生什么</b>
+      提交后先进入<b style="display:inline">自评</b>：系统把你的产出和上面 3 条验收标准逐条对照，存进你的成长记录——这部分对免费用户永久免费。
+      「<b style="display:inline">阶段验收</b>」是付费服务（由学长逐条给评语、不过可以改到过），详见 <a href="10-pricing.html">验收与付费</a>。
+      你也可以先自评，需要有人盖章的时候再申请学长验收。
+    </div>
+
+    <div class="sd-foot">
+      <span class="sd-free">✓ 免费 · 提交即存进你的成长记录</span>
+      <button class="btn btn-primary" type="submit" id="sdSubmit">提交验收</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ══════════ 页脚 ══════════ -->
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">
+        <span class="logo-mark">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      </div>
+      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+      <p class="creed">「愿课搭陪你走过每一次选方向的焦虑，需要时也总能搭把手。」</p>
+    </div>
+    <div class="foot-col"><h4>探索</h4><a href="01-home.html">首页</a><a href="02-explore.html">探索路线</a><a href="04-survey.html">定制路线</a><a href="08-library.html">资料库</a></div>
+    <div class="foot-col"><h4>结果服务</h4><a href="10-pricing.html">阶段验收</a><a href="09-cohort.html">项目组</a><a href="10-pricing.html">深度陪跑</a></div>
+    <div class="foot-col"><h4>关于</h4><a href="#">平台理念</a><a href="#">校园认证</a><a href="#">联系我们</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 知识在校园里流动</div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  /* ── ① 练：任务勾选 ── */
+  var tasks = [].slice.call(document.querySelectorAll('#taskList .task'));
+  var hint = document.getElementById('doneHint');
+
+  function syncTasks() {
+    var done = tasks.filter(function (t) { return t.classList.contains('done'); }).length;
+    document.getElementById('barTask').style.width = (done / tasks.length * 100) + '%';
+    document.getElementById('numTask').textContent = done + ' / ' + tasks.length;
+    hint.classList.toggle('show', done === tasks.length);
+    syncOverall();
+  }
+
+  tasks.forEach(function (t) {
+    t.querySelector('.tk-ck').addEventListener('click', function () {
+      t.classList.toggle('done');
+      var ck = t.querySelector('.tk-ck');
+      ck.setAttribute('aria-label', t.classList.contains('done') ? '取消完成' : '标记完成');
+      syncTasks();
+    });
+  });
+
+  /* ── ② 验：点亮验收标准 ── */
+  var rbs = [].slice.call(document.querySelectorAll('#rubric .rb'));
+  var note = document.getElementById('rubricNote');
+
+  function syncRings() {
+    var on = rbs.filter(function (r) { return r.classList.contains('on'); }).length;
+    document.getElementById('barRing').style.width = (on / rbs.length * 100) + '%';
+    document.getElementById('numRing').textContent = on + ' / ' + rbs.length;
+    var all = on === rbs.length;
+    note.classList.toggle('done', all);
+    note.querySelector('.rn-ico').textContent = all ? '✅' : '⭕';
+    document.getElementById('rubricNoteText').textContent = all
+      ? '三条都点亮了——这一关完成了。下一关「🎨 前端 · 让东西看得见」已解锁。'
+      : '三条都点亮后，这一关就完成了。';
+    syncOverall();
+  }
+
+  rbs.forEach(function (rb) {
+    rb.addEventListener('click', function () {
+      rb.classList.toggle('on');
+      var h = rb.querySelector('.rb-hint');
+      if (rb.classList.contains('on')) {
+        h.textContent = '✓ 已点亮';
+        var ring = document.createElement('span');
+        ring.className = 'ink-ring';
+        ring.style.cssText = 'width:26px;height:26px;left:-2px;top:-2px;';
+        rb.querySelector('.rb-ring').appendChild(ring);
+        setTimeout(function () { ring.remove(); }, 720);
+      } else {
+        h.textContent = '点我点亮';
+      }
+      syncRings();
+    });
+  });
+
+  /* ── ③ 本关总完成度 ── */
+  function syncOverall() {
+    var t = tasks.filter(function (x) { return x.classList.contains('done'); }).length;
+    var r = rbs.filter(function (x) { return x.classList.contains('on'); }).length;
+    var pct = Math.round((t + r) / (tasks.length + rbs.length) * 100);
+    document.getElementById('numAll').textContent = pct + '%';
+  }
+
+  /* ── ④ 提交面板 ── */
+  var dlg = document.getElementById('submitDlg');
+  document.getElementById('btnSubmit').addEventListener('click', function () { dlg.showModal(); });
+  document.getElementById('btnCloseDlg').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+
+  document.getElementById('dropZone').addEventListener('click', function () {
+    this.innerHTML = '✓ 已选择 <b>git-graph.png</b>（演示占位）<small>点一下可以重新选择</small>';
+  });
+
+  document.getElementById('submitForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var repo = document.getElementById('fRepo');
+    if (!repo.value.trim()) {
+      repo.style.borderColor = 'var(--pri)';
+      repo.focus();
+      repo.placeholder = '先填上你的仓库链接，这一步不能空着';
+      return;
+    }
+    dlg.close();
+
+    // 印章落下 + 按钮换成状态行
+    var card = document.getElementById('makeCard');
+    var stamp = document.createElement('div');
+    stamp.className = 'stamp slam';
+    stamp.innerHTML = '已提交<br>待自评';
+    card.appendChild(stamp);
+
+    document.getElementById('makeAct').outerHTML =
+      '<div class="mk-act mk-status pop-in">' +
+        '<span>✓ 已提交 · 2026-09-14 · 进入自评</span>' +
+        '<a href="10-pricing.html">想让人盖章？申请学长验收 →</a>' +
+      '</div>';
+  });
+
+  /* ── ⑤ 免修申请 ── */
+  document.getElementById('btnWaive').addEventListener('click', function () {
+    document.getElementById('waiveNote').outerHTML =
+      '<div class="waive-done">✓ 免修申请已提交<br>' +
+      '<span style="color:var(--ink-2);font-weight:500">我们会在 1 个工作日内把这个关卡的小测验发给你，10 分钟，过了直接盖章。</span></div>';
+    this.remove();
+  });
+
+  syncTasks();
+  syncRings();
+})();
+</script>
+</body>
+</html>
