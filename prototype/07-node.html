@@ -177,6 +177,13 @@
   .sd-field { display: block; margin-top: 18px; }
   .sd-lbl { display: block; font-size: 12.5px; font-weight: 800; margin-bottom: 7px; }
   .sd-lbl i { font-style: normal; font-size: 11px; color: var(--ink-faint); font-weight: 600; margin-left: 4px; }
+  .sd-pick { display: flex; gap: 7px; margin-bottom: 10px; flex-wrap: wrap; }
+  .pk {
+    font-size: 12.5px; font-weight: 700; padding: 6px 13px; border-radius: 999px;
+    border: 1.5px solid var(--line); color: var(--ink-2); background: #fff; transition: 0.15s;
+  }
+  .pk:hover { border-color: var(--pri); color: var(--pri-600); }
+  .pk.on { background: var(--ink); border-color: var(--ink); color: #fff; }
   .sd-field input, .sd-field textarea {
     width: 100%; border: 1.5px solid var(--line); border-radius: var(--r-lg);
     padding: 10px 13px; font-size: 13.5px; background: #fff; resize: vertical;
@@ -489,10 +496,11 @@
         <div class="beat-head">
           <span class="bh-seal">验</span>
           <h2>确认学会了：点亮的每一句都得是真的</h2>
-          <span class="bh-meta">自我确认 · 没人检查</span>
+          <span class="bh-meta">自查 · 没人打分</span>
         </div>
         <div class="beat-sub">
-          这一拍不用提交、没人打分。它是你自己给自己的确认——手上没数之前，别点。
+          这一拍不用提交、没人打分，是你自己给自己的确认——手上没数之前，别点。
+          （阶段末尾另有一道<b>验收关</b>：那里要交一个能跑起来的东西，AI 会真的打开点一遍。两回事。）
         </div>
 
         <div class="rubric" id="rubric">
@@ -600,10 +608,15 @@
       <button class="sd-x" type="button" id="btnCloseDlg" aria-label="关闭">✕</button>
     </div>
 
-    <label class="sd-field">
-      <span class="sd-lbl">你的仓库链接 <i>必填</i></span>
-      <input type="url" id="fRepo" placeholder="https://github.com/你的用户名/仓库名" />
-    </label>
+    <div class="sd-field">
+      <span class="sd-lbl">交一个能跑起来的东西 <i>三选一 · 必填</i></span>
+      <div class="sd-pick" id="pickKind">
+        <button type="button" class="pk on" data-k="link" data-ph="https://你的用户名.github.io/hello">🔗 能打开的链接</button>
+        <button type="button" class="pk" data-k="repo" data-ph="https://github.com/你的用户名/仓库名">📦 仓库地址</button>
+        <button type="button" class="pk" data-k="video" data-ph="https:// 你的录屏链接（B站 / 网盘都行）">🎬 一段录屏</button>
+      </div>
+      <input type="url" id="fRepo" placeholder="https://你的用户名.github.io/hello" />
+    </div>
 
     <label class="sd-field">
       <span class="sd-lbl">一段说明 <i>3–5 句就够</i></span>
@@ -620,17 +633,34 @@
 
     <div class="sd-burner">
       <b>提交之后会发生什么</b>
-      提交后先进入<b style="display:inline">自评</b>：系统把你的产出和上面 3 条验收标准逐条对照，存进你的成长记录——这部分对免费用户永久免费。
-      「<b style="display:inline">阶段验收</b>」是付费服务（由学长逐条给评语、不过可以改到过），详见 <a href="10-pricing.html">验收与付费</a>。
-      你也可以先自评，需要有人盖章的时候再申请学长验收。
+      AI 会把你交的东西<b style="display:inline">真的打开点一遍</b>——照着上面 3 条验收标准逐条核，每一步截图，
+      然后交回一份「哪条过了、哪条没过、卡在哪一步」。这部分<b style="display:inline">免费，不限次数</b>，改完随时重跑。
+      想要一份真人署名的认可，再申请学长验收（¥39）→ <a href="10-pricing.html">验收与付费</a>。
     </div>
 
     <div class="sd-foot">
-      <span class="sd-free">✓ 免费 · 提交即存进你的成长记录</span>
-      <button class="btn btn-primary" type="submit" id="sdSubmit">提交验收</button>
+      <span class="sd-free">✓ 免费 · AI 验收不限次数</span>
+      <button class="btn btn-primary" type="submit" id="sdSubmit">提交，让 AI 跑一遍</button>
     </div>
   </form>
 </dialog>
+
+<script>
+  // 三选一：切换提交形态时同步输入框的提示语
+  (function () {
+    var box = document.getElementById('pickKind');
+    var input = document.getElementById('fRepo');
+    if (!box || !input) return;
+    box.addEventListener('click', function (e) {
+      var btn = e.target.closest('.pk');
+      if (!btn) return;
+      box.querySelectorAll('.pk').forEach(function (b) { b.classList.remove('on'); });
+      btn.classList.add('on');
+      input.placeholder = btn.dataset.ph || '';
+      input.focus();
+    });
+  })();
+</script>
 
 <!-- ══════════ 页脚 ══════════ -->
 <footer class="foot">
@@ -735,7 +765,7 @@
     if (!repo.value.trim()) {
       repo.style.borderColor = 'var(--pri)';
       repo.focus();
-      repo.placeholder = '先填上你的仓库链接，这一步不能空着';
+      repo.placeholder = '先把这个链接填上，这一步不能空着';
       return;
     }
     dlg.close();
@@ -744,13 +774,13 @@
     var card = document.getElementById('makeCard');
     var stamp = document.createElement('div');
     stamp.className = 'stamp slam';
-    stamp.innerHTML = '已提交<br>待自评';
+    stamp.innerHTML = '已提交<br>待 AI 验收';
     card.appendChild(stamp);
 
     document.getElementById('makeAct').outerHTML =
       '<div class="mk-act mk-status pop-in">' +
-        '<span>✓ 已提交 · 2026-09-14 · 进入自评</span>' +
-        '<a href="10-pricing.html">想让人盖章？申请学长验收 →</a>' +
+        '<span>✓ 已提交 · 2026-09-14 · AI 正在把它打开点一遍</span>' +
+        '<a href="10-pricing.html">想要真人署名？申请学长验收 →</a>' +
       '</div>';
   });
 

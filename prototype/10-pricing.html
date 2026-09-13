@@ -87,9 +87,39 @@
   .fq-a { display: none; padding: 0 20px 18px 20px; font-size: 13.5px; color: var(--ink-2); line-height: 1.85; }
   .fq.open .fq-a { display: block; animation: rise .3s var(--ease-out) both; }
 
+  /* 验收关 · 两扇门 */
+  .doors { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
+  .door { padding: 22px; }
+  .door .d-tag { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; padding: 3px 11px; border-radius: 999px; display: inline-block; }
+  .door.a .d-tag { background: var(--mint-50); color: #0a7d59; }
+  .door.b .d-tag { background: var(--pri-50); color: var(--pri-700); }
+  .door h4 { font-size: 17px; font-weight: 800; margin-top: 11px; letter-spacing: -.3px; }
+  .door .d-price { font-size: 13px; font-weight: 800; color: var(--ink-soft); margin-top: 3px; }
+  .door p { font-size: 13px; color: var(--ink-2); margin-top: 9px; line-height: 1.75; }
+  .door.b { border-color: var(--pri); border-width: 2.5px; box-shadow: 0 5px 0 rgba(255,107,74,.18); }
+
+  /* 验收关 · 交什么 */
+  .gate-sub { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+  .gate-s { padding: 16px 18px; }
+  .gate-s .gs-i { font-size: 22px; }
+  .gate-s b { display: block; font-size: 14px; font-weight: 800; margin-top: 8px; }
+  .gate-s p { font-size: 12.5px; color: var(--ink-2); margin-top: 5px; line-height: 1.7; }
+
+  /* 验收关 · 判什么 */
+  .judge { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 46px; }
+  .judge-c { padding: 20px; }
+  .judge-c h4 { font-size: 14.5px; font-weight: 800; }
+  .judge-c .ju-sub { font-size: 11.5px; color: var(--ink-soft); margin-top: 3px; font-weight: 600; }
+  .judge-c ul { list-style: none; margin-top: 11px; }
+  .judge-c li { font-size: 13px; color: var(--ink-2); padding: 5px 0 5px 22px; position: relative; line-height: 1.6; }
+  .judge-c li::before { position: absolute; left: 0; font-weight: 900; font-size: 12px; }
+  .judge-c.yes li::before { content: '✓'; color: var(--mint); }
+  .judge-c.no { background: var(--bg-soft); border-style: dashed; }
+  .judge-c.no li::before { content: '—'; color: var(--ink-faint); }
+
   @media (max-width: 1180px) { .tiers { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 860px) {
-    .scene, .logic, .legal-grid { grid-template-columns: 1fr; }
+    .scene, .logic, .legal-grid, .doors, .judge, .gate-sub { grid-template-columns: 1fr; }
     .pr-hero h1 { font-size: 27px; }
   }
   @media (max-width: 560px) { .tiers { grid-template-columns: 1fr; } }
@@ -127,12 +157,12 @@
       课搭不卖课、不卖资料、不卖"入门到精通"。你在这里能免费拿到一整条路线，
       并且完整地走完它——我们不会在任何一关拦着你要钱。
       <br /><br />
-      收费只出现在一个地方：当你做完了东西，想要一份<strong>不是自己发给自己的证明</strong>。
+      收费只出现在一个地方：<strong>验收关</strong>——当你做完了东西，想要一份<strong>不是自己发给自己的证明</strong>。
     </p>
   </header>
 
   <div class="pledge">
-    <span>✅ 免费用户也能走完整条路线 · 我们不会在关卡中间设付费墙</span>
+    <span>✅ 免费用户能走完整条路线 · 每一道验收关都能拿到免费的 AI 结论</span>
   </div>
 
   <!-- ══════════ 价格卡 ══════════ -->
@@ -142,30 +172,31 @@
       <h3>免费</h3>
       <div class="tdesc">够你从零走到有一个能拿出手的项目</div>
       <div class="price"><i>¥</i><b>0</b></div>
-      <div class="pnote">永久免费</div>
+      <div class="pnote">永久免费 · 不需要绑卡</div>
       <ul>
         <li>全部资料库（136 份）</li>
         <li><b>计算机探索路线</b>全 8 站</li>
         <li>一条专属路线，<b>可完整走完</b></li>
+        <li><b>每一道验收关的 AI 验收，无限次免费</b></li>
         <li>打卡、进度、周窗口、休整券</li>
         <li>路线推进榜、社区浏览</li>
-        <li class="dim">阶段验收（自我确认）</li>
-        <li class="dim">项目组</li>
+        <li class="dim">真人学长署名验收</li>
+        <li class="dim">项目组 · 陪跑</li>
       </ul>
       <a class="btn btn-outline btn-block" href="02-explore.html">现在就开始</a>
     </div>
 
     <div class="toon-card tier hot">
       <span class="tier-tag">最轻的一次尝试</span>
-      <h3>单次阶段验收</h3>
-      <div class="tdesc">把"我觉得我做完了"变成一份有署名的证明</div>
+      <h3>学长验收</h3>
+      <div class="tdesc">把"系统说我的 demo 跑通了"变成"真人看过，署名认可"</div>
       <div class="price"><i>¥</i><b>39</b><span>/ 阶段</span></div>
       <div class="pnote">不通过免费重提，不限次数</div>
       <ul>
-        <li>提交你的产出（代码 / 文档 / 演示）</li>
-        <li><b>AI 初评</b>：10 分钟内给出第一轮意见</li>
-        <li><b>学长复核</b>：48 小时内出最终结论</li>
-        <li>通过 → 该阶段的<b>编号印记</b></li>
+        <li>交一个<b>能跑起来的东西</b>（链接 / 仓库 / 录屏）</li>
+        <li>含免费层已有的 <b>AI 验收结论 + 截图证据</b></li>
+        <li><b>真人助教 48 小时内给评语</b>，逐条说好在哪、差在哪</li>
+        <li>通过 → 该阶段的<b>编号印记</b>（可查、可挂简历）</li>
         <li>通过 → 一份能力说明：你强在哪、下一步补哪</li>
         <li>不通过 → <b>免费重提，不限次数</b></li>
         <li class="dim">同伴互评与答辩</li>
@@ -177,14 +208,14 @@
       <h3>项目组</h3>
       <div class="tdesc">同方向 25–30 人一期，有学长带、有同伴陪</div>
       <div class="price"><i>¥</i><b>449</b><span>/ 期（1 个月）</span></div>
-      <div class="pnote">🎉 内测价 ¥199 · 仅限前 3 期</div>
+      <div class="pnote">🎉 首次 14 天免费 · 内测价 ¥199（仅前 3 期）</div>
       <ul>
-        <li>本期<b>全部阶段验收</b>（通常 5–6 次，单买要 ¥195–234）</li>
+        <li>本期<b>全部学长验收</b>（通常 5–6 次，单买要 ¥195–234）</li>
         <li>每周一次学长答疑（直播 + 文字）</li>
         <li>组内进度星图：看见谁和你卡在同一关</li>
         <li>同伴互评：被别人看过的东西才叫作品</li>
         <li>月度<b>答辩节</b>：8 分钟讲你的项目</li>
-        <li>一个方向一个组，按月滚动开班</li>
+        <li><b>14 天免费体验</b>：不绑卡、不自动续费、到期不扣款</li>
         <li>7 天无理由退款</li>
       </ul>
       <a class="btn btn-outline btn-block" href="09-cohort.html">看看本期项目组</a>
@@ -194,17 +225,87 @@
       <h3>一对一陪跑</h3>
       <div class="tdesc">有具体目标、需要有人盯着你走完的人</div>
       <div class="price"><i>¥</i><b>1,299</b><span>/ 月</span></div>
-      <div class="pnote">每期限 10 人 · 需先通过 2 次验收</div>
+      <div class="pnote">每期限 10 人 · 需先通过 2 次学长验收</div>
       <ul>
         <li>每周 1 次 1v1（60 分钟，视频）</li>
         <li>简历、项目、面试逐条改</li>
         <li>随时文字答疑（工作日 24h 内回）</li>
         <li>按你的目标倒排时间表</li>
-        <li><b>仅对已通过 2 次阶段验收的人开放</b></li>
-        <li class="dim">代做项目</li>
-        <li class="dim">保 offer 承诺</li>
+        <li><b>仅对已通过 2 次学长验收的人开放</b></li>
+        <li class="dim">免费试用（纯人力产品，每期只收 10 人）</li>
+        <li class="dim">代做项目 · 保 offer 承诺</li>
       </ul>
       <a class="btn btn-outline btn-block" href="#faq">先聊聊看</a>
+    </div>
+  </section>
+
+  <!-- ══════════ 验收关长什么样 ══════════ -->
+  <section>
+    <div class="blog-sec-head"><h2>验收关长什么样</h2></div>
+    <div class="blog-sec-sub">你交一个能跑起来的东西，AI 真的把它打开点一遍</div>
+
+    <div class="gate-sub">
+      <div class="toon-card gate-s">
+        <span class="gs-i">🔗</span>
+        <b>一个能打开的链接</b>
+        <p>无头浏览器打开它，照标准点一遍：该有的按钮在不在、点了有没有反应、中途会不会报错。每一步截图。</p>
+      </div>
+      <div class="toon-card gate-s">
+        <span class="gs-i">📦</span>
+        <b>一个仓库地址</b>
+        <p>拉下来，读 README，看目录结构，能跑就把测试跑一遍。</p>
+      </div>
+      <div class="toon-card gate-s">
+        <span class="gs-i">🎬</span>
+        <b>一段录屏</b>
+        <p>视觉模型看一遍，逐条对照标准核。适合还没部署到公网的东西。</p>
+      </div>
+    </div>
+
+    <div class="judge">
+      <div class="toon-card judge-c yes">
+        <h4>✅ AI 判这些</h4>
+        <div class="ju-sub">事实 —— 机器几秒就能查清</div>
+        <ul>
+          <li>做出来了没有</li>
+          <li>跑不跑得起来</li>
+          <li>说好的功能在不在</li>
+          <li>有没有明显的抄袭特征</li>
+        </ul>
+      </div>
+      <div class="toon-card judge-c no">
+        <h4>🙅 AI 不判这些</h4>
+        <div class="ju-sub">判断 —— 只有真人判了才有人认</div>
+        <ul>
+          <li>做得好不好</li>
+          <li>代码写得漂不漂亮</li>
+          <li>有没有更好的实现</li>
+          <li>这个人学到了多少</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="blog-sec-head"><h2>所以验收关上有两扇门</h2></div>
+    <div class="blog-sec-sub">并排开着，你挑。门就在这里，但没人拦着你走路。</div>
+    <div class="doors">
+      <div class="toon-card door a">
+        <span class="d-tag">门 A · 免费</span>
+        <h4>AI 验收</h4>
+        <div class="d-price">¥0 · 即时 · 不限次数</div>
+        <p>
+          给你<strong>"做对了没有"</strong>这个事实：逐条 ✓/✗、截图证据、卡在哪一步。
+          它便宜、即时、可以一直判——所以它免费。
+        </p>
+      </div>
+      <div class="toon-card door b">
+        <span class="d-tag">门 B · ¥39</span>
+        <h4>学长验收</h4>
+        <div class="d-price">48 小时内 · 真人署名</div>
+        <p>
+          给你<strong>"做得怎么样"</strong>这个判断：好在哪、差在哪、下一步补哪，
+          以及一枚可以拿给别人看的编号印记。
+        </p>
+      </div>
     </div>
   </section>
 
@@ -216,7 +317,7 @@
       <table class="cmp">
         <thead>
           <tr>
-            <th>你会得到</th><th>免费</th><th>单次验收 ¥39</th><th>项目组 ¥449</th><th>陪跑 ¥1299</th>
+            <th>你会得到</th><th>免费</th><th>学长验收 ¥39</th><th>项目组 ¥449</th><th>陪跑 ¥1299</th>
           </tr>
         </thead>
         <tbody>
@@ -227,10 +328,13 @@
           <tr><td>打卡 / 进度 / 周窗口</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
           <tr><td>路线会不会中途被锁</td><td class="no">不会</td><td class="no">不会</td><td class="no">不会</td><td class="no">不会</td></tr>
 
-          <tr class="sect"><td colspan="5">拿到认可</td></tr>
-          <tr><td>自我确认（自己打勾）</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>AI 初评意见</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>真人学长复核</td><td class="no">—</td><td class="em">48 小时内</td><td class="em">优先 24 小时</td><td class="em">随时</td></tr>
+          <tr class="sect"><td colspan="5">验收关 · 做对了没有</td></tr>
+          <tr><td><b>AI 验收</b>（把你的 demo 打开点一遍）</td><td class="em">✓ 无限次</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>逐条 ✓/✗ + 截图证据 + 卡在哪</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>AI 结论能不能对外背书</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td></tr>
+
+          <tr class="sect"><td colspan="5">验收关 · 有没有人认</td></tr>
+          <tr><td><b>真人学长署名验收</b></td><td class="no">—</td><td class="em">48 小时内</td><td class="em">优先 24 小时</td><td class="em">随时</td></tr>
           <tr><td>编号印记 / 能力说明</td><td class="no">—</td><td class="yes">✓ 单枚</td><td class="yes">✓ 全套</td><td class="yes">✓ 全套</td></tr>
           <tr><td>同伴互评</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
           <tr><td>答辩节</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
@@ -241,7 +345,9 @@
           <tr><td>简历 / 面试辅导</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
 
           <tr class="sect"><td colspan="5">兜底</td></tr>
-          <tr><td>不通过怎么办</td><td class="no">—</td><td class="yes">免费重提</td><td class="yes">免费重提</td><td class="yes">免费重提</td></tr>
+          <tr><td>免费试用</td><td class="no">本来免费</td><td class="no">不用试</td><td class="em">首次 14 天</td><td class="no">不参与</td></tr>
+          <tr><td>试用要不要绑卡</td><td class="no">—</td><td class="no">—</td><td class="yes">不用，到期不扣款</td><td class="no">—</td></tr>
+          <tr><td>不通过怎么办</td><td class="yes">改完再跑一遍</td><td class="yes">免费重提</td><td class="yes">免费重提</td><td class="yes">免费重提</td></tr>
           <tr><td>退款</td><td class="no">—</td><td class="yes">未评审可退</td><td class="yes">7 天无理由</td><td class="yes">7 天无理由</td></tr>
         </tbody>
       </table>
@@ -259,7 +365,7 @@
         <p>
           简历上写"熟悉 RAG"，面试官会追问。但如果你能放一个二维码，扫开是一份带编号、有学长署名的阶段验收说明——那是完全不同的分量。
         </p>
-        <span class="sug">→ 单次验收 ¥39</span>
+        <span class="sug">→ 学长验收 ¥39</span>
       </div>
       <div class="toon-card scene-c">
         <span class="si">😵</span>
@@ -267,7 +373,7 @@
         <p>
           免费路线的完成率大概在三成。不是因为难，是因为没人知道你在走。项目组做的事情很简单：让 27 个人知道你这周该交东西了。
         </p>
-        <span class="sug">→ 项目组 ¥449（内测 ¥199）</span>
+        <span class="sug">→ 项目组 ¥449 · 首次 14 天免费</span>
       </div>
       <div class="toon-card scene-c">
         <span class="si">🎯</span>
@@ -302,18 +408,35 @@
         </p>
       </div>
       <div class="toon-card logic-c">
-        <b>③ 为什么免费用户不能被卡住</b>
+        <b>③ 为什么 AI 验收要免费</b>
         <p>
-          如果走到第 3 关弹一个"付费解锁下一关"，用户的第一反应不是掏钱，是去别的地方找免费版本，并且从此不再相信你。
-          <strong>付费墙拦不住人，只会把人推走。</strong>我们要的是"走完了，想要个证明"——那才是自愿的付费。
+          因为它免费才有用。学生做完一个东西，最需要反馈的就是当下那十分钟。这里要收钱，他会跳过——然后带着一个自己都没底的产出，
+          一路错到阶段结束，返工的是三周的量。
+          <strong>免费 AI 验收真正做的，是把返工从三周缩短到十分钟。</strong>省下的时间最后都会变成付费转化。
         </p>
       </div>
       <div class="toon-card logic-c">
         <b>④ 为什么项目组比单次验收划算这么多</b>
         <p>
-          这是故意的。单次验收 ¥39 × 6 个阶段 = ¥234，项目组 ¥449 却多给了答疑、互评、答辩和同伴。
+          这是故意的。学长验收 ¥39 × 6 个阶段 = ¥234，项目组 ¥449 却多给了答疑、互评、答辩和同伴。
           我们不希望你一次次零散地买——<strong>一次验收是交易，一期项目组才是真正的产品。</strong>
           ¥39 的存在，是让你能用最低成本先试一次，然后自己算明白这笔账。
+        </p>
+      </div>
+      <div class="toon-card logic-c">
+        <b>⑤ 关于多邻国：学位置感，不学扣心</b>
+        <p>
+          值得学的是它的<strong>位置感</strong>：主线永远免费，付费只出现在可选的地方；还有连胜和排行榜——这两样课搭都有现成的。
+          不学的是扣心机制：答错几题就没心，要么等要么付。那是<strong>拿失败惩罚用户</strong>，
+          在一个治"方向焦虑"的产品里，方向是反的。我们收的是"被认可"的钱，不是"别掉队"的钱。
+        </p>
+      </div>
+      <div class="toon-card logic-c">
+        <b>⑥ 为什么试用只给项目组，不给陪跑</b>
+        <p>
+          四个产品里，只有项目组是"不进去就感受不到"的——星图、同伴、每周答疑，看介绍页看不出来。
+          陪跑是纯人力，两周等于 2 次 1v1 白送；而且每期只收 10 人，试用会把产能占满，付钱的人反而进不来。
+          <strong>陪跑已经有更好的筛选器了：先通过 2 次学长验收。</strong>
         </p>
       </div>
     </div>
@@ -328,7 +451,9 @@
       <div class="legal-i"><span>✕</span><span><strong>不代做项目、不代写代码。</strong>你的产出必须是你自己写的。发现代做，撤销验收结果且不退款。</span></div>
       <div class="legal-i"><span>✕</span><span><strong>不提供任何形式的贷款、分期、预付费包。</strong>不诱导超前消费，不卖年卡。</span></div>
       <div class="legal-i"><span>✕</span><span><strong>不做大额预收费。</strong>单笔最高 ¥1,299，且按月结算，随时可停。</span></div>
-      <div class="legal-i"><span>✓</span><span><strong>验收不通过可以无限次重提</strong>，不再收费。</span></div>
+      <div class="legal-i"><span>✕</span><span><strong>AI 验收的结论不构成凭证。</strong>它是一份自查工具，页面上会写明"AI 结论不对外背书"。只有学长验收后签发的编号印记，才是课搭的凭证。</span></div>
+      <div class="legal-i"><span>✕</span><span><strong>不做"到期静默转付费"。</strong>免费试用不绑卡、不自动续费、到期不扣款。一个校园邮箱只能试用一次。</span></div>
+      <div class="legal-i"><span>✓</span><span><strong>验收不通过可以无限次重提</strong>，不再收费——AI 验收和学长验收都是。</span></div>
       <div class="legal-i"><span>✓</span><span><strong>7 天无理由退款</strong>（项目组与陪跑），已完成的单次验收除外。</span></div>
       <div class="legal-i"><span>✓</span><span><strong>价格公开透明</strong>，所有费用在本页写清，不存在任何隐藏收费。</span></div>
       <div class="legal-i"><span>✓</span><span><strong>所有带组学长实名可查</strong>，包含学校、专业、当前去向，可在组页查看。</span></div>
@@ -341,34 +466,59 @@
     <div class="blog-sec-sub">还有疑问可以直接问我们</div>
     <div class="faq">
       <div class="fq">
+        <div class="fq-q">AI 验收是怎么做的？会不会是随便打个分？<span class="ar">›</span></div>
+        <div class="fq-a">
+          你把一个<strong>能跑起来的东西</strong>交上去——一个链接、一个仓库、或者一段录屏。
+          AI 会用无头浏览器<strong>真的把它打开、点一遍</strong>：该有的按钮在不在、点了有没有反应、中途会不会报错，每一步都截图。
+          <br /><br />
+          交回来的是一份<strong>逐条的 ✓/✗ + 截图证据 + 卡在哪一步</strong>，不是一句"通过/不通过"。
+          它判的是<strong>事实</strong>——做出来了没有、跑不跑得起来；它<strong>不判</strong>做得好不好、代码漂不漂亮，那是学长的事。
+        </div>
+      </div>
+      <div class="fq">
+        <div class="fq-q">AI 验收的结论能写进简历吗？<span class="ar">›</span></div>
+        <div class="fq-a">
+          <strong>不能，我们也不会让它变成能。</strong>
+          AI 验收是一份自查工具，页面上会写明"AI 结论不对外背书"。
+          <br /><br />
+          原因很实际：如果 AI 说通过就算数，那所有人都会通过，这枚印记也就一文不值了。
+          能拿给别人看的只有一种——<strong>学长验收后签发的那枚编号印记</strong>，真人署名、可查、有编号。
+        </div>
+      </div>
+      <div class="fq">
         <div class="fq-q">验收不通过怎么办？会一直卡着吗？<span class="ar">›</span></div>
         <div class="fq-a">
-          不通过不会卡住你的路线。你的路线照常往下走，只是这一阶段暂时没有印记。
-          你可以按评审意见改完之后<strong>免费重新提交，不限次数</strong>。
-          实际上第一次不通过的人里，有 7 成在第二次就过了——评审意见本身就是最值钱的部分。
+          不会卡住。你的路线照常往下走，只是这一阶段暂时没有印记。
+          按意见改完之后<strong>免费重新提交，不限次数</strong>——AI 验收和学长验收都是。
+          实际上第一次没过的人里，有 7 成在第二次就过了，意见本身就是最值钱的部分。
         </div>
       </div>
       <div class="fq">
-        <div class="fq-q">我可以只买一次验收，不进项目组吗？<span class="ar">›</span></div>
+        <div class="fq-q">免费用户能走完整条路线吗？验收关会不会被拦？<span class="ar">›</span></div>
         <div class="fq-a">
-          可以。单次验收就是为"我只想试一次"设计的。
+          <strong>能，而且不会被拦。</strong>这是我们最在意的一条。
+          <br /><br />
+          免费用户可以走完 24 关中的每一关、拿到全部资料、看到完整路线，
+          并且<strong>在每一道验收关都能提交、都拿得到 AI 验收结论</strong>——这一层无限次免费。
+          你唯一缺的，是"有一个真人署名认了你走完了"。
+        </div>
+      </div>
+      <div class="fq">
+        <div class="fq-q">14 天免费体验怎么算？到期会自动扣款吗？<span class="ar">›</span></div>
+        <div class="fq-a">
+          <strong>不会。我们不绑卡、不自动续费、到期一分钱不扣。</strong>
+          试用只针对项目组，从开组那天起算 14 天；到期后你还在组里，只是不再享受新用户权益，想继续再单独买。
+          <br /><br />
+          一个校园邮箱一生只能试用一次——这条比手机号好使，换手机号容易，换学号不容易。
+          <br /><br />
+          陪跑不参与试用：它是纯人力产品，两周等于 2 次 1v1 白送，而且每期只收 10 人。
+        </div>
+      </div>
+      <div class="fq">
+        <div class="fq-q">我可以只买一次学长验收，不进项目组吗？<span class="ar">›</span></div>
+        <div class="fq-a">
+          可以。学长验收就是为"我只想试一次"设计的。
           不过说句实话：项目组里那 27 个和你卡在同一关的人，可能比验收本身更有用。
-        </div>
-      </div>
-      <div class="fq">
-        <div class="fq-q">谁来做验收？会不会是 AI 随便打个分？<span class="ar">›</span></div>
-        <div class="fq-a">
-          四层漏斗：<strong>AI 初评</strong>（结构化意见，10 分钟内）→ <strong>同伴互评</strong>（项目组内）→
-          <strong>助教终审</strong>（真人，48 小时内，这是决定通过与否的那一层）→ <strong>月度答辩</strong>（项目组）。
-          AI 只负责第一轮的机械检查，最终结论一定是真人给的，并且署真名。
-        </div>
-      </div>
-      <div class="fq">
-        <div class="fq-q">免费用户能走完整条路线吗？中途会不会被锁？<span class="ar">›</span></div>
-        <div class="fq-a">
-          <strong>能，而且不会被锁。</strong>这是我们最在意的一条。
-          免费用户可以走完 24 关中的每一关、拿到全部资料、看到完整路线。
-          我们不在关卡之间设任何付费墙。你唯一缺的，是"别人认可你走完了"这件事。
         </div>
       </div>
       <div class="fq">
