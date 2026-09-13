@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第Ⅳ章 · RAG 检索增强 — 我的路线 · 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+body { background: var(--paper); }
+
+.nd-wrap { max-width: 860px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 44px) 140px; position: relative; }
+
+/* 章头 */
+.nd-head { padding: clamp(36px, 6vw, 64px) 0 0; }
+.nd-crumb { font-family: var(--f-mono); font-size: .66rem; letter-spacing: .18em; color: var(--ink-3); margin-bottom: 30px; display: flex; gap: 10px; align-items: center; }
+.nd-crumb a:hover { color: var(--vermilion); }
+.nd-roman { font-family: var(--f-latin); font-style: italic; font-size: clamp(3.4rem, 8vw, 5.6rem); line-height: 1; color: var(--vermilion); opacity: .9; }
+.nd-head h1 { font-family: var(--f-display); font-weight: 900; font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.5; margin-top: 12px; max-width: 640px; }
+.nd-why { margin-top: 18px; padding: 18px 22px; background: var(--paper-2); border-left: 3px solid var(--vermilion); border-radius: 0 var(--radius-s) var(--radius-s) 0; font-size: .88rem; color: var(--ink-2); line-height: 2; max-width: 640px; }
+.nd-why b { color: var(--ink); }
+.nd-meta { display: flex; gap: 26px; margin: 24px 0 0; font-family: var(--f-mono); font-size: .68rem; color: var(--ink-3); flex-wrap: wrap; }
+.nd-meta span b { color: var(--spruce); font-weight: 500; }
+
+/* 四拍分区 */
+.beat { margin-top: clamp(44px, 6vw, 68px); }
+.beat-head { display: flex; align-items: baseline; gap: 16px; border-bottom: 2px solid var(--ink); padding-bottom: 12px; margin-bottom: 8px; }
+.beat-head .b-tag { font-family: var(--f-latin); font-style: italic; font-size: .78rem; color: var(--vermilion); letter-spacing: .18em; flex: none; }
+.beat-head h2 { font-family: var(--f-display); font-weight: 900; font-size: 1.3rem; }
+.beat-head .b-note { margin-left: auto; font-family: var(--f-mono); font-size: .62rem; color: var(--ink-3); letter-spacing: .1em; }
+
+/* 资源卡（编辑部式） */
+.res-main { display: flex; gap: 18px; padding: 22px; background: var(--card); border: 1.5px solid rgba(194,67,29,.35); border-radius: var(--radius); margin: 18px 0 10px; transition: box-shadow .25s; position: relative; }
+.res-main:hover { box-shadow: var(--shadow-lift); }
+.res-main .badge-main { position: absolute; top: -10px; left: 20px; background: var(--vermilion); color: #FBF4E8; font-size: .6rem; font-weight: 700; letter-spacing: .2em; padding: 4px 12px; border-radius: 999px; }
+.res-main .kind-ic { width: 46px; height: 46px; flex: none; border-radius: 10px; background: var(--vermilion-wash); color: var(--vermilion); display: grid; place-items: center; font-size: 1.2rem; }
+.res-main .t { font-family: var(--f-display); font-weight: 700; font-size: 1.04rem; }
+.res-main .d { font-size: .8rem; color: var(--ink-2); margin-top: 6px; line-height: 1.75; }
+.res-main .m { font-family: var(--f-mono); font-size: .64rem; color: var(--ink-3); margin-top: 10px; display: flex; gap: 16px; }
+.res-alts { border-top: 1px dashed var(--hairline); padding-top: 6px; }
+.res-alts summary { cursor: pointer; font-size: .78rem; color: var(--ink-3); padding: 12px 4px; list-style: none; display: flex; gap: 8px; align-items: center; }
+.res-alts summary::before { content: '▸'; transition: transform .2s; color: var(--vermilion); }
+.res-alts[open] summary::before { transform: rotate(90deg); }
+.res-alt { display: flex; gap: 14px; padding: 12px 6px; border-top: 1px dashed var(--hairline-2); font-size: .82rem; color: var(--ink-2); }
+.res-alt .t { font-weight: 600; color: var(--ink); }
+.res-alt .m { font-family: var(--f-mono); font-size: .62rem; color: var(--ink-3); margin-left: auto; white-space: nowrap; }
+
+/* 任务清单（输入/输出色标） */
+.tasks { margin-top: 14px; }
+.task-row { display: flex; gap: 14px; padding: 15px 6px; border-bottom: 1px dashed var(--hairline-2); align-items: flex-start; }
+.task-row .no { font-family: var(--f-latin); font-style: italic; color: var(--ink-3); padding-top: 2px; flex: none; width: 22px; }
+.task-row .body { flex: 1; }
+.task-row .t { font-weight: 600; font-size: .92rem; line-height: 1.6; }
+.task-row .d { font-size: .76rem; color: var(--ink-3); margin-top: 4px; line-height: 1.7; }
+.task-row .k { flex: none; font-family: var(--f-mono); font-size: .56rem; letter-spacing: .16em; padding: 4px 9px; border-radius: 4px; margin-top: 3px; }
+.k.in { background: #E7EBEF; color: #4A6275; }
+.k.out { background: var(--vermilion-wash); color: var(--vermilion); }
+.k.make { background: #E8E3F0; color: #5B4E86; }
+.task-row .ck { flex: none; width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid var(--hairline); margin-top: 2px; display: grid; place-items: center; font-size: .78rem; color: transparent; transition: all .18s cubic-bezier(.3,1.4,.5,1); cursor: pointer; }
+.task-row.done .ck { background: var(--spruce); border-color: var(--spruce); color: #F2EADB; }
+.task-row.done .t { color: var(--ink-3); text-decoration: line-through; text-decoration-color: rgba(49,84,63,.45); }
+
+/* 阶段作品 */
+.work-card { background: var(--indigo-night); color: #EFE7D8; border-radius: var(--radius); padding: clamp(24px, 3.4vw, 34px); margin-top: 18px; }
+.work-card .wk { font-family: var(--f-mono); font-size: .62rem; letter-spacing: .26em; color: var(--vermilion-bright); }
+.work-card h3 { font-family: var(--f-display); font-weight: 900; font-size: 1.25rem; margin: 10px 0 8px; }
+.work-card p { font-size: .84rem; color: #B8AD99; line-height: 1.85; }
+.work-card .chips { display: flex; gap: 8px; margin: 16px 0 22px; flex-wrap: wrap; }
+.work-card .chip2 { font-family: var(--f-mono); font-size: .66rem; padding: 5px 12px; border: 1px solid rgba(247,242,233,.25); border-radius: 999px; color: #CFC5B4; }
+.work-card .btn { background: #EFE7D8; color: var(--indigo-night); box-shadow: none; }
+
+/* 验收标准（待闭合的环） */
+.rubric { margin-top: 14px; display: grid; gap: 10px; }
+.rb { display: flex; gap: 14px; padding: 16px 18px; background: var(--card); border: 1px solid var(--hairline); border-radius: var(--radius-s); align-items: flex-start; }
+.rb .ring { flex: none; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--hairline); margin-top: 2px; position: relative; transition: all .3s; }
+.rb.hit .ring { border-color: var(--spruce); }
+.rb.hit .ring::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; background: var(--spruce); animation: ringclose .4s cubic-bezier(.3,1.4,.5,1); }
+@keyframes ringclose { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.rb .t { font-size: .88rem; font-weight: 600; line-height: 1.6; }
+.rb .d { font-size: .74rem; color: var(--ink-3); margin-top: 4px; line-height: 1.7; }
+.rb .w { margin-left: auto; font-family: var(--f-latin); font-style: italic; font-size: .72rem; color: var(--ink-3); flex: none; padding-top: 4px; }
+.rubric-note { font-family: var(--f-mono); font-size: .64rem; color: var(--ink-3); margin-top: 14px; letter-spacing: .06em; }
+
+/* 向导卡（卡壳时刻） */
+.guide { margin-top: 28px; background: var(--spruce-wash); border-radius: var(--radius); padding: 20px 24px; display: flex; gap: 16px; align-items: flex-start; }
+.guide .g-ic { width: 38px; height: 38px; border-radius: 50%; background: var(--spruce); color: #F2EADB; display: grid; place-items: center; font-family: var(--f-display); font-weight: 900; flex: none; font-size: 1rem; }
+.guide .g-t { font-weight: 700; font-size: .9rem; color: var(--spruce); }
+.guide p { font-size: .8rem; color: var(--ink-2); margin-top: 5px; line-height: 1.8; }
+.guide .g-link { font-size: .76rem; color: var(--spruce); text-decoration: underline dotted; text-underline-offset: 4px; cursor: pointer; }
+
+/* 免修 */
+.waive { margin-top: 20px; font-size: .76rem; color: var(--ink-3); text-align: center; }
+.waive a { color: var(--vermilion); text-decoration: underline dotted; text-underline-offset: 4px; cursor: pointer; }
+
+/* 底部 sticky */
+.stage-foot { position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; background: rgba(247,242,233,.94); backdrop-filter: blur(12px); border-top: 1px solid var(--hairline); padding: 13px 0; }
+.stage-foot .in { max-width: 860px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 44px); display: flex; align-items: center; gap: 18px; }
+.foot-prog { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.foot-prog .bar { flex: 1; max-width: 240px; height: 5px; border-radius: 5px; background: var(--paper-3); overflow: hidden; }
+.foot-prog .bar i { display: block; height: 100%; background: var(--spruce); border-radius: 5px; transition: width .4s cubic-bezier(.2,.7,.2,1); }
+.foot-prog .n { font-family: var(--f-mono); font-size: .68rem; color: var(--ink-2); white-space: nowrap; }
+.stage-foot .btn { flex: none; }
+
+@media (max-width: 640px) {
+  .beat-head .b-note { display: none; }
+  .rb .w { display: none; }
+  .task-row .k { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="nd-wrap">
+
+  <!-- 章头 -->
+  <header class="nd-head">
+    <div class="nd-crumb rv"><a href="05-roadmap.html">← 我的路线</a><span>·</span><span>K-02 · 第Ⅳ章</span></div>
+    <div class="nd-roman rv">Ⅳ</div>
+    <h1 class="rv rv-d1">能独立完成一个 RAG 应用的搭建、调优与评测</h1>
+    <div class="nd-why rv rv-d2"><b>为什么是现在：</b>你刚在第Ⅲ章学会让模型可靠地输出结构——RAG 就是「给模型喂对上下文」的第一场硬仗：检索质量决定回答上限。它也是面试官考察 AI 应用能力时<b>出现频率最高的一章</b>。</div>
+    <div class="nd-meta rv rv-d3">
+      <span>周期 <b>3 周</b>（弹性 2–4）</span>
+      <span>节奏 每周 5 学习日 + 1 缓冲日</span>
+      <span>本章足迹 <b>11 / 18</b></span>
+      <span>验收 代码 + 部署 + 评测报告</span>
+    </div>
+  </header>
+
+  <!-- 学 -->
+  <section class="beat">
+    <div class="beat-head rv"><span class="b-tag">第一拍 · 学</span><h2>输入：把地图装进脑子</h2><span class="b-note">编辑部式推荐 · 不做书签堆</span></div>
+    <div class="res-main rv rv-d1">
+      <span class="badge-main">主编推荐</span>
+      <span class="kind-ic">🗺</span>
+      <span>
+        <span class="t">《RAG 从切分到重排：一条链路的六个决策点》</span>
+        <span class="d" style="display:block">主理学长写的路线内教材，2.1 万字。按「你现在要做的一个决策」组织——读它是为了动手，不是为了收藏。每节末尾有一道自查题，答不出就别往下走。</span>
+        <span class="m" style="display:flex"><span>约 3.5 小时</span><span>课搭出品 · 陈学长</span><span>免费</span></span>
+      </span>
+    </div>
+    <details class="res-alts rv rv-d2">
+      <summary>备选 2 份（不同口味，按需取用）</summary>
+      <div class="res-alt"><span class="t">论文向 · RAG Survey 精读版（带中文批注）</span><span class="m">约 5 小时</span></div>
+      <div class="res-alt"><span class="t">视频向 · 检索链路手把手（B 站 · 8 集）</span><span class="m">约 4 小时</span></div>
+    </details>
+  </section>
+
+  <!-- 练 -->
+  <section class="beat">
+    <div class="beat-head rv"><span class="b-tag">第二拍 · 练</span><h2>实践：按顺序打六场仗</h2><span class="b-note">冷色=输入 · 暖色=输出</span></div>
+    <div class="tasks">
+      <div class="task-row done rv"><span class="ck">✓</span><span class="no">1</span><span class="body"><span class="t">跑通最小 RAG Demo（≤500 行）</span><span class="d">硬上限 500 行——先证明你理解骨架，别急着堆功能。</span></span><span class="k in">输入</span></div>
+      <div class="task-row done rv rv-d1"><span class="ck">✓</span><span class="no">2</span><span class="body"><span class="t">切分实验：三种 chunk 尺寸 × 两种重叠</span><span class="d">用数据回答「为什么你选了这个参数」——面试必问。</span></span><span class="k out">输出</span></div>
+      <div class="task-row done rv rv-d2"><span class="ck">✓</span><span class="no">3</span><span class="body"><span class="t">深大资料库导入 + Embedding 建库</span><span class="d">135 份资料已为你打包成数据集，直接拉取。</span></span><span class="k out">输出</span></div>
+      <div class="task-row rv"><span class="ck">✓</span><span class="no">4</span><span class="body"><span class="t">混合检索 + 重排，命中率 ≥ 85%</span><span class="d">BM25 + 向量的混合方案；重排模型自选，说出选型理由。</span></span><span class="k out">输出</span></div>
+      <div class="task-row rv"><span class="ck">✓</span><span class="no">5</span><span class="body"><span class="t">搭建评测集：30 问 + 人工标注</span><span class="d">没有评测的调优是玄学——这是本章最重要的一步。</span></span><span class="k out">输出</span></div>
+      <div class="task-row rv"><span class="ck">✓</span><span class="no">6</span><span class="body"><span class="t">迭代第Ⅳ章复习任务：给第Ⅲ章的周报生成器加上 RAG</span><span class="d">把旧作品接进新链路——课搭的复习即前进。</span></span><span class="k out">输出</span></div>
+    </div>
+
+    <!-- 向导卡：卡壳时刻 -->
+    <div class="guide rv">
+      <span class="g-ic">导</span>
+      <span>
+        <span class="g-t">卡在检索命中率上不去？</span>
+        <p>先别急着换模型。向导想先问你三个问题：坏例集中在哪类问题？BM25 和向量各自的命中率差多少？chunk 是不是切太碎了？——按这个顺序排查，多数 85% 的坎都出在第二步。</p>
+        <span class="g-link">和向导走一遍排查 →</span>
+      </span>
+    </div>
+  </section>
+
+  <!-- 创 -->
+  <section class="beat">
+    <div class="beat-head rv"><span class="b-tag">第三拍 · 创</span><h2>阶段作品：让它真的能用</h2></div>
+    <div class="work-card rv rv-d1">
+      <span class="wk">ACCEPTANCE PROJECT · 已按你的偏好选定</span>
+      <h3>深大校园问答机器人</h3>
+      <p>用真实资料（135 份深大文档）回答真实问题（新生会问的那些）。答不准要承认并给出来源——这两条做对了，它就不是玩具。</p>
+      <div class="chips"><span class="chip2">混合检索</span><span class="chip2">重排</span><span class="chip2">引用溯源</span><span class="chip2">兜底话术</span><span class="chip2">评测报告</span></div>
+      <a class="btn" href="#" onclick="alert('原型演示：提交通道 = 仓库链接 + 部署链接 + 评测报告 + 一段复盘自述（≤500字）');return false">提交验收 <span class="btn-arrow">→</span></a>
+    </div>
+  </section>
+
+  <!-- 验 -->
+  <section class="beat">
+    <div class="beat-head rv"><span class="b-tag">第四拍 · 验</span><h2>验收标准：过五关，盖一印</h2><span class="b-note">标准公开 · 可判可重交</span></div>
+    <div class="rubric">
+      <div class="rb hit rv"><span class="ring"></span><span><span class="t">检索命中率 ≥ 85%（评测集 30 问）</span><span class="d">附评测脚本，助教可一键复现。</span></span><span class="w">30%</span></div>
+      <div class="rb hit rv rv-d1"><span class="ring"></span><span><span class="t">坏例归因：列出 3 个答错的案例并说明原因</span><span class="d">归因比全对更重要——这是工程师和调参侠的分界。</span></span><span class="w">25%</span></div>
+      <div class="rb rv rv-d2"><span class="ring"></span><span><span class="t">引用溯源：每个回答标注来源文档</span><span class="d">没有来源的回答不展示——产品意识从这里开始。</span></span><span class="w">20%</span></div>
+      <div class="rb rv rv-d3"><span class="ring"></span><span><span class="t">代码质量：结构、命名、README 可读</span><span class="d">AI 初评 + 助教终审都会看；不要求完美，要求看得懂。</span></span><span class="w">15%</span></div>
+      <div class="rb rv rv-d3"><span class="ring"></span><span><span class="t">复盘自述：≤500 字，说清一个你做错又改对的决定</span><span class="d">这段话会直接成为你面试时的项目叙事素材。</span></span><span class="w">10%</span></div>
+    </div>
+    <div class="rubric-note rv">通过线 = 加权 ≥ 80 且第 1、2 项单项达标 · 未过可免费复提（≤7 天）· 全部达标时，印记「检索之印」落章</div>
+    <div class="waive rv">已经有 RAG 实战经验？<a>申请免修</a>——做一道本阶段校验题，通过直接盖章跳过，不浪费你的时间。</div>
+  </section>
+
+</div>
+
+<!-- 底部 sticky -->
+<div class="stage-foot">
+  <div class="in">
+    <div class="foot-prog">
+      <span class="n">本章 11/18</span>
+      <span class="bar"><i style="width:61%"></i></span>
+    </div>
+    <a class="btn btn-primary" href="05-roadmap.html">回到我的路线</a>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+// 任务行点击（演示勾选）
+document.querySelectorAll('.task-row').forEach(function (r) {
+  r.addEventListener('click', function () { r.classList.toggle('done'); });
+});
+</script>
+</body>
+</html>

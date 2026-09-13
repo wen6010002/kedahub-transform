@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>课搭 2.0 · 高保真原型 — 结果型成长社区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+body { background: var(--paper); }
+.cover { max-width: 1080px; margin: 0 auto; padding: clamp(40px, 7vw, 90px) clamp(20px, 4vw, 44px) 100px; }
+.cv-kicker { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .3em; color: var(--vermilion); margin-bottom: 20px; }
+.cv-kicker::before { content: ''; display: inline-block; width: 30px; height: 1px; background: var(--vermilion); vertical-align: 4px; margin-right: 12px; }
+.cover h1 { font-family: var(--f-display); font-weight: 900; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.35; }
+.cover .sub { color: var(--ink-2); margin: 18px 0 10px; max-width: 640px; line-height: 1.95; }
+.lang-strip { display: flex; gap: 12px; margin: 30px 0; flex-wrap: wrap; }
+.lang-chip { font-size: .76rem; padding: 8px 16px; border: 1px solid var(--hairline); border-radius: 999px; color: var(--ink-2); background: var(--card); }
+.lang-chip b { color: var(--vermilion); }
+.pg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 44px; }
+.pg { background: var(--card); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 20px 22px; transition: all .25s cubic-bezier(.2,.7,.2,1); display: flex; flex-direction: column; gap: 6px; min-height: 130px; }
+.pg:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); border-color: rgba(194,67,29,.35); }
+.pg .no { font-family: var(--f-mono); font-size: .6rem; letter-spacing: .2em; color: var(--vermilion); }
+.pg .t { font-family: var(--f-display); font-weight: 900; font-size: 1.02rem; margin-top: 2px; }
+.pg .d { font-size: .76rem; color: var(--ink-3); line-height: 1.7; flex: 1; }
+.pg .tag { font-size: .62rem; font-family: var(--f-mono); color: var(--ink-3); letter-spacing: .1em; }
+.pg.soul { grid-column: span 3; background: var(--indigo-night); border-color: transparent; }
+.pg.soul .t { color: #F5EEDF; font-size: 1.2rem; }
+.pg.soul .d { color: #B8AD99; }
+.pg.soul .no { color: var(--vermilion-bright); }
+.note { margin-top: 50px; padding: 22px 26px; background: var(--paper-2); border-radius: var(--radius); font-size: .82rem; color: var(--ink-2); line-height: 2; }
+.note b { color: var(--ink); }
+@media (max-width: 860px) { .pg-grid { grid-template-columns: 1fr 1fr; } .pg.soul { grid-column: span 2; } }
+@media (max-width: 560px) { .pg-grid { grid-template-columns: 1fr; } .pg.soul { grid-column: span 1; } }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cv-kicker rv">KEDAHUB 2.0 · HI-FI PROTOTYPE · 2026-09</div>
+  <h1 class="rv rv-d1">课搭 2.0 原型<br>结果型成长社区</h1>
+  <p class="sub rv rv-d2">十页高保真原型，覆盖完整闭环：方向科普 → 问卷 → 隐藏式 Agent 生成仪式 → 闯关式山径路线 → 节点四拍节奏 → 四层验收 → 项目组社区 → 定价。交互语言「山径 · 印记」贯穿全线。</p>
+  <div class="lang-strip rv rv-d3">
+    <span class="lang-chip">语义 · <b>等高线山径</b>（垭口=验收 云雾=未解锁 登顶=拿结果）</span>
+    <span class="lang-chip">物证 · <b>护照印章</b>（8 印记拼合登顶纹章）</span>
+    <span class="lang-chip">纪律 · <b>排印工艺</b>（纸墨朱砂 · 200ms 动效基准）</span>
+    <span class="lang-chip">原则 · <b>路线即连胜</b>（走过的路永久点亮）</span>
+  </div>
+
+  <div class="pg-grid">
+    <a class="pg soul rv" href="05-roadmap.html">
+      <span class="no">05 · 产品灵魂页 · 建议从这里开始</span>
+      <span class="t">我的路线 · 山径</span>
+      <span class="d">连续蜿蜒 SVG 山径（动态测量布局生成）· 走过段永久点亮 · 云雾遮罩预告 · 验收仪式全流程演示（静默一拍 → 逐项盖印 → 印记落章 → 路线延伸 → 云雾散开）。把当前阶段 7 个任务全部勾选，即可体验完整仪式。</span>
+      <span class="tag">交互演示页</span>
+    </a>
+    <a class="pg rv" href="01-home.html"><span class="no">01</span><span class="t">首页 · 方向导航</span><span class="d">两大方向族 16 张方向卡 · 路线票据 · 发车信息条 · 宣言带 · 资料馆降位</span><span class="tag">公开层</span></a>
+    <a class="pg rv" href="02-direction.html"><span class="no">02</span><span class="t">方向指南 · 科普页</span><span class="d">11 节固定结构 · 知识差对照 · 误区对照 · 模板预览 · 全免费可读</span><span class="tag">公开层 · SEO</span></a>
+    <a class="pg rv" href="03-survey.html"><span class="no">03</span><span class="t">情况问卷</span><span class="d">单题分屏 · 每题答「为什么问」· 键盘操作 · 滑杆实时推算 · 路线式进度</span><span class="tag">免费层</span></a>
+    <a class="pg rv" href="04-generating.html"><span class="no">04</span><span class="t">生成仪式</span><span class="d">隐藏 Agent 的前台：工序日志逐条浮现 · 路线装配 · 落章仪式 · 可跳过</span><span class="tag">免费层</span></a>
+    <a class="pg rv" href="06-node.html"><span class="no">06</span><span class="t">节点详情 · 四拍节奏</span><span class="d">学（编辑部式资源）→ 练（输入/输出色标）→ 创（作品提交）→ 验（待闭合环）· 卡壳时刻向导 · 免修申请</span><span class="tag">免费层</span></a>
+    <a class="pg rv" href="07-library.html"><span class="no">07</span><span class="t">资料馆</span><span class="d">1.0 遗产降位承接 · 资料为路线服务的新关系说明</span><span class="tag">公开层</span></a>
+    <a class="pg rv" href="08-cohort.html"><span class="no">08</span><span class="t">项目组 · VIP 社区</span><span class="d">组内进度星图（同阶段自然成组）· 四层验收队列 · 答辩节 · 项目墙 · 组规</span><span class="tag">付费层</span></a>
+    <a class="pg rv" href="09-pricing.html"><span class="no">09</span><span class="t">定价</span><span class="d">知识免费 / 结果付费 · 三档 + 按次验收 · 合规红线内建</span><span class="tag">付费层</span></a>
+  </div>
+
+  <div class="note rv">
+    <b>给评审的你：</b>原型为纯 HTML/CSS/JS（共享 assets/ 设计系统），直接双击打开即可，无需构建。所有数字（走过人数、通过率、价格）为演示占位。设计文档见 docs/DESIGN.md 与 docs/DESIGN-PART2.md，四份调研见 research/。
+  </div>
+</div>
+<script src="assets/app.js"></script>
+</body>
+</html>

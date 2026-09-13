@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>为结果付费 — 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.pr-hero { padding: clamp(44px, 6vw, 80px) 0 0; text-align: center; }
+.pr-hero .kicker { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .3em; color: var(--vermilion); margin-bottom: 20px; }
+.pr-hero h1 { font-family: var(--f-display); font-weight: 900; font-size: var(--t-hero); line-height: 1.35; }
+.pr-hero .sub { color: var(--ink-2); max-width: 560px; margin: 22px auto 0; line-height: 1.9; }
+
+/* 免费宣言 */
+.free-decl { max-width: 760px; margin: 40px auto 0; background: var(--spruce-wash); border-radius: var(--radius); padding: 22px 28px; text-align: left; display: flex; gap: 16px; }
+.free-decl .ic { font-size: 1.3rem; margin-top: 2px; }
+.free-decl p { font-size: .9rem; color: var(--ink-2); line-height: 1.9; }
+.free-decl b { color: var(--spruce); }
+
+/* 三档 */
+.tiers { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 18px; margin: clamp(40px, 5vw, 60px) 0 0; align-items: stretch; }
+.tier { background: var(--card); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 30px 28px; display: flex; flex-direction: column; position: relative; }
+.tier.hot { border: 2px solid var(--vermilion); box-shadow: var(--shadow-lift); }
+.tier .flag { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--vermilion); color: #FBF4E8; font-size: .66rem; font-weight: 700; letter-spacing: .18em; padding: 5px 16px; border-radius: 999px; white-space: nowrap; }
+.tier h3 { font-family: var(--f-display); font-weight: 900; font-size: 1.2rem; }
+.tier .td { font-size: .8rem; color: var(--ink-3); margin: 6px 0 20px; line-height: 1.7; }
+.tier .price { font-family: var(--f-latin); font-size: 2.5rem; font-weight: 600; line-height: 1; }
+.tier .price small { font-size: .85rem; font-family: var(--f-body); color: var(--ink-3); font-weight: 400; }
+.tier .price .cn { font-family: var(--f-body); font-size: 1rem; color: var(--ink-2); margin-right: 2px; }
+.tier .ul { list-style: none; margin: 24px 0; flex: 1; }
+.tier .ul li { font-size: .84rem; color: var(--ink-2); padding: 8px 0 8px 24px; position: relative; line-height: 1.7; border-bottom: 1px dashed var(--hairline-2); }
+.tier .ul li::before { content: '✓'; position: absolute; left: 2px; color: var(--spruce); font-weight: 700; }
+.tier .ul li.vip::before { color: var(--vermilion); }
+.tier .ul li.no { color: var(--ink-3); }
+.tier .ul li.no::before { content: '—'; color: var(--ink-3); }
+.tier .btn { justify-content: center; }
+
+/* 对比表 */
+.cmp { margin-top: var(--sp-section); }
+.cmp table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.cmp th { font-family: var(--f-display); font-weight: 900; text-align: left; padding: 16px 14px; border-bottom: 2px solid var(--ink); font-size: .95rem; }
+.cmp th.c { text-align: center; }
+.cmp td { padding: 13px 14px; border-bottom: 1px solid var(--hairline-2); color: var(--ink-2); }
+.cmp td.c { text-align: center; }
+.cmp td:first-child { font-weight: 600; color: var(--ink); }
+.cmp .yes { color: var(--spruce); font-weight: 700; }
+.cmp .no { color: var(--ink-3); }
+.cmp .hot-col { background: rgba(194,67,29,.045); }
+
+/* FAQ */
+.faq { max-width: 760px; margin: var(--sp-section) auto 0; }
+.faq-item { border-bottom: 1px solid var(--hairline); }
+.faq-item summary { cursor: pointer; padding: 20px 4px; font-weight: 700; font-size: .98rem; list-style: none; display: flex; justify-content: space-between; gap: 20px; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: '+'; font-family: var(--f-latin); color: var(--vermilion); font-size: 1.3rem; line-height: 1; transition: transform .25s; }
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item .ans { padding: 0 4px 22px; color: var(--ink-2); font-size: .88rem; line-height: 1.95; }
+
+@media (max-width: 960px) { .tiers { grid-template-columns: 1fr; } .tier.hot { order: -1; } .cmp { overflow-x: auto; } .cmp table { min-width: 560px; } }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="container topbar-inner">
+    <a class="wordmark" href="01-home.html"><span class="seal-mini">课</span><span class="wm-text"><span class="wm-cn">课搭</span><span class="wm-en">KEDAHUB</span></span></a>
+    <nav class="nav">
+      <a href="01-home.html#fangxiang">成长方向</a>
+      <a href="07-library.html">资料馆</a>
+      <a href="05-roadmap.html">我的路线</a>
+      <a href="08-cohort.html">项目组</a>
+      <a href="09-pricing.html" class="on">定价</a>
+    </nav>
+    <div class="topbar-cta">
+      <a class="btn btn-ghost" href="07-library.html">资料馆</a>
+      <a class="btn btn-primary" href="03-survey.html">免费定制路线</a>
+    </div>
+  </div>
+</header>
+
+<section class="pr-hero">
+  <div class="container">
+    <div class="kicker rv">PRICING · 为结果付费，不为焦虑付费</div>
+    <h1 class="rv rv-d1">知识免费，<br>结果才值得付费。</h1>
+    <p class="sub rv rv-d2">课搭不卖资料、不卖录播课、不做「不给钱就不给你知识」。免费帮你找到方向并开始走；付费，买的是有人陪你走到底。</p>
+    <div class="free-decl rv rv-d3">
+      <span class="ic">🌿</span>
+      <p><b>免费永远包含：</b>全部方向科普 · 专属路线生成 · 路线完整查看 · 前两个阶段（含资料与任务）· 打卡与进度记录。不设时间炸弹，14 天后依然可继续走这两个阶段。</p>
+    </div>
+  </div>
+</section>
+
+<section class="container" style="padding-bottom: var(--sp-section);">
+  <div class="tiers">
+    <div class="tier rv">
+      <h3>路人</h3>
+      <p class="td">先想清楚，再上路。</p>
+      <div class="price">¥0</div>
+      <ul class="ul">
+        <li>全部方向指南，免费读</li>
+        <li>专属路线免费生成，完整可看</li>
+        <li>前两个阶段免费走完（含资料、任务）</li>
+        <li>打卡、进度、成长记录</li>
+        <li class="no">阶段三起需要验收通道</li>
+        <li class="no">项目组与学长服务</li>
+      </ul>
+      <a class="btn btn-ghost" href="03-survey.html">免费开始 <span class="btn-arrow">→</span></a>
+    </div>
+
+    <div class="tier hot rv rv-d1">
+      <span class="flag">大多数人的选择</span>
+      <h3>项目组</h3>
+      <p class="td">同方向一个组，走到结果。月度滚动进组，每期 30 人封顶。</p>
+      <div class="price"><span class="cn">¥</span>449<small> / 期（3 个月）</small></div>
+      <ul class="ul">
+        <li class="vip">全部阶段解锁 + 验收不限次重交</li>
+        <li class="vip">四层验收：AI 初评 · 组员互评 · 助教终审（48h SLA）· 月度答辩</li>
+        <li class="vip">周会、答辩节、阶段小队、结对同行</li>
+        <li class="vip">案例库 + 精华库完整访问</li>
+        <li class="vip">结组：作品集 + 主理推荐语</li>
+        <li>内测期 ¥199 · 深大 edu 认证后入组</li>
+      </ul>
+      <a class="btn btn-primary" href="08-cohort.html">看本期项目组 <span class="btn-arrow">→</span></a>
+    </div>
+
+    <div class="tier rv rv-d2">
+      <h3>深度陪跑</h3>
+      <p class="td">临门一脚的 1 对 1。单次可购，套餐更省。</p>
+      <div class="price"><span class="cn">¥</span>159<small> / 次起 · 套餐 ¥1,999</small></div>
+      <ul class="ul">
+        <li>简历精修（单次 ¥159，套餐含 3 轮）</li>
+        <li class="vip">模拟面试（含录音复盘）</li>
+        <li class="vip">投递策略与节奏陪跑（秋招季 3 个月）</li>
+        <li class="vip">offer 比较与决策建议</li>
+        <li>主理每人同时陪跑 ≤ 5 人</li>
+      </ul>
+      <a class="btn btn-ghost" href="#">了解陪跑 <span class="btn-arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="cmp rv">
+    <table>
+      <thead><tr><th>对比</th><th class="c">路人 · 免费</th><th class="c hot-col">项目组</th><th class="c">深度陪跑</th></tr></thead>
+      <tbody>
+        <tr><td>方向科普与资料馆</td><td class="c yes">✓</td><td class="c hot-col yes">✓</td><td class="c yes">✓</td></tr>
+        <tr><td>专属定制路线</td><td class="c yes">✓ 全程可看</td><td class="c hot-col yes">✓ 可申请调整</td><td class="c yes">✓</td></tr>
+        <tr><td>阶段推进</td><td class="c">前 2 个阶段</td><td class="c hot-col yes">全部 8 阶段</td><td class="c yes">全部</td></tr>
+        <tr><td>阶段验收</td><td class="c no">—</td><td class="c hot-col">AI 初评 + 学长终审</td><td class="c">同左</td></tr>
+        <tr><td>组内社区</td><td class="c no">—</td><td class="c hot-col yes">✓</td><td class="c yes">✓</td></tr>
+        <tr><td>1 对 1 辅导</td><td class="c no">—</td><td class="c no">—</td><td class="c yes">✓</td></tr>
+        <tr><td>退款政策</td><td class="c">—</td><td class="c hot-col">入组 7 天内无理由全退</td><td class="c">首场辅导前可退</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="faq rv">
+    <details class="faq-item">
+      <summary>不想进组，能只买单次验收吗？</summary>
+      <p class="ans">可以。单阶段验收包 ¥39–79/次（按阶段复杂度），含 AI 初评 + 组员互评 + 助教终审 + 一次免费复提。它也是天然的「按阶段付费」——不满意随时停在当前阶段，损失敞口不超过一个阶段。我们不提供任何第三方分期，也不接受任何形式的培训贷。</p>
+    </details>
+    <details class="faq-item">
+      <summary>和培训班有什么区别？</summary>
+      <p class="ans">培训班卖课（录播 + 班主任催学），课搭卖的是「走到结果」这件事：路线按你定制、每阶段用作品验收、不通过就改到通过。没有大班直播课——学习内容本身来自经过验证的公开资源与学长整理的资料，我们把人力全部花在验收、答疑和项目辅导上。</p>
+    </details>
+    <details class="faq-item">
+      <summary>学长是谁，靠谱吗？</summary>
+      <p class="ans">主理学长都是走过同一条路线的人（大厂在职 / 已上岸研究生），每位都经过试讲与背调，且必须本人走过该方向的完整验收链。助教由往期优秀组员担任。所有验收评语留档可查。</p>
+    </details>
+    <details class="faq-item">
+      <summary>我的路线和组员不一样，组内怎么一起学？</summary>
+      <p class="ans">路线按人定制，但阶段是对齐的：同在 RAG 阶段的人自动构成研习小组，组内频道按阶段聚合。你在星图上随时能看到谁和你同阶段——这正是「定制路线 + 共享班级」的设计。</p>
+    </details>
+    <details class="faq-item">
+      <summary>验收不过怎么办？会一直卡住吗？</summary>
+      <p class="ans">不会卡死：AI 初评给出具体修改建议，改完不限次重交，学长终审只看「是否达到出口标准」。实在不合适，可以和主理商议改路线或换阶段——路线是为人服务的。</p>
+    </details>
+    <details class="faq-item">
+      <summary>没走到结果，能退吗？</summary>
+      <p class="ans">入组 7 天内无理由全退。之后不承诺「包 offer」——任何这种承诺都是欺骗，我们不做。但我们承诺过程质量：48h 验收反馈、答辩夜、答疑响应。走完全程而未抵达的，下一期免费重走。</p>
+    </details>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="wordmark" style="margin-bottom:18px"><span class="seal-mini">课</span><span class="wm-text"><span class="wm-cn" style="color:#F2EADB">课搭</span><span class="wm-en" style="color:#877D6B">KEDAHUB</span></span></div>
+        <p style="font-size:.84rem; line-height:1.9; max-width:300px; color:#B0A693">学长带路，陪你走到结果。从深大出发的大学生结果型成长社区。</p>
+      </div>
+      <div><h4>方向</h4><a href="01-home.html">实习就业</a><a href="01-home.html">大学成长</a><a href="02-direction.html">方向指南</a><a href="03-survey.html">定制路线</a></div>
+      <div><h4>社区</h4><a href="08-cohort.html">项目组</a><a href="07-library.html">资料馆</a><a href="09-pricing.html">定价</a><a href="#">抵达故事</a></div>
+      <div><h4>关于</h4><a href="#">我们是谁</a><a href="#">成为主理学长</a><a href="#">内容公约</a><a href="#">联系合作</a></div>
+    </div>
+    <div class="footer-colophon"><span>© 2026 课搭 KEDAHUB · 深圳大学学生团队</span><span>资料是基础 · 路线是核心 · 验收推动执行 · 结果形成社区</span></div>
+  </div>
+</footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

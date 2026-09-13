@@ -1,0 +1,61 @@
+/* ============================================================
+   课搭 2.0 · 设计系统 tokens
+   概念：路径与抵达（Route & Arrival）
+   气质：温暖学术 × 精致编辑。纸、墨、朱砂。
+   ============================================================ */
+
+:root {
+  /* —— 纸与墨 —— */
+  --paper:        #F7F2E9;   /* 暖纸 · 页面底 */
+  --paper-2:      #F1EADD;   /* 深一档纸 · 分区底 */
+  --paper-3:      #E9E0CE;   /* 最深纸 · 卡片描边区 */
+  --card:         #FCFAF4;   /* 卡片浮纸 */
+  --ink:          #221C15;   /* 暖墨 · 主文字 */
+  --ink-2:        #4C4437;   /* 次级文字 */
+  --ink-3:        #8A7F6D;   /* 弱文字 · meta */
+  --hairline:     rgba(34, 28, 21, .16);
+  --hairline-2:   rgba(34, 28, 21, .09);
+
+  /* —— 朱砂（课搭品牌主色）—— */
+  --vermilion:      #C2431D;  /* 印泥朱砂 · 主动作 */
+  --vermilion-deep: #9E3413;  /* 沉朱 · hover */
+  --vermilion-bright:#E4571F; /* 亮朱 · 高亮数据 */
+  --vermilion-wash: #F6DFD2;  /* 朱淡 · 底纹 */
+  --seal-red:       #B23A20;  /* 印章专用 */
+
+  /* —— 辅助 —— */
+  --spruce:       #31543F;   /* 云杉绿 · 大学成长族 / 成功态 */
+  --spruce-wash:  #DFE8DC;
+  --gold:         #A97E2F;   /* 秋金 · 点缀（极少量） */
+  --indigo-night: #1D1A15;   /* 夜墨 · 深色分区 */
+
+  /* —— 路线语义色（闯关状态）—— */
+  --st-locked:    #B7AC9A;   /* 未解锁 · 灰纸 */
+  --st-active:    #E4571F;   /* 进行中 · 亮朱 */
+  --st-passed:    #31543F;   /* 已通过 · 云杉 */
+  --st-review:    #A97E2F;   /* 待验收 · 秋金 */
+
+  /* —— 字体 —— */
+  --f-display: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;   /* 大标题 · 宋 */
+  --f-body:    'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --f-latin:   'Fraunces', 'Noto Serif SC', serif;               /* 拉丁展示 · 数字/英文 */
+  --f-mono:    'IBM Plex Mono', 'SF Mono', monospace;            /* 编号 · meta */
+
+  /* —— 字号阶梯 —— */
+  --t-hero:   clamp(2.6rem, 5.4vw, 4.4rem);
+  --t-h1:     clamp(2rem,   3.6vw, 3rem);
+  --t-h2:     clamp(1.5rem, 2.4vw, 2.1rem);
+  --t-h3:     1.25rem;
+  --t-body:   1rem;
+  --t-small:  .875rem;
+  --t-meta:   .75rem;
+
+  /* —— 空间 —— */
+  --sp-section: clamp(4.5rem, 9vw, 8rem);
+  --radius:    14px;
+  --radius-s:  8px;
+
+  /* —— 阴影（纸的浮起，不是玻璃拟态）—— */
+  --shadow-card: 0 1px 2px rgba(34,28,21,.05), 0 10px 32px -18px rgba(34,28,21,.22);
+  --shadow-lift: 0 2px 4px rgba(34,28,21,.06), 0 22px 48px -20px rgba(34,28,21,.3);
+}
