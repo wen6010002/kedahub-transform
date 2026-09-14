@@ -21,29 +21,29 @@
     font-size: 13px; font-weight: 700; color: #0a7d59; margin: 0 auto 44px; width: fit-content; max-width: 100%; }
 
   /* 价格卡 */
-  .tiers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; align-items: start; margin-bottom: 50px; }
-  .tier { padding: 22px 20px; display: flex; flex-direction: column; height: 100%; position: relative; }
+  .tiers { display: grid; grid-template-columns: repeat(5, 1fr); gap: 13px; align-items: start; margin-bottom: 50px; }
+  .tier { padding: 20px 17px; display: flex; flex-direction: column; height: 100%; position: relative; }
   .tier.hot { border-color: var(--pri); border-width: 2.5px; box-shadow: 0 5px 0 rgba(255,107,74,.18); }
   .tier-tag { position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
     background: var(--pri); color: #fff; font-size: 10.5px; font-weight: 800; padding: 3px 12px; border-radius: 999px; white-space: nowrap; }
-  .tier h3 { font-size: 16px; font-weight: 800; letter-spacing: -.3px; }
-  .tier .tdesc { font-size: 12px; color: var(--ink-soft); margin-top: 4px; line-height: 1.6; min-height: 36px; }
-  .tier .price { margin: 16px 0 4px; display: flex; align-items: baseline; gap: 3px; }
-  .tier .price b { font-size: 32px; font-weight: 800; letter-spacing: -1.5px; }
-  .tier .price i { font-style: normal; font-size: 15px; font-weight: 800; }
-  .tier .price span { font-size: 12.5px; color: var(--ink-soft); font-weight: 600; margin-left: 3px; }
-  .tier .pnote { font-size: 11.5px; color: var(--mint); font-weight: 700; min-height: 18px; }
-  .tier ul { list-style: none; margin: 16px 0 0; padding: 0; flex: 1; }
-  .tier li { font-size: 12.5px; color: var(--ink-2); padding: 5px 0 5px 20px; position: relative; line-height: 1.6; }
-  .tier li::before { content: '✓'; position: absolute; left: 0; color: var(--pri); font-weight: 900; font-size: 12px; }
+  .tier h3 { font-size: 15.5px; font-weight: 800; letter-spacing: -.3px; }
+  .tier .tdesc { font-size: 11.5px; color: var(--ink-soft); margin-top: 4px; line-height: 1.6; min-height: 54px; }
+  .tier .price { margin: 14px 0 4px; display: flex; align-items: baseline; gap: 3px; flex-wrap: wrap; }
+  .tier .price b { font-size: 28px; font-weight: 800; letter-spacing: -1.2px; }
+  .tier .price i { font-style: normal; font-size: 14px; font-weight: 800; }
+  .tier .price span { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; margin-left: 2px; }
+  .tier .pnote { font-size: 11px; color: var(--mint); font-weight: 700; min-height: 32px; line-height: 1.5; }
+  .tier ul { list-style: none; margin: 14px 0 0; padding: 0; flex: 1; }
+  .tier li { font-size: 12px; color: var(--ink-2); padding: 5px 0 5px 18px; position: relative; line-height: 1.58; }
+  .tier li::before { content: '✓'; position: absolute; left: 0; color: var(--pri); font-weight: 900; font-size: 11.5px; }
   .tier li.dim { color: var(--ink-faint); }
   .tier li.dim::before { content: '—'; color: var(--ink-faint); }
   .tier li b { color: var(--ink); font-weight: 700; }
-  .tier .btn { margin-top: 18px; }
+  .tier .btn { margin-top: 16px; font-size: 12.5px; padding: 0 12px; }
 
   /* 对比表 */
   .cmp-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-xl); margin-bottom: 50px; }
-  table.cmp { width: 100%; border-collapse: collapse; min-width: 760px; font-size: 13px; }
+  table.cmp { width: 100%; border-collapse: collapse; min-width: 940px; font-size: 13px; }
   table.cmp th, table.cmp td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--line-2); }
   table.cmp thead th { background: var(--bg-soft); font-weight: 800; font-size: 12.5px; white-space: nowrap; }
   table.cmp tbody tr:last-child td { border-bottom: none; }
@@ -91,7 +91,7 @@
   .doors { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
   .door { padding: 22px; }
   .door .d-tag { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; padding: 3px 11px; border-radius: 999px; display: inline-block; }
-  .door.a .d-tag { background: var(--mint-50); color: #0a7d59; }
+  .door.a .d-tag { background: var(--bg-deep); color: var(--ink-2); }
   .door.b .d-tag { background: var(--pri-50); color: var(--pri-700); }
   .door h4 { font-size: 17px; font-weight: 800; margin-top: 11px; letter-spacing: -.3px; }
   .door .d-price { font-size: 13px; font-weight: 800; color: var(--ink-soft); margin-top: 3px; }
@@ -152,17 +152,17 @@
   <!-- ══════════ 主张 ══════════ -->
   <header class="pr-hero">
     <div class="kicker">Pricing · 验收与付费</div>
-    <h1>路线免费，走完也免费。<br />只有一件事收费：<em>让别人认可你走完了</em>。</h1>
+    <h1>学习和探索全免费。<br />收费只在一处：<em>验收关</em>。</h1>
     <p>
-      课搭不卖课、不卖资料、不卖"入门到精通"。你在这里能免费拿到一整条路线，
-      并且完整地走完它——我们不会在任何一关拦着你要钱。
-      <br /><br />
-      收费只出现在一个地方：<strong>验收关</strong>——当你做完了东西，想要一份<strong>不是自己发给自己的证明</strong>。
+      课搭不卖课、不卖资料、不卖"入门到精通"。整条路线的学习内容你随便走，
+      我们不会在半路上拦着你要钱。<br /><br />
+      收费只在<strong>验收关</strong>——那个决定"这个阶段算不算走完了"的地方。它卖两样东西：
+      <strong>"我做对了没有"（¥9）</strong>，和<strong>"有人认我了"（¥39）</strong>。
     </p>
   </header>
 
   <div class="pledge">
-    <span>✅ 免费用户能走完整条路线 · 每一道验收关都能拿到免费的 AI 结论</span>
+    <span>✅ 学习内容全程免费 · 每道验收关，免费用户每周送 1 次</span>
   </div>
 
   <!-- ══════════ 价格卡 ══════════ -->
@@ -176,11 +176,11 @@
       <ul>
         <li>全部资料库（136 份）</li>
         <li><b>计算机探索路线</b>全 8 站</li>
-        <li>一条专属路线，<b>可完整走完</b></li>
-        <li><b>每一道验收关的 AI 验收，无限次免费</b></li>
+        <li>一条专属路线，<b>学习内容全程可走</b></li>
+        <li><b>验收关每周 1 次免费额度</b></li>
         <li>打卡、进度、周窗口、休整券</li>
         <li>路线推进榜、社区浏览</li>
-        <li class="dim">真人学长署名验收</li>
+        <li class="dim">关里要交什么（解锁后可见）</li>
         <li class="dim">项目组 · 陪跑</li>
       </ul>
       <a class="btn btn-outline btn-block" href="02-explore.html">现在就开始</a>
@@ -188,20 +188,35 @@
 
     <div class="toon-card tier hot">
       <span class="tier-tag">最轻的一次尝试</span>
-      <h3>学长验收</h3>
-      <div class="tdesc">把"系统说我的 demo 跑通了"变成"真人看过，署名认可"</div>
-      <div class="price"><i>¥</i><b>39</b><span>/ 阶段</span></div>
-      <div class="pnote">不通过免费重提，不限次数</div>
+      <h3>AI 验收</h3>
+      <div class="tdesc">一道验收关的入场券，也是最快的一次"我到底做对没有"</div>
+      <div class="price"><i>¥</i><b>9</b><span>/ 关</span></div>
+      <div class="pnote">免费用户每周送 1 次 · 组内不限次</div>
       <ul>
-        <li>交一个<b>能跑起来的东西</b>（链接 / 仓库 / 录屏）</li>
-        <li>含免费层已有的 <b>AI 验收结论 + 截图证据</b></li>
+        <li>解锁这道关：看到<b>要交什么、按哪几条判</b></li>
+        <li>把你交的东西（链接 / 仓库 / 录屏）<b>真的打开点一遍</b></li>
+        <li>逐条 <b>✓/✗</b> + 每一步的<b>截图证据</b></li>
+        <li>明确告诉你卡在哪一步</li>
+        <li>3 分钟出结论，<b>改完免费重跑，不限次数</b></li>
+        <li class="dim">真人评语与署名</li>
+      </ul>
+      <a class="btn btn-primary btn-block" href="06-roadmap.html">去解锁一道关</a>
+    </div>
+
+    <div class="toon-card tier">
+      <h3>学长验收</h3>
+      <div class="tdesc">把"系统说跑通了"变成"真人看过，署名认可"</div>
+      <div class="price"><i>¥</i><b>39</b><span>/ 阶段</span></div>
+      <div class="pnote">含一次 AI 验收 · 不通过免费重提</div>
+      <ul>
+        <li>已有的 <b>AI 验收结论 + 截图证据</b></li>
         <li><b>真人助教 48 小时内给评语</b>，逐条说好在哪、差在哪</li>
         <li>通过 → 该阶段的<b>编号印记</b>（可查、可挂简历）</li>
         <li>通过 → 一份能力说明：你强在哪、下一步补哪</li>
         <li>不通过 → <b>免费重提，不限次数</b></li>
         <li class="dim">同伴互评与答辩</li>
       </ul>
-      <a class="btn btn-primary btn-block" href="06-roadmap.html">去我的路线申请</a>
+      <a class="btn btn-outline btn-block" href="06-roadmap.html">去我的路线申请</a>
     </div>
 
     <div class="toon-card tier">
@@ -210,12 +225,12 @@
       <div class="price"><i>¥</i><b>449</b><span>/ 期（1 个月）</span></div>
       <div class="pnote">🎉 首次 14 天免费 · 内测价 ¥199（仅前 3 期）</div>
       <ul>
-        <li>本期<b>全部学长验收</b>（通常 5–6 次，单买要 ¥195–234）</li>
+        <li><b>AI 验收不限次数</b>（单买 ¥9/次）</li>
+        <li>本期<b>全部学长验收</b>（通常 5–6 次，单买要 ¥234）</li>
         <li>每周一次学长答疑（直播 + 文字）</li>
         <li>组内进度星图：看见谁和你卡在同一关</li>
-        <li>同伴互评：被别人看过的东西才叫作品</li>
-        <li>月度<b>答辩节</b>：8 分钟讲你的项目</li>
-        <li><b>14 天免费体验</b>：不绑卡、不自动续费、到期不扣款</li>
+        <li>同伴互评 + 月度<b>答辩节</b></li>
+        <li><b>14 天免费体验</b>：不绑卡、不自动续费</li>
         <li>7 天无理由退款</li>
       </ul>
       <a class="btn btn-outline btn-block" href="09-cohort.html">看看本期项目组</a>
@@ -285,27 +300,40 @@
       </div>
     </div>
 
-    <div class="blog-sec-head"><h2>所以验收关上有两扇门</h2></div>
-    <div class="blog-sec-sub">并排开着，你挑。门就在这里，但没人拦着你走路。</div>
+    <div class="blog-sec-head"><h2>所以验收关上有两档</h2></div>
+    <div class="blog-sec-sub">第一档告诉你做对了没有，第二档告诉别人你做完了。中间差着一个人的时间。</div>
     <div class="doors">
       <div class="toon-card door a">
-        <span class="d-tag">门 A · 免费</span>
-        <h4>AI 验收</h4>
-        <div class="d-price">¥0 · 即时 · 不限次数</div>
+        <span class="d-tag">第一档</span>
+        <h4>AI 验收 · ¥9/次</h4>
+        <div class="d-price">3 分钟 · 免费用户每周送 1 次 · 组内不限次</div>
         <p>
           给你<strong>"做对了没有"</strong>这个事实：逐条 ✓/✗、截图证据、卡在哪一步。
-          它便宜、即时、可以一直判——所以它免费。
+          它快、便宜、可以一直跑——所以它值 9 块，不值 39。
         </p>
       </div>
       <div class="toon-card door b">
-        <span class="d-tag">门 B · ¥39</span>
-        <h4>学长验收</h4>
-        <div class="d-price">48 小时内 · 真人署名</div>
+        <span class="d-tag">第二档</span>
+        <h4>学长验收 · ¥39/阶段</h4>
+        <div class="d-price">48 小时内 · 真人署名 · 含一次 AI 验收</div>
         <p>
           给你<strong>"做得怎么样"</strong>这个判断：好在哪、差在哪、下一步补哪，
-          以及一枚可以拿给别人看的编号印记。
+          以及一枚可以拿给别人看的编号印记。<strong>只有这一档的结论能对外背书。</strong>
         </p>
       </div>
+    </div>
+
+    <div class="toon-card" style="padding:18px 20px;background:var(--bg-soft);margin-bottom:46px">
+      <div style="font-size:13.5px;font-weight:800;display:flex;align-items:center;gap:8px">🔒 关卡是锁着的，但你知道它考什么</div>
+      <p style="font-size:13px;color:var(--ink-2);margin-top:7px;line-height:1.8">
+        每道验收关进去之前，你能看到它<strong>验证哪几项能力</strong>（比如「结构化输出 · 错误处理 · 接口封装」）——
+        但<strong>具体要交什么、按哪几条判，解锁之后才显示</strong>。
+        <br /><br />
+        这么设计是因为：标准和任务一旦公开，它就会变成一份能被搜到答案的作业。而验收本来就该考"你有没有真的做出来"，
+        不是"你能不能照着标准凑出来"。
+        <br /><br />
+        <strong>但我们不会让你买盲盒。</strong>能力清单一律公开——你掏钱买的是一个自己认可的挑战，不是一次抽奖。
+      </p>
     </div>
   </section>
 
@@ -317,38 +345,39 @@
       <table class="cmp">
         <thead>
           <tr>
-            <th>你会得到</th><th>免费</th><th>学长验收 ¥39</th><th>项目组 ¥449</th><th>陪跑 ¥1299</th>
+            <th>你会得到</th><th>免费</th><th>AI 验收 ¥9</th><th>学长验收 ¥39</th><th>项目组 ¥449</th><th>陪跑 ¥1299</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="sect"><td colspan="5">走路线</td></tr>
-          <tr><td>完整资料库</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>探索路线（8 站）</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>专属定制路线</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>打卡 / 进度 / 周窗口</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>路线会不会中途被锁</td><td class="no">不会</td><td class="no">不会</td><td class="no">不会</td><td class="no">不会</td></tr>
+          <tr class="sect"><td colspan="6">走路线（全部免费）</td></tr>
+          <tr><td>完整资料库</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>探索路线（8 站）</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>专属定制路线（学习内容）</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>打卡 / 进度 / 周窗口</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>学习内容会不会被锁</td><td class="no">不会</td><td class="no">不会</td><td class="no">不会</td><td class="no">不会</td><td class="no">不会</td></tr>
 
-          <tr class="sect"><td colspan="5">验收关 · 做对了没有</td></tr>
-          <tr><td><b>AI 验收</b>（把你的 demo 打开点一遍）</td><td class="em">✓ 无限次</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>逐条 ✓/✗ + 截图证据 + 卡在哪</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>AI 结论能不能对外背书</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td></tr>
+          <tr class="sect"><td colspan="6">验收关 · 做对了没有</td></tr>
+          <tr><td>进验收关的额度</td><td class="em">每周 1 次免费</td><td class="em">按次 ¥9</td><td class="em">按次 ¥9</td><td class="em">不限次</td><td class="em">不限次</td></tr>
+          <tr><td>解锁关卡：看到要交什么、按哪几条判</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>逐条 ✓/✗ + 每一步截图证据</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>AI 结论能不能对外背书</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td></tr>
 
-          <tr class="sect"><td colspan="5">验收关 · 有没有人认</td></tr>
-          <tr><td><b>真人学长署名验收</b></td><td class="no">—</td><td class="em">48 小时内</td><td class="em">优先 24 小时</td><td class="em">随时</td></tr>
-          <tr><td>编号印记 / 能力说明</td><td class="no">—</td><td class="yes">✓ 单枚</td><td class="yes">✓ 全套</td><td class="yes">✓ 全套</td></tr>
-          <tr><td>同伴互评</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>答辩节</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr class="sect"><td colspan="6">验收关 · 有没有人认</td></tr>
+          <tr><td><b>真人学长署名验收</b></td><td class="no">—</td><td class="no">—</td><td class="em">48 小时内</td><td class="em">优先 24 小时</td><td class="em">随时</td></tr>
+          <tr><td>编号印记 / 能力说明</td><td class="no">—</td><td class="no">—</td><td class="yes">✓ 单枚</td><td class="yes">✓ 全套</td><td class="yes">✓ 全套</td></tr>
+          <tr><td>同伴互评</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>答辩节</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
 
-          <tr class="sect"><td colspan="5">有人陪着</td></tr>
-          <tr><td>学长答疑</td><td class="no">—</td><td class="no">—</td><td class="em">每周 1 次</td><td class="em">每周 1v1</td></tr>
-          <tr><td>组内进度星图</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>简历 / 面试辅导</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+          <tr class="sect"><td colspan="6">有人陪着</td></tr>
+          <tr><td>学长答疑</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="em">每周 1 次</td><td class="em">每周 1v1</td></tr>
+          <tr><td>组内进度星图</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>简历 / 面试辅导</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
 
-          <tr class="sect"><td colspan="5">兜底</td></tr>
-          <tr><td>免费试用</td><td class="no">本来免费</td><td class="no">不用试</td><td class="em">首次 14 天</td><td class="no">不参与</td></tr>
-          <tr><td>试用要不要绑卡</td><td class="no">—</td><td class="no">—</td><td class="yes">不用，到期不扣款</td><td class="no">—</td></tr>
-          <tr><td>不通过怎么办</td><td class="yes">改完再跑一遍</td><td class="yes">免费重提</td><td class="yes">免费重提</td><td class="yes">免费重提</td></tr>
-          <tr><td>退款</td><td class="no">—</td><td class="yes">未评审可退</td><td class="yes">7 天无理由</td><td class="yes">7 天无理由</td></tr>
+          <tr class="sect"><td colspan="6">兜底</td></tr>
+          <tr><td>免费额度</td><td class="no">本来免费</td><td class="yes">每周 1 次</td><td class="no">不用试</td><td class="em">首次 14 天</td><td class="no">不参与</td></tr>
+          <tr><td>试用要不要绑卡</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">不用，到期不扣款</td><td class="no">—</td></tr>
+          <tr><td>不通过怎么办</td><td class="yes">改完再跑</td><td class="yes">改完再跑</td><td class="yes">免费重提</td><td class="yes">免费重提</td><td class="yes">免费重提</td></tr>
+          <tr><td>退款</td><td class="no">—</td><td class="yes">未用可退</td><td class="yes">未评审可退</td><td class="yes">7 天无理由</td><td class="yes">7 天无理由</td></tr>
         </tbody>
       </table>
     </div>
@@ -392,11 +421,13 @@
     <div class="blog-sec-sub">把我们想清楚的四件事摊开讲</div>
     <div class="logic">
       <div class="toon-card logic-c">
-        <b>① 为什么路线不收费，验收收费</b>
+        <b>① 为什么学习不收费，通过才收费</b>
         <p>
-          路线是"信息"，信息在今天是免费的——你花点时间总能找到替代品，收费只会逼走用户。
-          验收是"人的时间"：学长要真的打开你的代码看半小时，这件事有成本，也正因此才有价值。
-          <strong>为一个有成本的东西收费，用户是服的。</strong>
+          学习内容是"信息"，信息在今天是免费的——你花点时间总能找到替代品，收费只会逼走用户。
+          <br /><br />
+          而"通过"是两件事：一个是<strong>事实</strong>（跑不跑得起来），一个是<strong>判断</strong>（做得好不好）。
+          事实机器几秒钟就能查清，所以只值 ¥9；判断要一个人的半小时，而且只有真人的判断才有人认，所以值 ¥39。
+          <strong>价格和它给的东西对得上，用户才服。</strong>
         </p>
       </div>
       <div class="toon-card logic-c">
@@ -408,11 +439,15 @@
         </p>
       </div>
       <div class="toon-card logic-c">
-        <b>③ 为什么 AI 验收要免费</b>
+        <b>③ 为什么 AI 验收是 ¥9，既不免费也不 ¥39</b>
         <p>
-          因为它免费才有用。学生做完一个东西，最需要反馈的就是当下那十分钟。这里要收钱，他会跳过——然后带着一个自己都没底的产出，
-          一路错到阶段结束，返工的是三周的量。
-          <strong>免费 AI 验收真正做的，是把返工从三周缩短到十分钟。</strong>省下的时间最后都会变成付费转化。
+          <strong>不卖 ¥39，是因为不值。</strong>它的成本是四毛钱，判的是"跑不跑得起来"这种机器几秒钟能查清的事实。
+          为一个近乎零成本的事实收 39 块，用户想明白的那天，信任就没了。
+          <br /><br />
+          <strong>不能全免费，是因为免费的东西没人珍惜。</strong>随手可得的清单，扫一眼就扔了。
+          收 9 块钱，他会认真读完每一条 ✓/✗——这 9 块买的不是结论，是"我会认真对待它"。
+          <br /><br />
+          <strong>但每周必须送一次。</strong>一个从没体验过 AI 验收的人，不会去买学长验收——他不知道那东西长什么样。
         </p>
       </div>
       <div class="toon-card logic-c">
@@ -452,8 +487,10 @@
       <div class="legal-i"><span>✕</span><span><strong>不提供任何形式的贷款、分期、预付费包。</strong>不诱导超前消费，不卖年卡。</span></div>
       <div class="legal-i"><span>✕</span><span><strong>不做大额预收费。</strong>单笔最高 ¥1,299，且按月结算，随时可停。</span></div>
       <div class="legal-i"><span>✕</span><span><strong>AI 验收的结论不构成凭证。</strong>它是一份自查工具，页面上会写明"AI 结论不对外背书"。只有学长验收后签发的编号印记，才是课搭的凭证。</span></div>
+      <div class="legal-i"><span>✕</span><span><strong>验收关不是盲盒。</strong>能力清单一律公开，只有具体任务和评分细则在解锁后显示。用户花的钱要买的是一个自己认可的挑战，不是一次抽奖。</span></div>
+      <div class="legal-i"><span>✕</span><span><strong>每周免费额度不累积、不折现、不作废收费。</strong>当周不用，下周照常发一次。</span></div>
       <div class="legal-i"><span>✕</span><span><strong>不做"到期静默转付费"。</strong>免费试用不绑卡、不自动续费、到期不扣款。一个校园邮箱只能试用一次。</span></div>
-      <div class="legal-i"><span>✓</span><span><strong>验收不通过可以无限次重提</strong>，不再收费——AI 验收和学长验收都是。</span></div>
+      <div class="legal-i"><span>✓</span><span><strong>一道关解锁之后，改完免费重跑，不限次数</strong>；学长验收不通过也免费重提。</span></div>
       <div class="legal-i"><span>✓</span><span><strong>7 天无理由退款</strong>（项目组与陪跑），已完成的单次验收除外。</span></div>
       <div class="legal-i"><span>✓</span><span><strong>价格公开透明</strong>，所有费用在本页写清，不存在任何隐藏收费。</span></div>
       <div class="legal-i"><span>✓</span><span><strong>所有带组学长实名可查</strong>，包含学校、专业、当前去向，可在组页查看。</span></div>
@@ -473,6 +510,9 @@
           <br /><br />
           交回来的是一份<strong>逐条的 ✓/✗ + 截图证据 + 卡在哪一步</strong>，不是一句"通过/不通过"。
           它判的是<strong>事实</strong>——做出来了没有、跑不跑得起来；它<strong>不判</strong>做得好不好、代码漂不漂亮，那是学长的事。
+          <br /><br />
+          价格：<strong>解锁一道关 ¥9</strong>，免费用户每周送 1 次。<strong>这道关解锁之后，改完可以免费重跑，不限次数</strong>——
+          收的是"进这道门"的钱，不是"每跑一次"的钱。
         </div>
       </div>
       <div class="fq">
@@ -494,12 +534,25 @@
         </div>
       </div>
       <div class="fq">
+        <div class="fq-q">关卡锁着，我付了钱发现不合适怎么办？<span class="ar">›</span></div>
+        <div class="fq-a">
+          <strong>能力清单是公开的，不是盲盒。</strong>解锁之前你就能看到这道关验证哪几项能力
+          （比如「结构化输出 · 错误处理 · 接口封装」）——只是具体要交什么、按哪几条判，解锁后才显示。
+          <br /><br />
+          这么设计是因为：标准和任务一旦公开，它就会变成一份能被搜到答案的作业。而验收本来就该考"你有没有真的做出来"，
+          不是"你能不能照着标准凑出来"。
+          <br /><br />
+          花的钱买的是一个你认可的挑战，不是一次抽奖——这条是底线，越线就变成盲盒生意了。
+        </div>
+      </div>
+      <div class="fq">
         <div class="fq-q">免费用户能走完整条路线吗？验收关会不会被拦？<span class="ar">›</span></div>
         <div class="fq-a">
-          <strong>能，而且不会被拦。</strong>这是我们最在意的一条。
+          <strong>学习内容全程免费，不会在半路被拦。</strong>24 关的学习内容、全部资料、整条路线都看得到，随便走。
           <br /><br />
-          免费用户可以走完 24 关中的每一关、拿到全部资料、看到完整路线，
-          并且<strong>在每一道验收关都能提交、都拿得到 AI 验收结论</strong>——这一层无限次免费。
+          验收关是独立关卡，不在学习路径上：你不解锁它，照样能往下学，只是那道门一直亮着"未通过"。
+          <strong>免费用户每周还有 1 次免费的 AI 验收额度</strong>，够你试一次。
+          <br /><br />
           你唯一缺的，是"有一个真人署名认了你走完了"。
         </div>
       </div>

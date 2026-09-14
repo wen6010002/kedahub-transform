@@ -80,14 +80,37 @@
 
   .lv-cta { margin: 4px 0 8px 38px; }
 
-  /* ── 调整批注（让个性化看得见） ── */
-  .adjust { display: flex; gap: 9px; align-items: flex-start; margin: 8px 0 10px 38px;
-    background: var(--pri-50); border: 1px dashed #ffd0c0; border-radius: var(--r-lg); padding: 9px 12px; }
-  .adjust .ai { font-size: 14px; flex: none; }
-  .adjust b { font-size: 12px; font-weight: 800; color: var(--pri-700); }
-  .adjust span { font-size: 12px; color: var(--ink-2); display: block; margin-top: 1px; line-height: 1.55; }
-  .adjust .undo { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--ink-soft); flex: none;
-    border-bottom: 1px dashed var(--ink-faint); }
+  /* ── 路线说明（讲这条路是按什么排的，不讲改了什么） ── */
+  .rnote { display: flex; gap: 9px; align-items: flex-start; margin: 8px 0 10px 38px;
+    background: var(--bg-soft); border-radius: var(--r-lg); padding: 9px 12px; }
+  .rnote .ai { font-size: 14px; flex: none; }
+  .rnote b { font-size: 12px; font-weight: 800; color: var(--ink); }
+  .rnote span { font-size: 12px; color: var(--ink-2); display: block; margin-top: 1px; line-height: 1.55; }
+
+  /* ── 阶段验收关：独立关卡，钥匙在外面 ── */
+  .gate { margin: 12px 0 4px 38px; border: 2px dashed #ffd0c0; border-radius: var(--r-toon);
+    background: linear-gradient(135deg, #fff, var(--pri-50)); padding: 14px 15px;
+    display: flex; gap: 12px; align-items: flex-start; }
+  .gate-ico { font-size: 20px; flex: none; line-height: 1.35; }
+  .gate-body { min-width: 0; flex: 1; }
+  .gate-body > b { font-size: 13px; font-weight: 800; display: block; letter-spacing: -.2px; }
+  .gate-cap { font-size: 11.5px; color: var(--ink-2); display: block; margin-top: 5px; line-height: 1.6; }
+  .gate-cap i { font-style: normal; font-weight: 800; color: var(--pri-700); }
+  .gate-hidden { position: relative; margin-top: 9px; border-radius: 8px; overflow: hidden;
+    background: #fff; border: 1px solid var(--line); padding: 10px 12px; min-height: 52px; }
+  .gate-hidden .gh-txt { font-size: 11.5px; color: var(--ink-2); line-height: 1.7;
+    filter: blur(4.5px); user-select: none; display: block; }
+  .gate-hidden .gh-lock { position: absolute; inset: 0; display: grid; place-items: center; text-align: center;
+    font-size: 11.5px; font-weight: 800; color: var(--pri-700); letter-spacing: .02em;
+    background: rgba(255, 255, 255, .55); backdrop-filter: blur(1.5px); }
+  .gate > .btn { flex: none; align-self: center; }
+  .gate.done { border-style: solid; border-color: #c9f0e0; background: linear-gradient(135deg, #fff, var(--mint-50)); }
+  .gate.done .gate-cap i { color: #0a7d59; }
+  @media (max-width: 720px) {
+    .rnote, .gate { margin-left: 0; }
+    .gate { flex-wrap: wrap; }
+    .gate > .btn { width: 100%; }
+  }
 
   /* ── 侧栏 ── */
   .pp-grid { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -172,10 +195,18 @@
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">装好你的开发环境</span><span class="lv-sub">Python、VS Code、终端基本操作</span></span><span class="lv-right">2026-08-28</span></div>
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">写第一个能跑的 Python 程序</span><span class="lv-sub">变量、循环、函数，够用就行</span></span><span class="lv-right">2026-09-02</span></div>
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">让程序读一个文件</span><span class="lv-sub">把 csv 里的成绩算个平均分</span></span><span class="lv-right">2026-09-05</span></div>
-            <div class="adjust">
-              <span class="ai">✂️</span>
-              <span><b>已为你跳过 2 关</b><span>你在问卷里说「写过小项目」，所以跳过了「变量与类型」「列表与字典」两关。</span></span>
-              <a class="undo" href="#">恢复</a>
+            <div class="rnote">
+              <span class="ai">🎯</span>
+              <span><b>这一段从「把作业改造成作品」起步</b><span>你手上已经有能跑的东西了，所以这里不带你重做一遍，直接教你怎么把它讲成一个面试能用的故事。</span></span>
+            </div>
+
+            <div class="gate done">
+              <span class="gate-ico">🔖</span>
+              <div class="gate-body">
+                <b>阶段验收关 · 已通过</b>
+                <span class="gate-cap">第 <i>01</i> 枚印记 · 学长署名 · 2026-08-30</span>
+              </div>
+              <a class="btn btn-outline btn-sm" href="10-pricing.html">看这一枚</a>
             </div>
           </div>
         </div>
@@ -195,6 +226,15 @@
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">读懂 JSON</span><span class="lv-sub">从一坨返回里挑出你要的字段</span></span><span class="lv-right">2026-09-10</span></div>
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">把数据存下来</span><span class="lv-sub">写进本地文件，下次直接用</span></span><span class="lv-right">2026-09-11</span></div>
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">处理请求失败</span><span class="lv-sub">超时、报错、重试 —— 让程序不那么脆</span></span><span class="lv-right">2026-09-12</span></div>
+
+            <div class="gate done">
+              <span class="gate-ico">🔖</span>
+              <div class="gate-body">
+                <b>阶段验收关 · 已通过</b>
+                <span class="gate-cap">第 <i>02</i> 枚印记 · 学长署名 · 2026-09-13</span>
+              </div>
+              <a class="btn btn-outline btn-sm" href="10-pricing.html">看这一枚</a>
+            </div>
           </div>
         </div>
       </div>
@@ -214,10 +254,9 @@
           <div class="stg-body">
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">大模型到底在做什么</span><span class="lv-sub">不用数学，用直觉理解「预测下一个词」</span></span><span class="lv-right">已完成</span></div>
 
-            <div class="adjust">
-              <span class="ai">➕</span>
-              <span><b>已为你插入 1 个强化关</b><span>你没有结构化输出的经验，直接做第 3 关会卡住。这里加了一关过渡。</span></span>
-              <a class="undo" href="#">跳过也行</a>
+            <div class="rnote">
+              <span class="ai">🧱</span>
+              <span><b>这一关前面垫了一步</b><span>结构化输出是后面所有关卡的地基——走相似路线的人，有一半是在这里卡住的。</span></span>
             </div>
 
             <div class="lv" id="lv-now" data-lv>
@@ -257,6 +296,20 @@
             <div class="tasks" data-tasks>
               <div class="task"><span class="tk-box">✓</span><span class="tk-txt">算一次调用花多少钱，估算你自己的小工具月成本</span></div>
               <div class="task"><span class="tk-box">✓</span><span class="tk-txt">用缓存把重复请求省掉一半</span></div>
+            </div>
+
+            <!-- 阶段验收关：独立关卡。能力清单可见，具体要交什么锁着 -->
+            <div class="gate">
+              <span class="gate-ico">🔒</span>
+              <div class="gate-body">
+                <b>阶段验收关 · 独立关卡</b>
+                <span class="gate-cap">这道关验证：<i>结构化输出</i> · <i>错误处理</i> · <i>接口封装</i></span>
+                <div class="gate-hidden">
+                  <span class="gh-txt">要交的东西：一个能跑起来的脚本，读入你上一关存的课程资料，输出一份结构化的知识点清单。要求连续跑 3 次结果一致，模型返回坏数据时不能崩。</span>
+                  <span class="gh-lock">🔒 解锁后可见：这次要交什么、按哪几条判</span>
+                </div>
+              </div>
+              <a class="btn btn-primary btn-sm" href="10-pricing.html">解锁这道关</a>
             </div>
           </div>
         </div>
@@ -368,15 +421,15 @@
       </div>
 
       <div class="side-box" style="background:var(--pri-50);border-color:#ffd9cd">
-        <h3>✂️ 这份路线为你改了什么</h3>
-        <div class="sb-sub" style="color:var(--pri-700)">基于你填的 6 个问题 + 探索路线手感</div>
+        <h3>🧭 这条路是按什么排的</h3>
+        <div class="sb-sub" style="color:var(--pri-700)">一个人一条路线 · 这是你的那一版</div>
         <div style="font-size:12.5px;color:var(--ink-2);line-height:1.9">
-          ✂️ 跳过 2 关（你已会）<br />
-          ➕ 插入 1 关（补你的薄弱处）<br />
-          ⏱️ 按每周 6–10 小时重排了节奏<br />
-          🎯 把「课程问答机器人」设成你的主项目
+          ⏱️ 按你每周 6–10 小时排的节奏<br />
+          🎯 主项目：「课程问答机器人」<br />
+          🧱 第 3 关前面垫了一步，那里最容易卡<br />
+          📅 约 6 个月走完，赶得上暑期实习
         </div>
-        <a class="btn btn-outline btn-block btn-sm" style="margin-top:12px;background:#fff" href="04-survey.html">重新定制一次 →</a>
+        <a class="btn btn-outline btn-block btn-sm" style="margin-top:12px;background:#fff" href="04-survey.html">情况变了？重新排一次 →</a>
       </div>
 
       <div class="side-box">
@@ -390,7 +443,7 @@
 
       <div class="cert">
         <b>🔖 阶段验收关</b>
-        <p>当前阶段走完后，交一个能跑起来的东西——AI 会真的打开点一遍，免费、不限次数；想要真人署名，再申请学长验收。</p>
+        <p>一道独立的关卡，通过才算走完这个阶段。进去之前看得到它考哪几项能力，看不到要交什么——AI 会把你交的东西真的打开点一遍（¥9/次，每周送 1 次）；想要真人署名，再走学长验收。</p>
         <a class="btn btn-primary btn-sm btn-block" style="margin-top:11px" href="10-pricing.html">了解验收 →</a>
       </div>
 

@@ -16,15 +16,16 @@
   .sv-kicker { font-size: 11.5px; font-weight: 800; letter-spacing: 0.22em; color: var(--pri-600); text-transform: uppercase; margin-bottom: 9px; }
   .sv-head h1 { font-size: 30px; font-weight: 800; letter-spacing: -1px; line-height: 1.24; }
   .sv-head h1 em { font-style: normal; color: var(--pri); }
-  .sv-head p { font-size: 14px; color: var(--ink-2); margin-top: 10px; max-width: 780px; line-height: 1.78; }
+  .sv-head p { font-size: 14px; color: var(--ink-2); margin-top: 10px; max-width: 800px; line-height: 1.78; }
 
   /* 顶部进度 */
   .sv-prog { max-width: 1280px; margin: 0 auto 24px; }
   .sv-track { height: 6px; border-radius: 999px; background: var(--bg-deep); overflow: hidden; }
   .sv-track i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--pri), var(--pri-600)); transition: width 0.42s var(--ease-pop); }
-  .sv-pmeta { display: flex; align-items: center; gap: 9px; margin-top: 10px; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; }
+  .sv-pmeta { display: flex; align-items: center; gap: 9px; margin-top: 10px; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; flex-wrap: wrap; }
   .sv-pmeta b { color: var(--ink); font-weight: 800; font-size: 14.5px; letter-spacing: -0.3px; }
   .sv-pmeta .sp { margin-left: auto; }
+  .sv-pmeta .sv-stepname { color: var(--pri-700); font-weight: 800; }
 
   /* 两栏 */
   .sv-layout { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 258px; gap: 30px; align-items: start; }
@@ -40,7 +41,7 @@
 
   .q-no { font-size: 11.5px; font-weight: 800; letter-spacing: 0.14em; color: var(--pri-600); margin-bottom: 9px; }
   .q-title { font-size: 25px; font-weight: 800; letter-spacing: -0.7px; line-height: 1.32; }
-  .q-sub { font-size: 13.5px; color: var(--ink-2); margin-top: 9px; line-height: 1.78; max-width: 800px; }
+  .q-sub { font-size: 13.5px; color: var(--ink-2); margin-top: 9px; line-height: 1.78; max-width: 820px; }
   .q-sub b { color: var(--ink); }
 
   /* ── 选项 ── */
@@ -81,6 +82,18 @@
   .opts.dir .opt { flex-direction: column; gap: 9px; padding: 16px 16px 18px; }
   .opts.dir .oi { font-size: 28px; }
   .opts.dir .opt b { font-size: 14.5px; padding-right: 22px; }
+
+  /* 多选：紧凑标签式 */
+  .opts.chips { grid-template-columns: repeat(4, 1fr); gap: 9px; }
+  .opts.chips .opt { padding: 12px 13px; align-items: center; gap: 9px; }
+  .opts.chips .oi { font-size: 18px; }
+  .opts.chips .opt b { font-size: 13px; letter-spacing: -0.1px; }
+  .opts.chips .ck { width: 17px; height: 17px; right: 9px; top: 9px; font-size: 9px; }
+  .multi-hint {
+    display: flex; align-items: center; gap: 7px; margin-top: 14px;
+    font-size: 12.5px; font-weight: 700; color: var(--pri-700);
+  }
+  .opts.chips .opt.on b { padding-right: 18px; }
 
   /* ── 手感图谱 / 提示卡 ── */
   .taste-card { margin-top: 20px; padding: 18px 20px 20px; }
@@ -190,17 +203,20 @@
   .sv-count { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
   .sv-count b { color: var(--ink); font-size: 14px; }
   .btn[disabled] { opacity: 0.42; pointer-events: none; box-shadow: none; }
+  #btnSkip { font-weight: 700; }
+  #btnSkip[hidden] { display: none; }
 
   @media (max-width: 1080px) {
     .sv-layout { grid-template-columns: 1fr; }
     .sv-rail { position: static; }
     .opts.c2 { grid-template-columns: 1fr; }
     .opts.dir { grid-template-columns: repeat(2, 1fr); }
+    .opts.chips { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 720px) {
     .sv-head h1 { font-size: 23px; }
     .q-title { font-size: 21px; }
-    .opts.dir { grid-template-columns: 1fr; }
+    .opts.dir, .opts.chips { grid-template-columns: 1fr; }
     .sv-bar-in { padding-left: 16px; padding-right: 16px; }
     .sv-hint { display: none; }
   }
@@ -237,27 +253,30 @@
   <!-- ══════════ 页头 ══════════ -->
   <header class="sv-head">
     <div class="sv-kicker">Custom Route · 定制专属路线</div>
-    <h1>回答 6 个问题，<em>换一条只属于你的路线</em></h1>
+    <h1>回答 16 个问题，<em>换一条只属于你的路线</em></h1>
     <p>
-      这不是问卷，是排课。每一次选择都会真的改动路线里的关卡——基础好的直接跳过热身关，
-      时间少的自动把阶段拆细，走完探索路线的会拿手感数据预填方向。全部答完约 3 分钟。
+      问得比一般问卷细，是因为<b>排课得先摸清底</b>。你每答一题，路线就少猜一分——
+      起点从哪关算、每周排多少、主项目做什么、阶段验收考什么，全由这些答案决定。
+      分 5 步，全部答完约 4 分钟，中途可以退出，答案会留着。
     </p>
   </header>
 
   <!-- ══════════ 顶部进度 ══════════ -->
   <div class="sv-prog">
-    <div class="sv-track"><i id="progFill" style="width:16.6%"></i></div>
+    <div class="sv-track"><i id="progFill" style="width:6.25%"></i></div>
     <div class="sv-pmeta">
-      <b id="progNow">第 1 题</b><span>／ 共 6 题</span>
-      <span class="sp">大约还要 3 分钟</span>
+      <b id="progNow">第 1 题</b><span>／ 共 16 题</span>
+      <span class="sv-stepname" id="progStep">· 先认识你</span>
+      <span class="sp" id="progEta">大约还要 4 分钟</span>
     </div>
   </div>
 
   <div class="sv-layout">
     <div class="sv-stage">
 
-      <!-- ─────────── Q1 年级 ─────────── -->
-      <section class="q on" data-q="0" data-key="grade">
+      <!-- ═══════════ 第 1 步 · 先认识你 ═══════════ -->
+
+      <section class="q on" data-q="0" data-step="0" data-key="grade">
         <div class="q-no">Q1 · 年级</div>
         <h2 class="q-title">你现在大几？</h2>
         <p class="q-sub">同样是「想学后端」，大一和大四的排法完全不同：大一有时间打地基，大四只能直奔能写进简历的东西。<b>这一步决定路线铺几个学期。</b></p>
@@ -269,14 +288,39 @@
         </div>
       </section>
 
-      <!-- ─────────── Q2 探索路线 ─────────── -->
-      <section class="q" data-q="1" data-key="explored">
-        <div class="q-no">Q2 · 探索情况</div>
+      <section class="q" data-q="1" data-step="0" data-key="major">
+        <div class="q-no">Q2 · 专业</div>
+        <h2 class="q-title">你的专业是哪一类？</h2>
+        <p class="q-sub">不是查户口。专业决定<b>哪些东西你已经在课上见过了</b>——计算机类的同学可以跳过不少基础，跨专业的同学需要先把几个概念补上，不然第一关就会卡。</p>
+        <div class="opts c2" data-key="major">
+          <button class="opt" data-v="计算机类"><span class="oi">💻</span><span class="ob"><b>计算机 / 软件 / 人工智能</b><span class="sub">课上的东西可以直接算进基础，路线会往前挪，省掉重复的部分。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="理工科非计算机"><span class="oi">📐</span><span class="ob"><b>理工科，但不是计算机</b><span class="sub">数学和逻辑通常够用，缺的是工程那套习惯。会补一段环境与工具的铺垫。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="文科商科"><span class="oi">📚</span><span class="ob"><b>文科 / 商科 / 管理</b><span class="sub">完全从零开始也不怕。前两关会把每个名词都拆开讲，不默认你懂任何术语。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="其他"><span class="oi">🧭</span><span class="ob"><b>其他 / 还没定专业</b><span class="sub">按零基础排，等你走完前两关再根据实际情况重排。</span></span><span class="ck">✓</span></button>
+        </div>
+      </section>
+
+      <section class="q" data-q="2" data-step="0" data-key="prior">
+        <div class="q-no">Q3 · 你碰过多少代码</div>
+        <h2 class="q-title">到现在为止，你写过代码吗？</h2>
+        <p class="q-sub">问的是<b>真实动手的量</b>，不是"学过"。跟着视频敲过一遍和没碰过，排法差很多。</p>
+        <div class="opts c2" data-key="prior">
+          <button class="opt" data-v="完全没写过"><span class="oi">🐣</span><span class="ob"><b>一行都没写过</b><span class="sub">从"终端是什么"开始，第一关不写代码，只让你把电脑用明白。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="照着敲过"><span class="oi">📗</span><span class="ob"><b>跟着教程敲过，但自己写不出来</b><span class="sub">这是最常见的状态。路线会先安排"脱离教程做一个小东西"，把这个坎迈过去。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="课程作业量"><span class="oi">📝</span><span class="ob"><b>写过大作业，能自己调通</b><span class="sub">基础够用，直接把重心放到"做出能给人看的东西"上。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="做过完整项目"><span class="oi">🧩</span><span class="ob"><b>独立做过能跑起来的项目</b><span class="sub">起点会明显前置，主项目直接上难度，并加一次把项目讲成面试故事的复盘。</span></span><span class="ck">✓</span></button>
+        </div>
+      </section>
+
+      <!-- ═══════════ 第 2 步 · 你手上已经有什么 ═══════════ -->
+
+      <section class="q" data-q="3" data-step="1" data-key="explored">
+        <div class="q-no">Q4 · 探索情况</div>
         <h2 class="q-title">你走完探索路线了吗？</h2>
         <p class="q-sub">探索路线的 8 站会留下手感数据。走过的话，我们就不用猜你喜欢什么了——<b>直接按你在哪一站坐得住来排。</b></p>
         <div class="opts c2" data-key="explored">
           <button class="opt" data-v="走完了"><span class="oi">🧭</span><span class="ob"><b>走完了</b><span class="sub">8 站的手感数据可以直接用。选这个，下面会按你的手感预填方向。</span></span><span class="ck">✓</span></button>
-          <button class="opt" data-v="没有"><span class="oi">⏳</span><span class="ob"><b>还没有</b><span class="sub">没关系，先按直觉选。之后补走探索路线，路线会自动重排。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="没走完"><span class="oi">⏳</span><span class="ob"><b>还没有</b><span class="sub">没关系，先按直觉选。之后补走探索路线，路线会自动重排。</span></span><span class="ck">✓</span></button>
         </div>
 
         <!-- 走完了 → 手感图谱 -->
@@ -291,7 +335,7 @@
           </div>
           <div class="tc-note">
             你在「AI」和「前端」上眼睛最亮，在「服务器」上明显坐不住（得分 34，8 站最低）。<br />
-            <b>已根据你的手感预填方向倾向：AI 应用 —— 下面第 3 题可以改。</b>
+            <b>已根据你的手感预填方向倾向：AI 应用 —— 下面第 11 题可以改。</b>
           </div>
         </div>
 
@@ -309,9 +353,112 @@
         </div>
       </section>
 
-      <!-- ─────────── Q3 方向 ─────────── -->
-      <section class="q" data-q="2" data-key="dir">
-        <div class="q-no">Q3 · 方向</div>
+      <section class="q" data-q="4" data-step="1" data-key="stack">
+        <div class="q-no">Q5 · 已经会的东西</div>
+        <h2 class="q-title">下面这些，你哪些真的用过？</h2>
+        <p class="q-sub">多选，<b>用过才勾</b>。"听说过"先不算——勾多了路线会把你放到跟不上的位置，勾少了只是多花几个小时。<b>一个都没有的话，直接选最后一个。</b></p>
+        <div class="opts chips" data-key="stack" data-multi="1">
+          <button class="opt" data-v="C/C++"><span class="oi">🔧</span><span class="ob"><b>C / C++</b></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="Java"><span class="oi">☕</span><span class="ob"><b>Java</b></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="Python"><span class="oi">🐍</span><span class="ob"><b>Python</b></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="JavaScript"><span class="oi">🟨</span><span class="ob"><b>JavaScript</b></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="HTML/CSS"><span class="oi">🎨</span><span class="ob"><b>HTML / CSS</b></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="SQL"><span class="oi">🗄️</span><span class="ob"><b>SQL / 数据库</b></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="Git"><span class="oi">🌿</span><span class="ob"><b>Git / GitHub</b></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="都没用过"><span class="oi">🌱</span><span class="ob"><b>都没用过</b></span><span class="ck">✓</span></button>
+        </div>
+        <div class="multi-hint" id="stackHint">☝️ 可多选，选完点右下角继续</div>
+      </section>
+
+      <section class="q" data-q="5" data-step="1" data-key="artifact">
+        <div class="q-no">Q6 · 你的作品</div>
+        <h2 class="q-title">有没有什么东西，是你能发给别人的？</h2>
+        <p class="q-sub">不是问你会多少，是问<b>你手上有没有实物</b>。这条直接决定路线从哪儿开始——有作品的人和没作品的人，排法差整整一个阶段。</p>
+        <div class="opts c2" data-key="artifact">
+          <button class="opt" data-v="没有"><span class="oi">🫙</span><span class="ob"><b>没有，什么都没有</b><span class="sub">从"做出第一个能发给室友的东西"开始排，这一关通常在一个晚上内完成。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="课程作业"><span class="oi">📄</span><span class="ob"><b>有课程作业，但拿不出手</b><span class="sub">会教你把这些作业改造成能讲的东西，不用从零重做。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="自己折腾的"><span class="oi">🧪</span><span class="ob"><b>自己折腾过一些小玩意</b><span class="sub">选一个改造成主线项目，比另起一个新项目快得多。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="能给别人用"><span class="oi">🚀</span><span class="ob"><b>有，而且真的有人在用</b><span class="sub">起点前置，重点放在"怎么把它讲成面试答案"和补上工程规范。</span></span><span class="ck">✓</span></button>
+        </div>
+      </section>
+
+      <section class="q" data-q="6" data-step="1" data-key="rig" data-optional="1">
+        <div class="q-no">Q7 · 设备条件</div>
+        <h2 class="q-title">你的电脑能装东西吗？</h2>
+        <p class="q-sub">这题影响后面「服务器」「AI」那几关怎么排。<b>答不上来也没关系，这题可以跳过。</b></p>
+        <div class="opts c2" data-key="rig">
+          <button class="opt" data-v="普通笔记本"><span class="oi">💻</span><span class="ob"><b>就一台普通笔记本</b><span class="sub">够用。需要服务器的关卡会给你现成的云端环境，不用自己买。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="能装 Docker"><span class="oi">🐳</span><span class="ob"><b>能装软件 / 跑得动 Docker</b><span class="sub">可以在本地跑完整环境，那几关会安排得更深一点。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="有云主机"><span class="oi">☁️</span><span class="ob"><b>已经有云主机 / 服务器</b><span class="sub">直接从部署开始排，把已有的机器用起来，省掉一整关。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="不确定"><span class="oi">🤷</span><span class="ob"><b>不太确定</b><span class="sub">按最保守的来：全部用浏览器里的云端环境，对电脑没要求。</span></span><span class="ck">✓</span></button>
+        </div>
+      </section>
+
+      <!-- ═══════════ 第 3 步 · 你的时间 ═══════════ -->
+
+      <section class="q" data-q="7" data-step="2" data-key="hours">
+        <div class="q-no">Q8 · 每周投入</div>
+        <h2 class="q-title">每周能投入多少时间？</h2>
+        <p class="q-sub">不用往多了填。<b>按你真实能坚持的节奏来</b>——路线会按这个节奏算每站的间隔，填多了只会让你掉队。</p>
+
+        <div class="sh-top">
+          <div class="sh-big"><u>约</u><b id="hMonths">6</b><i>个月走完</i></div>
+          <div class="sh-lvl">
+            <b id="hLabel">6–10 小时 / 周</b>
+            <span id="hDate">按今天开始，大约 2027 年 3 月走完</span>
+          </div>
+        </div>
+
+        <input class="rng" id="rngHours" type="range" min="0" max="4" step="1" value="2" aria-label="每周可投入时间" />
+        <div class="sh-ticks" id="hTicks">
+          <span>3 小时以下</span><span>3–6 小时</span><span class="on">6–10 小时</span><span>10–20 小时</span><span>20 小时以上</span>
+        </div>
+        <p class="sh-desc" id="hDesc">
+          周末加两个晚上，这是最多人选的节奏。路线按「每周一个关卡」排，
+          能赶上大三上投暑期实习的时间线，临时有事断一周也不会掉队。
+        </p>
+      </section>
+
+      <section class="q" data-q="8" data-step="2" data-key="when">
+        <div class="q-no">Q9 · 学习时段</div>
+        <h2 class="q-title">你更可能在什么时候学？</h2>
+        <p class="q-sub">这决定每关的<b>单次时长</b>怎么切。碎片时间的人，一关会被拆成 3 段 20 分钟；有整块时间的人，一关一次做完。</p>
+        <div class="opts c2" data-key="when">
+          <button class="opt" data-v="工作日下午"><span class="oi">🌤️</span><span class="ob"><b>没课的工作日下午</b><span class="sub">课表里抠出来的整块时间，最适合"一次做完一个关卡"。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="晚上"><span class="oi">🌙</span><span class="ob"><b>晚上回宿舍之后</b><span class="sub">最常见。每关切成 1–2 小时的两段，中间留个睡觉的间隔反而记得更牢。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="周末整块"><span class="oi">📅</span><span class="ob"><b>平时没空，主要靠周末</b><span class="sub">每关按"周末一次做完"排。平时只留 20 分钟的复习，不掉线就行。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="碎片时间"><span class="oi">🧩</span><span class="ob"><b>只有碎片时间，随时可能被打断</b><span class="sub">每关拆成 20 分钟一段，每段都有独立的小产出——中断了也不白费。</span></span><span class="ck">✓</span></button>
+        </div>
+      </section>
+
+      <section class="q" data-q="9" data-step="2" data-key="deadline">
+        <div class="q-no">Q10 · 时间线</div>
+        <h2 class="q-title">有没有一个硬时间点？</h2>
+        <p class="q-sub">有 deadline 和没有，路线的排法完全相反。<b>有的话会倒着排</b>——先把最后要交的东西定下来，再往前推每一关该在什么时候完成。</p>
+        <div class="opts c2" data-key="deadline">
+          <button class="opt" data-v="没有"><span class="oi">🌊</span><span class="ob"><b>没有，慢慢来</b><span class="sub">按节奏自然排，不设倒计时，穿插更多探索性的内容。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="一年内"><span class="oi">🗓️</span><span class="ob"><b>一年内希望能有个结果</b><span class="sub">比如明年这个时候想拿着一份东西去投实习。按 12 个月倒排。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="半年内"><span class="oi">⏱️</span><span class="ob"><b>半年内</b><span class="sub">节奏会明显加快，砍掉铺垫性关卡，只留能出结果的部分。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="三个月内"><span class="oi">🔥</span><span class="ob"><b>三个月内，比较急</b><span class="sub">只排能在这个窗口里变成作品和面试答案的关卡。会提前告诉你哪些必须有、哪些来不及。</span></span><span class="ck">✓</span></button>
+        </div>
+      </section>
+
+      <!-- ═══════════ 第 4 步 · 你想要什么 ═══════════ -->
+
+      <section class="q" data-q="10" data-step="3" data-key="goal">
+        <div class="q-no">Q11 · 目标</div>
+        <h2 class="q-title">你更想要什么结果？</h2>
+        <p class="q-sub">最后一条路线的重点会不一样：求职要的是面试答案，保研要的是能写进材料的东西。<b>选一个最主要的。</b></p>
+        <div class="opts c2" data-key="goal">
+          <button class="opt" data-v="求职拿 offer"><span class="oi">💼</span><span class="ob"><b>求职拿 offer</b><span class="sub">按目标岗位倒排关卡，最后 2 关是模拟面试 + 简历打磨。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="保研考研加分"><span class="oi">🎓</span><span class="ob"><b>保研考研加分</b><span class="sub">偏向能写进材料的东西：竞赛、论文复现、可展示的项目。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="做出能拿出手的项目"><span class="oi">🚀</span><span class="ob"><b>做出能拿出手的项目</b><span class="sub">以 3 个能上线、能真的给别人用的作品为主线。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="单纯想学会"><span class="oi">🧠</span><span class="ob"><b>单纯想学会</b><span class="sub">不设验收压力，按兴趣走，关卡可以随时替换成你想做的方向。</span></span><span class="ck">✓</span></button>
+        </div>
+      </section>
+
+      <section class="q" data-q="11" data-step="3" data-key="dir">
+        <div class="q-no">Q12 · 方向</div>
         <h2 class="q-title">你想走哪个方向？</h2>
         <p class="q-sub">选一个就够，后面还能换。下面写的是<b>这个方向每天到底在干嘛</b>，不是岗位 JD 里那些漂亮话。</p>
 
@@ -335,53 +482,51 @@
         </div>
       </section>
 
-      <!-- ─────────── Q4 基础 ─────────── -->
-      <section class="q" data-q="3" data-key="base">
-        <div class="q-no">Q4 · 基础</div>
-        <h2 class="q-title">你现在的代码基础？</h2>
-        <p class="q-sub">这一题直接决定<b>跳过多少关卡</b>。诚实选就行，选高了后面会卡住，选低了只是浪费几小时。</p>
-        <div class="opts c2" data-key="base">
-          <button class="opt" data-v="完全零基础"><span class="oi">🐣</span><span class="ob"><b>完全零基础</b><span class="sub">会先补 2 个热身关卡：命令行 + 第一个脚本，各约 1.5 小时，不写一行看不懂的代码。</span></span><span class="ck">✓</span></button>
-          <button class="opt" data-v="学过一点语法"><span class="oi">📗</span><span class="ob"><b>学过一点语法</b><span class="sub">跳过语法关，直接从「做出一个小东西」开始，省下约 6 小时。</span></span><span class="ck">✓</span></button>
-          <button class="opt" data-v="写过小项目"><span class="oi">🧩</span><span class="ob"><b>写过小项目</b><span class="sub">直接进项目关，并额外加 1 次代码复盘，帮你把小项目讲成面试故事。</span></span><span class="ck">✓</span></button>
-          <button class="opt" data-v="有实习经历"><span class="oi">💼</span><span class="ob"><b>有实习经历</b><span class="sub">基础阶段整体跳过，只保留进阶关卡和 2 次模拟面试，路线缩短约 40%。</span></span><span class="ck">✓</span></button>
+      <section class="q" data-q="12" data-step="3" data-key="public" data-optional="1">
+        <div class="q-no">Q13 · 公开意愿</div>
+        <h2 class="q-title">做出来的东西，你愿意公开吗？</h2>
+        <p class="q-sub">这决定验收怎么交：愿意公开的，交一个能点开的链接；不愿意的，交录屏就行，<b>两种我们都认</b>。这题可以跳过，默认按"只给认识的人看"处理。</p>
+        <div class="opts c2" data-key="public">
+          <button class="opt" data-v="愿意公开"><span class="oi">🌍</span><span class="ob"><b>愿意，能发链接最好</b><span class="sub">部署到公网，验收时直接交网址。作品也能挂在主页上攒着。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="只给认识的人看"><span class="oi">👥</span><span class="ob"><b>只给认识的人看就行</b><span class="sub">不追求公开访问量。会安排一个不公开的部署方式，链接只有你发的人能打开。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="不想公开"><span class="oi">🔒</span><span class="ob"><b>暂时不想公开</b><span class="sub">验收交录屏，效果一样。等你想公开的时候，随时可以把东西补部署上去。</span></span><span class="ck">✓</span></button>
         </div>
       </section>
 
-      <!-- ─────────── Q5 时间 ─────────── -->
-      <section class="q" data-q="4" data-key="hours">
-        <div class="q-no">Q5 · 时间</div>
-        <h2 class="q-title">每周能投入多少时间？</h2>
-        <p class="q-sub">不用往多了填。<b>按你真实能坚持的节奏来</b>——路线会按这个节奏算每站的间隔，填多了只会让你掉队。</p>
+      <!-- ═══════════ 第 5 步 · 你适合怎么学 ═══════════ -->
 
-        <div class="sh-top">
-          <div class="sh-big"><u>约</u><b id="hMonths">6</b><i>个月走完</i></div>
-          <div class="sh-lvl">
-            <b id="hLabel">6–10 小时 / 周</b>
-            <span id="hDate">按今天开始，大约 2027 年 3 月走完</span>
-          </div>
+      <section class="q" data-q="13" data-step="4" data-key="learn">
+        <div class="q-no">Q14 · 学习方式</div>
+        <h2 class="q-title">你学新东西最快的方式是？</h2>
+        <p class="q-sub">同一关的内容，按不同方式给出来的顺序完全不同。<b>选你真实的情况</b>，不用选"应该"的那个。</p>
+        <div class="opts c2" data-key="learn">
+          <button class="opt" data-v="看视频"><span class="oi">📺</span><span class="ob"><b>先看别人讲一遍</b><span class="sub">每关开头会挂一段 8–12 分钟的讲解，看完再动手。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="读文档"><span class="oi">📖</span><span class="ob"><b>读文字，自己琢磨</b><span class="sub">给的是精简过的图文步骤，没有视频，可以按自己的速度跳着看。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="直接动手"><span class="oi">🔨</span><span class="ob"><b>直接上手试，卡了再查</b><span class="sub">先给任务，资料挂在旁边备查。这种方式走得最快，但需要你受得了卡住。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="看别人的成品"><span class="oi">🔍</span><span class="ob"><b>先看做出来是什么样</b><span class="sub">每关先给你看成品的截图和源码，知道终点长什么样，再倒着拆。</span></span><span class="ck">✓</span></button>
         </div>
-
-        <input class="rng" id="rngHours" type="range" min="0" max="4" step="1" value="2" aria-label="每周可投入时间" />
-        <div class="sh-ticks" id="hTicks">
-          <span>3 小时以下</span><span>3–6 小时</span><span class="on">6–10 小时</span><span>10–20 小时</span><span>20 小时以上</span>
-        </div>
-        <p class="sh-desc" id="hDesc">
-          周末加两个晚上，这是最多人选的节奏。路线按「每周一个关卡」排，
-          能赶上大三上投暑期实习的时间线，临时有事断一周也不会掉队。
-        </p>
       </section>
 
-      <!-- ─────────── Q6 目标 ─────────── -->
-      <section class="q" data-q="5" data-key="goal">
-        <div class="q-no">Q6 · 目标</div>
-        <h2 class="q-title">你更想要什么结果？</h2>
-        <p class="q-sub">最后一条路线的重点会不一样：求职要的是面试答案，保研要的是能写进材料的东西。<b>选一个最主要的。</b></p>
-        <div class="opts c2" data-key="goal">
-          <button class="opt" data-v="求职拿 offer"><span class="oi">💼</span><span class="ob"><b>求职拿 offer</b><span class="sub">按目标岗位倒排关卡，最后 2 关是模拟面试 + 简历打磨。</span></span><span class="ck">✓</span></button>
-          <button class="opt" data-v="保研考研加分"><span class="oi">🎓</span><span class="ob"><b>保研考研加分</b><span class="sub">偏向能写进材料的东西：竞赛、论文复现、可展示的项目。</span></span><span class="ck">✓</span></button>
-          <button class="opt" data-v="做出能拿出手的项目"><span class="oi">🚀</span><span class="ob"><b>做出能拿出手的项目</b><span class="sub">以 3 个能上线、能真的给别人用的作品为主线，验收也看这个。</span></span><span class="ck">✓</span></button>
-          <button class="opt" data-v="单纯想学会"><span class="oi">🧠</span><span class="ob"><b>单纯想学会</b><span class="sub">不设验收压力，按兴趣走，关卡可以随时替换成你想做的方向。</span></span><span class="ck">✓</span></button>
+      <section class="q" data-q="14" data-step="4" data-key="stuck">
+        <div class="q-no">Q15 · 卡住的时候</div>
+        <h2 class="q-title">卡住的时候，你希望怎么被对待？</h2>
+        <p class="q-sub">我们不会一卡住就冲上来帮你。<b>按你喜欢的来</b>——有人需要死磕，有人需要有人推一把。</p>
+        <div class="opts c2" data-key="stuck">
+          <button class="opt" data-v="自己死磕"><span class="oi">🧗</span><span class="ob"><b>先自己死磕，别来打扰我</b><span class="sub">卡住 40 分钟后才给第一个提示，而且只给方向，不给答案。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="给个方向"><span class="oi">🧭</span><span class="ob"><b>给我指个方向就行</b><span class="sub">卡住 15 分钟给一句提示，比如"去看看这个函数的返回值"。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="直接说怎么做"><span class="oi">🛟</span><span class="ob"><b>直接告诉我这一步怎么做</b><span class="sub">卡住 10 分钟就给完整解法，但会要求你合上答案自己重写一遍。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="找人问"><span class="oi">💬</span><span class="ob"><b>我想找人问</b><span class="sub">会优先把你引到项目组的答疑里，而不是自己憋着。</span></span><span class="ck">✓</span></button>
+        </div>
+      </section>
+
+      <section class="q" data-q="15" data-step="4" data-key="pace">
+        <div class="q-no">Q16 · 节奏</div>
+        <h2 class="q-title">最后一个：你希望谁来管进度？</h2>
+        <p class="q-sub">这一题决定<b>要不要给你安排提醒和同伴</b>。说实话就行，说"我需要有人催"一点不丢人——大部分人都需要。</p>
+        <div class="opts c2" data-key="pace">
+          <button class="opt" data-v="需要有人催"><span class="oi">⏰</span><span class="ob"><b>需要有人催我</b><span class="sub">会安排每周提醒、组内进度可见，并建议你进项目组——一个人走完的概率确实低很多。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="自己按计划走"><span class="oi">📋</span><span class="ob"><b>我自己会按计划走</b><span class="sub">只给进度条和周窗口，不打扰你。掉队超过两周才会提醒一次。</span></span><span class="ck">✓</span></button>
+          <button class="opt" data-v="随心"><span class="oi">🍃</span><span class="ob"><b>想学就学，别催</b><span class="sub">不设任何提醒。路线会排得更宽松，方便你随时停下来再捡起来。</span></span><span class="ck">✓</span></button>
         </div>
       </section>
 
@@ -391,19 +536,21 @@
     <aside class="sv-rail">
       <div class="sv-steps">
         <h3>📋 定制进度</h3>
-        <div class="sv-step on" data-s="0"><span class="sv-dot">1</span><span class="sv-st">年级</span></div>
-        <div class="sv-step" data-s="1"><span class="sv-dot">2</span><span class="sv-st">探索情况</span></div>
-        <div class="sv-step" data-s="2"><span class="sv-dot">3</span><span class="sv-st">方向</span></div>
-        <div class="sv-step" data-s="3"><span class="sv-dot">4</span><span class="sv-st">基础</span></div>
-        <div class="sv-step" data-s="4"><span class="sv-dot">5</span><span class="sv-st">每周时间</span></div>
-        <div class="sv-step" data-s="5"><span class="sv-dot">6</span><span class="sv-st">想要的结果</span></div>
+        <div class="sv-step on" data-s="0"><span class="sv-dot">1</span><span class="sv-st">先认识你</span><small>3 题</small></div>
+        <div class="sv-step" data-s="1"><span class="sv-dot">2</span><span class="sv-st">你手上有什么</span><small>4 题</small></div>
+        <div class="sv-step" data-s="2"><span class="sv-dot">3</span><span class="sv-st">你的时间</span><small>3 题</small></div>
+        <div class="sv-step" data-s="3"><span class="sv-dot">4</span><span class="sv-st">你想要什么</span><small>3 题</small></div>
+        <div class="sv-step" data-s="4"><span class="sv-dot">5</span><span class="sv-st">你适合怎么学</span><small>3 题</small></div>
       </div>
 
       <div class="toon-card sv-tip">
-        <b>📐 这些答案会被怎么用？</b>
+        <b>📐 问这么细干嘛？</b>
         <p>
-          28 条路线模板都由已上岸的学长人工验证过。你的答案不会从零生成一条路线，
-          而是在最接近的那条模板上<b style="color:var(--ink)">改 3–6 处</b>——该跳的跳、该补的补。
+          因为排课不是套模板。你的答案决定这条路<b style="color:var(--ink)">从哪一关开始、每周排多少、主项目做什么、阶段验收考哪几项能力</b>。
+          答得越实在，排出来的越贴你。
+        </p>
+        <p style="margin-top:8px">
+          排完你看到的就是<b style="color:var(--ink)">你这一条路线</b>——没有"标准版"可以对比，也没有别人的版本给你参照。
         </p>
         <div class="sv-keys">
           <kbd>←</kbd><kbd>→</kbd><span>可以翻页</span>
@@ -423,9 +570,10 @@
 <div class="sv-bar">
   <div class="sv-bar-in">
     <button class="btn btn-outline" id="btnPrev" disabled>← 上一步</button>
+    <button class="btn btn-light btn-sm" id="btnSkip" hidden>跳过这题</button>
     <span class="sv-hint" id="barHint">先选一个，再继续</span>
     <span class="sp"></span>
-    <span class="sv-count">第 <b id="barNow">1</b> / 6 题</span>
+    <span class="sv-count">第 <b id="barNow">1</b> / 16 题</span>
     <button class="btn btn-primary" id="btnNext" disabled>下一步 →</button>
   </div>
 </div>
@@ -453,30 +601,55 @@
 <script src="assets/app.js"></script>
 <script>
 (function () {
+  /* ── 五步分组（决定侧栏与题号文案） ── */
+  const STEPS = [
+    { n: '先认识你',     from: 0,  to: 2  },
+    { n: '你手上有什么', from: 3,  to: 6  },
+    { n: '你的时间',     from: 7,  to: 9  },
+    { n: '你想要什么',   from: 10, to: 12 },
+    { n: '你适合怎么学', from: 13, to: 15 }
+  ];
+
   /* ── 答案状态 ── */
-  const answers = { grade: null, explored: null, dir: null, base: null, hours: 2, goal: null };
+  const answers = {};
   let dirTouched = false;
 
   const qs = [...document.querySelectorAll('.q')];
   const TOTAL = qs.length;
   let cur = 0;
-  let lastDir = 1; // 1 = 前进，-1 = 后退
+  let lastDir = 1;
 
   const progFill = document.getElementById('progFill');
   const progNow  = document.getElementById('progNow');
+  const progStep = document.getElementById('progStep');
+  const progEta  = document.getElementById('progEta');
   const barNow   = document.getElementById('barNow');
   const barHint  = document.getElementById('barHint');
   const btnPrev  = document.getElementById('btnPrev');
   const btnNext  = document.getElementById('btnNext');
+  const btnSkip  = document.getElementById('btnSkip');
   const steps    = [...document.querySelectorAll('.sv-step')];
 
   function save() {
     try { sessionStorage.setItem('kh_survey', JSON.stringify(answers)); } catch (e) {}
   }
 
+  /* 多选题：数组；单选题：字符串；滑块：数字 */
+  function isMulti(i) {
+    const box = qs[i].querySelector('.opts[data-multi]');
+    return !!box;
+  }
   function answered(i) {
-    const k = qs[i].dataset.key;
-    return !k || answers[k] !== null;
+    const el = qs[i];
+    if (el.dataset.optional === '1') return true;
+    const k = el.dataset.key;
+    if (!k) return true;
+    const v = answers[k];
+    if (Array.isArray(v)) return v.length > 0;
+    return v !== null && v !== undefined;
+  }
+  function stepOf(i) {
+    return STEPS.findIndex(s => i >= s.from && i <= s.to);
   }
 
   /* ── 渲染 ── */
@@ -490,11 +663,18 @@
       }
     });
 
-    progFill.style.width = ((cur + 1) / TOTAL * 100).toFixed(1) + '%';
+    progFill.style.width = ((cur + 1) / TOTAL * 100).toFixed(2) + '%';
     progNow.textContent = '第 ' + (cur + 1) + ' 题';
     barNow.textContent = cur + 1;
 
+    const si = stepOf(cur);
+    progStep.textContent = '· ' + STEPS[si].n;
+
+    const left = TOTAL - cur - 1;
+    progEta.textContent = left === 0 ? '最后一题了' : '大约还要 ' + Math.max(1, Math.round(left * 0.25)) + ' 分钟';
+
     btnPrev.disabled = cur === 0;
+    btnSkip.hidden = qs[cur].dataset.optional !== '1';
 
     const last = cur === TOTAL - 1;
     btnNext.textContent = last ? '生成我的专属路线 →' : '下一步 →';
@@ -503,14 +683,15 @@
     btnNext.disabled = !ok;
 
     barHint.classList.toggle('warn', !ok);
-    if (!ok) barHint.textContent = '先选一个，再继续';
+    if (qs[cur].dataset.optional === '1' && !ok) barHint.textContent = '这题可以跳过';
+    else if (!ok) barHint.textContent = isMulti(cur) ? '可多选，至少选一个' : '先选一个，再继续';
     else if (last) barHint.textContent = '生成后随时可以重排';
     else barHint.textContent = '也可以按 → 键继续';
 
     steps.forEach((s, i) => {
-      s.classList.toggle('on', i === cur);
-      s.classList.toggle('done', i < cur);
-      s.querySelector('.sv-dot').textContent = i < cur ? '✓' : String(i + 1);
+      s.classList.toggle('on', i === si);
+      s.classList.toggle('done', i < si);
+      s.querySelector('.sv-dot').textContent = i < si ? '✓' : String(i + 1);
     });
   }
 
@@ -521,7 +702,7 @@
       const box = qs[cur].querySelector('.opts');
       if (box) { box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake'); }
       barHint.classList.add('warn');
-      barHint.textContent = '先选一个，再继续';
+      barHint.textContent = isMulti(cur) ? '可多选，至少选一个' : '先选一个，再继续';
       return;
     }
     lastDir = delta;
@@ -530,39 +711,59 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  function submit() { save(); location.href = '05-generating.html'; }
+
   btnPrev.addEventListener('click', () => go(-1));
-  btnNext.addEventListener('click', () => {
-    if (cur === TOTAL - 1) { save(); location.href = '05-generating.html'; return; }
-    go(1);
-  });
+  btnNext.addEventListener('click', () => { if (cur === TOTAL - 1) submit(); else go(1); });
+  btnSkip.addEventListener('click', () => { lastDir = 1; cur = Math.min(cur + 1, TOTAL - 1); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
   document.addEventListener('keydown', (e) => {
     const t = e.target;
     if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
-    if (e.key === 'ArrowRight') { e.preventDefault(); if (cur === TOTAL - 1) { save(); location.href = '05-generating.html'; } else go(1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); if (cur === TOTAL - 1) submit(); else go(1); }
     else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
   });
 
-  /* ── 选项点击 ── */
-  function selectOpt(key, value) {
-    const box = document.querySelector('.opts[data-key="' + key + '"]');
-    if (!box) return;
-    box.querySelectorAll('.opt').forEach(b => b.classList.remove('on', 'pop'));
-    const btn = [...box.querySelectorAll('.opt')].find(b => b.dataset.v === value);
-    if (!btn) return;
-    btn.classList.add('on');
-    void btn.offsetWidth;
-    btn.classList.add('pop');
-    answers[key] = value;
+  /* ── 选项点击（单选 / 多选） ── */
+  function paint(box) {
+    box.querySelectorAll('.opt').forEach(b => {
+      const v = b.dataset.v;
+      const val = answers[box.dataset.key];
+      const on = Array.isArray(val) ? val.includes(v) : val === v;
+      b.classList.toggle('on', on);
+    });
   }
 
   document.querySelectorAll('.opts').forEach(box => {
     const key = box.dataset.key;
+    const multi = box.hasAttribute('data-multi');
+
     box.querySelectorAll('.opt').forEach(btn => {
       btn.addEventListener('click', () => {
         const v = btn.dataset.v;
-        if (key === 'dir') dirTouched = true;
-        selectOpt(key, v);
+
+        if (multi) {
+          let arr = Array.isArray(answers[key]) ? answers[key].slice() : [];
+          if (v === '都没用过') {
+            // 「都没用过」是互斥项
+            arr = arr.includes(v) ? [] : [v];
+          } else {
+            arr = arr.filter(x => x !== '都没用过');
+            arr = arr.includes(v) ? arr.filter(x => x !== v) : arr.concat(v);
+          }
+          answers[key] = arr;
+          paint(box);
+          const hint = document.getElementById('stackHint');
+          if (hint) hint.textContent = arr.length
+            ? '已选 ' + arr.length + ' 项 · 选完点右下角继续'
+            : '☝️ 可多选，选完点右下角继续';
+        } else {
+          if (key === 'dir') dirTouched = true;
+          answers[key] = v;
+          paint(box);
+        }
+
+        btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
 
         if (key === 'explored') {
           const taste = document.getElementById('tasteCard');
@@ -572,7 +773,9 @@
             taste.hidden = false; note.hidden = true;
             taste.classList.remove('pop-in'); void taste.offsetWidth; taste.classList.add('pop-in');
             if (!dirTouched) {
-              selectOpt('dir', 'AI 应用');
+              answers.dir = 'AI 应用';
+              const dbox = document.querySelector('.opts[data-key="dir"]');
+              if (dbox) paint(dbox);
               pre.hidden = false;
             }
           } else {
@@ -584,7 +787,6 @@
 
         if (key === 'dir') {
           document.getElementById('unsureTip').hidden = (v !== '我还不太确定');
-          // 用户手动改掉了预填方向，撤掉预填提示
           if (v !== 'AI 应用') document.getElementById('dirPreNote').hidden = true;
         }
 
@@ -594,7 +796,7 @@
     });
   });
 
-  /* ── Q5 滑块 ── */
+  /* ── Q8 滑块 ── */
   const HOURS = [
     { t: '3 小时以下', m: 12,
       d: '每周大概只够推进半个关卡，路线会拉长到 12 个月。但慢不等于走不完——第一节会专门教你「20 分钟也能做一次有效练习」，先保住连续性。' },
@@ -608,7 +810,7 @@
       d: '冲刺节奏。会额外插入 2 次模拟面试和 1 次阶段验收，避免走太快、基础不扎实，面试一问就露馅。' }
   ];
 
-  const rng    = document.getElementById('rngHours');
+  const rng     = document.getElementById('rngHours');
   const hMonths = document.getElementById('hMonths');
   const hLabel  = document.getElementById('hLabel');
   const hDate   = document.getElementById('hDate');
