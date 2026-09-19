@@ -1,15 +1,40 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<html lang="zh-CN" data-page-node-id="0qb72pjX1Ft0bIfTSqiWZA">
+<head data-page-node-id="3VPcdPOPPGs57I8DvjInNA">
+<meta charset="UTF-8" data-page-node-id="TTRJzHuaCHTr35pFjI9CYW" />
+<meta name="viewport" content="width=device-width, initial-scale=1" data-page-node-id="zVn4fOayE8O2l8WtuGLIvY" />
 <title>课搭 · 大学生成长社区</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/kh.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="jv6Z41rOxDT6RjxayS4QGi" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin data-page-node-id="OPeT8HzAulQhXlsagluL1Z" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" data-page-node-id="i4v8Ttg0nM00ORgIY6fGAH" />
+<link rel="stylesheet" href="assets/kh.css" data-page-node-id="pn3e3Ea28ElbesGYzPLjoC" />
 <style>
-  /* —— 本页专属：路线入口区 —— */
+  /* ── 继续上次 ── */
+  .resume {
+    display: flex; align-items: center; gap: 13px; flex-wrap: wrap;
+    border: 2px solid #ffd9cd; background: linear-gradient(120deg, #fff, var(--pri-50));
+    border-radius: var(--r-toon); padding: 14px 18px; margin-bottom: 18px; box-shadow: var(--sticker);
+  }
+  .resume[hidden] { display: none; }
+  .resume .rs-ico { font-size: 22px; flex: none; }
+  .resume .rs-body { flex: 1; min-width: 200px; }
+  .resume .rs-body b { display: block; font-size: 14.5px; font-weight: 800; letter-spacing: -.25px; }
+  .resume .rs-body span { display: block; font-size: 12.5px; color: var(--ink-2); margin-top: 2px; line-height: 1.6; }
+  .resume .rs-meta { font-size: 11.5px; color: var(--ink-soft); font-weight: 700; flex: none; }
+
+  /* ── 双区切换：滑动下划线 ── */
+  .zt-bar { position: relative; }
+  .zt-ink {
+    position: absolute; bottom: -1px; left: 0; height: 2px; width: 0;
+    background: var(--pri); border-radius: 2px;
+    transition: transform var(--t-base) var(--ease-out), width var(--t-base) var(--ease-out);
+  }
+
+  /* ── 首屏数字可点 ── */
+  a.bm-count { border-bottom: 2px solid rgba(255,107,74,.35); transition: color var(--t-fast), border-color var(--t-fast); }
+  a.bm-count:hover { color: var(--pri-600); border-color: var(--pri); }
+
+  /*，本页专属：路线入口区，*/
   .gate { display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; margin-bottom: 34px; }
   .gate-card { position: relative; overflow: hidden; padding: 22px 24px; display: flex; flex-direction: column; }
   .gate-card h3 { font-size: 19px; font-weight: 800; letter-spacing: -0.4px; display: flex; align-items: center; gap: 8px; }
@@ -42,384 +67,326 @@
   @media (max-width: 1080px) { .gate { grid-template-columns: 1fr; } .gap-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
-<body>
+<body data-page-node-id="MyMm5DV88XhPEGKelggEL1">
 
 <!-- ══════════ 导航 ══════════ -->
-<nav class="nav">
-  <div class="nav-inner">
-    <a class="logo" href="01-home.html">
-      <span class="logo-mark">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+<nav class="nav" data-page-node-id="4ByRrWQ7OkJky8FRBABte9">
+  <div class="nav-inner" data-page-node-id="8ZWkn70PK1NyDS5SNISIO8">
+    <a class="logo" href="01-home.html" data-page-node-id="UFX0h4S2ZqXvgoxc4Vp11y">
+      <span class="logo-mark" data-page-node-id="tGIBnEEw0uBQJcaHTdzIdy">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="CcQr8C07DQS7b7Xulp7LFf"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" data-page-node-id="MPDApoKTRbWJ02cipcmRPd"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" data-page-node-id="CAnRQVjSYjHbYdqJLVJSie"/></svg>
       </span>
-      <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      <span class="logo-text" data-page-node-id="S0OP3SFP7ukuX3LZyHfasP"><b data-page-node-id="CcIf84LEs20gBzyMJ1M0hc">课搭</b><span data-page-node-id="5VLMliSpZv7Iyb3ZQ4PiEv">大学生成长社区</span></span>
     </a>
-    <div class="nav-search">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <div class="nav-search" data-page-node-id="ovsNSrNDQ7j6LkB51ScxmE">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" data-page-node-id="KzK5UXlcGw0S0c8Q23OdUM"><circle cx="11" cy="11" r="7" data-page-node-id="eBydY7TIjog7Q528kZdbiO"/><path d="M20 20l-3.5-3.5" data-page-node-id="Qhi3G7jTmzDEDbxoAqBKOO"/></svg>
       搜索资料、路线、学长经验…
     </div>
-    <div class="nav-actions">
-      <a class="nav-link on" href="01-home.html">首页</a>
-      <a class="nav-link" href="02-explore.html">🧭 探索路线</a>
-      <a class="nav-link" href="09-cohort.html">项目组</a>
-      <a class="nav-link" href="10-pricing.html">验收与付费</a>
-      <a class="btn btn-outline btn-sm" href="04-survey.html">登录</a>
-      <a class="btn btn-primary btn-sm" href="04-survey.html">定制我的路线</a>
+    <div class="nav-actions" data-page-node-id="dBymC4EV0zqKcIi64cHxOX">
+      <a class="nav-link on" href="01-home.html" data-page-node-id="SJIAzVLAuuzzrVHaXmDxf1">首页</a>
+      <a class="nav-link" href="02-explore.html" data-page-node-id="SnMlExOLcESRwgyEmwYom5">🧭 探索路线</a>
+      <a class="nav-link" href="09-cohort.html" data-page-node-id="jeXp8yRVv5HlhvdfaYKUwg">项目组</a>
+      <a class="nav-link" href="10-pricing.html" data-page-node-id="YjkYfBqU9Uy3ueoWZUKz5n">验收与付费</a>
+      <a class="btn btn-outline btn-sm" href="04-survey.html" data-page-node-id="sBYtHpGUfMyEiIwQ6krWmz">登录</a>
+      <a class="btn btn-primary btn-sm" href="04-survey.html" data-page-node-id="AWq1FT36HiY26KVtzHlSIq">定制我的路线</a>
     </div>
   </div>
 </nav>
 
-<main class="page">
+<main class="page" data-page-node-id="gsc8G3tD553V2OCMWjvxha">
 
   <!-- ══════════ 顶部提示：新生优先 ══════════ -->
-  <div class="notice">
-    <span class="nt-tag">新生</span>
-    <span>还没想好学哪个方向？先花 8 个晚上把计算机摸一遍，再决定走哪条路。</span>
-    <a href="02-explore.html">开始探索 →</a>
+  <section class="resume" id="resumeBox" hidden data-page-node-id="8QjgiXLLZ7zLGh1XnMLAzy">
+    <span class="rs-ico" data-page-node-id="GKsAoDtrmaL1RT9XbnzWqu">🧭</span>
+    <div class="rs-body" data-page-node-id="IkfIlwYf59meV0h24Brepv">
+      <b id="rsTitle" data-page-node-id="GvCdrFEXgRuwFdEHtlxJhw">接着走</b>
+      <span id="rsDesc" data-page-node-id="bZAnF8ZFgxGMu5KtRe5kqh"></span>
+    </div>
+    <span class="rs-meta" id="rsMeta" data-page-node-id="0ygnIMjLbKee9x0tvRRjIn"></span>
+    <a class="btn btn-primary btn-sm" href="06-roadmap.html" data-page-node-id="KgEdG5UiSXRe6f8ESGfkas">继续走 →</a>
+  </section>
+
+  <div class="notice" data-page-node-id="a4z0HK4jFm5rZdW5jaTECc">
+    <span class="nt-tag" data-page-node-id="qU6wd5oMnjIu7A9YmaQA9F">新生</span>
+    <span data-page-node-id="CyPKtyx6WDS2ybsblGzc7H">还没想好学哪个方向？先把探索路线主干走一遍，再决定走哪条路。</span>
+    <a href="02-explore.html" data-page-node-id="XRyeHBed2LKiqZxZF2mYzU">开始探索 →</a>
   </div>
 
   <!-- ══════════ 刊头 ══════════ -->
-  <header>
-    <div class="blog-mast">
-      <div class="blog-mast-main">
-        <div class="bm-kicker">Campus Materials Blog · 校园资料博客</div>
-        <h1>找资料，先来<em>课搭</em></h1>
-        <p class="bm-tagline">
-          课程真题、留学文书、求职模板、成长路线——每一份都来自学长学姐的真实整理，署名可溯。
+  <header data-page-node-id="sRie9tAs1PpNNhNEc7keq6">
+    <div class="blog-mast" data-page-node-id="ErbsZWIB0uq6prNOcyjmtC">
+      <div class="blog-mast-main" data-page-node-id="xbhyb1CWu2fjZ3Ms6HFwbj">
+        <div class="bm-kicker" data-page-node-id="QaKl96uAf6wikv0k8rLmrv">Campus Materials Blog · 校园资料博客</div>
+        <h1 data-page-node-id="tBtBdakdkQEkXSky7hecmq">找资料，先来<em data-page-node-id="WRnc4S0N13jzg4uvxVHOyM">课搭</em></h1>
+        <p class="bm-tagline" data-page-node-id="M81WUGVdpanEmaGi9hB3vA">
+          课程真题、留学文书、求职模板、成长路线，每一份都来自学长学姐的真实整理，署名可溯。
         </p>
       </div>
-      <div class="blog-mast-side">
-        2026 秋季学期 · 开学季<br />
-        共收录资料 <span class="bm-count">136</span> 份<br>成长路线 <span class="bm-count">28</span> 条
+      <div class="blog-mast-side" data-page-node-id="s3nqyL0pWQus4T1DYDqOqc">
+        2026 秋季学期 · 开学季<br  data-page-node-id="4e8vQYcy284wvzA5oYotV3"/>
+        共收录资料 <a class="bm-count" href="08-library.html" data-page-node-id="pC6ehDDLkgwPD6Y6FIV6Y5">136</a> 份<br  data-page-node-id="5SOeugontG3BRS64zLGJT9"/>探索路线 <a class="bm-count" href="02-explore.html" data-page-node-id="jBEZmhgYdgV7FULySCr55U">41</a> 站 · 免费
       </div>
     </div>
-    <div class="bm-rule"></div>
-    <nav class="blog-cats">
-      <span class="bc-label">📚 分类</span>
-      <a class="bc-chip on" href="#">全部</a>
-      <a class="bc-chip" href="#">🎓 新生引路</a>
-      <a class="bc-chip" href="#">📖 课程学习</a>
-      <a class="bc-chip" href="#">🎯 升学备考</a>
-      <a class="bc-chip" href="#">✈️ 留学申请</a>
-      <a class="bc-chip" href="#">💼 求职实习</a>
-      <a class="bc-chip" href="#">🌱 成长视野</a>
-      <a class="bc-chip" href="#">🏫 家教教案</a>
+    <div class="bm-rule" data-page-node-id="MWv7rJFpfJa9BAoWjaZt0k"></div>
+    <nav class="blog-cats" data-page-node-id="AZPympsSZzp5fwwL4mKLmd">
+      <span class="bc-label" data-page-node-id="MlX0zEdGvepd7crJEUw8Ba">📚 分类</span>
+      <a class="bc-chip on" href="#" data-page-node-id="1EHzUa4UKpRV6wKxUt1a5B">全部</a>
+      <a class="bc-chip" href="#" data-page-node-id="YMowXDG4NyuPTBgdLYvW3F">🎓 新生引路</a>
+      <a class="bc-chip" href="#" data-page-node-id="0P0tOa5xbBVZ4oAlnFjJXw">📖 课程学习</a>
+      <a class="bc-chip" href="#" data-page-node-id="snZD88u6H2nE6GqkLnR4Y3">🎯 升学备考</a>
+      <a class="bc-chip" href="#" data-page-node-id="PZtqR1DMwETdyXRZtomuPk">✈️ 留学申请</a>
+      <a class="bc-chip" href="#" data-page-node-id="ab8vpGJ29gBL6vjB1DVb2J">💼 求职实习</a>
+      <a class="bc-chip" href="#" data-page-node-id="VCimyfE9wSJ9l9bUqjotBB">🌱 成长视野</a>
+      <a class="bc-chip" href="08-library.html" data-page-node-id="QRm1fJ563CQaiB0mhU6WTf">🧭 方向科普</a>
+      <a class="bc-chip" href="#" data-page-node-id="QRm1fJ563CQaiB0mhU6WTx">🏫 家教教案</a>
     </nav>
   </header>
 
   <!-- ══════════ ① 路线入口（本页最高优先级） ══════════ -->
-  <section class="gate">
-    <a class="toon-card hoverable gate-card gate-a" href="02-explore.html">
-      <span class="gate-tag">大一 · 探索路线</span>
-      <h3>我还不知道自己喜欢什么</h3>
-      <p>
-        不确定方向就先别选。8 个晚上，从黑窗口到 AI 各摸一遍，每站都做出一个能拿给室友看的小东西。
-        走完你手里不是一张问卷答案，而是<strong>八次真实手感</strong>——用脚投票选出来的方向，才不容易后悔。
+  <section class="gate" data-page-node-id="LrL5W7CDLDoEkCeCo4diCt">
+    <a class="toon-card hoverable gate-card gate-a" href="02-explore.html" data-page-node-id="PGnnYIawgGalUyCyIREfQY">
+      <span class="gate-tag" data-page-node-id="UmMA614DbyQibnh7m0VVtc">大一 · 探索路线</span>
+      <h3 data-page-node-id="Y8jF0BEzZBGGbTFIavavG2">我还不知道自己喜欢什么</h3>
+      <p data-page-node-id="qpbkR4QuPCwlMyjvHYGP43">
+        不确定方向就先别选。三块主干、三十站，把计算机从头摸到尾，每站都做出一个能拿给室友看的小东西。
+        走完你手里不是一张问卷答案，而是<strong data-page-node-id="4q8b308FsCWIaYtaxQJ5De">三十次真实手感</strong>，用脚投票选出来的方向，才不容易后悔。
       </p>
-      <div class="gate-stops">
-        <span class="gs">⌨️ 黑窗口</span><span class="gs-arrow">›</span>
-        <span class="gs">📜 脚本</span><span class="gs-arrow">›</span>
-        <span class="gs">🌿 Git</span><span class="gs-arrow">›</span>
-        <span class="gs">🖥️ 服务器</span><span class="gs-arrow">›</span>
-        <span class="gs">🗄️ 数据库</span><span class="gs-arrow">›</span>
-        <span class="gs">🤖 AI</span>
+      <div class="gate-stops" data-page-node-id="m6WIpOHCjiRv1DaENWNxIX">
+        <span class="gs" data-page-node-id="4cR3AAv4DewgMoFxtWc4VQ">⌨️ 黑窗口</span><span class="gs-arrow" data-page-node-id="VdHManpm94sigKBwyqJXUe">›</span>
+        <span class="gs" data-page-node-id="LyrJcyGKPcXWtawuNckLsI">📜 脚本</span><span class="gs-arrow" data-page-node-id="KqBIERWDV7ZylzpZXMfKN3">›</span>
+        <span class="gs" data-page-node-id="4GQkNTk0oGcyH7KXNqFnOS">🌿 Git</span><span class="gs-arrow" data-page-node-id="4P9UNz6UTX7wee5sOqXnqb">›</span>
+        <span class="gs" data-page-node-id="Dtm40Dvih164IoIF2oiL0m">🖥️ 服务器</span><span class="gs-arrow" data-page-node-id="M7cjEdolhaX8iJR1mRtnt6">›</span>
+        <span class="gs" data-page-node-id="DBFte1D9yp6HOF68LsKyCL">🗄️ 数据库</span><span class="gs-arrow" data-page-node-id="N1ojFe5dAjw03v6lglQZeX">›</span>
+        <span class="gs" data-page-node-id="s928DziKzKTdzmKzpKZKSq">🤖 AI</span>
       </div>
-      <div class="gate-foot">
-        <span class="btn btn-primary">开始探索之旅</span>
-        <span style="font-size:12px;color:var(--ink-soft)">免费 · 约 16 小时 · 已 1,284 人走完</span>
+      <div class="gate-foot" data-page-node-id="dWc1NIlKCxjCN0I94wFHDX">
+        <span class="btn btn-primary" data-page-node-id="CMzhhpKOK7MyHyvTJxQzB5">开始探索之旅</span>
+        <span style="font-size:12px;color:var(--ink-soft)" data-page-node-id="P6SgFcIbiaN4B7EcTReEnd">免费 · 主干约 20 小时 · 已 1,284 人走完</span>
       </div>
-      <span class="gate-dai">
-        <svg width="76" height="76" viewBox="0 0 64 64" class="dai-bob">
-          <rect x="19" y="47" width="9" height="11" rx="4.5" fill="#d04a2a"/>
-          <rect x="36" y="47" width="9" height="11" rx="4.5" fill="#d04a2a"/>
-          <rect x="8" y="9" width="48" height="44" rx="16" fill="#ff6b4a"/>
-          <rect x="8" y="9" width="48" height="44" rx="16" fill="url(#gd)" opacity=".35"/>
-          <circle cx="24" cy="29" r="4.2" fill="#fff"/><circle cx="40" cy="29" r="4.2" fill="#fff"/>
-          <circle cx="25" cy="30" r="2.2" fill="#1a1d23"/><circle cx="41" cy="30" r="2.2" fill="#1a1d23"/>
-          <path d="M27 39q5 5 10 0" stroke="#1a1d23" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-          <defs><linearGradient id="gd" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+      <span class="gate-dai" data-page-node-id="UzkfIn5joX9iFiSwbu5KhF">
+        <svg width="76" height="76" viewBox="0 0 64 64" class="dai-bob" data-page-node-id="TTIogCoG1uLLxYQVRvq0XE">
+          <rect x="19" y="47" width="9" height="11" rx="4.5" fill="#d04a2a" data-page-node-id="FCFYbJx0VMyPbUGwFacLU2"/>
+          <rect x="36" y="47" width="9" height="11" rx="4.5" fill="#d04a2a" data-page-node-id="tfvFlCOOQYkA1qoNDMXhJe"/>
+          <rect x="8" y="9" width="48" height="44" rx="16" fill="#ff6b4a" data-page-node-id="uC4HzGdlqCaZCu58FNEIyl"/>
+          <rect x="8" y="9" width="48" height="44" rx="16" fill="url(#gd)" opacity=".35" data-page-node-id="VxRM6yf7bVIUkzEVQH21yd"/>
+          <circle cx="24" cy="29" r="4.2" fill="#fff" data-page-node-id="7zRuNmmwFHyhwuI6momnFa"/><circle cx="40" cy="29" r="4.2" fill="#fff" data-page-node-id="RW3Z3V0Mp2eGpCLq7KFpwU"/>
+          <circle cx="25" cy="30" r="2.2" fill="#1a1d23" data-page-node-id="5H13DHr2RKu2A976Ef4yyr"/><circle cx="41" cy="30" r="2.2" fill="#1a1d23" data-page-node-id="456MXjjpig1EqxdrcL05I1"/>
+          <path d="M27 39q5 5 10 0" stroke="#1a1d23" stroke-width="2.4" fill="none" stroke-linecap="round" data-page-node-id="b01x5QBXTRuAEQU3IYPhlK"/>
+          <defs data-page-node-id="FKR0M5U6wOhTtaqN5HLaeU"><linearGradient id="gd" x1="0" y1="0" x2="1" y2="1" data-page-node-id="wRdtHL4ClHB9gdXmdFslVx">
+            <stop offset="0" stop-color="#fff" data-page-node-id="owPw1yMKjIhICYPZQWFdhO"/><stop offset="1" stop-color="#fff" stop-opacity="0" data-page-node-id="iapFr98ZhovFlrOpAjziH8"/>
           </linearGradient></defs>
         </svg>
       </span>
     </a>
 
-    <a class="toon-card hoverable gate-card gate-b" href="04-survey.html">
-      <span class="gate-tag">已有方向</span>
-      <h3>我想走 前端 / 算法 / 后端…</h3>
-      <p>
+    <a class="toon-card hoverable gate-card gate-b" href="04-survey.html" data-page-node-id="9Lj1PwJzD3yD2RdubjUaTG">
+      <span class="gate-tag" data-page-node-id="G2QWsYnq4BoZLiXWqGCpsI">已有方向</span>
+      <h3 data-page-node-id="qMNIYsiX0O13Su76cFCsIl">我想走 前端 / 算法 / 后端…</h3>
+      <p data-page-node-id="rgrLQUtz7EOCnFrCbgrCJa">
         选一个方向，告诉我你的年级、基础和每周能投入的时间。
-        <strong>这条路会按你的情况现排</strong>：从哪一关开始、每周排多少、主项目做什么、每道验收关考哪几项能力，
+        <strong data-page-node-id="u9ADhYZKHvqiIMSJKC8n6W">这条路会按你的情况现排</strong>：从哪一关开始、每周排多少、主项目做什么、每道验收关考哪几项能力，
         全由你答的东西决定。排完就是你这一条。
       </p>
-      <div class="gate-foot" style="margin-top:18px">
-        <span class="btn btn-ink">定制我的路线</span>
-        <span style="font-size:12px;color:var(--ink-soft)">约 3 分钟</span>
+      <div class="gate-foot" style="margin-top:18px" data-page-node-id="s0H6pKngILAXT7iVRzj6Qy">
+        <span class="btn btn-ink" data-page-node-id="NNum91N0tPFeg3NKDnyvRZ">定制我的路线</span>
+        <span style="font-size:12px;color:var(--ink-soft)" data-page-node-id="lUUhUrOziJy6vma9FVpyJ6">约 3 分钟</span>
       </div>
     </a>
   </section>
 
   <!-- ══════════ ② 信息差专栏 ══════════ -->
-  <section class="blog-sec">
-    <div class="blog-sec-head">
-      <h2>💡 信息差</h2>
-      <a class="bs-more" href="#">全部 42 篇 →</a>
+  <section class="blog-sec" data-page-node-id="3ciAUgWIFErmAF4tHKJ5Ie">
+    <div class="blog-sec-head" data-page-node-id="rH3TdPFqXcvDeEEhkSiqtv">
+      <h2 data-page-node-id="RGtKSYaY3jALye71Pm7ecK">💡 信息差</h2>
+      <a class="bs-more" href="08-library.html" data-page-node-id="YSUfGGK0OGGWcFTHNTTbxi">全部 42 篇 →</a>
     </div>
-    <div class="blog-sec-sub">你踩的坑，学长都踩过。这些事没人会主动告诉你。</div>
-    <div class="gap-grid">
-      <a class="toon-card hoverable gap-card" href="03-direction.html">
-        <span class="gap-ico">🧭</span>
-        <span>
-          <span class="gap-flag">方向认知 · 8 分钟</span>
-          <b>计算机十几个方向，到底哪个适合我？</b>
-          <span>把"前端/后端/算法/测试/运维"拆成每天在干嘛、什么性格的人干得下去、天花板在哪。</span>
+    <div class="blog-sec-sub" data-page-node-id="eUkostBIdFPy2gCYPaJui9">你踩的坑，学长都踩过。这些事没人会主动告诉你。</div>
+    <div class="gap-grid" data-page-node-id="0jGbE63SazpExFxBoufPXy">
+      <a class="toon-card hoverable gap-card" href="03-direction.html" data-page-node-id="EZDXH10Fp3eRinsmTcOpaE">
+        <span class="gap-ico" data-page-node-id="4TxmXRZXh6Qni5EM8enwwv">🧭</span>
+        <span data-page-node-id="eXBGwNpcES3oraYB4wRuwj">
+          <span class="gap-flag" data-page-node-id="2i22FSsfikP6dsERazrcw8">方向认知 · 8 分钟</span>
+          <b data-page-node-id="jwfHWHzGUlQy7WuDVRIuAQ">计算机十几个方向，到底哪个适合我？</b>
+          <span data-page-node-id="gapHDFqF7bHW68ATiCYBTT">把"前端/后端/算法/测试/运维"拆成每天在干嘛、什么性格的人干得下去、天花板在哪。</span>
         </span>
       </a>
-      <a class="toon-card hoverable gap-card" href="#">
-        <span class="gap-ico">⏰</span>
-        <span>
-          <span class="gap-flag">时间线 · 6 分钟</span>
-          <b>大厂暑期实习，其实大三上就要投了</b>
-          <span>春招秋招、暑期实习、日常实习的真实时间表——错过一次，等于晚一年。</span>
+      <a class="toon-card hoverable gap-card" href="#" data-page-node-id="l5eu7tX0vm5Q881DBdDqOa">
+        <span class="gap-ico" data-page-node-id="rsZ4bt0MPMdAxOsn1WWY27">⏰</span>
+        <span data-page-node-id="dehbuQcuEyJ0PckMpjEbzA">
+          <span class="gap-flag" data-page-node-id="B9T9NTikRvSGvYphs47s0X">时间线 · 6 分钟</span>
+          <b data-page-node-id="NDUhHoGxJE7F6K756FUUmG">大厂暑期实习，其实大三上就要投了</b>
+          <span data-page-node-id="nkDIME3bPRfg8i1zJXKbhS">春招秋招、暑期实习、日常实习的真实时间表，错过一次，等于晚一年。</span>
         </span>
       </a>
-      <a class="toon-card hoverable gap-card" href="#">
-        <span class="gap-ico">🪤</span>
-        <span>
-          <span class="gap-flag">避坑 · 5 分钟</span>
-          <b>这 7 类证书和培训，别报</b>
-          <span>简历上不加分、面试官不看、还占你两个月。哪些才是真的有用。</span>
+      <a class="toon-card hoverable gap-card" href="#" data-page-node-id="WBBhxXp3hcoblFdngA3yMP">
+        <span class="gap-ico" data-page-node-id="X7pqshRGkSNEyWBb6Hrrbv">🪤</span>
+        <span data-page-node-id="s9UXKC0KEVFJ3IdvFRYwQb">
+          <span class="gap-flag" data-page-node-id="1zyi0K2ROwcSewAwi488gB">避坑 · 5 分钟</span>
+          <b data-page-node-id="efoAsDoGsSB2LKZbjzsdP6">这 7 类证书和培训，别报</b>
+          <span data-page-node-id="CbLQVUJPHHHsE1RCUIBjbG">简历上不加分、面试官不看、还占你两个月。哪些才是真的有用。</span>
         </span>
       </a>
-      <a class="toon-card hoverable gap-card" href="#">
-        <span class="gap-ico">🎓</span>
-        <span>
-          <span class="gap-flag">升学 · 7 分钟</span>
-          <b>保研、考研、留学、就业，四条路的真实门槛</b>
-          <span>各自要什么、什么时候开始准备、什么人不适合——一张表说清。</span>
+      <a class="toon-card hoverable gap-card" href="#" data-page-node-id="9krrbUQep73zAak1KQ83Y5">
+        <span class="gap-ico" data-page-node-id="G4lRpV0zOKyILBBle3CkoN">🎓</span>
+        <span data-page-node-id="w4Jh8f67nrXRje06Usyves">
+          <span class="gap-flag" data-page-node-id="2ZyPHOgJwdxnSJFeiU3bfR">升学 · 7 分钟</span>
+          <b data-page-node-id="SlPJScihjCmoCN9jbElPlX">保研、考研、留学、就业，四条路的真实门槛</b>
+          <span data-page-node-id="mTVb9f6iKaQgZ1zMQ0moAN">各自要什么、什么时候开始准备、什么人不适合，一张表说清。</span>
         </span>
       </a>
     </div>
   </section>
 
-  <!-- ══════════ ③ 双区：资料 / 路线库 ══════════ -->
-  <nav class="zt-bar" aria-label="专区切换" style="display:flex;gap:8px;margin-bottom:26px;border-bottom:1px solid var(--line);padding-bottom:0">
-    <button class="zt-btn on" data-zone="works"
-      style="padding:9px 16px;font-size:13.5px;font-weight:700;border-bottom:2px solid var(--pri);color:var(--pri-600);margin-bottom:-1px;display:flex;align-items:center;gap:6px">
-      📚 资料库 <small style="font-weight:500;color:var(--ink-soft);font-size:11.5px">136 份</small>
-    </button>
-    <button class="zt-btn" data-zone="routes"
-      style="padding:9px 16px;font-size:13.5px;font-weight:700;border-bottom:2px solid transparent;color:var(--ink-soft);margin-bottom:-1px;display:flex;align-items:center;gap:6px">
-      🧭 路线库 <small style="font-weight:500;color:var(--ink-soft);font-size:11.5px">28 条 · 都能按你的情况重排</small>
-    </button>
-  </nav>
+  <!-- ══════════ ③ 资料库 ══════════ -->
+  <div class="blog-sec-head" style="margin-bottom:18px">
+      <h2 data-page-node-id="ztHeadTitle">📚 资料库</h2>
+      <a class="bs-more" href="08-library.html" data-page-node-id="ztHeadMore">全部 136 份 →</a>
+    </div>
 
-  <div class="blog-layout">
-    <div class="blog-main">
+  <div class="blog-layout" data-page-node-id="sUN1O9fKOFI3hfYQgEYGXM">
+    <div class="blog-main" data-page-node-id="tWcRpzmTDjLDdJo29Ny8GU">
 
       <!-- ── 区 A：资料库 ── -->
-      <div data-panel="works">
-        <section class="fresh-zone">
-          <div class="fresh-head">
-            <span class="fresh-ico">🎓</span>
-            <div class="fresh-title">
+      <div data-panel="works" data-page-node-id="ybDC5yAWfLUWcZugPDLZ3G">
+        <section class="fresh-zone" data-page-node-id="FAqsqXCP5EX0HXSjlQ7zNS">
+          <div class="fresh-head" data-page-node-id="hb1BKWucHwyecWF0xktNir">
+            <span class="fresh-ico" data-page-node-id="u6yoeE2DmSjmOeDzX2SZKE">🎓</span>
+            <div class="fresh-title" data-page-node-id="bFgCiixDswK5K5ZdfDc7XR">
               你好，2026 级新同学
-              <small>报到、选课、军训、宿舍——学长学姐把路都替你踩过了</small>
+              <small data-page-node-id="KvI62K4OLv1Vc6MsMG1ff2">报到、选课、军训、宿舍，学长学姐把路都替你踩过了</small>
             </div>
           </div>
-          <div class="fresh-chips">
-            <button class="fchip on">全部</button>
-            <button class="fchip">报到流程</button>
-            <button class="fchip">宿舍生活</button>
-            <button class="fchip">英语分级</button>
-            <button class="fchip">转专业</button>
-            <button class="fchip">计算机</button>
-            <button class="fchip">竞赛</button>
+          <div class="fresh-chips" data-page-node-id="DAYxyCtwjMtfb9OMbK4MRC">
+            <button class="fchip on" data-page-node-id="tsRmPDSwutRoLhZxqSenqs">全部</button>
+            <button class="fchip" data-page-node-id="3FmPrZVUVHnPfZXiu0PSdM">报到流程</button>
+            <button class="fchip" data-page-node-id="ncdpBfj0LY0pNs2m4Izmf1">宿舍生活</button>
+            <button class="fchip" data-page-node-id="HYWCCk8vIgKU96yYlMNuIY">英语分级</button>
+            <button class="fchip" data-page-node-id="CdVBP2Opa5H5IbKPt9j0v9">转专业</button>
+            <button class="fchip" data-page-node-id="yd9fzdsgZb5qfsFyrh2URF">计算机</button>
+            <button class="fchip" data-page-node-id="PObh0hwPRbT76JFmL3IWuX">竞赛</button>
           </div>
-          <div class="feed-row" style="padding-left:0;padding-right:0">
-            <div class="feed-date"><b>01</b><small>新生引路</small></div>
-            <div>
-              <div class="feed-eyebrow">🎓 新生引路 · 通用资料 <span class="fr-pill fine">精点</span></div>
-              <div class="feed-title">计算机零基础第一课：专业到底学什么，怎么才算入门</div>
-              <div class="feed-desc">写给刚进大学的计算机新生：这个专业到底在学什么、什么才算真的入门。</div>
+          <div class="feed-row" style="padding-left:0;padding-right:0" data-page-node-id="Ia0jfJAyTHONCgnFy6L90d">
+            <div class="feed-date" data-page-node-id="BSmw8UIPbopXRhslahSMK4"><b data-page-node-id="ncE0ssoXfn2XrwVOeHH6mX">01</b><small data-page-node-id="MNO8Mr8LjZoYfnsACMQAsA">新生引路</small></div>
+            <div data-page-node-id="XnOkAN5Aptu6A54Pwo5xLg">
+              <div class="feed-eyebrow" data-page-node-id="qot1KDqXgS9XF7ywpDRlo7">🎓 新生引路 · 通用资料 <span class="fr-pill fine" data-page-node-id="LT5VkBfBv8PCHX8pGyUrBZ">精点</span></div>
+              <div class="feed-title" data-page-node-id="W5mtGMQP0qF08m5MMSdpGp">计算机零基础第一课：专业到底学什么，怎么才算入门</div>
+              <div class="feed-desc" data-page-node-id="74Wt7UlqrFpHB2iyLFOCx5">写给刚进大学的计算机新生：这个专业到底在学什么、什么才算真的入门。</div>
             </div>
-            <div class="feed-arrow">›</div>
+            <div class="feed-arrow" data-page-node-id="V1dQWoEYD1Y9fGSs8iyRRd">›</div>
           </div>
-          <div class="feed-row" style="padding-left:0;padding-right:0">
-            <div class="feed-date"><b>02</b><small>新生引路</small></div>
-            <div>
-              <div class="feed-eyebrow">🎓 新生引路 · 通用资料</div>
-              <div class="feed-title">计算机第一课</div>
-              <div class="feed-desc">大学第一学期怎么过：选课、自学路径与常见误区，学长踩过的坑都在这。</div>
+          <div class="feed-row" style="padding-left:0;padding-right:0" data-page-node-id="YMdXFkQkrHQLrs1vlAcNky">
+            <div class="feed-date" data-page-node-id="AKFSMilfGmWx1gNXEhMJ9H"><b data-page-node-id="zDTYcoLFBtJXi105W1vn0q">02</b><small data-page-node-id="rpxxjisyhDOyot19BmEDmT">新生引路</small></div>
+            <div data-page-node-id="q5hAQKfRu1F7nndZDBJiZ9">
+              <div class="feed-eyebrow" data-page-node-id="gVgRS3vcxcL5M2j6sQNvpI">🎓 新生引路 · 通用资料</div>
+              <div class="feed-title" data-page-node-id="7Z8bZmr2z8C7IcdDdNFATU">计算机第一课</div>
+              <div class="feed-desc" data-page-node-id="zXFEPVjjmZWBtAiocbCwNv">大学第一学期怎么过：选课、自学路径与常见误区，学长踩过的坑都在这。</div>
             </div>
-            <div class="feed-arrow">›</div>
+            <div class="feed-arrow" data-page-node-id="Pl3dbK5ZcRQl33ZiGS4RCk">›</div>
           </div>
-          <div class="feed-row" style="padding-left:0;padding-right:0;border-bottom:none">
-            <div class="feed-date"><b>03</b><small>新生引路</small></div>
-            <div>
-              <div class="feed-eyebrow">🎓 新生引路 · 通用资料</div>
-              <div class="feed-title">深大计算机学院奖学金助学金评定制度汇总</div>
-              <div class="feed-desc">深大计算机奖学金与助学金评定制度汇总，想拿奖学金先读懂规则。</div>
+          <div class="feed-row" style="padding-left:0;padding-right:0;border-bottom:none" data-page-node-id="HI4foxtOzOLFHZ74GBmLOn">
+            <div class="feed-date" data-page-node-id="GiaN62v1kgzxCOK8WTbEoD"><b data-page-node-id="UlWV2w4ERfEk4txgTWBf64">03</b><small data-page-node-id="MqmHOGFppTScFv09ceMKGn">新生引路</small></div>
+            <div data-page-node-id="hAXnCdXRnBKiBMCVKBtcCF">
+              <div class="feed-eyebrow" data-page-node-id="gBXKkoKyZnsFpvT9WwxgMa">🎓 新生引路 · 通用资料</div>
+              <div class="feed-title" data-page-node-id="7Yg1QF6KiiqN3UR9h8zHox">深大计算机学院奖学金助学金评定制度汇总</div>
+              <div class="feed-desc" data-page-node-id="EO0NY3BdXMpm43h4aCyabp">深大计算机奖学金与助学金评定制度汇总，想拿奖学金先读懂规则。</div>
             </div>
-            <div class="feed-arrow">›</div>
+            <div class="feed-arrow" data-page-node-id="B2YGmAmuQ4mS4H0o82NjOW">›</div>
           </div>
         </section>
 
-        <section class="blog-sec">
-          <div class="blog-sec-head">
-            <h2>最新上架</h2>
-            <a class="bs-more" href="#">全部 →</a>
+        <section class="blog-sec" data-page-node-id="tASDBcTNewJjAHF9bx6GtG">
+          <div class="blog-sec-head" data-page-node-id="bJbp9slikE08lDnJAjGG09">
+            <h2 data-page-node-id="XQ2OtbAJxvFUks8OrcqlUd">最新上架</h2>
+            <a class="bs-more" href="08-library.html" data-page-node-id="7fjAEKQznAGBnSjdUuvCyq">全部 →</a>
           </div>
-          <div class="blog-sec-sub">按收录时间倒序，每天更新</div>
+          <div class="blog-sec-sub" data-page-node-id="Z9mw67qmjXA1uAPsYVKaxz">按收录时间倒序，每天更新</div>
 
-          <div class="feed-row">
-            <div class="feed-date"><b>09</b><small>09月</small></div>
-            <div>
-              <div class="feed-eyebrow">📖 课程学习 · 通用资料 <span class="fr-pill free">免费</span></div>
-              <div class="feed-title">C语言基础练习题：66 题从 Hello World 到课程设计</div>
-              <div class="feed-desc">66 道题覆盖 C 语言期末全部基础语法。每题带可直接编译运行的参考代码和讲解（全部代码已用 gcc 实测编译通过）。</div>
-              <div class="feed-meta"><b>温昊璇</b><span>👁 20</span><span>⭐ 0</span><span class="tag">#C语言</span><span class="tag">#未复习</span></div>
+          <div class="feed-row" data-page-node-id="tHM94WVoDniydg5jiAnKEC">
+            <div class="feed-date" data-page-node-id="knnOJvkd5l1KSuaJ2lpBcB"><b data-page-node-id="8CSZcAqsQKlV7NyUBySnlB">09</b><small data-page-node-id="BujfuS3FMMzPnArhfLdQZn">09月</small></div>
+            <div data-page-node-id="2QGNsKm6fsHvEmzqV4duwb">
+              <div class="feed-eyebrow" data-page-node-id="dShtxFHPZxpwEwS0UvQTf6">📖 课程学习 · 通用资料 <span class="fr-pill free" data-page-node-id="q2jBKGV3fZNNrwvJoMAfxE">免费</span></div>
+              <div class="feed-title" data-page-node-id="c1HjHn7GGuWeWnwReyDQOx">C语言基础练习题：66 题从 Hello World 到课程设计</div>
+              <div class="feed-desc" data-page-node-id="wQA5kAKIDCDYWrnvLF6gLU">66 道题覆盖 C 语言期末全部基础语法。每题带可直接编译运行的参考代码和讲解（全部代码已用 gcc 实测编译通过）。</div>
+              <div class="feed-meta" data-page-node-id="V7KCZK5RjLqVJ2TrPKQ0Ro"><b data-page-node-id="Pe1G5NHx4g1oSxUEkODQRk">温昊璇</b><span data-page-node-id="jX2kqN6kzQBHR7ClQZK7q2">👁 20</span><span data-page-node-id="eXufkYorYoFgVTZeGuEtKR">⭐ 0</span><span class="tag" data-page-node-id="i7tbOAyV7ARj3uFelOyOz8">#C语言</span><span class="tag" data-page-node-id="3156oaeQNquGPaRri7QXz2">#未复习</span></div>
             </div>
-            <div class="feed-arrow">›</div>
+            <div class="feed-arrow" data-page-node-id="rNvDAUbMFoLC5R5192NluZ">›</div>
           </div>
-          <div class="feed-row">
-            <div class="feed-date"><b>05</b><small>09月</small></div>
-            <div>
-              <div class="feed-eyebrow">🏫 家教教案 · 通用资料 <span class="fr-pill free">免费</span></div>
-              <div class="feed-title">家教第一课</div>
-              <div class="feed-desc">第一次去家教怎么备课、怎么开场、怎么和家长相处，全流程经验。</div>
-              <div class="feed-meta"><b>温昊璇</b><span>👁 12</span><span>⭐ 1</span><span class="tag">#家教经验</span></div>
+          <div class="feed-row" data-page-node-id="QaMyo7QZ3zJAcFfetgDjp8">
+            <div class="feed-date" data-page-node-id="tUQ2z2LOE9oqQR9zBL4oHD"><b data-page-node-id="CClBf6ApuV9T45HA6LIutr">05</b><small data-page-node-id="apjQFPpowO4fmTkQWMdnxx">09月</small></div>
+            <div data-page-node-id="LpYyyGIXsLj1ABQdBdzSVL">
+              <div class="feed-eyebrow" data-page-node-id="zvtl9jkshWrA6QCqerf0eV">🏫 家教教案 · 通用资料 <span class="fr-pill free" data-page-node-id="IRg0nmbtNEr4KMuC2YX1re">免费</span></div>
+              <div class="feed-title" data-page-node-id="W4iy6xAcEGTc4tl8cMciAz">家教第一课</div>
+              <div class="feed-desc" data-page-node-id="TGKOHNF8ulX33VCD8Dd73N">第一次去家教怎么备课、怎么开场、怎么和家长相处，全流程经验。</div>
+              <div class="feed-meta" data-page-node-id="0AwWcq1fyBAawvWqlozSp2"><b data-page-node-id="CB5TvKoMhY49WIPc7PcrMg">温昊璇</b><span data-page-node-id="6Hz9AEnBsYETjDIkTo5zsm">👁 12</span><span data-page-node-id="AxFpouli2HKfaGuEK04PXF">⭐ 1</span><span class="tag" data-page-node-id="ZjW6iMFaBUl3sMrn82GiVP">#家教经验</span></div>
             </div>
-            <div class="feed-arrow">›</div>
+            <div class="feed-arrow" data-page-node-id="s8P1CwVZlAGHZQdtKnbnzu">›</div>
           </div>
-          <div class="feed-row">
-            <div class="feed-date"><b>05</b><small>09月</small></div>
-            <div>
-              <div class="feed-eyebrow">🎯 升学备考 · 通用资料 <span class="fr-pill free">免费</span></div>
-              <div class="feed-title">计算机考研 408 指南</div>
-              <div class="feed-desc">408 四门课（数据结构/组成原理/操作系统/计算机网络）的复习策略与资料选择。</div>
-              <div class="feed-meta"><b>温昊璇</b><span>👁 15</span><span>⭐ 0</span><span class="tag">#考研</span></div>
+          <div class="feed-row" data-page-node-id="ynUjw8VzRT6jFKVD5fLMNO">
+            <div class="feed-date" data-page-node-id="LdOGeUrR5fky1Bgb4byRRc"><b data-page-node-id="GaVa0xvmM65CPeirS7BPWQ">05</b><small data-page-node-id="oEpmVq8YF2azTVnAenDLjF">09月</small></div>
+            <div data-page-node-id="3HW43UXcZoKHjcITHEUeWo">
+              <div class="feed-eyebrow" data-page-node-id="WLTyAeO0KfqCoIwW3pYa7E">🎯 升学备考 · 通用资料 <span class="fr-pill free" data-page-node-id="Hsf76DQGvFTRhpwLgNOPgE">免费</span></div>
+              <div class="feed-title" data-page-node-id="EKubWy7fOwh4Nt38eOmVtN">计算机考研 408 指南</div>
+              <div class="feed-desc" data-page-node-id="uK4J1m8XjALEaf7i6QPMVD">408 四门课（数据结构/组成原理/操作系统/计算机网络）的复习策略与资料选择。</div>
+              <div class="feed-meta" data-page-node-id="tFGlw0Jd3XZl8jg0B3Fhjb"><b data-page-node-id="BwEB5HzjQ2xtZEBDEcmMGz">温昊璇</b><span data-page-node-id="vPlAS8n57lCZkcDr2z079e">👁 15</span><span data-page-node-id="i0tGAvWzCZR4miREButnqX">⭐ 0</span><span class="tag" data-page-node-id="tU41rOHX0v3r8kkDItEGX9">#考研</span></div>
             </div>
-            <div class="feed-arrow">›</div>
+            <div class="feed-arrow" data-page-node-id="F6R0BPkRmHAX4zvHnF1gQN">›</div>
           </div>
-          <div class="feed-row">
-            <div class="feed-date"><b>05</b><small>09月</small></div>
-            <div>
-              <div class="feed-eyebrow">🌱 成长视野 · 通用资料 <span class="fr-pill free">免费</span> <span class="fr-pill fine">精点</span></div>
-              <div class="feed-title">计算机方向全景图</div>
-              <div class="feed-desc">计算机岗位方向全览：后端、前端、AI、安全、测试的技能要求与前景对比。</div>
-              <div class="feed-meta"><b>温昊璇</b><span>👁 13</span><span>⭐ 2</span><span class="tag">#方向选择</span></div>
+          <div class="feed-row" data-page-node-id="9ENPqs6oPbELzgKO2IUsvh">
+            <div class="feed-date" data-page-node-id="7vKWsOPfCTqW5sDIxmvcI9"><b data-page-node-id="aYhUCZutcXyfaBwa4w3Tls">05</b><small data-page-node-id="p0hiQHEHBagwukqOIZmNzl">09月</small></div>
+            <div data-page-node-id="Jj8gRwN3RfjJOWBAz52fC2">
+              <div class="feed-eyebrow" data-page-node-id="hooqHHLhcnSjlDH7DKNNle">🌱 成长视野 · 通用资料 <span class="fr-pill free" data-page-node-id="tFXsKb2HjABRpiHNGE44e3">免费</span> <span class="fr-pill fine" data-page-node-id="zkkIdbGWnI7nbsQ6nw29Sr">精点</span></div>
+              <div class="feed-title" data-page-node-id="lJr2V3s5yozmppD0z8yVN2">计算机方向全景图</div>
+              <div class="feed-desc" data-page-node-id="hhfOW5KdQUJ11zUuJt3nEo">计算机岗位方向全览：后端、前端、AI、安全、测试的技能要求与前景对比。</div>
+              <div class="feed-meta" data-page-node-id="NHL5pAD3pCu0gJ26b8OOWN"><b data-page-node-id="aFKoCtBbr9pP3nGuG7sMrP">温昊璇</b><span data-page-node-id="DlluVDlHbwiVNpDcxVLUmw">👁 13</span><span data-page-node-id="gMQ0ZjNDFzT8g1vnHLFF1w">⭐ 2</span><span class="tag" data-page-node-id="I5HRqsPiUnGrlAfCHzuuDh">#方向选择</span></div>
             </div>
-            <div class="feed-arrow">›</div>
+            <div class="feed-arrow" data-page-node-id="PQIl1W3KSXE6bVDECBz8Ai">›</div>
           </div>
-          <div class="feed-foot"><a class="btn btn-light btn-sm" href="08-library.html">浏览更早的资料 →</a></div>
-        </section>
-      </div>
-
-      <!-- ── 区 B：路线库 ── -->
-      <div data-panel="routes" hidden>
-        <section class="blog-sec">
-          <div class="blog-sec-head">
-            <h2>路线库</h2>
-            <a class="bs-more" href="04-survey.html">定制我的路线 →</a>
-          </div>
-          <div class="blog-sec-sub">每条都由已上岸的学长学姐验证过是真的走得通。挑一条开始，或者直接按你的情况排一条。</div>
-
-          <a class="toon-card hoverable" href="02-explore.html"
-             style="display:flex;gap:16px;padding:18px;margin-bottom:12px;background:linear-gradient(120deg,#fff,var(--pri-50))">
-            <span style="width:56px;height:56px;border-radius:16px;background:var(--pri);display:grid;place-items:center;font-size:26px;flex:none;box-shadow:0 3px 0 rgba(208,74,42,.3)">🧭</span>
-            <span style="flex:1">
-              <b style="font-size:16px;font-weight:800;display:block">计算机探索路线 · 8 站</b>
-              <span style="font-size:13px;color:var(--ink-2);display:block;margin-top:3px">还不知道选什么方向就走这条。从黑窗口到 AI 各摸一遍，用真实手感选方向。</span>
-              <span style="display:flex;gap:12px;margin-top:8px;font-size:11.5px;color:var(--ink-soft)">
-                <span>⏱ 约 16 小时</span><span>👥 1,284 人走过</span><span class="fr-pill free">免费</span>
-              </span>
-            </span>
-          </a>
-
-          <div class="feed-row">
-            <div class="feed-date"><b>01</b><small>后端</small></div>
-            <div>
-              <div class="feed-eyebrow">💼 求职实习 · 6 阶段 24 关卡 <span class="fr-pill free">学习全程免费</span></div>
-              <div class="feed-title">Java 后端成长路线：从语法到能扛住面试的项目</div>
-              <div class="feed-desc">由 3 位已上岸大厂后端的学长验证。含 4 个可写进简历的项目、每阶段的验收标准与常见挂点。</div>
-              <div class="feed-meta"><b>课搭教研组</b><span>👥 862 人在走</span><span class="tag">#Java</span><span class="tag">#Spring</span><span class="tag">#可验收</span></div>
-            </div>
-            <div class="feed-arrow">›</div>
-          </div>
-          <div class="feed-row">
-            <div class="feed-date"><b>02</b><small>算法</small></div>
-            <div>
-              <div class="feed-eyebrow">💼 求职实习 · 5 阶段 30 关卡 <span class="fr-pill free">学习全程免费</span></div>
-              <div class="feed-title">算法与数据结构：从 LeetCode 100 到能过笔试</div>
-              <div class="feed-desc">按遗忘曲线排布的刷题路线，每阶段配一场模拟笔试。由拿到 SP offer 的学长验证。</div>
-              <div class="feed-meta"><b>课搭教研组</b><span>👥 731 人在走</span><span class="tag">#算法</span><span class="tag">#笔试</span></div>
-            </div>
-            <div class="feed-arrow">›</div>
-          </div>
-          <div class="feed-row">
-            <div class="feed-date"><b>03</b><small>前端</small></div>
-            <div>
-              <div class="feed-eyebrow">💼 求职实习 · 5 阶段 22 关卡 <span class="fr-pill free">学习全程免费</span></div>
-              <div class="feed-title">前端成长路线：从写得出页面到写得好项目</div>
-              <div class="feed-desc">HTML/CSS → JS → 框架 → 工程化 → 项目。每阶段一个能上线给别人看的作品。</div>
-              <div class="feed-meta"><b>课搭教研组</b><span>👥 508 人在走</span><span class="tag">#前端</span><span class="tag">#React</span></div>
-            </div>
-            <div class="feed-arrow">›</div>
-          </div>
-          <div class="feed-row">
-            <div class="feed-date"><b>04</b><small>AI</small></div>
-            <div>
-              <div class="feed-eyebrow">🌱 成长视野 · 6 阶段 26 关卡 <span class="fr-pill free">学习全程免费</span></div>
-              <div class="feed-title">AI 应用开发路线：会用大模型做出真东西</div>
-              <div class="feed-desc">不教你训模型，教你把模型用起来：Prompt → RAG → Agent → 上线。门槛比你想的低。</div>
-              <div class="feed-meta"><b>课搭教研组</b><span>👥 1,102 人在走</span><span class="tag">#AI</span><span class="tag">#RAG</span><span class="tag">#Agent</span></div>
-            </div>
-            <div class="feed-arrow">›</div>
-          </div>
-          <div class="feed-foot"><a class="btn btn-light btn-sm" href="#">查看全部 28 条路线 →</a></div>
+          <div class="feed-foot" data-page-node-id="NnDUwalHoB84o5PwVkSiGf"><a class="btn btn-light btn-sm" href="08-library.html" data-page-node-id="Un1lNtyoTVCg9tsiRBc5rl">浏览更早的资料 →</a></div>
         </section>
       </div>
+
+      
 
     </div>
 
     <!-- ══════════ 侧栏 ══════════ -->
-    <aside class="blog-side">
-      <div class="side-box">
-        <h3>🔥 本周路线推进榜</h3>
-        <div class="sb-sub">按本周走过的关卡数排名</div>
-        <div class="rank-item"><span class="rank-no t1">1</span><span class="rank-av" style="background:#ff6b4a">温</span><span class="rank-info"><b>温昊璇</b><span>Java 后端</span></span><span class="rank-metric">26</span></div>
-        <div class="rank-item"><span class="rank-no t2">2</span><span class="rank-av" style="background:#10b981">O</span><span class="rank-info"><b>Orion</b><span>AI 应用</span></span><span class="rank-metric">19</span></div>
-        <div class="rank-item"><span class="rank-no t3">3</span><span class="rank-av" style="background:#6366f1">m</span><span class="rank-info"><b>mro4</b><span>前端</span></span><span class="rank-metric">14</span></div>
-        <div class="rank-item"><span class="rank-no">4</span><span class="rank-av" style="background:#e8638f">y</span><span class="rank-info"><b>yyy</b><span>算法</span></span><span class="rank-metric">11</span></div>
-        <div class="rank-item"><span class="rank-no">5</span><span class="rank-av" style="background:#f59e0b">平</span><span class="rank-info"><b>平台管理员</b><span>探索路线</span></span><span class="rank-metric">9</span></div>
+    <aside class="blog-side" data-page-node-id="AHsIOuRlg3E7lleMXjjRqa">
+      <div class="side-box" data-page-node-id="2cbEGkGDhA9hmTio0ZIA8N">
+        <h3 data-page-node-id="MBNZW4P5wvVTnAB5Bo9T9Y">🔥 本周路线推进榜</h3>
+        <div class="sb-sub" data-page-node-id="htSfAPy2RmWakOmJK7DBva">按本周走过的关卡数排名</div>
+        <div class="rank-item" data-page-node-id="3hGnq1gdxTKH1wsxPgd662"><span class="rank-no t1" data-page-node-id="jguE27lVyMVholHYUEkn7G">1</span><span class="rank-av" style="background:#ff6b4a" data-page-node-id="LeNnJVRWVuLn62iXhowtyU">温</span><span class="rank-info" data-page-node-id="VsveFfTKVdLuMieBdsC61K"><b data-page-node-id="cmiTgU52oDRrRw2L7Pmmeo">温昊璇</b><span data-page-node-id="EpFP9nae0HttkuLbAJnBpc">Java 后端</span></span><span class="rank-metric" data-page-node-id="HI0di7FUGNp7mQe8hFo68m">26</span></div>
+        <div class="rank-item" data-page-node-id="Vg3ObVPfrv4uzE5TJBrHLN"><span class="rank-no t2" data-page-node-id="BOcyyE6CWKdk60vbBDsgvm">2</span><span class="rank-av" style="background:#10b981" data-page-node-id="Unw1IifZpbdwPShVTtEkz1">O</span><span class="rank-info" data-page-node-id="i94eWml4ePHn2x5Ae6m2q4"><b data-page-node-id="ErNlLPxNoLyxh7sOTf8dBU">Orion</b><span data-page-node-id="EYACDTdwGFFmX3aIo3fNaa">AI 应用</span></span><span class="rank-metric" data-page-node-id="ayVuflTA2MlfsD5PxxinB3">19</span></div>
+        <div class="rank-item" data-page-node-id="ChKRcFwwFQTcMEYe9X0kGu"><span class="rank-no t3" data-page-node-id="0aStTnYFwHESyL6mOruP13">3</span><span class="rank-av" style="background:#6366f1" data-page-node-id="BB8rx0OYZrwD5KspzEVnnU">m</span><span class="rank-info" data-page-node-id="hnfmSlsyBTER9kWvrBZ6bC"><b data-page-node-id="hXyYhwjjftTJiWtWiSOiQZ">mro4</b><span data-page-node-id="uIBL0Fo9IxtcZnoGAOzDFU">前端</span></span><span class="rank-metric" data-page-node-id="uh157jXXs4SiUyWyVG369a">14</span></div>
+        <div class="rank-item" data-page-node-id="ORLIinfj4d29kkOaWYaYqE"><span class="rank-no" data-page-node-id="xYRtMAMF7ynr6xmyZfu5Zl">4</span><span class="rank-av" style="background:#e8638f" data-page-node-id="ExOdNsCX1wlwAQ9OQWdrgX">y</span><span class="rank-info" data-page-node-id="3GEW4x0GNNmALiGYozuSEu"><b data-page-node-id="Z16m1JB3BXLkttQhRHvKTU">yyy</b><span data-page-node-id="iMB6sWYGA3gwpTN1AvybUX">算法</span></span><span class="rank-metric" data-page-node-id="dEbVJy5sjGQDkGZsTXlSSW">11</span></div>
+        <div class="rank-item" data-page-node-id="l3Dx9i6ZIrKwcHKwMV4dzI"><span class="rank-no" data-page-node-id="jz4LV202XD70WVHjpWvPe0">5</span><span class="rank-av" style="background:#f59e0b" data-page-node-id="JIKH9JRAn5nA6f8RHZMfGs">平</span><span class="rank-info" data-page-node-id="ReXypeHfMMEBC196WRAga9"><b data-page-node-id="OKCQsGMLJMmGWlVFDFnQVN">平台管理员</b><span data-page-node-id="OoeStFZtuD1l8PUdzxz2X4">探索路线</span></span><span class="rank-metric" data-page-node-id="eoWvvBKeZsJ6iJVDKPCQ9W">9</span></div>
       </div>
 
-      <div class="side-box" style="background:var(--pri-50);border-color:#ffd9cd">
-        <h3>🧭 还没定方向？</h3>
-        <div class="sb-sub" style="color:var(--pri-700)">先走一遍探索路线，8 站摸完再选</div>
-        <a class="btn btn-primary btn-block btn-sm" href="02-explore.html">开始探索 →</a>
-        <div style="font-size:11.5px;color:var(--pri-700);margin-top:9px;text-align:center">免费 · 约 16 小时</div>
+      <div class="side-box" style="background:var(--pri-50);border-color:#ffd9cd" data-page-node-id="wLZedocHklbA87EFZybu4x">
+        <h3 data-page-node-id="rEnDauBYxwE2RDXMXWurq1">🧭 还没定方向？</h3>
+        <div class="sb-sub" style="color:var(--pri-700)" data-page-node-id="dkJhODE4iFM683AoFqdGoC">先走一遍探索路线，主干摸完再选</div>
+        <a class="btn btn-primary btn-block btn-sm" href="02-explore.html" data-page-node-id="O3qhBZwnByONtAVkFVLNl6">开始探索 →</a>
+        <div style="font-size:11.5px;color:var(--pri-700);margin-top:9px;text-align:center" data-page-node-id="JdwDoIYaQIQHY3sHW6aC3C">免费 · 主干约 20 小时</div>
       </div>
 
-      <div class="side-box">
-        <h3>📢 公告</h3>
-        <div class="sb-sub">平台动态</div>
-        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.7">
-          <b style="color:var(--ink)">2026/9/14</b><br />「探索路线」上线，大一同学建议从这里开始。
+      <div class="side-box" data-page-node-id="zyJNRM1D9kSYffSPDljFu5">
+        <h3 data-page-node-id="1D3dIWz8UC4fpiuP42sQmI">📢 公告</h3>
+        <div class="sb-sub" data-page-node-id="JHmb3HUWHNqlcqHNwISu9E">平台动态</div>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.7" data-page-node-id="NR6G7iiq5YvWgvhpB2RDhw">
+          <b style="color:var(--ink)" data-page-node-id="A02bATGzLO15twyzBBuoPq">2026/9/14</b><br  data-page-node-id="8iBKWAj06atGuSRiGnNb26"/>「探索路线」上线，大一同学建议从这里开始。
         </div>
       </div>
 
-      <div class="side-box">
-        <h3>🗂️ 资料分类</h3>
-        <div class="sb-sub">点进入目录</div>
-        <div style="font-size:12.5px">
-          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">🎓 新生引路 <span style="color:var(--ink-faint)">12</span></a>
-          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">📖 课程学习 <span style="color:var(--ink-faint)">28</span></a>
-          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">🎯 升学备考 <span style="color:var(--ink-faint)">24</span></a>
-          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">✈️ 留学申请 <span style="color:var(--ink-faint)">31</span></a>
-          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">💼 求职实习 <span style="color:var(--ink-faint)">22</span></a>
-          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">🌱 成长视野 <span style="color:var(--ink-faint)">15</span></a>
-          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html">🏫 家教教案 <span style="color:var(--ink-faint)">4</span></a>
+      <div class="side-box" data-page-node-id="ZBefHDaWAF4pql9A99sYml">
+        <h3 data-page-node-id="0kEyylnEbx2nXywHiyAJxX">🗂️ 资料分类</h3>
+        <div class="sb-sub" data-page-node-id="HrhtFA42QDZEmqbICwXiiN">点进入目录</div>
+        <div style="font-size:12.5px" data-page-node-id="1Cnr28gWMk0sUYLbEqUx6c">
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html" data-page-node-id="5UNWW7rQTEvjJTK4qpjMoW">🎓 新生引路 <span style="color:var(--ink-faint)" data-page-node-id="liBsE0QmaCGUfeUF0ZNH0y">12</span></a>
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html" data-page-node-id="QGSXXlTbP9Vvw90Bac6Jl2">📖 课程学习 <span style="color:var(--ink-faint)" data-page-node-id="chFJZCVULrdEHOwwJccT14">28</span></a>
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html" data-page-node-id="loEgQWJscXmuVhL5GXocSL">🎯 升学备考 <span style="color:var(--ink-faint)" data-page-node-id="AMPYkD1ypGx7DOPDl2Pjrc">24</span></a>
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html" data-page-node-id="DRyvIkpIBy9J3UFUefvQAS">✈️ 留学申请 <span style="color:var(--ink-faint)" data-page-node-id="AsGW6QgUvhGClY6lge3Gyf">31</span></a>
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html" data-page-node-id="xW77mt0JZG2Mr1hDevcCIQ">💼 求职实习 <span style="color:var(--ink-faint)" data-page-node-id="gRkbFNys8pAV8p0tBEJuTE">22</span></a>
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html" data-page-node-id="NVQWDm2YD7zxHcGPEvnux5">🌱 成长视野 <span style="color:var(--ink-faint)" data-page-node-id="MvqW4I3hHO9delyr8MR6cn">15</span></a>
+          <a style="display:flex;justify-content:space-between;padding:4px 0;color:var(--ink-2)" href="08-library.html" data-page-node-id="R5ybF5Elj32KvdRFPPb40l">🏫 家教教案 <span style="color:var(--ink-faint)" data-page-node-id="nnIx6WwZ2ZcKuAx899RbAg">4</span></a>
         </div>
       </div>
     </aside>
@@ -427,47 +394,52 @@
 </main>
 
 <!-- ══════════ 页脚 ══════════ -->
-<footer class="foot">
-  <div class="foot-inner">
-    <div class="foot-brand">
-      <div class="logo">
-        <span class="logo-mark">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+<footer class="foot" data-page-node-id="HfHG7qp3iyIgX94TGodCBg">
+  <div class="foot-inner" data-page-node-id="BXmsIs58v0nGgdLHDlO8Hi">
+    <div class="foot-brand" data-page-node-id="X9q9FYe3DLuDEx5N41vewB">
+      <div class="logo" data-page-node-id="HNNQ1ldG4kmcApWTwnO1fI">
+        <span class="logo-mark" data-page-node-id="0UtoylYsSJXJxQpuLcEn15">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="FhMJ9tEJ3HBGoLNkxjnUJn"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" data-page-node-id="YeUAwlZDvW2jk5WfNWry8n"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" data-page-node-id="LcxIv7ftx5GEJ9HNcj7iSF"/></svg>
         </span>
-        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+        <span class="logo-text" data-page-node-id="bivyKESEHU9DewI1Wph8gP"><b data-page-node-id="5C20UvvW6s57zCIkQD66hH">课搭</b><span data-page-node-id="jNyxMYtDzavg55UadF5aG8">大学生成长社区</span></span>
       </div>
-      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
-      <p class="creed">「愿课搭陪你走过每一次选方向的焦虑，需要时也总能搭把手。」</p>
+      <p data-page-node-id="EdxZWnSsUZ0TKzft1P9YYG">不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+      <p class="creed" data-page-node-id="pstspgcK88IVULPLG2FaDd">「愿课搭陪你走过每一次选方向的焦虑，需要时也总能搭把手。」</p>
     </div>
-    <div class="foot-col"><h4>探索</h4><a href="#">校园广场</a><a href="#">关注动态</a><a href="02-explore.html">探索路线</a><a href="04-survey.html">定制路线</a></div>
-    <div class="foot-col"><h4>创作者</h4><a href="#">发布作品</a><a href="#">分类浏览</a><a href="#">关注动态</a></div>
-    <div class="foot-col"><h4>关于</h4><a href="#">平台理念</a><a href="#">校园认证</a><a href="#">原创保护</a><a href="#">联系我们</a></div>
+    <div class="foot-col" data-page-node-id="s2Fc4497dX69cfewjE4CUa"><h4 data-page-node-id="68ddQhR7BOV81Z6neGhI8a">探索</h4><a href="#" data-page-node-id="3mLSN34S7D2jfXEODeUZKP">校园广场</a><a href="#" data-page-node-id="EJINXBk26xvENH0ED4YGnl">关注动态</a><a href="02-explore.html" data-page-node-id="LqtdZEa4eEbLJOFe5NTEyQ">探索路线</a><a href="04-survey.html" data-page-node-id="tp5gU4QfxKeiBWFSho5fA9">定制路线</a></div>
+    <div class="foot-col" data-page-node-id="SpoZ8rdBdNJtKL68CqdMNk"><h4 data-page-node-id="bLIRLZIS4yt7b7SGEEpzV7">创作者</h4><a href="#" data-page-node-id="XJtgfSqDqTGgRN4UjFI6aC">发布作品</a><a href="#" data-page-node-id="hoCDkHkeSHdKha0w7EhhvO">分类浏览</a><a href="#" data-page-node-id="fV8ny8QcHWtZc6kBvGrKFz">关注动态</a></div>
+    <div class="foot-col" data-page-node-id="CNpg67ZHwwzIMUmxL9XeTN"><h4 data-page-node-id="yqHjcCMANJnAKDPamDkHs5">关于</h4><a href="#" data-page-node-id="ghAvWmIsAJp52UPNnCiuoZ">平台理念</a><a href="#" data-page-node-id="J4RagLulXaCLjdI2g06BXP">校园认证</a><a href="#" data-page-node-id="nNuJ4HJskZlmqX48gE6NK7">原创保护</a><a href="#" data-page-node-id="BGqw90sn9qvYtORp8XXyJX">联系我们</a></div>
   </div>
-  <div class="foot-bottom">© 2026 课搭 · 知识在校园里流动</div>
+  <div class="foot-bottom" data-page-node-id="EdtZL2ndtYT4V17LASO76r">© 2026 课搭 · 知识在校园里流动</div>
 </footer>
 
 <script src="assets/app.js"></script>
 <script>
-  // 双区切换
-  document.querySelectorAll('.zt-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const zone = btn.dataset.zone;
-      document.querySelectorAll('.zt-btn').forEach(b => {
-        const on = b === btn;
-        b.style.borderBottomColor = on ? 'var(--pri)' : 'transparent';
-        b.style.color = on ? 'var(--pri-600)' : 'var(--ink-soft)';
-      });
-      document.querySelectorAll('[data-panel]').forEach(p => {
-        p.hidden = p.dataset.panel !== zone;
-        if (!p.hidden) { p.classList.remove('rise'); void p.offsetWidth; p.classList.add('rise'); }
-      });
+(function () {
+  'use strict';
+
+  /* ── 继续上次：有进行中的路线就把入口顶到最上面 ── */
+  var KH = window.KH;
+  if (KH) {
+    KH.seed();                       // 原型演示用：先塞一份进行中的路线，好让这个入口有东西可显示
+    var r = KH.resume();
+    if (r) {
+      document.getElementById('rsTitle').textContent = '接着走 · ' + r.dir;
+      document.getElementById('rsDesc').textContent =
+        r.stage + ' · ' + r.level + ' · 上次停在' + (KH.ago(r.at) || '最近');
+      document.getElementById('rsMeta').textContent = '还剩 3 关走完这个阶段';
+      document.getElementById('resumeBox').hidden = false;
+    }
+  }
+
+  /* ── 新生 chips ── */
+  document.querySelectorAll('.fchip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      document.querySelectorAll('.fchip').forEach(function (x) { x.classList.remove('on'); });
+      c.classList.add('on');
     });
   });
-  // 新生 chips
-  document.querySelectorAll('.fchip').forEach(c => c.addEventListener('click', () => {
-    document.querySelectorAll('.fchip').forEach(x => x.classList.remove('on'));
-    c.classList.add('on');
-  }));
+})();
 </script>
 </body>
 </html>

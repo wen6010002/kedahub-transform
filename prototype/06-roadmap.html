@@ -52,6 +52,7 @@
 
   /* ── 关卡行 ── */
   .lv { display: flex; align-items: flex-start; gap: 12px; padding: 12px; border-radius: var(--r-lg); transition: background .15s; cursor: pointer; }
+  .lv[hidden], .tasks[hidden] { display: none; }
   .lv:hover { background: var(--bg-soft); }
   .lv + .lv { border-top: 1px solid var(--line-2); border-radius: 0; }
   .lv-dot { width: 26px; height: 26px; border-radius: 50%; flex: none; display: grid; place-items: center;
@@ -80,20 +81,13 @@
 
   .lv-cta { margin: 4px 0 8px 38px; }
 
-  /* ── 路线说明（讲这条路是按什么排的，不讲改了什么） ── */
-  .rnote { display: flex; gap: 9px; align-items: flex-start; margin: 8px 0 10px 38px;
-    background: var(--bg-soft); border-radius: var(--r-lg); padding: 9px 12px; }
-  .rnote .ai { font-size: 14px; flex: none; }
-  .rnote b { font-size: 12px; font-weight: 800; color: var(--ink); }
-  .rnote span { font-size: 12px; color: var(--ink-2); display: block; margin-top: 1px; line-height: 1.55; }
-
   /* ── 阶段验收关：独立关卡，钥匙在外面 ── */
   .gate { margin: 12px 0 4px 38px; border: 2px dashed #ffd0c0; border-radius: var(--r-toon);
     background: linear-gradient(135deg, #fff, var(--pri-50)); padding: 14px 15px;
     display: flex; gap: 12px; align-items: flex-start; }
   .gate-ico { font-size: 20px; flex: none; line-height: 1.35; }
   .gate-body { min-width: 0; flex: 1; }
-  .gate-body > b { font-size: 13px; font-weight: 800; display: block; letter-spacing: -.2px; }
+  .gate-body> b { font-size: 13px; font-weight: 800; display: block; letter-spacing: -.2px; }
   .gate-cap { font-size: 11.5px; color: var(--ink-2); display: block; margin-top: 5px; line-height: 1.6; }
   .gate-cap i { font-style: normal; font-weight: 800; color: var(--pri-700); }
   .gate-hidden { position: relative; margin-top: 9px; border-radius: 8px; overflow: hidden;
@@ -103,13 +97,13 @@
   .gate-hidden .gh-lock { position: absolute; inset: 0; display: grid; place-items: center; text-align: center;
     font-size: 11.5px; font-weight: 800; color: var(--pri-700); letter-spacing: .02em;
     background: rgba(255, 255, 255, .55); backdrop-filter: blur(1.5px); }
-  .gate > .btn { flex: none; align-self: center; }
+  .gate> .btn { flex: none; align-self: center; }
   .gate.done { border-style: solid; border-color: #c9f0e0; background: linear-gradient(135deg, #fff, var(--mint-50)); }
   .gate.done .gate-cap i { color: #0a7d59; }
   @media (max-width: 720px) {
-    .rnote, .gate { margin-left: 0; }
+    .gate { margin-left: 0; }
     .gate { flex-wrap: wrap; }
-    .gate > .btn { width: 100%; }
+    .gate> .btn { width: 100%; }
   }
 
   /* ── 侧栏 ── */
@@ -127,6 +121,16 @@
 
   @media (max-width: 1080px) { .rm-head { grid-template-columns: 1fr; } }
   @media (max-width: 720px) { .stg { grid-template-columns: 44px 1fr; gap: 0 8px; } .lv-right { display: none; } }
+
+  /* 改动落地时闪一下，让人看见「路线真的跟着变了」 */
+  @keyframes kpulse { 0% { box-shadow: 0 0 0 0 rgba(255,107,74,.4); } 100% { box-shadow: 0 0 0 14px rgba(255,107,74,0); } }
+  .pulse { animation: kpulse .7s var(--ease-out); border-radius: var(--r-lg); }
+
+  /* 这一站的资料挂条 */
+  .lv-doc { display:inline-block; margin-top:5px; font-size:11.5px; font-weight:700; color:var(--pri-700);
+    text-decoration:none; }
+  .lv-doc:hover { text-decoration:underline; }
+  .lv-main { display:flex; flex-direction:column; gap:2px; }
 </style>
 </head>
 <body>
@@ -159,21 +163,21 @@
       <div class="kicker">My Route · 专属路线</div>
       <h1>AI 应用开发 · 你的路线</h1>
       <div class="sub">
-        生成于 <b>2026-09-14</b> · 按你填的「每周 6–10 小时」排的节奏 —— 大约 <b>4 个月</b>走完。
+        生成于 <b>2026-09-14</b> · 按你填的「每周 <b id="headHours">6</b> 小时」排的节奏，大约 <b id="headMonths">4</b> 个月走完。
       </div>
       <div class="rm-bar"><i id="rmBar"></i></div>
       <div class="rm-meta">
-        <div><b>38%</b><span>总进度</span></div>
-        <div><b>9 / 24</b><span>已走过关卡</span></div>
-        <div><b>3 / 6</b><span>已通过阶段</span></div>
+        <div><b id="mPct">—</b><span>总进度</span></div>
+        <div><b id="mDone">—</b><span>已走过关卡</span></div>
+        <div><b id="mStage">3 / 6</b><span>已通过阶段</span></div>
         <div><b>2</b><span>本周走过的</span></div>
       </div>
     </div>
     <div>
       <div class="toon-card" style="padding:16px;background:#fff">
         <div style="font-size:12px;font-weight:800;color:var(--ink-soft);letter-spacing:.06em">你在这里</div>
-        <div style="font-size:15px;font-weight:800;margin-top:5px">第 3 阶段 · Prompt 与 API</div>
-        <div style="font-size:12.5px;color:var(--ink-soft);margin-top:3px">还剩 2 关 · 预计 4 天</div>
+        <div style="font-size:15px;font-weight:800;margin-top:5px">第 3 阶段 · 走进大模型</div>
+        <div style="font-size:12.5px;color:var(--ink-soft);margin-top:3px" id="hereLeft">还剩 2 关 · 预计 4 天</div>
         <a class="btn btn-primary btn-block" style="margin-top:12px" href="#lv-now">继续走 →</a>
       </div>
     </div>
@@ -181,6 +185,46 @@
 
   <div class="blog-layout">
     <div class="blog-main">
+
+      <!-- ══════════ 只有两件事要你说了算 ══════════ -->
+      <div class="ask" id="askCard">
+        <div class="ask-h">
+          <span class="ask-ico">🧭</span>
+          <b>有两件事想跟你确认</b>
+          <span class="ask-cnt" id="askCnt">2 件事</span>
+        </div>
+        <div class="ask-sub">
+          别的都按你问卷里的回答排好了。只有这两件，问卷上问不出来，得你说了算。改完当场生效，路线跟着重排。
+        </div>
+
+        <div class="ask-q" data-q="start">
+          <b>第一关从哪儿起步？</b>
+          <span class="aq-why">你说写过脚本、碰过一点 Python。但「写过一点」到底是多少，从文字里看不出来。</span>
+          <div class="ask-opts">
+            <button class="ask-opt on" type="button" data-v="base">先补一节 JSON 再说<small>多花 20 分钟，把地基垫平</small></button>
+            <button class="ask-opt" type="button" data-v="skip">直接做个小工具<small>跳过基础语法，上手就做</small></button>
+          </div>
+        </div>
+
+        <div class="ask-q" data-q="pace">
+          <b>每周给你排多少？</b>
+          <span class="aq-why">问卷上填的「每周 6–10 小时」多半是理想值。按你实际能拿出来的时间排，才走得下去。</span>
+          <div class="ask-opts">
+            <button class="ask-opt on" type="button" data-v="full">按 6 小时排<small>每周 3 个任务</small></button>
+            <button class="ask-opt" type="button" data-v="light">先按 3 小时排<small>每周 2 个任务，路拉长一点</small></button>
+          </div>
+        </div>
+
+        <div class="ask-foot">
+          <a class="btn btn-outline btn-sm" href="04-survey.html">情况有变，重做问卷 →</a>
+          <span class="af-note">改完不用保存，路线自己跟着变</span>
+        </div>
+      </div>
+
+      <div class="quiet" style="margin-bottom:24px">
+        <span class="q-ico">🧩</span>
+        <span>其余部分已经按你的问卷排好了：<b>从哪一站接上</b>、<b>主项目选哪个</b>、<b>每个阶段给几周</b>。这几处走到跟前再调也不迟，现在说了你也没法判断。</span>
+      </div>
 
       <!-- ══════════ 阶段 1 ══════════ -->
       <div class="stg">
@@ -195,10 +239,7 @@
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">装好你的开发环境</span><span class="lv-sub">Python、VS Code、终端基本操作</span></span><span class="lv-right">2026-08-28</span></div>
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">写第一个能跑的 Python 程序</span><span class="lv-sub">变量、循环、函数，够用就行</span></span><span class="lv-right">2026-09-02</span></div>
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">让程序读一个文件</span><span class="lv-sub">把 csv 里的成绩算个平均分</span></span><span class="lv-right">2026-09-05</span></div>
-            <div class="rnote">
-              <span class="ai">🎯</span>
-              <span><b>这一段从「把作业改造成作品」起步</b><span>你手上已经有能跑的东西了，所以这里不带你重做一遍，直接教你怎么把它讲成一个面试能用的故事。</span></span>
-            </div>
+            <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">把作业改造成作品</span><span class="lv-sub">不重做一遍，直接教你怎么把它讲成面试能用的故事</span></span><span class="lv-right">2026-09-06</span></div>
 
             <div class="gate done">
               <span class="gate-ico">🔖</span>
@@ -225,7 +266,7 @@
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">调一个公开 API</span><span class="lv-sub">拿到天气数据并打印出来</span></span><span class="lv-right">2026-09-08</span></div>
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">读懂 JSON</span><span class="lv-sub">从一坨返回里挑出你要的字段</span></span><span class="lv-right">2026-09-10</span></div>
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">把数据存下来</span><span class="lv-sub">写进本地文件，下次直接用</span></span><span class="lv-right">2026-09-11</span></div>
-            <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">处理请求失败</span><span class="lv-sub">超时、报错、重试 —— 让程序不那么脆</span></span><span class="lv-right">2026-09-12</span></div>
+            <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">处理请求失败</span><span class="lv-sub">超时、报错、重试，让程序不那么脆</span></span><span class="lv-right">2026-09-12</span></div>
 
             <div class="gate done">
               <span class="gate-ico">🔖</span>
@@ -240,7 +281,7 @@
       </div>
 
       <!-- ══════════ 阶段 3 · 当前 ══════════ -->
-      <div class="stg">
+      <div class="stg" id="stg3">
         <div class="stg-rail">
           <span class="rt-node active rt-halo" style="width:42px;height:42px;font-size:17px">3</span>
           <span class="stg-line dash"></span>
@@ -254,20 +295,28 @@
           <div class="stg-body">
             <div class="lv"><span class="lv-dot done">✓</span><span class="lv-main"><span class="lv-name">大模型到底在做什么</span><span class="lv-sub">不用数学，用直觉理解「预测下一个词」</span></span><span class="lv-right">已完成</span></div>
 
-            <div class="rnote">
-              <span class="ai">🧱</span>
-              <span><b>这一关前面垫了一步</b><span>结构化输出是后面所有关卡的地基——走相似路线的人，有一半是在这里卡住的。</span></span>
+            <div class="lv" id="lv-json" data-lv>
+              <span class="lv-dot now">2</span>
+              <span class="lv-main">
+                <span class="lv-name">先搞懂 JSON 是什么</span>
+                <span class="lv-sub">一节课，20 分钟</span>
+              </span>
+              <span class="lv-right">现在可以做</span>
+            </div>
+            <div class="tasks" data-tasks id="tasks-json">
+              <div class="task"><span class="tk-box">✓</span><span class="tk-txt">看懂一条 JSON：花括号、键值对、数组各是什么</span></div>
+              <div class="task"><span class="tk-box">✓</span><span class="tk-txt">自己手写一条，再用 Python 把它读出来</span></div>
             </div>
 
             <div class="lv" id="lv-now" data-lv>
-              <span class="lv-dot now">2</span>
+              <span class="lv-dot lock">3</span>
               <span class="lv-main">
                 <span class="lv-name">让模型输出「结构」而不是一段话</span>
-                <span class="lv-sub">3 个小任务 · 约 1.5 小时</span>
+                <span class="lv-sub" id="structSub">3 个小任务 · 约 1.5 小时 · 走完上一关解锁</span>
               </span>
-              <span class="lv-right">进行中</span>
+              <span class="lv-right" id="structRight">未解锁</span>
             </div>
-            <div class="tasks" data-tasks>
+            <div class="tasks" data-tasks id="tasks-struct">
               <div class="task"><span class="tk-box">✓</span><span class="tk-txt">用 API 让模型返回一段 JSON，而不是自由文本</span></div>
               <div class="task"><span class="tk-box">✓</span><span class="tk-txt">给它一个「字段说明书」，看输出会不会变规矩</span></div>
               <div class="task"><span class="tk-box">✓</span><span class="tk-txt">故意喂一个坏输入，观察它会怎么出错</span></div>
@@ -277,7 +326,7 @@
             </div>
 
             <div class="lv" data-lv>
-              <span class="lv-dot lock">3</span>
+              <span class="lv-dot lock">4</span>
               <span class="lv-main"><span class="lv-name">Prompt 的三条实用心法</span><span class="lv-sub">4 个小任务 · 约 2 小时 · 走完上一关解锁</span></span>
               <span class="lv-right">未解锁</span>
             </div>
@@ -289,7 +338,7 @@
             </div>
 
             <div class="lv" data-lv>
-              <span class="lv-dot lock">4</span>
+              <span class="lv-dot lock">5</span>
               <span class="lv-main"><span class="lv-name">成本与速度：别让 API 账单吓到你</span><span class="lv-sub">2 个小任务 · 约 1 小时</span></span>
               <span class="lv-right">未解锁</span>
             </div>
@@ -361,7 +410,8 @@
           <div class="stg-body">
             <div class="lv"><span class="lv-dot lock">1</span><span class="lv-main"><span class="lv-name">给它一个别人能打开的地址</span></span></div>
             <div class="lv"><span class="lv-dot lock">2</span><span class="lv-main"><span class="lv-name">写一份别人看得懂的说明</span></span></div>
-            <div class="lv"><span class="lv-dot lock">3</span><span class="lv-main"><span class="lv-name">收尾：把你的项目放进简历</span></span></div>
+            <div class="lv"><span class="lv-dot lock">3</span><span class="lv-main"><span class="lv-name">别人用的时候别崩：日志与报错</span></span></div>
+            <div class="lv"><span class="lv-dot lock">4</span><span class="lv-main"><span class="lv-name">收尾：把你的项目放进简历</span></span></div>
           </div>
         </div>
       </div>
@@ -374,7 +424,7 @@
             <div style="flex:1;min-width:220px">
               <b style="font-size:16px;font-weight:800">登顶 · 拿到你的第一份能力证明</b>
               <div style="font-size:12.5px;color:var(--ink-2);margin-top:4px">
-                24 关全部走完并通过 6 次阶段验收后，你会得到一份编号可验证的《能力路线证书》，以及一个能写进简历的完整项目。
+                整条路线走完、6 次阶段验收都过了之后，你会拿到一份编号可验证的《能力路线证书》，以及一个能写进简历的完整项目。
               </div>
             </div>
             <a class="btn btn-ink" href="10-pricing.html">验收与证书怎么算 →</a>
@@ -405,7 +455,7 @@
 
       <div class="side-box">
         <h3>🗓️ 本周窗口</h3>
-        <div class="sb-sub">按周算，不按天算 —— 断一天不清零</div>
+        <div class="sb-sub">按周算，不按天算，断一天不清零</div>
         <div class="wk">
           <i class="on">一</i><i class="on">二</i><i class="today">三</i><i>四</i><i>五</i><i>六</i><i>日</i>
         </div>
@@ -416,7 +466,7 @@
           <span class="pill" style="background:var(--warn-50);color:#b5730a">🎫 休整券 × 2</span>
         </div>
         <div style="font-size:11px;color:var(--ink-soft);margin-top:8px;line-height:1.55">
-          考试周、生病、回家 —— 用一张休整券，这周不算数，路线不会断。
+          考试周、生病、回家，用一张休整券，这周不算数，路线不会断。
         </div>
       </div>
 
@@ -424,10 +474,10 @@
         <h3>🧭 这条路是按什么排的</h3>
         <div class="sb-sub" style="color:var(--pri-700)">一个人一条路线 · 这是你的那一版</div>
         <div style="font-size:12.5px;color:var(--ink-2);line-height:1.9">
-          ⏱️ 按你每周 6–10 小时排的节奏<br />
+          ⏱️ 按你每周 <b id="sbHours">6</b> 小时排的节奏<br />
           🎯 主项目：「课程问答机器人」<br />
-          🧱 第 3 关前面垫了一步，那里最容易卡<br />
-          📅 约 6 个月走完，赶得上暑期实习
+          🧱 第 3 阶段最容易卡，那几关给你多留了时间<br />
+          📅 约 <b id="sbMonths">4</b> 个月走完<span id="sbPaceNote">，赶得上暑期实习</span>
         </div>
         <a class="btn btn-outline btn-block btn-sm" style="margin-top:12px;background:#fff" href="04-survey.html">情况变了？重新排一次 →</a>
       </div>
@@ -443,7 +493,7 @@
 
       <div class="cert">
         <b>🔖 阶段验收关</b>
-        <p>一道独立的关卡，通过才算走完这个阶段。进去之前看得到它考哪几项能力，看不到要交什么——AI 会把你交的东西真的打开点一遍（¥9/次，每周送 1 次）；想要真人署名，再走学长验收。</p>
+        <p>一道独立的关卡，通过才算走完这个阶段。进去之前看得到它考哪几项能力，看不到要交什么。系统会把你交的东西真的打开看一遍（¥9/次，每周送 1 次）；想要真人署名，再走学长验收。</p>
         <a class="btn btn-primary btn-sm btn-block" style="margin-top:11px" href="10-pricing.html">了解验收 →</a>
       </div>
 
@@ -469,73 +519,190 @@
 
 <script src="assets/app.js"></script>
 <script>
-/* ── 阶段展开 / 折叠 ── */
-document.querySelectorAll('[data-toggle]').forEach(t => {
-  t.addEventListener('click', () => t.closest('.stg-card').classList.toggle('open'));
-});
+(function () {
+  var KH = window.KH || { get: function (n, f) { return f; }, set: function () {} };
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ── 关卡展开 + 任务勾选 ── */
-document.querySelectorAll('[data-lv]').forEach(lv => {
-  lv.addEventListener('click', e => {
-    if (e.target.closest('.lv-cta')) return;
-    lv.classList.toggle('open');
-  });
-});
+  /* 问卷里读不出来的两件事，用户当场能定 */
+  var choice = { start: 'base', pace: 'full' };
+  var HOURS = { full: 6, light: 3 };
+  var MONTHS = { full: 4, light: 6 };
+  var PACE_NOTE = { full: '，赶得上暑期实习', light: '，慢一点，但不容易断' };
 
-document.querySelectorAll('.task').forEach(task => {
-  task.addEventListener('click', () => {
-    task.classList.toggle('on');
-    task.classList.remove('wiggle'); void task.offsetWidth; task.classList.add('wiggle');
-    checkLevelDone(task.closest('.tasks'));
-  });
-});
-
-function checkLevelDone(tasksEl) {
-  if (!tasksEl) return;
-  const all = tasksEl.querySelectorAll('.task');
-  const on = tasksEl.querySelectorAll('.task.on').length;
-  if (on < all.length || all.length === 0) return;
-  const lv = tasksEl.previousElementSibling;
-  if (!lv || lv.dataset.slammed) return;
-  lv.dataset.slammed = '1';
-
-  // ① 印章落章（落在这一关任务区的右上角，不压住关卡名和状态）
-  const card = document.createElement('div');
-  card.className = 'stamp slam';
-  card.innerHTML = '关卡<br/>通过';
-  card.style.cssText = 'position:absolute;right:18px;top:-6px;z-index:6;width:62px;height:62px;font-size:9.5px';
-  tasksEl.style.position = 'relative';
-  tasksEl.appendChild(card);
-
-  // ② 关卡变已完成
-  const dot = lv.querySelector('.lv-dot');
-  dot.className = 'lv-dot done pop-in';
-  dot.textContent = '✓';
-  lv.querySelector('.lv-right').textContent = '刚刚完成';
-
-  // ③ 解锁下一关（跳过中间的 .tasks / .lv-cta，找到下一个带 data-lv 的关卡）
-  let nextLv = lv.nextElementSibling;
-  while (nextLv && !(nextLv.dataset && nextLv.dataset.lv !== undefined)) nextLv = nextLv.nextElementSibling;
-  if (nextLv) {
-    const nd = nextLv.querySelector('.lv-dot');
-    if (nd && nd.classList.contains('lock')) {
-      setTimeout(() => {
-        nd.className = 'lv-dot now pop-in';
-        nd.textContent = '3';
-        nextLv.querySelector('.lv-sub').innerHTML = nextLv.querySelector('.lv-sub').innerHTML.replace(' · 走完上一关解锁', ' · 已解锁');
-        nextLv.querySelector('.lv-right').textContent = '可以开始';
-      }, 620);
-    }
+  function pulse(el) {
+    if (!el || reduced) return;
+    el.classList.remove('pulse'); void el.offsetWidth; el.classList.add('pulse');
   }
 
-  // ④ 进度与印记更新
-  setTimeout(() => {
-    const bar = document.getElementById('rmBar');
-    bar.style.width = '50%';
-    document.querySelector('.rm-meta div:nth-child(1) b').textContent = '50%';
-    document.querySelector('.rm-meta div:nth-child(2) b').textContent = '10 / 24';
-  }, 400);
-}
+  /* ── 阶段展开 / 折叠 ── */
+  document.querySelectorAll('[data-toggle]').forEach(function (t) {
+    t.addEventListener('click', function () { t.closest('.stg-card').classList.toggle('open'); });
+  });
+
+  /* ── 关卡展开 ── */
+  document.querySelectorAll('[data-lv]').forEach(function (lv) {
+    lv.addEventListener('click', function (e) {
+      if (e.target.closest('.lv-cta')) return;
+      lv.classList.toggle('open');
+    });
+  });
+
+  /* ── 任务勾选 ── */
+  document.querySelectorAll('.task').forEach(function (task) {
+    task.addEventListener('click', function () {
+      task.classList.toggle('on');
+      task.classList.remove('wiggle'); void task.offsetWidth; task.classList.add('wiggle');
+      checkLevelDone(task.closest('.tasks'));
+      refreshProgress();
+    });
+  });
+
+  /* ── 起步：要不要先补一节 JSON ── */
+  function applyStart() {
+    var json = document.getElementById('lv-json');
+    var jsonTasks = document.getElementById('tasks-json');
+    var struct = document.getElementById('lv-now');
+    var structDot = struct.querySelector('.lv-dot');
+    var base = choice.start === 'base';
+
+    json.hidden = !base;
+    jsonTasks.hidden = !base;
+
+    if (base) {
+      structDot.className = 'lv-dot lock';
+      document.getElementById('structRight').textContent = '未解锁';
+      document.getElementById('structSub').textContent = '3 个小任务 · 约 1.5 小时 · 走完上一关解锁';
+    } else {
+      structDot.className = 'lv-dot now';
+      document.getElementById('structRight').textContent = '进行中';
+      document.getElementById('structSub').textContent = '3 个小任务 · 约 1.5 小时';
+    }
+
+    var lvs = [].slice.call(document.querySelectorAll('#stg3 .lv')).filter(function (l) { return !l.hidden; });
+    lvs.forEach(function (l, i) {
+      var dot = l.querySelector('.lv-dot');
+      if (dot.classList.contains('done')) { dot.textContent = '✓'; return; }
+      dot.textContent = String(i + 1);
+    });
+
+    refreshProgress();
+  }
+
+  /* ── 每一关都挂上这一站的资料 ── */
+  document.querySelectorAll('.lv .lv-main').forEach(function (m) {
+    var a = document.createElement('a');
+    a.className = 'lv-doc';
+    a.href = '08-library.html';
+    a.textContent = '📚 这一站的资料 · 引路版 + 精通版';
+    a.title = '每一关都配好了资料：引路版带着走，精通版往深挖';
+    m.appendChild(a);
+  });
+
+  /* ── 节奏：每周排多少 ── */
+  function applyPace() {
+    var h = HOURS[choice.pace], m = MONTHS[choice.pace];
+    document.getElementById('headHours').textContent = h;
+    document.getElementById('headMonths').textContent = m;
+    document.getElementById('sbHours').textContent = h;
+    document.getElementById('sbMonths').textContent = m;
+    document.getElementById('sbPaceNote').textContent = PACE_NOTE[choice.pace];
+  }
+
+  /* ── 进度：从页面上的真实状态算出来，不写死 ── */
+  function refreshProgress() {
+    var all = [].slice.call(document.querySelectorAll('.stg-card .lv')).filter(function (l) { return !l.hidden; });
+    var total = all.length;
+    var done = all.filter(function (l) {
+      return l.querySelector('.lv-dot').classList.contains('done');
+    }).length;
+    var pct = total ? Math.round(done / total * 100) : 0;
+
+    document.getElementById('mPct').textContent = pct + '%';
+    document.getElementById('mDone').textContent = done + ' / ' + total;
+    document.getElementById('rmBar').style.width = pct + '%';
+
+    var left = all.filter(function (l) {
+      return l.closest('#stg3') && !l.querySelector('.lv-dot').classList.contains('done');
+    }).length;
+    document.getElementById('hereLeft').textContent = '还剩 ' + left + ' 关 · 预计 ' + (left * 2) + ' 天';
+  }
+
+  /* ── 关卡勾完：落章 + 解锁下一关 ── */
+  function checkLevelDone(tasksEl) {
+    if (!tasksEl) return;
+    var all = tasksEl.querySelectorAll('.task');
+    var on = tasksEl.querySelectorAll('.task.on').length;
+    if (on < all.length || all.length === 0) return;
+    var lv = tasksEl.previousElementSibling;
+    if (!lv || lv.dataset.slammed) return;
+    lv.dataset.slammed = '1';
+
+    var card = document.createElement('div');
+    card.className = 'stamp slam';
+    card.innerHTML = '关卡<br />通过';
+    card.style.cssText = 'position:absolute;right:18px;top:-6px;z-index:6;width:62px;height:62px;font-size:9.5px';
+    tasksEl.style.position = 'relative';
+    tasksEl.appendChild(card);
+
+    var dot = lv.querySelector('.lv-dot');
+    dot.className = 'lv-dot done pop-in';
+    dot.textContent = '✓';
+    lv.querySelector('.lv-right').textContent = '刚刚完成';
+
+    var nextLv = lv.nextElementSibling;
+    while (nextLv && !(nextLv.dataset && nextLv.dataset.lv !== undefined)) nextLv = nextLv.nextElementSibling;
+    if (nextLv) {
+      var nd = nextLv.querySelector('.lv-dot');
+      if (nd && nd.classList.contains('lock')) {
+        setTimeout(function () {
+          nd.className = 'lv-dot now pop-in';
+          nextLv.querySelector('.lv-right').textContent = '可以开始';
+          var sub = nextLv.querySelector('.lv-sub');
+          if (sub) sub.innerHTML = sub.innerHTML.replace(' · 走完上一关解锁', ' · 已解锁');
+        }, 620);
+      }
+    }
+    refreshProgress();
+  }
+
+  /* ── 两件事的按钮 ── */
+  document.querySelectorAll('.ask-q').forEach(function (q) {
+    q.querySelectorAll('.ask-opt').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        q.querySelectorAll('.ask-opt').forEach(function (b) { b.classList.remove('on'); });
+        btn.classList.add('on');
+        choice[q.dataset.q] = btn.dataset.v;
+
+        if (q.dataset.q === 'start') {
+          applyStart();
+          pulse(document.getElementById('stg3'));
+        } else {
+          applyPace();
+          pulse(document.querySelector('.rm-head'));
+        }
+        KH.set('survey', Object.assign(KH.get('survey', {}) || {}, choice));
+      });
+    });
+  });
+
+  /* ── 回来时接着上次的选择 ── */
+  var saved = KH.get('survey', null);
+  if (saved && saved.start && saved.pace) {
+    choice.start = saved.start;
+    choice.pace = saved.pace;
+    ['start', 'pace'].forEach(function (k) {
+      var q = document.querySelector('.ask-q[data-q="' + k + '"]');
+      if (!q) return;
+      q.querySelectorAll('.ask-opt').forEach(function (b) {
+        b.classList.toggle('on', b.dataset.v === choice[k]);
+      });
+    });
+  }
+
+  applyStart();
+  applyPace();
+  refreshProgress();
+})();
 </script>
 </body>
 </html>

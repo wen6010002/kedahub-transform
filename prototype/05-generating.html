@@ -67,6 +67,17 @@
   }
   .gen-src b { color: var(--ink-2); }
 
+  /* 顶部总进度线：让等待有边界 */
+  .gen-prog { position: fixed; left: 0; right: 0; top: 0; height: 3px; z-index: 90; pointer-events: none; }
+  .gen-prog i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--pri), var(--pri-600)); transition: width .3s linear; }
+
+  .gen-skip {
+    display: block; margin: 14px auto 0; font-size: 12px; font-weight: 700;
+    color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px;
+  }
+  .gen-skip:hover { color: var(--pri-600); }
+  .gen-skip[hidden] { display: none; }
+
   @media (max-width: 720px) {
     .gen h1 { font-size: 25px; }
     .gen-stamp { width: 76px; height: 76px; font-size: 10.5px; }
@@ -92,6 +103,7 @@
     <div class="nav-actions">
       <a class="nav-link" href="01-home.html">首页</a>
       <a class="nav-link" href="02-explore.html">🧭 探索路线</a>
+      <a class="nav-link" href="06-roadmap.html">我的路线</a>
       <a class="nav-link" href="09-cohort.html">项目组</a>
       <a class="nav-link" href="10-pricing.html">验收与付费</a>
       <a class="btn btn-outline btn-sm" href="04-survey.html">登录</a>
@@ -99,6 +111,8 @@
     </div>
   </div>
 </nav>
+
+<div class="gen-prog" aria-hidden="true"><i id="genProg"></i></div>
 
 <main class="page gen-page">
   <section class="gen">
@@ -151,13 +165,15 @@
 
     <!-- ══════════ 兜底按钮 ══════════ -->
     <div class="gen-actions" id="genActions" hidden>
-      <a class="btn btn-primary btn-lg" href="06-roadmap.html">查看我的路线 →</a>
-      <span class="gn-note" id="gnNote">正在打开你的路线…</span>
+      <a class="btn btn-primary btn-lg" href="06-roadmap.html">进入我的路线 →</a>
+      <span class="gn-note" id="gnNote">路线已经排好了，点进去就能开始第一关</span>
     </div>
+
+    <button class="gen-skip" type="button" id="btnSkip">跳过动画，直接看结果</button>
 
     <p class="gen-src rise d5">
       这条路线的每一关，都由<b>已上岸的学长</b>验证过是真的走得通的，再按你的情况排成你这一条。<br />
-      排完你看到的就是你的版本——没有"标准版"可以对，也没有别人的路线给你参照。
+      排完你看到的就是你的版本，没有"标准版"可以对，也没有别人的路线给你参照。
     </p>
 
   </section>
@@ -190,7 +206,8 @@
 
   /* ═══ 1. 读上一页的答案，让文案接得上 ═══ */
   let a = null;
-  try { a = JSON.parse(sessionStorage.getItem('kh_survey') || 'null'); } catch (e) {}
+  try { a = JSON.parse(localStorage.getItem('kh:survey') || 'null'); } catch (e) {}
+  if (!a) { try { a = JSON.parse(sessionStorage.getItem('kh_survey') || 'null'); } catch (e) {} }
   a = a || {};
 
   const dirName = a.dir || 'AI 应用';
@@ -247,12 +264,12 @@
   /* ═══ 2. 日志文案 ═══ */
   const LOGS = [
     { t: '正在读取你的情况…', s: gradeTxt + ' · 每周 ' + hoursTxt + ' · 目标：' + goalTxt },
-    { t: '已算出你的起点', s: '从 ' + start.n + ' 开始——' + start.s },
+    { t: '已算出你的起点', s: '从 ' + start.n + ' 开始，' + start.s },
     { t: '正在按你的可用时段切关卡…', s: '单次约 ' + sessionLen + ' 分钟，' + (a.when || '晚上') + '刚好排得下' },
     { t: '正在确定主项目…', s: projName + '，和你说的目标对得上' },
     { t: '正在排 6 道阶段验收关…', s: '每道考的能力都不一样，进去之前看不到具体考什么' },
     { t: '正在按你的节奏偏好做设置…', s: paceTxt },
-    { t: '路线生成完毕', s: routeName + ' · 共 24 个关卡 · 约 ' + months + ' 个月走完', final: true }
+    { t: '路线生成完毕', s: routeName + ' · 6 个阶段 · 约 ' + months + ' 个月走完', final: true }
   ];
 
   const logsBox = document.getElementById('genLogs');
@@ -312,34 +329,52 @@
 
   /* ═══ 4. 节奏：日志逐条浮现，路线随之生长 ═══ */
   const START = 500, GAP = 620;
+  const timers = [];
   rows.forEach((el, i) => {
-    setTimeout(() => {
+    timers.push(setTimeout(() => {
       el.classList.add('rise', 'on');
       const tick = el.querySelector('.tick');
       tick.classList.add('pop-in');
       to((i + 1) / rows.length * 0.9, GAP);
-    }, START + i * GAP);
+    }, START + i * GAP));
   });
 
   const LAST = START + (rows.length - 1) * GAP;   // ≈ 4220ms
   const STAMP_AT = LAST + 750;
-  const HOLD = location.search.indexOf('hold') >= 0;  // 原型截图用：?hold=1 不自动跳转
 
-  setTimeout(() => {
-    /* ① 印章落下 */
-    const wrap = document.getElementById('stampWrap');
-    wrap.hidden = false;
-    /* ② 路线最后一次生长 */
+  /* ═══ 5. 顶部进度线：走满就说明结束了，不用干等 ═══ */
+  const progEl = document.getElementById('genProg');
+  const T0 = performance.now();
+  const T_END = STAMP_AT + 900;
+  const pt = setInterval(() => {
+    const k = Math.max(0, Math.min(1, (performance.now() - T0 - START) / (T_END - START)));
+    progEl.style.width = (k * 100) + '%';
+    if (k >= 1) clearInterval(pt);
+  }, 60);
+
+  /* ═══ 6. 收尾：印章落下，然后停在这儿等你自己点 ═══ */
+  function finish() {
+    document.getElementById('stampWrap').hidden = false;
     to(1, 900);
-    /* ③ 兜底按钮 + 跳转 */
-    document.getElementById('genActions').hidden = false;
-    document.querySelector('.gen-actions').classList.add('pop-in');
-    if (!HOLD) {
-      setTimeout(() => { location.href = '06-roadmap.html'; }, 900);
-    } else {
-      document.getElementById('gnNote').textContent = '（原型预览：已停在此页）';
-    }
-  }, STAMP_AT);
+    const acts = document.getElementById('genActions');
+    acts.hidden = false;
+    acts.classList.add('pop-in');
+    document.getElementById('btnSkip').hidden = true;
+  }
+
+  timers.push(setTimeout(finish, STAMP_AT));
+
+  /* 跳过动画：第二次看的人不用再等一遍 */
+  document.getElementById('btnSkip').addEventListener('click', () => {
+    timers.forEach(clearTimeout);
+    clearInterval(pt);
+    rows.forEach(el => el.classList.add('rise', 'on'));
+    prog = 1; from = 1; target = 1;
+    grow.style.strokeDashoffset = 0;
+    nodeEls.forEach(g => g.classList.add('on'));
+    progEl.style.width = '100%';
+    finish();
+  });
 })();
 </script>
 </body>

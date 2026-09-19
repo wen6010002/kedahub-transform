@@ -75,6 +75,25 @@
   .star-say .big em { font-style: normal; color: var(--pri-700); }
   .star-say .btn { margin-left: auto; }
 
+  /* 星图成员提示 */
+  .star-tip {
+    position: fixed; z-index: 90; max-width: 190px; pointer-events: none;
+    background: var(--ink); color: #fff; font-size: 11.5px; font-weight: 700;
+    padding: 6px 12px; border-radius: var(--r-lg); line-height: 1.5;
+    opacity: 0; transform: translateY(4px);
+    transition: opacity var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out);
+  }
+  .star-tip.show { opacity: 1; transform: none; }
+  .star-dot { cursor: pointer; }
+
+  /* 漏斗上标出「你在这里」 */
+  .fn-card.is-you { border-color: var(--pri); border-width: 2.5px; box-shadow: 0 5px 0 rgba(255,107,74,.18); position: relative; }
+  .fn-you {
+    position: absolute; top: -11px; left: 18px; background: var(--pri); color: #fff;
+    font-size: 10.5px; font-weight: 800; padding: 3px 11px; border-radius: 999px; white-space: nowrap;
+  }
+  .fn-next { display: block; margin-top: 9px; font-size: 12px; color: var(--pri-700); font-weight: 700; line-height: 1.65; }
+
   /* ── ③ 四层验收漏斗 ── */
   .funnel { display: flex; flex-direction: column; align-items: center; gap: 11px; }
   .fn-layer { width: 100%; }
@@ -118,6 +137,16 @@
   .proj-card .pd { font-size: 12.5px; color: var(--ink-2); line-height: 1.72; margin-top: 7px; flex: 1; }
   .proj-card .pm { display: flex; align-items: center; gap: 9px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line-2); font-size: 11.5px; color: var(--ink-soft); }
   .proj-card .who { width: 25px; height: 25px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 800; color: #fff; flex: none; }
+  .proj-card { cursor: pointer; text-align: left; }
+  .pc-more { display: grid; grid-template-rows: 0fr; opacity: 0;
+    transition: grid-template-rows var(--t-base) var(--ease-out), opacity var(--t-base) var(--ease-out); }
+  .proj-card.open .pc-more { grid-template-rows: 1fr; opacity: 1; }
+  .pc-more> div { overflow: hidden; min-height: 0; }
+  .pc-more dl { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 12.5px; }
+  .pc-more dt { font-weight: 800; color: var(--pri-700); }
+  .pc-more dt + dd { margin-top: 3px; }
+  .pc-more dd { color: var(--ink-2); line-height: 1.72; margin-bottom: 9px; }
+  .pc-more dd:last-child { margin-bottom: 0; }
   .stg { margin-left: auto; font-size: 10.5px; font-weight: 800; padding: 2.5px 9px; border-radius: 999px; background: var(--bg-deep); color: var(--ink-2); white-space: nowrap; }
   .stg.done { background: var(--mint-50); color: var(--mint); }
 
@@ -224,8 +253,7 @@
         <div class="co-kicker">VIP 项目组 · K-04 AI 应用开发方向 · 招生中</div>
         <h1>AI 应用开发 · <em>2026 秋季 第 3 期</em></h1>
         <p class="co-desc">
-          路线可以因人而异，但人和人的时间不能。<b>所以同一个方向的人进同一个组</b>——
-          一起交验收、一起被辅导、一起答辩。你的路线还是你自己那条，只是这一路上有人和你走在同一段。
+          路线可以因人而异，但人和人的时间不能。<b>所以同一个方向的人进同一个组</b>，一起交验收、一起被辅导、一起答辩。你的路线还是你自己那条，只是这一路上有人和你走在同一段。
         </p>
         <div class="co-stats">
           <div><b>28<em> / 30</em></b><span>本期人数（封顶 30）</span></div>
@@ -247,7 +275,7 @@
         <span class="mn-ava" style="background:linear-gradient(150deg,#ff6b4a,#d04a2a)">陈</span>
         <span>
           <span class="mn-name">陈学长 <span class="mn-tag lead">主带</span></span>
-          <span class="mn-line">大厂 AI 应用工程师，K-04 路线走通者。带过 4 期组，最擅长在答辩夜把你问到自己都没想过的地方——因为面试官也会这么问。</span>
+          <span class="mn-line">大厂 AI 应用工程师，K-04 路线走通者。带过 4 期组，最擅长在答辩夜把你问到自己都没想过的地方，因为面试官也会这么问。</span>
         </span>
       </div>
       <div class="mn-card">
@@ -269,49 +297,52 @@
       <div class="star-axis">
         <div class="star-col">
           <span class="star-node"></span>
-          <span class="star-label"><b>STAGE 01</b>Python 工程化</span>
+          <span class="star-label"><b>STAGE 01</b>把工具装好</span>
           <div class="star-dots"><span class="star-dot" title="李 · 第 1 阶段">李</span><span class="star-dot" title="张 · 第 1 阶段">张</span><span class="star-dot" title="周 · 第 1 阶段">周</span></div>
         </div>
         <div class="star-col">
           <span class="star-node"></span>
-          <span class="star-label"><b>STAGE 02</b>LLM 基础与 Prompt</span>
+          <span class="star-label"><b>STAGE 02</b>让程序会取数据</span>
           <div class="star-dots"><span class="star-dot" title="吴 · 第 2 阶段">吴</span><span class="star-dot" title="郑 · 第 2 阶段">郑</span><span class="star-dot" title="王 · 第 2 阶段">王</span><span class="star-dot" title="赵 · 第 2 阶段">赵</span></div>
-        </div>
-        <div class="star-col">
-          <span class="star-node"></span>
-          <span class="star-label"><b>STAGE 03</b>RAG 检索增强</span>
-          <div class="star-dots"><span class="star-dot" title="钱 · 第 3 阶段">钱</span><span class="star-dot" title="孙 · 第 3 阶段">孙</span><span class="star-dot" title="马 · 第 3 阶段">马</span><span class="star-dot" title="高 · 第 3 阶段">高</span><span class="star-dot" title="林 · 第 3 阶段">林</span></div>
         </div>
         <div class="star-col me">
           <span class="star-node"></span>
-          <span class="star-label"><b>STAGE 04</b>Agent 编排与工具</span>
+          <span class="star-label"><b>STAGE 03</b>走进大模型</span>
           <div class="star-dots">
-            <span class="star-dot me rt-halo" title="你 · 第 4 阶段 · 第 3 周">你</span>
+            <span class="star-dot me rt-halo" title="你 · 第 3 阶段 · 第 2 关">你</span>
+            <span class="star-dot" title="钱 · 第 3 阶段">钱</span><span class="star-dot" title="孙 · 第 3 阶段">孙</span><span class="star-dot" title="马 · 第 3 阶段">马</span>
+            <span class="star-dot" title="高 · 第 3 阶段">高</span><span class="star-dot" title="林 · 第 3 阶段">林</span>
+          </div>
+        </div>
+        <div class="star-col">
+          <span class="star-node"></span>
+          <span class="star-label"><b>STAGE 04</b>RAG · 让模型有资料可查</span>
+          <div class="star-dots">
             <span class="star-dot" title="何 · 第 4 阶段">何</span><span class="star-dot" title="罗 · 第 4 阶段">罗</span><span class="star-dot" title="梁 · 第 4 阶段">梁</span>
             <span class="star-dot" title="宋 · 第 4 阶段">宋</span><span class="star-dot" title="唐 · 第 4 阶段">唐</span><span class="star-dot" title="许 · 第 4 阶段">许</span>
           </div>
         </div>
         <div class="star-col">
           <span class="star-node"></span>
-          <span class="star-label"><b>STAGE 05</b>生产化工程</span>
+          <span class="star-label"><b>STAGE 05</b>Agent · 让模型会用工具</span>
           <div class="star-dots"><span class="star-dot" title="冯 · 第 5 阶段">冯</span><span class="star-dot" title="邓 · 第 5 阶段">邓</span><span class="star-dot" title="曹 · 第 5 阶段">曹</span><span class="star-dot" title="彭 · 第 5 阶段">彭</span><span class="star-dot" title="袁 · 第 5 阶段">袁</span></div>
         </div>
         <div class="star-col">
           <span class="star-node"></span>
-          <span class="star-label"><b>STAGE 06</b>项目包装与求职</span>
+          <span class="star-label"><b>STAGE 06</b>上线 · 把作品发出去</span>
           <div class="star-dots"><span class="star-dot" title="蒋 · 第 6 阶段">蒋</span><span class="star-dot" title="沈 · 第 6 阶段">沈</span><span class="star-dot" title="陈 · 第 6 阶段">陈</span><span class="star-dot" title="徐 · 第 6 阶段">徐</span></div>
         </div>
       </div>
 
       <div class="star-foot">
-        <span><i class="lg-dot" style="background:var(--pri)"></i>你 · 第 4 阶段「Agent 编排与工具」· 第 3 周</span>
+        <span><i class="lg-dot" style="background:var(--pri)"></i>你 · 第 3 阶段「走进大模型」· 第 2 关</span>
         <span><i class="lg-dot" style="background:var(--bg-soft);border:1.5px solid var(--line)"></i>其他组员 · 共 27 人</span>
         <span style="margin-left:auto">数据每小时同步一次 · 阶段由你自己打卡，不强制公开</span>
       </div>
 
       <div class="star-say">
         <div>
-          <div class="big">你不是一个人在走 —— <em>有 6 个人和你卡在同一阶段</em>。</div>
+          <div class="big">你不是一个人在走，<em>有 6 个人和你卡在同一阶段</em>。</div>
           <div style="font-size:12.5px;color:var(--ink-2);margin-top:5px">
             你们 7 个人自然构成一个研习小组：组内频道「Agent 编排互助桌」已为你打开，本周的话题是「工具调用失败时，模型应该说什么」。
           </div>
@@ -324,26 +355,28 @@
   <!-- ══════════ ③ 四层验收漏斗 ══════════ -->
   <section class="blog-sec">
     <div class="blog-sec-head"><span class="sec-no">验</span><h2>四层验收漏斗</h2></div>
-    <div class="blog-sec-sub">一份提交要过四道关。<strong>第一层（AI 把关）¥9/次，免费用户每周送 1 次，组内不限次数</strong>；越往下给你反馈的人越少、越贵——所以前面的关卡，最好你自己先过一遍。</div>
+    <div class="blog-sec-sub">一份提交要过四道关。<strong>第一层（系统把关）¥9/次，免费用户每周送 1 次，组内不限次数</strong>；越往下给你反馈的人越少、越贵，所以前面的关卡，最好你自己先过一遍。</div>
 
     <div class="funnel">
       <div class="fn-layer fn-1">
         <div class="toon-card fn-card">
           <span class="fn-no" style="background:var(--bg-deep);color:var(--ink-2)">L1</span>
           <div class="fn-body">
-            <b>AI 把关 · ¥9/次</b>
-            <span>把你交的东西<b>真的打开点一遍</b>：该有的在不在、点了有没有反应、卡在哪一步，逐条给你 ✓/✗ 和截图。<em>它判事实，不判好坏——它不是判官，是让你在麻烦别人之前先自己修一遍。</em></span>
+            <b>系统把关 · ¥9/次</b>
+            <span>把你交的东西<b>真的打开看一遍</b>：该有的在不在、点了有没有反应、卡在哪一步，逐条给你 ✓/✗ 和截图。<em>它判事实，不判好坏，它不是判官，是让你在麻烦别人之前先自己修一遍。</em></span>
           </div>
           <span class="fn-meta"><b>谁来做</b> 无头浏览器 + 视觉模型<br /><b>耗时</b> 3 分钟 · 免费用户每周 1 次 · <b>组内不限</b></span>
         </div>
       </div>
 
       <div class="fn-layer fn-2">
-        <div class="toon-card fn-card">
+        <div class="toon-card fn-card is-you">
+          <span class="fn-you">你在这里 · 第 3 阶段</span>
           <span class="fn-no" style="background:var(--mint-50);color:var(--mint)">L2</span>
           <div class="fn-body">
             <b>同伴互评</b>
             <span>同阶段的其他组员来评。你会收到 2 份来自同学的评审，同时你也要评别人的 2 份。<em>学会看出别人项目里的问题，是面试时最有用的能力。</em></span>
+            <span class="fn-next"><b>怎么进 L3：</b>收到 2 份同学评审，并且把分给你的 2 份评完。你已经评完 1 份，还差 1 份。</span>
           </div>
           <span class="fn-meta"><b>谁来做</b> 同阶段组员 · 2 人<br /><b>耗时</b> 24 小时内</span>
         </div>
@@ -365,7 +398,7 @@
           <span class="fn-no" style="background:var(--ink)">L4</span>
           <div class="fn-body">
             <b>月度答辩</b>
-            <span>每期一次，每人 8 分钟讲自己的项目 + 7 分钟问答，全场都在。<em>你会得到台下所有人的追问——这些追问，就是你面试时会遇到的问题。</em></span>
+            <span>每期一次，每人 8 分钟讲自己的项目 + 7 分钟问答，全场都在。<em>你会得到台下所有人的追问，这些追问，就是你面试时会遇到的问题。</em></span>
           </div>
           <span class="fn-meta"><b>谁来做</b> 全组 + 主带学长<br /><b>耗时</b> 每期一次 · 约 3 小时</span>
         </div>
@@ -374,7 +407,7 @@
 
     <div class="fn-foot">
       <span class="big">提交本期验收</span>
-      <span class="sub">四个关卡走完，你会拿到一份带评语的验收记录——它可以贴在简历附件里，也可以直接拿去答面试官。</span>
+      <span class="sub">四个关卡走完，你会拿到一份带评语的验收记录，它可以贴在简历附件里，也可以直接拿去答面试官。</span>
       <a class="btn btn-primary" href="#" style="margin-left:auto">提交本期验收 →</a>
     </div>
   </section>
@@ -389,7 +422,7 @@
         <div class="dn-date">10/15<span>周四 20:00 · 线上，全场直播</span></div>
         <h3>每人 8 分钟讲自己的项目<br />+ 7 分钟问答</h3>
         <div class="dn-form">
-          28 位组员全部上台，主带学长在台下追问。讲不清楚的项目等于没做——这句话在答辩夜是字面意思。
+          28 位组员全部上台，主带学长在台下追问。讲不清楚的项目等于没做，这句话在答辩夜是字面意思。
           上一期的 3 位同学，讲完当场就被改掉了简历里的项目描述。
         </div>
         <a class="btn" style="background:#fff;color:var(--ink)" href="#join">报名旁听本期 →</a>
@@ -401,7 +434,7 @@
         <div class="quote">
           <span class="av" style="background:#ff6b4a">陈</span>
           <div>
-            <p>「你这个 85% 命中率，是你自己标的评测集吧？面试官一定会问同一句话。把标注规则也写进报告里——那比数字本身更有说服力。」</p>
+            <p>「你这个 85% 命中率，是你自己标的评测集吧？面试官一定会问同一句话。把标注规则也写进报告里，那比数字本身更有说服力。」</p>
             <div class="meta">陈学长 → 罗同学 · RAG 阶段验收</div>
           </div>
         </div>
@@ -409,7 +442,7 @@
         <div class="quote">
           <span class="av" style="background:#6366f1">陈</span>
           <div>
-            <p>「被问到不会的，别说『大概』。说『这个我没测过，回去补一组对照实验再答你』——这句话在面试里是加分的，含糊才是减分。」</p>
+            <p>「被问到不会的，别说『大概』。说『这个我没测过，回去补一组对照实验再答你』，这句话在面试里是加分的，含糊才是减分。」</p>
             <div class="meta">陈学长 · 全场 · 求职冲刺环节</div>
           </div>
         </div>
@@ -417,7 +450,7 @@
         <div class="quote">
           <span class="av" style="background:#10b981">林</span>
           <div>
-            <p>「你用 try/except 把整个流程包起来了，这会掩盖问题。应该按工具分别兜底，并记下失败原因——不然线上出问题你查不到是哪一步。」</p>
+            <p>「你用 try/except 把整个流程包起来了，这会掩盖问题。应该按工具分别兜底，并记下失败原因，不然线上出问题你查不到是哪一步。」</p>
             <div class="meta">林学姐 → 唐同学 · Agent 阶段验收</div>
           </div>
         </div>
@@ -442,37 +475,43 @@
       <div class="toon-card hoverable proj-card">
         <div class="pt">深大校园问答机器人</div>
         <div class="pd">混合检索 + 重排 + 引用溯源，答不准会承认自己不知道。验收目标是检索命中率 ≥ 85%，附 30 条自标注评测集。</div>
-        <div class="pm"><span class="who" style="background:#ff6b4a">何</span><span>何同学</span><span class="stg">RAG 阶段</span></div>
+        <div class="pm"><span class="who" style="background:#ff6b4a">何</span><span>何同学</span><span class="stg">第 4 阶段 · RAG</span></div>
+        <div class="pc-more"><div><dl><dt>学长评语</dt><dd>检索命中率卡在 71% 三周没动，最后是换切块方式救回来的，不是换模型。</dd><dt>他也卡过的地方</dt><dd>别一上来就加重排，先把切块切对。</dd></dl></div></div>
       </div>
 
       <div class="toon-card hoverable proj-card">
         <div class="pt">CI 失败自动排查 Agent</div>
         <div class="pd">读日志、定位失败原因、给出修复建议。多工具编排 + 重试策略 + 出错时的降级路径，正在补评测集。</div>
-        <div class="pm"><span class="who" style="background:#6366f1">罗</span><span>罗同学</span><span class="stg">Agent 阶段</span></div>
+        <div class="pm"><span class="who" style="background:#6366f1">罗</span><span>罗同学</span><span class="stg">第 5 阶段 · Agent</span></div>
+        <div class="pc-more"><div><dl><dt>学长评语</dt><dd>工具一多就乱序，加了显式状态机才稳下来。</dd><dt>他也卡过的地方</dt><dd>先写死流程，再让模型决定走哪条。</dd></dl></div></div>
       </div>
 
       <div class="toon-card hoverable proj-card">
         <div class="pt">课搭周报生成器</div>
-        <div class="pd">打卡记录进去，结构稳定的周报出来。模型输出必须是 JSON，字段缺失自动重试——所有下游功能的地基。</div>
+        <div class="pd">打卡记录进去，结构稳定的周报出来。模型输出必须是 JSON，字段缺失自动重试，所有下游功能的地基。</div>
         <div class="pm"><span class="who" style="background:#10b981">赵</span><span>赵同学</span><span class="stg done">已验收</span></div>
+        <div class="pc-more"><div><dl><dt>学长评语</dt><dd>模型偶尔少给字段，下游全崩。补了校验加一次重试，就再没出过事。</dd><dt>他也卡过的地方</dt><dd>把输出格式当接口契约写，别当提示词技巧。</dd></dl></div></div>
       </div>
 
       <div class="toon-card hoverable proj-card">
         <div class="pt">培养方案冲突检测小工具</div>
         <div class="pd">把培养方案和目标课程丢进去，输出未来四个学期的排课建议，标出会撞车的组合。给同专业的学弟学妹用过。</div>
-        <div class="pm"><span class="who" style="background:#f59e0b">郑</span><span>郑同学</span><span class="stg">LLM 基础</span></div>
+        <div class="pm"><span class="who" style="background:#f59e0b">郑</span><span>郑同学</span><span class="stg">第 3 阶段 · 大模型</span></div>
+        <div class="pc-more"><div><dl><dt>学长评语</dt><dd>课程依赖一开始写成一张大表，换成图之后才好查。</dd><dt>他也卡过的地方</dt><dd>数据结构选型比算法重要得多。</dd></dl></div></div>
       </div>
 
       <div class="toon-card hoverable proj-card">
         <div class="pt">论文速读助手</div>
         <div class="pd">上传 PDF，输出「它解决什么问题 / 怎么做的 / 有什么坑」三段式。重点是让模型承认读不懂的部分，而不是编。</div>
         <div class="pm"><span class="who" style="background:#e8638f">梁</span><span>梁同学</span><span class="stg">RAG 阶段</span></div>
+        <div class="pc-more"><div><dl><dt>学长评语</dt><dd>模型爱编。改成让它先标出「读不懂的部分」，反而老实了。</dd><dt>他也卡过的地方</dt><dd>给它一条允许说不知道的出口。</dd></dl></div></div>
       </div>
 
       <div class="toon-card hoverable proj-card">
         <div class="pt">简历诊断 Agent</div>
         <div class="pd">按目标 JD 逐条比对简历，指出缺什么、怎么补，附改写建议。已加上成本看板和缓存，日调用从 800 次降到 210 次。</div>
         <div class="pm"><span class="who" style="background:#575c65">蒋</span><span>蒋同学</span><span class="stg done">已验收</span></div>
+        <div class="pc-more"><div><dl><dt>学长评语</dt><dd>按条比对会重复调模型，成本炸了。加缓存加批处理，降了 4 倍。</dd><dt>他也卡过的地方</dt><dd>先算一遍钱，再决定怎么调。</dd></dl></div></div>
       </div>
     </div>
   </section>
@@ -489,7 +528,7 @@
           <p><b>宋同学提问</b>：向量库到底选 pgvector 还是 Milvus？我这量级是不是杀鸡用牛刀？</p>
           <div class="qa-mini">
             <div class="q">「向量库选 pgvector 还是 Milvus？」</div>
-            <div class="a"><span class="who">陈学长</span>你的量级（十万 chunk 以下）pgvector + HNSW 完全够，还省一个组件的运维。面试被问到就说「按数据量选型」——这本身就是加分回答。</div>
+            <div class="a"><span class="who">陈学长</span>你的量级（十万 chunk 以下）pgvector + HNSW 完全够，还省一个组件的运维。面试被问到就说「按数据量选型」，这本身就是加分回答。</div>
           </div>
           <div class="meta">2 小时前 · 7 人跟进</div>
         </div>
@@ -498,7 +537,7 @@
       <div class="tl-item">
         <div class="tl-rail"><span class="tl-ic pass">✓</span></div>
         <div class="tl-body">
-          <p><b>何同学通过「Agent 编排」阶段验收</b>——主带评语：「工具失败时的降级路径写得比大部分实习生的代码干净，下一个项目可以上多工具协作了。」</p>
+          <p><b>何同学通过「Agent 编排」阶段验收</b>，主带评语：「工具失败时的降级路径写得比大部分实习生的代码干净，下一个项目可以上多工具协作了。」</p>
           <div class="meta">5 小时前 · L3 助教终审</div>
         </div>
       </div>
@@ -522,7 +561,7 @@
       <div class="tl-item">
         <div class="tl-rail"><span class="tl-ic info">＋</span></div>
         <div class="tl-body">
-          <p><b>3 位新同学入组</b>，分别从第 1、2 阶段开始。组内已经按阶段提示了结对——你和他们的阶段不重叠，暂时不会打扰到你。</p>
+          <p><b>3 位新同学入组</b>，分别从第 1、2 阶段开始。组内已经按阶段提示了结对，你和他们的阶段不重叠，暂时不会打扰到你。</p>
           <div class="meta">3 天前 · 入组</div>
         </div>
       </div>
@@ -544,7 +583,7 @@
       <span class="badge">合规声明</span>
     </div>
     <p class="rules-sub">
-      这一块不放最后当小字。因为下面四条，是你在决定付钱之前就应该知道的事——尤其是前两条，我们做不到，也不会假装做得到。
+      这一块不放最后当小字。因为下面四条，是你在决定付钱之前就应该知道的事，尤其是前两条，我们做不到，也不会假装做得到。
     </p>
 
     <div class="rules-grid">
@@ -560,7 +599,7 @@
         <span class="ic">✋</span>
         <div>
           <b>不代做项目</b>
-          <p>代码必须你自己写。学长会帮你改、追问你、把你的标准提到面试要求，但<em>不会替你交作业</em>。答辩夜也必须到——讲不清楚的项目等于没做，这是这条路线唯一的硬规矩。</p>
+          <p>代码必须你自己写。学长会帮你改、追问你、把你的标准提到面试要求，但<em>不会替你交作业</em>。答辩夜也必须到，讲不清楚的项目等于没做，这是这条路线唯一的硬规矩。</p>
         </div>
       </div>
 
@@ -568,7 +607,7 @@
         <span class="ic">🔁</span>
         <div>
           <b>验收不通过，可以无限次重提</b>
-          <p>不额外收费，也不扣你的排期。被打回的通常不是能力问题，是没写清楚、没测过、没做复盘。<em>改完随时重交，直到达标为止</em>——这本就是学会一件事的正常过程。</p>
+          <p>不额外收费，也不扣你的排期。被打回的通常不是能力问题，是没写清楚、没测过、没做复盘。<em>改完随时重交，直到达标为止</em>，这本就是学会一件事的正常过程。</p>
         </div>
       </div>
 
@@ -594,8 +633,7 @@
       <div>
         <div style="font-size:18px;font-weight:800;letter-spacing:-0.4px">还没定方向？先别急着进组</div>
         <p style="font-size:13px;color:var(--ink-2);margin-top:6px;line-height:1.75;max-width:680px">
-          项目组只对同一个方向的人开放，因为验收标准是按方向定的。如果你现在还不确定走哪条路，先花 8 个晚上走一遍探索路线——
-          用真实手感选出来的方向，进组之后也不容易半途而废。
+          项目组只对同一个方向的人开放，因为验收标准是按方向定的。如果你现在还不确定走哪条路，先把探索路线主干走一遍，用真实手感选出来的方向，进组之后也不容易半途而废。
         </p>
       </div>
       <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
@@ -627,5 +665,52 @@
 </footer>
 
 <script src="assets/app.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* 项目墙：点开看学长评语和「他也卡过的地方」 */
+  document.querySelectorAll('.proj-card').forEach(function (card) {
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-expanded', 'false');
+    function toggle() {
+      var open = card.classList.toggle('open');
+      card.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+  });
+
+  /* 星图上的成员点：点一下看这个人走到哪儿了 */
+  var tip = document.createElement('div');
+  tip.className = 'star-tip';
+  tip.setAttribute('role', 'status');
+  document.body.appendChild(tip);
+  var tipTimer = null;
+
+  document.querySelectorAll('.star-dot').forEach(function (dot) {
+    dot.setAttribute('tabindex', '0');
+    dot.setAttribute('role', 'button');
+    function show() {
+      var label = dot.getAttribute('title') || dot.textContent;
+      tip.textContent = label.replace(/ · /g, ' · ') + (dot.classList.contains('me') ? '（你）' : '');
+      var r = dot.getBoundingClientRect();
+      tip.style.left = Math.max(12, r.left + r.width / 2 - 70) + 'px';
+      tip.style.top = (r.top - 40) + 'px';
+      tip.classList.add('show');
+      clearTimeout(tipTimer);
+      tipTimer = setTimeout(function () { tip.classList.remove('show'); }, 2200);
+    }
+    dot.addEventListener('click', show);
+    dot.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(); }
+    });
+    dot.addEventListener('mouseenter', show);
+  });
+})();
+</script>
 </body>
 </html>

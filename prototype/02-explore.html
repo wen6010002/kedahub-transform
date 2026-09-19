@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<html lang="zh-CN" data-page-node-id="DHwDfulO3uQHyYAkLp65bZ">
+<head data-page-node-id="97iD4gUdJPIvGxNsoWK10m">
+<meta charset="UTF-8" data-page-node-id="HLgHEZlMTDgaoO2oBsNyW6" />
+<meta name="viewport" content="width=device-width, initial-scale=1" data-page-node-id="aW7Nr6XG18g5L9T6HhePIl" />
 <title>探索路线 · 课搭</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/kh.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="U2CMYPEfC9QHd3iinDo2pt" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin data-page-node-id="iRSmF4Z6pS0dcXPDyvbjpH" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" data-page-node-id="MGlaHsQSChK15535JeC5jU" />
+<link rel="stylesheet" href="assets/kh.css" data-page-node-id="ORTJebAZ9ytym1jzetj14J" />
 <style>
+  /* hidden 兜底：.btn 是 inline-flex，会盖掉浏览器默认的 [hidden] */
+  [hidden] { display: none !important; }
+
   .ex-hero { display: grid; grid-template-columns: 1fr 320px; gap: 32px; align-items: center; margin-bottom: 34px; }
   .ex-hero h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; }
   .ex-hero h1 em { font-style: normal; color: var(--pri); }
@@ -19,12 +22,16 @@
   .ex-stat div b { display: block; font-size: 22px; font-weight: 800; letter-spacing: -0.6px; }
   .ex-stat div span { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
 
-  /* 进度卡 */
+  /* ── 进度卡 ── */
   .ex-prog { padding: 20px; text-align: center; }
   .ex-prog .ring { position: relative; width: 118px; height: 118px; margin: 4px auto 14px; }
   .ex-prog .ring svg { transform: rotate(-90deg); }
   .ex-prog .ring .num { position: absolute; inset: 0; display: grid; place-items: center; font-size: 26px; font-weight: 800; letter-spacing: -1px; }
   .ex-prog .ring .num small { font-size: 12px; color: var(--ink-soft); font-weight: 700; }
+  .ex-prog .prog-label { font-size: 13px; font-weight: 700; }
+  .ex-prog .prog-next { font-size: 12px; color: var(--ink-soft); margin-top: 3px; }
+  .pp-row { margin-top: 14px; display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; }
+  .ex-prog .pp-slot { width: 30px; height: 30px; font-size: 12.5px; }
 
   /* ── 路线主体 ── */
   .trail { position: relative; padding-left: 4px; }
@@ -33,6 +40,8 @@
   .stop-node { display: flex; align-items: flex-start; justify-content: center; padding-top: 22px; position: relative; z-index: 2; }
 
   .stop-card { padding: 18px 20px; position: relative; overflow: hidden; }
+  .stop .stop-card { transition: transform var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out),
+                     border-color var(--t-base) var(--ease-out), opacity var(--t-slow) var(--ease-out); }
   .stop-card .sc-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .stop-no { font-size: 11.5px; font-weight: 800; letter-spacing: 0.08em; color: var(--ink-faint); }
   .stop-time { font-size: 11.5px; font-weight: 700; color: var(--ink-soft); background: var(--bg-soft); padding: 2px 9px; border-radius: 999px; }
@@ -42,442 +51,1574 @@
   .stop-out .lbl { font-size: 11px; font-weight: 800; color: var(--ink-soft); flex: none; letter-spacing: 0.04em; padding-top: 1px; }
   .stop-out .val { font-size: 12.5px; color: var(--ink); font-weight: 600; line-height: 1.6; }
   .stop-wow { display: flex; gap: 9px; align-items: flex-start; margin-top: 8px; }
+  .stop-wow .lbl { font-size: 11px; font-weight: 800; color: var(--ink-soft); flex: none; letter-spacing: 0.04em; padding-top: 1px; }
   .stop-wow .val { font-size: 12.5px; color: var(--pri-700); font-weight: 600; line-height: 1.6; }
   .stop-act { margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .act-note { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
 
-  /* 手感评分 */
+  /* 状态角标 */
+  .sc-tag { margin-left: auto; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 999px; flex: none; }
+  .sc-tag.is-done { color: var(--mint); background: var(--mint-50); }
+  .sc-tag.is-here { color: var(--pri-700); background: var(--pri-50); }
+  .sc-tag.is-lock { color: var(--ink-soft); background: var(--bg-deep); }
+
+  /* 锁态：标题和产出照旧看得见，整张卡蒙一层薄雾，解锁后雾散开 */
+  .stop.is-locked .stop-card { border-style: dashed; opacity: .72; }
+  .stop.is-locked .stop-card h3 { color: var(--ink-2); }
+  .stop.is-locked .stop-card .stop-wow { opacity: .62; }
+
+  /* 打卡按钮 */
+  .btn:disabled { cursor: not-allowed; }
+  .btn:disabled:hover { transform: none; }
+  .checkin[disabled]:not(.is-done-btn) { opacity: .55; }
+  .checkin.is-done-btn { background: var(--mint-50); color: #0a7d59; box-shadow: none; cursor: default; }
+
+  /* 撤销 / 重置（跟着当前站走） */
+  .undo-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .reset-link { font-size: 11.5px; font-weight: 700; color: var(--ink-faint); text-decoration: underline; text-underline-offset: 3px; }
+  .reset-link:hover { color: var(--pri-600); }
+  .trail-end { display: flex; justify-content: center; padding: 10px 0 4px; }
+
+  /* ── 手感评分 ── */
   .feel { margin-top: 14px; padding-top: 13px; border-top: 1px dashed var(--line); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .feel .q { font-size: 12.5px; font-weight: 700; color: var(--ink-2); }
   .feel-btn {
     font-size: 12px; font-weight: 700; padding: 5px 13px; border-radius: 999px;
-    border: 1.5px solid var(--line); background: #fff; transition: 0.15s var(--ease-pop);
+    border: 1.5px solid var(--line); background: #fff;
+    transition: transform var(--t-fast) var(--ease-pop), border-color var(--t-fast) var(--ease-out),
+                background-color var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out);
   }
   .feel-btn:hover { border-color: var(--pri); transform: translateY(-2px); }
   .feel-btn:active { transform: scale(0.94); }
+  .feel-btn:disabled:hover { border-color: var(--line); transform: none; }
   .feel-btn.on { background: var(--pri); border-color: var(--pri); color: #fff; box-shadow: 0 2px 0 rgba(208,74,42,.3); }
+  .feel-hint { font-size: 11.5px; color: var(--ink-faint); font-weight: 600; }
+  .feel.is-off .feel-btn { opacity: .5; }
   .feel-done { font-size: 12px; font-weight: 700; color: var(--pri-700); display: flex; align-items: center; gap: 6px; }
 
-  /* 已完成状态角标 */
-  .sc-done {
-    margin-left: auto; font-size: 11px; font-weight: 800; color: var(--mint);
-    background: var(--mint-50); padding: 3px 10px; border-radius: 999px;
-    display: inline-flex; align-items: center; gap: 4px;
-  }
-  .sc-lock { margin-left: auto; font-size: 11px; font-weight: 800; color: var(--ink-soft); background: var(--bg-deep); padding: 3px 10px; border-radius: 999px; }
-
-  .stop.is-locked .stop-card { filter: grayscale(0.35); }
-
-  /* 方向体检终点 */
+  /* ── 终点：手感图谱 + 结论 ── */
   .finish { background: var(--ink); color: #fff; border-color: var(--ink); padding: 26px 24px; margin-top: 20px; }
   .finish h3 { color: #fff; }
   .finish .lead { color: rgba(255,255,255,.72); }
   .finish .stop-out { background: rgba(255,255,255,.1); }
   .finish .stop-out .lbl { color: rgba(255,255,255,.55); }
   .finish .stop-out .val { color: #fff; }
+  .finish .quiet { background: rgba(255,255,255,.08); color: rgba(255,255,255,.72); }
+  .finish .quiet b { color: #fff; }
 
-  /* 手感图谱示例 */
-  .taste { display: flex; align-items: flex-end; gap: 7px; height: 84px; margin: 16px 0 8px; }
-  .taste i { flex: 1; border-radius: 5px 5px 0 0; background: var(--pri); opacity: .85; display: block; }
-  .taste-lbl { display: flex; gap: 7px; font-size: 10px; color: var(--ink-soft); }
-  .taste-lbl span { flex: 1; text-align: center; }
+  .taste { display: flex; align-items: flex-end; gap: 7px; height: 100px; margin: 16px 0 8px; }
+  .taste i {
+    flex: 1; height: 4px; border-radius: 5px 5px 0 0; background: rgba(255,255,255,.16); display: block;
+    transition: height var(--t-slow) var(--ease-pop), background-color var(--t-base) var(--ease-out);
+  }
+  .taste i.v3 { height: 100%; background: var(--pri); }
+  .taste i.v2 { height: 62%; background: var(--warn); }
+  .taste i.v1 { height: 30%; background: var(--ink-faint); }
+  .taste-lbl { display: flex; gap: 7px; font-size: 10px; color: rgba(255,255,255,.6); }
+  .taste-lbl span { flex: 1; min-width: 0; text-align: center; overflow-wrap: anywhere; line-height: 1.35; }
+  .taste-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11px; color: rgba(255,255,255,.55); font-weight: 600; }
+  .taste-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .taste-legend i { width: 9px; height: 9px; border-radius: 3px; display: block; }
+  .taste-legend i.v3 { background: var(--pri); }
+  .taste-legend i.v2 { background: var(--warn); }
+  .taste-legend i.v1 { background: var(--ink-faint); }
+
+  .verdict-act { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .verdict-ghost { background: transparent; border-color: rgba(255,255,255,.3); color: #fff; }
+  .verdict-ghost:hover { background: rgba(255,255,255,.1); border-color: #fff; color: #fff; }
+
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
   @media (max-width: 1080px) { .ex-hero { grid-template-columns: 1fr; } }
   @media (max-width: 720px) {
     .stop { grid-template-columns: 52px 1fr; gap: 0 10px; }
     .trail-svg { width: 52px; }
     .rt-node { width: 46px; height: 46px; font-size: 17px; }
+    .why-grid { grid-template-columns: 1fr; }
+    .ex-hero h1 { font-size: 26px; }
   }
+
+  /* ═══ 六模块版新增 ═══ */
+  .mod { margin-top: 34px; }
+  .mod-head { display:flex; align-items:flex-start; gap:14px; flex-wrap:wrap; padding:16px 18px;
+    border:1.5px solid var(--line); border-radius:18px; background:#fff; }
+  .mod-head .mh-ico { width:46px; height:46px; border-radius:14px; background:var(--pri-50);
+    display:grid; place-items:center; font-size:22px; flex:none; }
+  .mod-head .mh-body { flex:1; min-width:220px; }
+  .mod-head .mh-kind { font-size:11px; font-weight:800; letter-spacing:.4px; color:var(--pri-700); }
+  .mod-head h2 { font-size:19px; font-weight:800; letter-spacing:-.3px; margin:3px 0 6px; }
+  .mod-head .mh-desc { font-size:13px; color:var(--ink-2); line-height:1.7; }
+  .mod-head .mh-side { text-align:right; flex:none; }
+  .mod-head .mh-num { font-size:15px; font-weight:800; color:var(--ink); }
+  .mod-head .mh-num small { font-weight:600; color:var(--ink-soft); font-size:12px; }
+  .mod-head .mh-bar { width:120px; height:6px; border-radius:5px; background:var(--bg-deep); margin-top:6px; overflow:hidden; }
+  .mod-head .mh-bar i { display:block; height:100%; width:0; background:var(--pri); border-radius:5px;
+    transition: width var(--t-slow) var(--ease-out); }
+  .mod.is-opt .mod-head { border-style:dashed; opacity:.92; }
+  .mod.is-opt-locked .mh-desc, .mod.is-opt-locked h2 { color:var(--ink-2); }
+  .mod-locknote { margin:10px 0 0; font-size:12.5px; color:var(--ink-soft); font-weight:600; }
+  .mod-locknote b { color:var(--pri-700); }
+  .mod .stop { margin-top:14px; }
+  .mod-stops { margin-top:16px; }
+  .mod-verdict { margin-top:12px; font-size:12.5px; color:var(--ink-soft); font-weight:600; }
+  .mod-verdict b { color:var(--pri-700); }
+  @media (max-width:720px){ .mod-head .mh-side { text-align:left; } }
 </style>
 </head>
-<body>
+<body data-page-node-id="6NtyEz6kVM7dT3yR9sz8bS">
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a class="logo" href="01-home.html">
-      <span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
-      <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+<nav class="nav" data-page-node-id="zEoTUVdDMNDcvyAHk9yuAl">
+  <div class="nav-inner" data-page-node-id="xIwYX4ws9HNXuKDQaAHf7n">
+    <a class="logo" href="01-home.html" data-page-node-id="bFHi2a4C5zW2aixz4dJsDU">
+      <span class="logo-mark" data-page-node-id="o7hSatujIUZh0xRYDT9kLk"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="Z3HFnl76HU7DNrit2xkBMp"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" data-page-node-id="NwvvomGEOEbIXLtD8j4LB2"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" data-page-node-id="AEFgedOAQ2LWkYhQgOVovi"/></svg></span>
+      <span class="logo-text" data-page-node-id="UVd8z2Kdl40f4EQnY4yUto"><b data-page-node-id="3X2xJ69ITMCqIU53IWZIQb">课搭</b><span data-page-node-id="GEL8KrSPDudvZvzBTOFyKA">大学生成长社区</span></span>
     </a>
-    <div class="nav-search">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <div class="nav-search" data-page-node-id="bVGrvf1Jdaeerfi7lv1Hc6">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" data-page-node-id="YcxWcs1AHABXwDBwvnkHYO"><circle cx="11" cy="11" r="7" data-page-node-id="m0RhHoXB78pUEelx7MSCAh"/><path d="M20 20l-3.5-3.5" data-page-node-id="SpVIZDh1lEKJMRXmdNmDr3"/></svg>
       搜索资料、路线、学长经验…
     </div>
-    <div class="nav-actions">
-      <a class="nav-link" href="01-home.html">首页</a>
-      <a class="nav-link on" href="02-explore.html">🧭 探索路线</a>
-      <a class="nav-link" href="09-cohort.html">项目组</a>
-      <a class="nav-link" href="10-pricing.html">验收与付费</a>
-      <a class="btn btn-outline btn-sm" href="04-survey.html">登录</a>
-      <a class="btn btn-primary btn-sm" href="04-survey.html">定制我的路线</a>
+    <div class="nav-actions" data-page-node-id="HkQ1chvrvIgfjbfmMzYG1Z">
+      <a class="nav-link" href="01-home.html" data-page-node-id="tKiiKpPxOwgpLQCvZ8UmXg">首页</a>
+      <a class="nav-link on" href="02-explore.html" data-page-node-id="pcGfSksagVNxNCesPfJ8MB">🧭 探索路线</a>
+      <a class="nav-link" href="09-cohort.html" data-page-node-id="RglUZLuMCJdOf62yp9bOfV">项目组</a>
+      <a class="nav-link" href="10-pricing.html" data-page-node-id="RnbMtjDAUCl4tYJV28Ly1D">验收与付费</a>
+      <a class="btn btn-outline btn-sm" href="04-survey.html" data-page-node-id="5JNV4hJJetS5IH1D1iostc">登录</a>
+      <a class="btn btn-primary btn-sm" href="04-survey.html" data-page-node-id="Q7Tkul39GA4Azort8JEuBp">定制我的路线</a>
     </div>
   </div>
 </nav>
 
-<main class="page">
+<main class="page" data-page-node-id="xLyyho3ZGmF9DAksFRCjRc">
 
   <!-- ══════════ 头部 ══════════ -->
-  <header class="ex-hero">
-    <div>
-      <div class="kicker">Exploration Trail · 探索路线</div>
-      <h1>先别急着选方向，<br />先<em>把计算机摸一遍</em>。</h1>
-      <p>
+  <header class="ex-hero" data-page-node-id="0oQV16HAgevrpx8le9kOyU">
+    <div data-page-node-id="xt52bGr0ioUSeHAad4hUq3">
+      <div class="kicker" data-page-node-id="HFX48ZQehx9T4Tx0wnSLFJ">Exploration Trail · 探索路线</div>
+      <h1 data-page-node-id="3SEqd1naEY3hYuk4twQGrf">先别急着选方向，<br  data-page-node-id="0Gn62xkQjHVrFqD7zgaJDh"/>先<em data-page-node-id="pQDG7EQe6dGXN8GTBhwuo4">把计算机摸一遍</em>。</h1>
+      <p data-page-node-id="zEurKNw8ZHtAxESCbGNv9q">
         大一是唯一一段"可以不知道自己要干什么"的时间。这条路线不教你成为谁，
-        它只做一件事：<strong>用 8 个晚上，让你亲手碰一遍计算机的每个角落</strong>，
-        然后你自己就知道该往哪走了。
+        它只做一件事：<strong data-page-node-id="eBmn0h4zFrIvT9LpFzyQ0K">三块主干，让你亲手碰一遍计算机的每个角落</strong>。
+        走完主干，再去看看别的岗位，然后你自己就知道该往哪走了。
       </p>
-      <p style="margin-top:10px">
-        每一站都要做出一个小东西——不是看完视频打个勾，是<strong>真的做出来、能拿给室友看</strong>。
-        走完 8 站，你手里不是一份问卷答案，而是八次真实的手感。
+      <p style="margin-top:10px" data-page-node-id="3z8emm2iI5L7fHYhovAMo7">
+        每一站都要做出一个小东西。看完资料打个勾不算数，你得真的做出来，能拿给室友看。
+        走完主干，你手里是三十次真实的手感，比一份问卷答案实在得多。
       </p>
-      <div class="ex-stat">
-        <div><b>8</b><span>站 · 每站 1.5–2.5 小时</span></div>
-        <div><b>16h</b><span>总计（约两周晚自习）</span></div>
-        <div><b>8</b><span>个能拿出手的小作品</span></div>
-        <div><b>¥0</b><span>完全免费</span></div>
+      <div class="ex-stat" data-page-node-id="UaeRK1oI4wNbBvi2o7E0NZ">
+        <div data-page-node-id="hkjgZ8HulwEQ0SDS4LzQZ8"><b data-page-node-id="0SrWxTotcLo4lForPiNGZt">30</b><span data-page-node-id="9DJoPdU6tugOoXvUgXa8um">站主干 · 每站 30–60 分钟</span></div>
+        <div data-page-node-id="pEsCAy8z7VjZA0EJVAPt4P"><b data-page-node-id="KKItqUqJXGial7iFpAcOpk">20h</b><span data-page-node-id="8daCBNbyNQ1Di1qwjN5324">主干约三周晚自习</span></div>
+        <div data-page-node-id="d4HHnOrGIzfrKUa2o7Ggwd"><b data-page-node-id="UGJs3Z67orOVsUjp4mjXSE">30</b><span data-page-node-id="osaTDUKl6Iug5Rgp4QnvPC">个能拿出手的小作品</span></div>
+        <div data-page-node-id="voK7CwLdGVTn19np2NXPeq"><b data-page-node-id="tAZxcedpY9xlxPbwVQ7qgE">¥0</b><span data-page-node-id="GRXHqgBR9B4mFIuNNeJG2Q">完全免费</span></div>
       </div>
     </div>
 
-    <div class="toon-card ex-prog">
-      <div class="ring">
-        <svg width="118" height="118">
-          <circle cx="59" cy="59" r="50" fill="none" stroke="#ebedf0" stroke-width="9" />
+    <div class="toon-card ex-prog" data-page-node-id="tpwu3HwEQsrQ6Z0kFBFR2j">
+      <div class="ring" data-page-node-id="XObc0y0p6nERkKLsiS2DQG">
+        <svg width="118" height="118" data-page-node-id="9WyOF1s6GaDEJahqJDrTGc">
+          <circle cx="59" cy="59" r="50" fill="none" stroke="#ebedf0" stroke-width="9" data-page-node-id="aLC5zrDTZCKm7i7RxxFrP2" />
           <circle id="ringFg" cx="59" cy="59" r="50" fill="none" stroke="#ff6b4a" stroke-width="9"
                   stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="235"
-                  style="transition: stroke-dashoffset .7s cubic-bezier(.22,.61,.36,1)" />
+                  style="transition: stroke-dashoffset var(--t-ceremony) var(--ease-out)" data-page-node-id="cuJgMMm9aVMFAEKcB0JlVm" />
         </svg>
-        <div class="num"><span id="progNum">2</span><small>/8</small></div>
+        <div class="num" data-page-node-id="q1bXclUCqJxlRa4IqC8MFr"><span id="progNum" data-page-node-id="aVcExj8Qr8B5Roa9qN23r5">0</span><small data-page-node-id="7N3YobAa93lwAezEP16nDW">/41</small></div>
       </div>
-      <div style="font-size:13px;font-weight:700">已走过 2 站</div>
-      <div style="font-size:12px;color:var(--ink-soft);margin-top:3px">下一站：Git 时间机器</div>
-      <div style="margin-top:14px;display:flex;justify-content:center;gap:6px">
-        <span class="pp-slot on" style="width:32px;height:32px;font-size:13px">⌨️</span>
-        <span class="pp-slot on" style="width:32px;height:32px;font-size:13px">📜</span>
-        <span class="pp-slot" style="width:32px;height:32px;font-size:13px">🌿</span>
-        <span class="pp-slot" style="width:32px;height:32px;font-size:13px">🎨</span>
-        <span class="pp-slot" style="width:32px;height:32px;font-size:13px">🖥️</span>
-        <span class="pp-slot" style="width:32px;height:32px;font-size:13px">🗄️</span>
-        <span class="pp-slot" style="width:32px;height:32px;font-size:13px">🤖</span>
-        <span class="pp-slot" style="width:32px;height:32px;font-size:13px">🌌</span>
+      <div class="prog-label" id="progLabel" data-page-node-id="vopNOfNtWxX0DAcJi9xFcY">还没开始</div>
+      <div class="prog-next" id="progNext" data-page-node-id="ZKCdEe6rrGaU4TTywYx6UZ">第一站：💻 电脑是怎么工作的</div>
+      <div class="pp-row" data-page-node-id="IEcVLiTcdRHTWKi3891IMc">
+        <span class="pp-slot" data-page-node-id="wOorp59f6qhdXeuQGX6Agz">💻</span>
+        <span class="pp-slot" data-page-node-id="jTwSDOHRzD5G2LuV9c0sIf">🌐</span>
+        <span class="pp-slot" data-page-node-id="Q51Kai6OB4njB93KIYdD1P">🧠</span>
+        <span class="pp-slot" data-page-node-id="hS0P1Z9LrOMxKN79ci4WQa">🏗️</span>
+        <span class="pp-slot" data-page-node-id="1LFKKNKUL8WCXn5qwGuMXg">🔧</span>
+        <span class="pp-slot" data-page-node-id="VHFxBNIeiAkBKHXFdj5MFA">📈</span>
       </div>
     </div>
   </header>
-
   <!-- ══════════ 路线 ══════════ -->
-  <div class="trail" id="trail">
-    <svg class="trail-svg" id="trailSvg" preserveAspectRatio="none">
-      <path id="pTrack" fill="none" stroke="#ebedf0" stroke-width="7" stroke-linecap="round" />
-      <path id="pDone" fill="none" stroke="#ff6b4a" stroke-width="7" stroke-linecap="round" />
-      <path id="pDash" fill="none" stroke="#b3b7be" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 14" opacity=".55" />
-    </svg>
+  <div class="trail" id="trail" data-page-node-id="OdgQfXNO9AihhCoHn3G1ba">
 
-    <!-- 1 -->
-    <div class="stop is-done" data-i="0">
-      <div class="stop-node">
-        <span class="rt-node done">⌨️<span class="rt-badge">✓</span></span>
+    <!-- ── 模块 1 · 计算机初识 ── -->
+    <section class="mod" data-mod="0" id="mod0" data-page-node-id="iXQGFVPNYxcoq9QuYmBA4H">
+      <div class="mod-head" data-page-node-id="0GzOSYWPFE4NhuVKCp81Qd">
+        <span class="mh-ico" data-page-node-id="xSue26KhSV1AdFDQXbO2TE">💻</span>
+        <div class="mh-body" data-page-node-id="m8kAJfotnwROpnKw6Ndyq1">
+          <span class="mh-kind" data-page-node-id="HIe2cF20HLT82TuxLmxuBH">主干必修</span>
+          <h2 data-page-node-id="fPGzCa1cxvaW16NkBNbGqn">计算机初识</h2>
+          <div class="mh-desc" data-page-node-id="cH0VhsxDIprgsyJpH80UKq">零基础打底：看懂电脑、会开终端、能装软件、敢改代码。后面的每一站都踩在这九站上。</div>
+        </div>
+        <div class="mh-side" data-page-node-id="A9gsxMVpJNGWo94QlHu1Pi">
+          <div class="mh-num" data-page-node-id="00l1HANMz8YEuqWfUzi5wE"><b id="modNum0" data-page-node-id="K4t7aQGCSP7fcYNtGmYWT4">0</b><small data-page-node-id="LebxjwyhmBIl8ToKmtKIvf"> / 9 站 · 约 6.4 小时</small></div>
+          <div class="mh-bar" data-page-node-id="bMfZ5zEq6YtjospCxNiTlF"><i id="modBar0" data-page-node-id="BdHxFFHDu7bvOIhk1OSasq"></i></div>
+          <div class="mod-verdict" id="modFeel0" hidden data-page-node-id="sI6rqCzDfptCZurBrtgn8x"></div>
+        </div>
       </div>
-      <div class="toon-card stop-card">
-        <div class="sc-top"><span class="stop-no">STOP 01</span><span class="stop-time">约 1.5 小时</span><span class="sc-done">✓ 已走过</span></div>
-        <h3>⌨️ 黑窗口</h3>
-        <div class="lead">电影里黑客敲的那个黑框，其实是电脑最老实的样子——你说什么，它就做什么。这一站让你不再怕它。</div>
-        <div class="stop-out"><span class="lbl">你会做出</span><span class="val">一条命令，把 100 个乱文件按日期改好名</span></div>
-        <div class="stop-wow"><span class="lbl">⚡ 哇时刻</span><span class="val">第一次 <code>cd</code>，电脑真的走"进"了那个文件夹</span></div>
-        <div class="feel">
-          <span class="q">这一站的手感？</span>
-          <button class="feel-btn">🔥 上头了</button>
-          <button class="feel-btn">🙂 还行</button>
-          <button class="feel-btn on">🥱 没感觉</button>
+      <div class="mod-locknote" id="modLock0" hidden data-page-node-id="dDsPGlAZ9JmDP0VJhDrKU8"></div>
+      <div class="mod-stops" data-page-node-id="QgrhP8MEfILFtlvxngLfh9">
+    <div class="stop" data-i="0" data-mod="0" data-name="电脑是怎么工作的" data-ico="💻" data-page-node-id="D7lGahKOE5jMAYNMeHoAzB">
+      <div class="stop-node" data-page-node-id="8eDjaGDtsEKJK2HsFLFPgO"><span class="rt-node" data-page-node-id="LO3RKJPPnQYJjddiaa5Mpo">💻</span></div>
+      <div class="toon-card stop-card" data-page-node-id="KmfxzZ5a0maTETBtCdGmcR">
+        <div class="sc-top" data-page-node-id="6NAODV48gGOxrNePu25PS0"><span class="stop-no" data-page-node-id="DoSWXNVehEBGXN0BrzBf0I">STOP 01</span><span class="stop-time" data-page-node-id="Y9CXR7iBp8EBGiRIgGZlkB">约 35 分钟</span><span class="sc-tag is-lock" data-page-node-id="iGKRX0Z1NjSP7CkGhoQR1p">走完前一站解锁</span></div>
+        <h3 data-page-node-id="1WDALZHeA0ZGheGLmba5AI">💻 电脑是怎么工作的</h3>
+        <div class="stop-out" data-page-node-id="mtfq91VhEaUEKHjOzPoKMG"><span class="lbl" data-page-node-id="HINVzCOV6g8xm2gMlCanBz">你会做出</span><span class="val" data-page-node-id="sPFOUD1aoHuplRGWl7DPmA">看懂自己电脑卡了到底是谁的锅</span></div>
+        <div class="stop-wow" data-page-node-id="McFf4ObvtnnQfeQC8sDvfh"><span class="lbl" data-page-node-id="tycHQ8YaeOfoqqIZsCCA6b">⚡ 哇时刻</span><span class="val" data-page-node-id="M2ULupl2Uy9r4hhk34qgc9">开十个标签页，任务管理器里的内存数字肉眼可见地涨</span></div>
+        <div class="stop-act" data-page-node-id="E0eRUyddeBCeKYl4kxHAF0">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="5pApmYf2cK1opnT044P4of">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="DMauG3JW0M8Yuwm4EkuCZY">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="c28QByD4ifOZwv97w2F18d">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="jlJjTvt9QOLwA7pWqQCH58">
+          <span class="q" data-page-node-id="XVu52fbgJE7BrNs49dAWaz">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="hFGBu2OBs4HWVNpWAaRbCq">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="kKgBrSnBBaCEHtmIgfXnzs">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="Jb7zXSUD0SvzW5h0Ar3tWR">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="xHzu1bUcxvFYkdQwYB4yud">走完这一站就能打分</span>
         </div>
       </div>
     </div>
-
-    <!-- 2 -->
-    <div class="stop is-done" data-i="1">
-      <div class="stop-node">
-        <span class="rt-node done">📜<span class="rt-badge">✓</span></span>
-      </div>
-      <div class="toon-card stop-card">
-        <div class="sc-top"><span class="stop-no">STOP 02</span><span class="stop-time">约 2 小时</span><span class="sc-done">✓ 已走过</span></div>
-        <h3>📜 脚本 · 让电脑替你干活</h3>
-        <div class="lead">你已经会跟电脑说话了，现在让它替你重复劳动。这一站之后，你会开始嫌弃手动做的事。</div>
-        <div class="stop-out"><span class="lbl">你会做出</span><span class="val">一个自动整理桌面的脚本：把下载文件夹里的东西按类型分好类</span></div>
-        <div class="stop-wow"><span class="lbl">⚡ 哇时刻</span><span class="val">你写的代码，干完了你本来要干一小时的事</span></div>
-        <div class="feel">
-          <span class="q">这一站的手感？</span>
-          <button class="feel-btn on">🔥 上头了</button>
-          <button class="feel-btn">🙂 还行</button>
-          <button class="feel-btn">🥱 没感觉</button>
+    <div class="stop" data-i="1" data-mod="0" data-name="二进制与编码" data-ico="🔢" data-page-node-id="yshlBmIbaY4IMNPbwlailW">
+      <div class="stop-node" data-page-node-id="eMhZodF6uGKiAB6UKWSPZE"><span class="rt-node" data-page-node-id="UEufJFduLlWBjy6AnEFLeL">🔢</span></div>
+      <div class="toon-card stop-card" data-page-node-id="GRqhK1GGUtit9mZlrBYD0Q">
+        <div class="sc-top" data-page-node-id="PfFp3xwjJCyJ1R8FWrn5c5"><span class="stop-no" data-page-node-id="WIuPixgAXUo7odC4mczaPp">STOP 02</span><span class="stop-time" data-page-node-id="ANo9AHRoEKUaoVGLt2UVKE">约 35 分钟</span><span class="sc-tag is-lock" data-page-node-id="MJk6xgfS2UYqpQNJuvKvDb">走完前一站解锁</span></div>
+        <h3 data-page-node-id="hUahA0iIMO7esY4Pbk7loC">🔢 二进制与编码</h3>
+        <div class="stop-out" data-page-node-id="omaCznHFnwHB4yMBpu113C"><span class="lbl" data-page-node-id="gi1CJMJawUd4eEAK07EXkM">你会做出</span><span class="val" data-page-node-id="lqRE4J3SaXQPmRB9dStbhd">亲眼看到「中」这个字在硬盘上真正的样子</span></div>
+        <div class="stop-wow" data-page-node-id="QD4HNhA21iDY4vLkqtZRah"><span class="lbl" data-page-node-id="8slqFClRCditUvTRkWZHDt">⚡ 哇时刻</span><span class="val" data-page-node-id="Yi9Y28uwsAyAOVoBb0KRfh">屏幕上打出 e4 b8 ad，这就是「中」的字节</span></div>
+        <div class="stop-act" data-page-node-id="uPFHPfDDI8JZL6tUWNr1QS">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="Va9FTKL9oASciONLpHhCAz">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="3OZNn1GAmnkTTcMGXLaLXy">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="H8M9clOKNL2hxkIXpGILUH">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="ZrViYzEVC0QgCOQMbC115Z">
+          <span class="q" data-page-node-id="GF4NwG7Sw7QR8kQigXsmfg">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="LCmGFC05yWqweG3LMTeVlH">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="ygTUvt4zFSPrJBKTemsjEq">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="4mLijnJwVWcz8muks6I78Z">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="fXZ48gK9ManiIklCMsDiAC">走完这一站就能打分</span>
         </div>
       </div>
     </div>
-
-    <!-- 3 · 当前站 -->
-    <div class="stop is-active" data-i="2" id="stopActive">
-      <div class="stop-node">
-        <span class="rt-node active rt-halo pressable">🌿</span>
-      </div>
-      <div class="toon-card stop-card" style="border-color:var(--pri)">
-        <div class="sc-top"><span class="stop-no">STOP 03</span><span class="stop-time">约 1.5 小时</span><span class="sc-lock" style="background:var(--pri-50);color:var(--pri-700)">你在这里</span></div>
-        <h3>🌿 Git · 给代码一台时间机器</h3>
-        <div class="lead">所有程序员都在用的那个东西，其实只解决一个问题：让你敢改。改坏了能退回来，这就是安全感的来源。</div>
-        <div class="stop-out"><span class="lbl">你会做出</span><span class="val">你自己的第一个 GitHub 仓库，有完整的提交记录，能发链接给同学</span></div>
-        <div class="stop-wow"><span class="lbl">⚡ 哇时刻</span><span class="val">你删掉了一整个文件，一条命令把它变了回来</span></div>
-        <div class="stop-act">
-          <button class="btn btn-primary" id="btnFinish">✓ 完成这一站</button>
-          <a class="btn btn-outline" href="07-node.html">看这一站的 4 个小任务 →</a>
-          <span style="font-size:11.5px;color:var(--ink-soft);font-weight:600">共 4 个小任务 · 已做 2 个</span>
+    <div class="stop" data-i="2" data-mod="0" data-name="文件与目录" data-ico="📁" data-page-node-id="k4wFUcqLlNTHjWzJtHpUqu">
+      <div class="stop-node" data-page-node-id="RmNERFqFZdj875HKNknG4S"><span class="rt-node" data-page-node-id="TKVMfYe0LVpKLXZGq4tPci">📁</span></div>
+      <div class="toon-card stop-card" data-page-node-id="fLF5qM8pYYY4jzzIRDFfOD">
+        <div class="sc-top" data-page-node-id="UwcxYXgqfTxO9ePUviWMVq"><span class="stop-no" data-page-node-id="C2snBf7ZsoRemMybUgnVEY">STOP 03</span><span class="stop-time" data-page-node-id="6iXIzBvLJ0VfEsHW92wqAt">约 45 分钟</span><span class="sc-tag is-lock" data-page-node-id="fa5HX5g7wkzgyT9qlB9RnT">走完前一站解锁</span></div>
+        <h3 data-page-node-id="eObCipa4wxoZPqobI7ePP3">📁 文件与目录</h3>
+        <div class="stop-out" data-page-node-id="1FiDXPFsbMl4LakMoqEejX"><span class="lbl" data-page-node-id="8VCqt8AOl0lU0EmGApF7km">你会做出</span><span class="val" data-page-node-id="eS9blY867EURWGfd8xEiBJ">一个三层文件夹，和一次权限实验</span></div>
+        <div class="stop-wow" data-page-node-id="HKdyXCfRGhhAheal7KsSUD"><span class="lbl" data-page-node-id="GDGbCijvDpExxl7QZcbX2J">⚡ 哇时刻</span><span class="val" data-page-node-id="i6eux2bunIqlvu6XCBXpke">亲手造出一个连自己都打不开的文件</span></div>
+        <div class="stop-act" data-page-node-id="SlIYOG6HHYhJlRh66iymKP">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="sC35EyTo7wGbPp8N4cY1ba">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="wo9NaBtypahCcnYOcKafr4">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="WOGxXByD53EPV0TEoEiozg">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="TlxWZkkHkFmH3J5WAOMtib">
+          <span class="q" data-page-node-id="nejSD6Q45Vv2MXcb3f48RW">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="EelEsava9DseFMe3uhPK2c">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="aNC8WNLM31v2YlLLBunHkb">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="D6801YeYEgzPFiHL9QM2pE">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="SVbmHMTTCFV7JFEp0gQZlX">走完这一站就能打分</span>
         </div>
       </div>
     </div>
-
-    <!-- 4 -->
-    <div class="stop is-locked" data-i="3">
-      <div class="stop-node"><span class="rt-node locked">🎨</span></div>
-      <div class="toon-card stop-card">
-        <div class="sc-top"><span class="stop-no">STOP 04</span><span class="stop-time">约 2.5 小时</span><span class="sc-lock">走完第 3 站解锁</span></div>
-        <h3>🎨 前端 · 让东西看得见</h3>
-        <div class="lead">前面做的东西只有你自己看得到。这一站给它一张脸，然后发出去，让别人的手机能打开。</div>
-        <div class="stop-out" style="position:relative;overflow:hidden"><span class="lbl">你会做出</span><span class="val" style="filter:blur(4.5px);user-select:none">████████████████████</span><span class="rt-mist" style="border-radius:8px"><span class="qm">？</span></span></div>
+    <div class="stop" data-i="3" data-mod="0" data-name="常见文件格式" data-ico="📄" data-page-node-id="EzkGdgTPzRBevjPPWLR5lH">
+      <div class="stop-node" data-page-node-id="f88O4kqzmUg08Y7jM3gBfC"><span class="rt-node" data-page-node-id="Rl1Jld6sgzVhCBcdS52elL">📄</span></div>
+      <div class="toon-card stop-card" data-page-node-id="8HFmJMyDoihviLh6hrtKuM">
+        <div class="sc-top" data-page-node-id="7DBUda03VX796x3LMR6bOh"><span class="stop-no" data-page-node-id="NZha5MeqxwIOB66lIh52Jd">STOP 04</span><span class="stop-time" data-page-node-id="4nDUigWQydaNYJ8CbA49sV">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="W8z1Pi3cgOeFC8ivJO3BRr">走完前一站解锁</span></div>
+        <h3 data-page-node-id="MGg0NnDQCrNcoL3gkJ8llV">📄 常见文件格式</h3>
+        <div class="stop-out" data-page-node-id="tkMdRCiNJyXSJOJN2UwP5V"><span class="lbl" data-page-node-id="hJh1jmdpXqvh7mE6WnZAfO">你会做出</span><span class="val" data-page-node-id="cT0cQLHBAe3avWNjIXmaW5">看懂乱码是怎么来的</span></div>
+        <div class="stop-wow" data-page-node-id="YF0Zda7TKjCZVuXbzIZUL0"><span class="lbl" data-page-node-id="yz8QUsHFevX7lkW25XoT7P">⚡ 哇时刻</span><span class="val" data-page-node-id="oyelV3Nl8zfTuPy5WNUavK">把文字砍掉一半，屏幕上真的蹦出乱码</span></div>
+        <div class="stop-act" data-page-node-id="Zph0CkvewZesxn99banXzU">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="dQPh6UccQPFE1NXFAHUvVc">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="KKERfcSzAAmDvRCF32DmcH">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="iufjoy08RRvDYik6yqFdBB">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="JlAE4K8HXjx78KsQxlDy2J">
+          <span class="q" data-page-node-id="CbLJu83gEDMLWlOVxmEnDS">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="dQOtO2A4rr3OJH0s2Z34Jn">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="p8leMTJien0JW6hSl1PFjd">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="A890cHtJLdaBEKmmJHYsku">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="yvzPsU8rMNrsSjW1KvePOG">走完这一站就能打分</span>
+        </div>
       </div>
     </div>
-
-    <div class="stop is-locked" data-i="4">
-      <div class="stop-node"><span class="rt-node locked">🖥️</span></div>
-      <div class="toon-card stop-card">
-        <div class="sc-top"><span class="stop-no">STOP 05</span><span class="stop-time">约 2 小时</span><span class="sc-lock">走完第 3 站解锁</span></div>
-        <h3>🖥️ 服务器 · 让你的东西被别人用到</h3>
-        <div class="lead">网页只在你自己电脑上打开不算数。这一站把它放到公网上，让任何人任何地方都能访问。</div>
-        <div class="stop-out" style="position:relative;overflow:hidden"><span class="lbl">你会做出</span><span class="val" style="filter:blur(4.5px);user-select:none">████████████████████</span><span class="rt-mist" style="border-radius:8px"><span class="qm">？</span></span></div>
+    <div class="stop" data-i="4" data-mod="0" data-name="黑窗口" data-ico="⌨️" data-page-node-id="lEPPpu5ye4pAvFpHPRBDgB">
+      <div class="stop-node" data-page-node-id="TFSnYLQO3PLIbgi73UUVoM"><span class="rt-node" data-page-node-id="eTg3dYl4ihtsr2hPJgTuQe">⌨️</span></div>
+      <div class="toon-card stop-card" data-page-node-id="w3pet2f4WHqHFonVWHdtqu">
+        <div class="sc-top" data-page-node-id="PH5TUpHDA3PbypAYyqDgcH"><span class="stop-no" data-page-node-id="bnZRK7EqCRXncFgf8adSCx">STOP 05</span><span class="stop-time" data-page-node-id="H5t3Kq8ZUDyF7cZTbeF3wH">约 55 分钟</span><span class="sc-tag is-lock" data-page-node-id="VPbK8A1C9jBydae3KGXyC7">走完前一站解锁</span></div>
+        <h3 data-page-node-id="PTwz1s8F4JB78b29qh3rtb">⌨️ 黑窗口</h3>
+        <div class="stop-out" data-page-node-id="48yTXRRRtFC21qskwrJqrG"><span class="lbl" data-page-node-id="RbFVMU08NQp6WF9ZjrSHPh">你会做出</span><span class="val" data-page-node-id="UidNZIc5vJGBdTarkVOZkt">用命令行整理自己的下载文件夹</span></div>
+        <div class="stop-wow" data-page-node-id="bNTzaKU5JFh3KRJDUGDcMq"><span class="lbl" data-page-node-id="HhPxGHN9hCSGoDXg8Hxtcf">⚡ 哇时刻</span><span class="val" data-page-node-id="qB0gOox1cXGv2GFLkCfbyC">黑窗口里打一行字，图形界面里多出一个文件夹</span></div>
+        <div class="stop-act" data-page-node-id="GBmTRwwifC8rImeKbN5ZDr">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="8vTHuz1Rffpt3rp88YiY6C">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="iA46GlgdRvTf73Wf2spEhC">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="UnRZNGpyDZaEEyTyHL2cNH">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="Da2da268X0sWk4HtXDxnra">
+          <span class="q" data-page-node-id="h604Hpbl0Vu2XazisArJ8M">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="0sYREIqRAjCO88TW7D5H8W">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="Bulf2xjqyvARRBZ3Slwx6i">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="pp5wad96oarEmGFSzCRjWs">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="FfIuGlkBQdc3izQVyCr2Px">走完这一站就能打分</span>
+        </div>
       </div>
     </div>
-
-    <div class="stop is-locked" data-i="5">
-      <div class="stop-node"><span class="rt-node locked">🗄️</span></div>
-      <div class="toon-card stop-card">
-        <div class="sc-top"><span class="stop-no">STOP 06</span><span class="stop-time">约 2 小时</span><span class="sc-lock">走完第 3 站解锁</span></div>
-        <h3>🗄️ 数据库 · 让程序有记忆</h3>
-        <div class="lead">为什么刷新页面数据还在？为什么网站记得你是谁？这一站回答这个问题。</div>
-        <div class="stop-out" style="position:relative;overflow:hidden"><span class="lbl">你会做出</span><span class="val" style="filter:blur(4.5px);user-select:none">████████████████████</span><span class="rt-mist" style="border-radius:8px"><span class="qm">？</span></span></div>
+    <div class="stop" data-i="5" data-mod="0" data-name="Shell" data-ico="🔗" data-page-node-id="ItOWd0ONhPIWQtTZUUOEaS">
+      <div class="stop-node" data-page-node-id="cHm2tPZg17v47NaU3K4sN7"><span class="rt-node" data-page-node-id="JnJkMVIPW0BEzGv4PGeHHC">🔗</span></div>
+      <div class="toon-card stop-card" data-page-node-id="EDu5cNQOm1Xij2IWBW4T1p">
+        <div class="sc-top" data-page-node-id="wO4b6HxFT7HF988aFLFQBH"><span class="stop-no" data-page-node-id="JqtPLSQP8F8YupEDjLlwbp">STOP 06</span><span class="stop-time" data-page-node-id="dR5eYnPHcuSPpA4MJaBOQ2">约 45 分钟</span><span class="sc-tag is-lock" data-page-node-id="6j13HfM4Z9L2RdZSVFuPhL">走完前一站解锁</span></div>
+        <h3 data-page-node-id="a7n7cHBX2PpBRzmNAANvhO">🔗 Shell</h3>
+        <div class="stop-out" data-page-node-id="kBOr9aBMdgxp4HKroVX2NP"><span class="lbl" data-page-node-id="8lncZNKNMsI6edKcbf9Y2s">你会做出</span><span class="val" data-page-node-id="6PyXvF9DAclT0gABpiipwk">一行管道命令，数出一堆东西的种类</span></div>
+        <div class="stop-wow" data-page-node-id="uJ6QnU3UHuA0fVahSgNtJq"><span class="lbl" data-page-node-id="CJ83O6FjHFl9QYh6mpgCxW">⚡ 哇时刻</span><span class="val" data-page-node-id="5v2k1CLUO5HxuyaHpOj17Y">五个互不认识的工具，一根竖线串起来干完活</span></div>
+        <div class="stop-act" data-page-node-id="SRJOvus7DMM27aEF92YTFs">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="MxQxf23FX7MHioqteOGNAy">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="wrXLnFFy6sacitSaFn63Wr">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="QaEEqLAsn4hMhGci0eSen6">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="AAIqb2F9Q5OPzT83C3WbIM">
+          <span class="q" data-page-node-id="R96iBSg1pjcdfXRAp4sIPE">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="pBnDVhc0wgZnb36jpPfho9">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="5DVnBsPqaCFkKuMFy77gkn">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="x55sshR4oBcAqVtZjrr8pL">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="qvflMjmTvDgkXsD7d65hMD">走完这一站就能打分</span>
+        </div>
       </div>
     </div>
-
-    <div class="stop is-locked" data-i="6">
-      <div class="stop-node"><span class="rt-node locked">🤖</span></div>
-      <div class="toon-card stop-card">
-        <div class="sc-top"><span class="stop-no">STOP 07</span><span class="stop-time">约 2 小时</span><span class="sc-lock">走完第 3 站解锁</span></div>
-        <h3>🤖 AI · 让程序会思考</h3>
-        <div class="lead">不用训练模型，你也能调用它。这一站你会发现：AI 应用开发的门槛，比所有人想象的都低。</div>
-        <div class="stop-out" style="position:relative;overflow:hidden"><span class="lbl">你会做出</span><span class="val" style="filter:blur(4.5px);user-select:none">████████████████████</span><span class="rt-mist" style="border-radius:8px"><span class="qm">？</span></span></div>
+    <div class="stop" data-i="6" data-mod="0" data-name="脚本" data-ico="📜" data-page-node-id="mzUJAXKoPx7wHRQtpvrQgB">
+      <div class="stop-node" data-page-node-id="NXR3CbusSQtYsAWlJOLyut"><span class="rt-node" data-page-node-id="sLS6jmvdNmBn10INvMCeHE">📜</span></div>
+      <div class="toon-card stop-card" data-page-node-id="MYZ6bzcx4D6O699v2qzB2c">
+        <div class="sc-top" data-page-node-id="wA4uJn68FnDenMtI5ZdqWF"><span class="stop-no" data-page-node-id="flPgDQriRPkvyG1KlHHXJK">STOP 07</span><span class="stop-time" data-page-node-id="JWf86L4YM3zVaYdwwif9no">约 50 分钟</span><span class="sc-tag is-lock" data-page-node-id="Amd691andK0DWONdVmQboN">走完前一站解锁</span></div>
+        <h3 data-page-node-id="7Cw72klqzO8uvtNCmXS63w">📜 脚本</h3>
+        <div class="stop-out" data-page-node-id="l98SyF3TzUzKLwWSz7Tj5i"><span class="lbl" data-page-node-id="l8ekMuLesAqr0SX5oXKQYE">你会做出</span><span class="val" data-page-node-id="fIa57BVuFEot0NB8BBydfD">你自己的第一个脚本</span></div>
+        <div class="stop-wow" data-page-node-id="SqhVl9S4L5G41JjBCWZotE"><span class="lbl" data-page-node-id="v5x47blCcK4FG9ubxKbO6I">⚡ 哇时刻</span><span class="val" data-page-node-id="Hy7ids3f2cwmAONpcEnIBB">打一个名字，电脑把三个文件自动归了档</span></div>
+        <div class="stop-act" data-page-node-id="FHKUjwNfS8HIl4fJ9jCclk">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="d5sGspUHlMR9NNtYKyyGgY">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="UsgKXVJ2fTgmIzd11gHG6x">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="bPcyukwzlJf8zVDlpZcbso">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="wmf1R8X0zkJMf4zVaZaMBx">
+          <span class="q" data-page-node-id="HtwVceDcn9LZIjM0LjslYm">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="lS7COWkHt8SLJJM0oPoa8S">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="tQoPs2Y7oVEBGETZazBx6p">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="b0rv3bepZ63AG1oA1YQCwi">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="nLCHHNaXrOCpUFzZHJXQvF">走完这一站就能打分</span>
+        </div>
       </div>
     </div>
-
-    <div class="stop is-locked" data-i="7">
-      <div class="stop-node"><span class="rt-node locked">🌌</span></div>
-      <div class="toon-card stop-card">
-        <div class="sc-top"><span class="stop-no">STOP 08</span><span class="stop-time">约 2 小时</span><span class="sc-lock">走完第 3 站解锁</span></div>
-        <h3>🌌 模型 · 机器到底是怎么"学会"的</h3>
-        <div class="lead">亲手跑一次训练，看着准确率从 30% 爬到 90%。看懂它，你才知道 AI 能干什么、不能干什么。</div>
-        <div class="stop-out" style="position:relative;overflow:hidden"><span class="lbl">你会做出</span><span class="val" style="filter:blur(4.5px);user-select:none">████████████████████</span><span class="rt-mist" style="border-radius:8px"><span class="qm">？</span></span></div>
+    <div class="stop" data-i="7" data-mod="0" data-name="软件是怎么装上去的" data-ico="📦" data-page-node-id="8MFoF6CDAkBObw9IiEDVUW">
+      <div class="stop-node" data-page-node-id="deXU9V6e69TuoOCD0Xtrtf"><span class="rt-node" data-page-node-id="BoGv6ALBGhZ27gnTGpSzkC">📦</span></div>
+      <div class="toon-card stop-card" data-page-node-id="xmSkmLDsXecvcewsnWHgOS">
+        <div class="sc-top" data-page-node-id="JjhKDERSXdeXTmuYZMWeHn"><span class="stop-no" data-page-node-id="zIq5AVJ4O85JYk0bsC7dp4">STOP 08</span><span class="stop-time" data-page-node-id="tqxqiFqxaA0n7nKy0WP5lm">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="mQgR4lf0ZYGLEbdEU8CJSY">走完前一站解锁</span></div>
+        <h3 data-page-node-id="q39ALoH7DvBzNjSRIc8bDu">📦 软件是怎么装上去的</h3>
+        <div class="stop-out" data-page-node-id="7FIyVnCXnv0ORkOvWVJcyT"><span class="lbl" data-page-node-id="Q2lzEHqTpZeUttDMSZeXoA">你会做出</span><span class="val" data-page-node-id="dfCsZWtr2DTC9qfVBYT2KP">看懂软件装在硬盘的哪个位置</span></div>
+        <div class="stop-wow" data-page-node-id="Fcf3b0QOWyTqYLRX3xPmJT"><span class="lbl" data-page-node-id="eujXaDKzqf9W9EA3zFN640">⚡ 哇时刻</span><span class="val" data-page-node-id="DQhkIqoq0qHz0he3FnWxuM">数一数电脑里原来装着几百个程序</span></div>
+        <div class="stop-act" data-page-node-id="xr2hfpfNX1cOtJcNDYeC4z">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="o8NJENzyViWcUqpF5y4Lgr">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="h2FleBUfSXd46nJZFZiU1H">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="B7GqRJxsmo6nKB0fXN66Yl">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="EaB3IJRE8g7AQTKfSdMqeG">
+          <span class="q" data-page-node-id="PyKIixyqSrkGFB0j2hWSiz">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="hLg5IF2JtE0gspCTxA4Zmc">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="dx2PxxvvUWILUlNMNkM66N">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="PX4iG6uxyAGUBS61FBGNM6">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="RsuNAuSjlHP5gzH4smhsKB">走完这一站就能打分</span>
+        </div>
       </div>
     </div>
+    <div class="stop" data-i="8" data-mod="0" data-name="Git" data-ico="🌿" data-page-node-id="M0EWDtIYJCk3IcKpGqHEvC">
+      <div class="stop-node" data-page-node-id="uIa4G4Pc3c2XStTuQbMuUC"><span class="rt-node" data-page-node-id="3w0aPuPZYOBWsYhmSkYYtm">🌿</span></div>
+      <div class="toon-card stop-card" data-page-node-id="d2dKgqpD0NEkALXcmR63Nq">
+        <div class="sc-top" data-page-node-id="ldKCyJyE3zRLBhnEuqC7BT"><span class="stop-no" data-page-node-id="OoJa0biW2q5fZLXd1Nu0Ui">STOP 09</span><span class="stop-time" data-page-node-id="34TMBE5HJy9nkrKqRT2flJ">约 60 分钟</span><span class="sc-tag is-lock" data-page-node-id="LxcmL88kAPluc04HuTMzxT">走完前一站解锁</span></div>
+        <h3 data-page-node-id="P6vVZhjbmO6EfG8cs7N8DW">🌿 Git</h3>
+        <div class="stop-out" data-page-node-id="niD80Mlcpo6ySjogYh9EDP"><span class="lbl" data-page-node-id="U86Ubmy3ZwfrY0EG9BbB7Z">你会做出</span><span class="val" data-page-node-id="uqhmk6Gk0xkHonBT4mNWDE">你自己的第一个仓库，有完整提交记录</span></div>
+        <div class="stop-wow" data-page-node-id="J5H6sauePsT0fkxqZpBvOV"><span class="lbl" data-page-node-id="i0eluJolejZ9f1rAHjDjB6">⚡ 哇时刻</span><span class="val" data-page-node-id="kLngZ1wio9gRaPDNqPFDN1">删掉一个文件，一条命令把它变了回来</span></div>
+        <div class="stop-act" data-page-node-id="0EZo4UDKmbJvA7JKp7YdIr">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="FXaKU2Dn9uB0913KNy9vcV">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="GX7C7B61rj2o4TlLD217TF">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="HGwuNfdzjhYbAVcIzWae7k">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="WrCeKTmv4ERnB9QNZ2Zq2J">
+          <span class="q" data-page-node-id="Ul2uCGAWAZDZDWNG2O0RBH">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="POC8Guu6RJBtV8sgKwkgCG">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="VSYLw9G7Bk4AUZubQ42v85">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="gyQM2DUkpbwAC28bMEHlvl">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="ev68QWVBrncZTEOj7vmj97">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+      </div>
+    </section>
+
+    <!-- ── 模块 2 · 前后端初识 ── -->
+    <section class="mod" data-mod="1" id="mod1" data-page-node-id="3r7P2drYrxxvlMZUuygczC">
+      <div class="mod-head" data-page-node-id="fehWpEklo3Cqix32ZzO2F4">
+        <span class="mh-ico" data-page-node-id="062oWQG1H26fHvqwCeeleA">🌐</span>
+        <div class="mh-body" data-page-node-id="z11AFxKkk0XwmmyvJgmge9">
+          <span class="mh-kind" data-page-node-id="WIGzPC4B0TqrO9MjyOVeT5">主干必修</span>
+          <h2 data-page-node-id="gFPay66lp92jFIjhrhouW6">前后端初识</h2>
+          <div class="mh-desc" data-page-node-id="ebFH7bIyFzLBhiHGpe2M4V">一个网页怎么到你屏幕上的，一路摸到云。走完这十一站，你能说清一个网站从头到尾是怎么跑起来的。</div>
+        </div>
+        <div class="mh-side" data-page-node-id="1paJKw9lfTmEXsslL5ntb8">
+          <div class="mh-num" data-page-node-id="FL6jyn8iW0pJM0fF1Ce861"><b id="modNum1" data-page-node-id="kfiit3m1H06w5ADpy8enQC">0</b><small data-page-node-id="W45HfyxE7mbZDcs9KY1Nle"> / 11 站 · 约 6.8 小时</small></div>
+          <div class="mh-bar" data-page-node-id="IyZSwIWbTzQyp6i7vWyGck"><i id="modBar1" data-page-node-id="EgZUaXmXqYmLDpg2VhFkhM"></i></div>
+          <div class="mod-verdict" id="modFeel1" hidden data-page-node-id="1VFZr5aqhKlzbyKul10rVg"></div>
+        </div>
+      </div>
+      <div class="mod-locknote" id="modLock1" hidden data-page-node-id="9HfxTHg43TcClDA1J3QIvN"></div>
+      <div class="mod-stops" data-page-node-id="ZJBIF2dZ526xnz5I3XvSaj">
+    <div class="stop" data-i="9" data-mod="1" data-name="一个网页是怎么出现在你屏幕上的" data-ico="🌐" data-page-node-id="DMiWZzwtqp2yfHDS24fbFK">
+      <div class="stop-node" data-page-node-id="AtQylGdp1pgBHRzbxG4fMx"><span class="rt-node" data-page-node-id="AVkj5qvvD2TLNkdgN09teY">🌐</span></div>
+      <div class="toon-card stop-card" data-page-node-id="mFjH6lDMN5upetIEA7K342">
+        <div class="sc-top" data-page-node-id="8c5ILr882klbpMEqGFtVhj"><span class="stop-no" data-page-node-id="NPBmLBCsutu0P4GyvXMnhJ">STOP 10</span><span class="stop-time" data-page-node-id="kEX3r9YGgX2oIoFUqI4YkB">约 35 分钟</span><span class="sc-tag is-lock" data-page-node-id="yCWxy7vFN1wTyFdV5AZlFd">走完前一站解锁</span></div>
+        <h3 data-page-node-id="T2SSn3XQgXqoaJ8euTJmiP">🌐 一个网页是怎么出现在你屏幕上的</h3>
+        <div class="stop-out" data-page-node-id="gnXJRkaUf4jqDYJHZHgRNP"><span class="lbl" data-page-node-id="VFVjWHb0syFahhMsrItYrU">你会做出</span><span class="val" data-page-node-id="fjWJ5CoKIGWc4rh4D8vU3D">看懂打开网页背后的几十次请求</span></div>
+        <div class="stop-wow" data-page-node-id="LHGYxjmXx7soZskOoQdgus"><span class="lbl" data-page-node-id="9SYiEW1sgWA3MVuQKGWSkV">⚡ 哇时刻</span><span class="val" data-page-node-id="PRg2k996iCdBLSpAlwDIh2">刷新一下，Network 里几十条请求刷刷往下长</span></div>
+        <div class="stop-act" data-page-node-id="gkz7FcdfR5ZYGEuxBZliZs">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="s1k871vdzhV78NTZA74PtN">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="Go3C1bpXoctF5pW6ALKcoT">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="YRmDjkMPZJEZwgJZaYSuWL">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="s2OlfeOJywpZTZCImjyg0D">
+          <span class="q" data-page-node-id="MuWGaEJO2duQSEpDJSTAQK">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="914me9yBsSXwqnr8ECI5L7">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="w5fysLMco3nBAq34NtWVx6">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="2WQXZRsewb3MKEPTs0Ad1R">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="U1fpKZ63fiKmLtFfMtFD0c">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="10" data-mod="1" data-name="前端技术栈" data-ico="🎨" data-page-node-id="SW9oTCq2wKbqZB7imODcLI">
+      <div class="stop-node" data-page-node-id="Gc4z0GA8SiOItFPUcaaXn8"><span class="rt-node" data-page-node-id="cpkZHbVif1k3f0bMx1GLyD">🎨</span></div>
+      <div class="toon-card stop-card" data-page-node-id="c3wCKtrAl5xdpCJVvGouWS">
+        <div class="sc-top" data-page-node-id="mbci4ft0raVOpXGK17Q9QR"><span class="stop-no" data-page-node-id="nlc3HRwgxy3KKfvzCD4d01">STOP 11</span><span class="stop-time" data-page-node-id="YqcxoPGJuiABUzpGcRBHYB">约 40 分钟</span><span class="sc-tag is-lock" data-page-node-id="NHHVy6cGEIGrYF9Tir0djv">走完前一站解锁</span></div>
+        <h3 data-page-node-id="ASF80k2NtREKth1wN1BwUU">🎨 前端技术栈</h3>
+        <div class="stop-out" data-page-node-id="mxFKYQsvXUAGgYvIRrgtyv"><span class="lbl" data-page-node-id="MRok5SHPVP3o8sym4IKygI">你会做出</span><span class="val" data-page-node-id="r77RbgAZHw3EOEhHOeYGRC">当场改掉别人网页上的字和颜色</span></div>
+        <div class="stop-wow" data-page-node-id="0FTlgktpAgfFWgIH2Tzxxh"><span class="lbl" data-page-node-id="RKhCpsJwmrjbJKHHVyPmuL">⚡ 哇时刻</span><span class="val" data-page-node-id="SZRPNc5k4ZzX6vZB3pyTwQ">改一下立刻变，刷新一下恢复原样</span></div>
+        <div class="stop-act" data-page-node-id="9Rf8EsbuDQOyBQuJc60sCB">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="v8qmJ3pqUxz2IufSI9tVdN">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="Y5hBWwNT5PCAvPI3tL9541">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="Vw4Kehk488YRCrhtmkbHP0">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="LswzLhRoPWi3gAnrR1N0XT">
+          <span class="q" data-page-node-id="WZCHtz2AasMEgf46x51DYl">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="NeXB5Jz3t7BzVzkU4Vs5uI">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="DfUJO0UMVSm4dqTI5nQeXc">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="POx4CGnqgvzEf2oY3b23Cb">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="GBEGNqkarXM4dHwAyH7rcb">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="11" data-mod="1" data-name="前端不依赖后端能做出什么" data-ico="✨" data-page-node-id="NBWQYXVLii3Du3EgOERjN2">
+      <div class="stop-node" data-page-node-id="G6mFXDJJ5I4pnkxke9cYzf"><span class="rt-node" data-page-node-id="555GqEPZ7E48SxPqOAq9ro">✨</span></div>
+      <div class="toon-card stop-card" data-page-node-id="0WxLGfAmZWFbvQaZjR4ZXK">
+        <div class="sc-top" data-page-node-id="sDqVdi7rUS7NJRKs6r43cZ"><span class="stop-no" data-page-node-id="luhx2Sb5Z3byuVGgEYEbpQ">STOP 12</span><span class="stop-time" data-page-node-id="4tpARDjGlyRzSs71LEDCOa">约 35 分钟</span><span class="sc-tag is-lock" data-page-node-id="ySngDwaYiaXkLAG0dGDOy0">走完前一站解锁</span></div>
+        <h3 data-page-node-id="pFT5czgripF4XJrgodfw9s">✨ 前端不依赖后端能做出什么</h3>
+        <div class="stop-out" data-page-node-id="aBp5XFd6UFRS2vsoBgdZdI"><span class="lbl" data-page-node-id="5AjQlktYhUCGYixQni8iEg">你会做出</span><span class="val" data-page-node-id="5JpvhvNLcqaGAkwV93trHQ">一个不用登录也能记住设置的页面</span></div>
+        <div class="stop-wow" data-page-node-id="HnfvE3e6Qb5Kz6YwbPfKLO"><span class="lbl" data-page-node-id="AYUzZuYAnk6oFaEzV1pgfD">⚡ 哇时刻</span><span class="val" data-page-node-id="Sd0TfpWUQyv7fKfoc1STjJ">关掉页面再打开，存的东西还在</span></div>
+        <div class="stop-act" data-page-node-id="DhsDHspjcI3uN8J7ibYslC">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="DAnHPvpOhp3Fz0jcevX8mE">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="3XxHNzV94DBWw27Q3B2V2Q">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="418RTgEr7GBnWUrA7T04qM">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="gVTtt1z1ig2tAcHmeAtvGJ">
+          <span class="q" data-page-node-id="kIWFA9KA4c3fbEvm4xkEWO">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="BWhSlS21E5dUe2WAXvB2b7">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="32MganhYdQQJ67dMerSAAt">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="TkX9JfTP5FHtQWvQbZFx0T">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="i8Ci6lDhSmj44oTza6jtWw">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="12" data-mod="1" data-name="后端都包括什么" data-ico="⚙️" data-page-node-id="q706i5bCCLvmKBaLjohabu">
+      <div class="stop-node" data-page-node-id="VHnMd6XXCF2FAHAWAJkm59"><span class="rt-node" data-page-node-id="YTcwKf2km5AjvFmHjUPcjG">⚙️</span></div>
+      <div class="toon-card stop-card" data-page-node-id="7hNdEZzTEndsXk6A7NNqHp">
+        <div class="sc-top" data-page-node-id="CzCg4kkaAgcMJX1RV4y1KY"><span class="stop-no" data-page-node-id="Dgu9MDMzAqlWO4Sqn4sgCd">STOP 13</span><span class="stop-time" data-page-node-id="63RkJPM2Ljf6B4JbfYUzzK">约 35 分钟</span><span class="sc-tag is-lock" data-page-node-id="RkSutRmyazx9o8r4PCCDi8">走完前一站解锁</span></div>
+        <h3 data-page-node-id="BlW0IAIagyaJk2EH0vdbbo">⚙️ 后端都包括什么</h3>
+        <div class="stop-out" data-page-node-id="wmvNWCF3i1BsVCTCWifbop"><span class="lbl" data-page-node-id="3b8EJwECVsjSUYDj25BwAl">你会做出</span><span class="val" data-page-node-id="mmIJyjBCEVLRyBi9fh8r5P">看懂后端返回的原始数据</span></div>
+        <div class="stop-wow" data-page-node-id="fn5gOIeTE8VDKM2MBGDY8L"><span class="lbl" data-page-node-id="q5wLerNsFAOomYGbgQA6N8">⚡ 哇时刻</span><span class="val" data-page-node-id="4heme1kcT4wZ1tGjBUF11K">地址栏敲一个地址，跳出原始的 JSON</span></div>
+        <div class="stop-act" data-page-node-id="CrTCusvZtSwP9xZvhgId1V">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="du2Ov5q8qXh0ShgOSgNZFo">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="hYbOYHLyUfSqnvEcGRKE3C">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="rK6MUl6QXTYMrgsmqGYfTH">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="dJNtVkY4FJMMIMe9W5fpZE">
+          <span class="q" data-page-node-id="iJXcHsDAkn9jk5QUeA7iYx">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="80u0Y4Z1pFgtBdlwcemXEl">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="DhRmKiVMPNlMEO4plLbpgi">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="ipi3sYuhNN2rqhpTKC3DaV">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="mqxh5CI8koSPAaDbNOYwsb">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="13" data-mod="1" data-name="服务器" data-ico="🖥️" data-page-node-id="RRlfvTQwcOk20N2r1upQV1">
+      <div class="stop-node" data-page-node-id="pDOfWSAG9VldR57crK1lar"><span class="rt-node" data-page-node-id="HcDF2ENSWiyi3FiNXG3OFc">🖥️</span></div>
+      <div class="toon-card stop-card" data-page-node-id="fCUoAtARBD3qs5v8mVCbCD">
+        <div class="sc-top" data-page-node-id="TjDXNNV89mE6GMYhKR2pDi"><span class="stop-no" data-page-node-id="a7W223AnSVBtXRFEhHLp5u">STOP 14</span><span class="stop-time" data-page-node-id="3muuLFbKzhGPu0VUgMzGoe">约 40 分钟</span><span class="sc-tag is-lock" data-page-node-id="rWlCE8DxYnE2i5oMp0qs4j">走完前一站解锁</span></div>
+        <h3 data-page-node-id="fGFuLdkDbiEQj4GSrhD1ns">🖥️ 服务器</h3>
+        <div class="stop-out" data-page-node-id="xgynfeZvcTT3ySdV8LKRHJ"><span class="lbl" data-page-node-id="Yu9psgLclaEURWNSEid29o">你会做出</span><span class="val" data-page-node-id="8bq0iuxc5jcRFfpkczSmHY">看懂自己电脑的地址，和它为什么别人访问不到</span></div>
+        <div class="stop-wow" data-page-node-id="kd2bvcCV3Opx1zad8e1ENT"><span class="lbl" data-page-node-id="S4PZelBEDLkhb7KxmHGvKW">⚡ 哇时刻</span><span class="val" data-page-node-id="tVwW0QHb6lmWhFYRzM9vqm">手机连流量，打开了自己电脑上跑的东西</span></div>
+        <div class="stop-act" data-page-node-id="NLEl9C2UFDXp9yUAtlB2Xl">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="GGvj7ENnJUjdWqmPTH9Hf1">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="TLo9bcaE23IqXoDmntFHNu">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="H25mmMuuVJ2Zsc4emCd5ZL">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="UiVWoazeANKaGPwZwFY6JZ">
+          <span class="q" data-page-node-id="kd2ztRuNdnaNaONikALCzr">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="pJGQRQ89bmxa098AkXvCv7">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="WRSRoOZD8EwCswgTI6O34e">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="zZx89vxPO3dbfSBm5OtqBg">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="kgKBh7lGUVBiRrdm7GlUpY">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="14" data-mod="1" data-name="网络初识" data-ico="📡" data-page-node-id="ntTc7ogepcrCrf0KcSyEEn">
+      <div class="stop-node" data-page-node-id="uuOWQhkI69OuAal2INM2dN"><span class="rt-node" data-page-node-id="cxIgOjgKpwWWvqLcsBx3TG">📡</span></div>
+      <div class="toon-card stop-card" data-page-node-id="FUQj5EIreDogzCclS3xHQD">
+        <div class="sc-top" data-page-node-id="VSQGCE3SOTeBaEgzkOzPas"><span class="stop-no" data-page-node-id="osnib5mZaWgcCqAurM1e5F">STOP 15</span><span class="stop-time" data-page-node-id="MjNGFWuOCuN2AYB4m1cfGn">约 45 分钟</span><span class="sc-tag is-lock" data-page-node-id="2X6c2SO6Bh1Ho7nXFh7VHv">走完前一站解锁</span></div>
+        <h3 data-page-node-id="9GASx5z8SADDdvAOZRImH9">📡 网络初识</h3>
+        <div class="stop-out" data-page-node-id="m4UpaSLuoYwL2aInKxvp9c"><span class="lbl" data-page-node-id="S3MHWZCh9dCtYoWDRmrrw1">你会做出</span><span class="val" data-page-node-id="Xom3D3De2XqrwiUgusS5eM">亲手看一次完整请求的全过程</span></div>
+        <div class="stop-wow" data-page-node-id="sOB3pQR5nBwvuyTMhmaQFm"><span class="lbl" data-page-node-id="ZiYNbD2PCaTf0O4ELCRDYo">⚡ 哇时刻</span><span class="val" data-page-node-id="25LDjmCebXuJgL9DhEF3Vr">ping 一下，看见你和那台服务器之间有多远</span></div>
+        <div class="stop-act" data-page-node-id="aqj6DWWmesQF1vLHOa1RIa">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="chGOf9j6B4NI7k5CuXdWKn">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="Jmt7uUbAV0V8JMa2T7huAu">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="5MbWTX4AqGreC9Bq3RcInZ">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="wMt1Ot9QtyB2GgbPbogVC2">
+          <span class="q" data-page-node-id="01jGPOSwkKvfEXTWVZgDbj">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="nrBGhueT11S1DCYHefUobr">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="KIYcvw2ZoSMYPlniJZBkiy">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="fhyRsOTrvjqnxpBZEJQ47b">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="xYBlZ8q9u9RJbqFyJiNkJC">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="15" data-mod="1" data-name="数据库" data-ico="🗄️" data-page-node-id="mPi6iub6Z2YB2RDMtwu8zM">
+      <div class="stop-node" data-page-node-id="4ueYx9VEv7Fj5Dy4ntxGpS"><span class="rt-node" data-page-node-id="cZ3obMzVRDIABr6CIZInZu">🗄️</span></div>
+      <div class="toon-card stop-card" data-page-node-id="PVxJH0FB8In1bPO39dG3Av">
+        <div class="sc-top" data-page-node-id="pNHCYGJH6zXzqIMblvUS7Q"><span class="stop-no" data-page-node-id="93mibJcDZDEZ6Nm40c9pgm">STOP 16</span><span class="stop-time" data-page-node-id="PlSKNt70tffmFcNAIFPj6l">约 45 分钟</span><span class="sc-tag is-lock" data-page-node-id="FM3JUpGY3EIu5LqYisNQ2S">走完前一站解锁</span></div>
+        <h3 data-page-node-id="JHkBYIeCkA3OnzmJOoxd4w">🗄️ 数据库</h3>
+        <div class="stop-out" data-page-node-id="ZPevIqbi0eJlHz8dffHlNd"><span class="lbl" data-page-node-id="DQyKPwFiQw9e4bB5qgxVYy">你会做出</span><span class="val" data-page-node-id="xxOMqZazov76AN3Y3gUg32">你自己的第一个数据库</span></div>
+        <div class="stop-wow" data-page-node-id="C9dtv9o3AtntPJ2eFiPDay"><span class="lbl" data-page-node-id="j2Hw1sFqVfWlxw34fuk2GV">⚡ 哇时刻</span><span class="val" data-page-node-id="MI0OGNkdlvszTx8uWZUhKu">一条命令，从表里精准捞出你要的那一行</span></div>
+        <div class="stop-act" data-page-node-id="0CcVMENeubekYAx5OCCBv9">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="WSB3UmI5veDSIUfb06UFHG">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="gul4UrcxQ4czgS3tkHXgxM">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="4TbLvHBHEVGw2B1DJS01On">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="ZVCR0DroOkZ7r3VdzQcnMq">
+          <span class="q" data-page-node-id="tz1aKbJwWo4e6KGqDoynGG">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="T1jA3hDGw7o2Hs1BzHXq02">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="qvaS3pu5SdwhQquKn8a0VI">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="MnC1EzGKpHMtvAZXqa5qie">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="uOveYUxcNO3HZQOTeEpkxI">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="16" data-mod="1" data-name="各种数据库" data-ico="🗃️" data-page-node-id="JXxnauj4MJKtflbRCpAMnK">
+      <div class="stop-node" data-page-node-id="Xd2TlYROJATy2xvlGUwG7F"><span class="rt-node" data-page-node-id="IlgrXELECFmLp0ZjR8hn8H">🗃️</span></div>
+      <div class="toon-card stop-card" data-page-node-id="qO3aVF6fBWlmg7u1bc6twX">
+        <div class="sc-top" data-page-node-id="OaM9jWna3slNjRWN8piFEx"><span class="stop-no" data-page-node-id="FmLFolk9QHQj3VnPihvNIZ">STOP 17</span><span class="stop-time" data-page-node-id="q9OdVJbxTL6O00aSnXeW2S">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="xHQ5H3iHajcSR0JL2HZRit">走完前一站解锁</span></div>
+        <h3 data-page-node-id="3qNepWmxKEppZNPrGMxFV6">🗃️ 各种数据库</h3>
+        <div class="stop-out" data-page-node-id="5RWZHGpNEgP92D9wqasGWy"><span class="lbl" data-page-node-id="sfTymjdGJFaFi6nEamSjU9">你会做出</span><span class="val" data-page-node-id="8bWGQBbaC8mpNr4RaSMeKF">看懂七种数据库各自的用武之地</span></div>
+        <div class="stop-wow" data-page-node-id="C2R43E84xzfVJFQn8tYfth"><span class="lbl" data-page-node-id="rh7j8ciDLiIMO4tCykAApM">⚡ 哇时刻</span><span class="val" data-page-node-id="FLCQV1vpIcIplSGadH74qp">两行 JSON，看明白「文档型」灵活在哪</span></div>
+        <div class="stop-act" data-page-node-id="VHuu7H6IvY6VEbJvwNDUfZ">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="gHRs4v5KM0SQoOEcPe74y2">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="LDtYSSWZWaTfKL3zZWJB6Q">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="fjdX9m7MuuDuFhTV3ANIxw">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="g4lXu8tyrSYSLcCKFCfpDt">
+          <span class="q" data-page-node-id="IXwrb9HGQZJZNhcG8qwhHH">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="8WtKojzlaHtaLqHRruodbr">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="9leByC3ieDoX3iUJ5l9TyM">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="EhDqB0cNC28kDxqyXLJ9F3">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="XUHX85qjLFpFJzfhc8mK3G">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="17" data-mod="1" data-name="接口" data-ico="🔌" data-page-node-id="RwTwx8qseGrbkZb6gLf3Th">
+      <div class="stop-node" data-page-node-id="v6YIujvLDtEMJnJqSsbo2A"><span class="rt-node" data-page-node-id="iIeoFbnLdEpEbFH36rLlvs">🔌</span></div>
+      <div class="toon-card stop-card" data-page-node-id="8q2iNAa8pACEtuV9MF5bnb">
+        <div class="sc-top" data-page-node-id="NWtRBFjkgxyttySVSU6OHK"><span class="stop-no" data-page-node-id="sbPobXdq2Zjfme3EG03B2C">STOP 18</span><span class="stop-time" data-page-node-id="C8Wc2SgRIe0iCfc8kMy8Lw">约 40 分钟</span><span class="sc-tag is-lock" data-page-node-id="arsCvtwPG1YRDvR8ryzU6j">走完前一站解锁</span></div>
+        <h3 data-page-node-id="Ia96yWUFXYheEbswya8PU7">🔌 接口</h3>
+        <div class="stop-out" data-page-node-id="JIjrBezAk8ACCOd0DiCvsp"><span class="lbl" data-page-node-id="3hcB78Rw1m6L0kkd6aYXfC">你会做出</span><span class="val" data-page-node-id="jk7Ga5K7WpodLAlaUQVhEp">看懂接口的地址和参数</span></div>
+        <div class="stop-wow" data-page-node-id="5AL2D0U1DvJxx4CbvmHV29"><span class="lbl" data-page-node-id="WjuF2eddyMdgs4TcLBgJnt">⚡ 哇时刻</span><span class="val" data-page-node-id="trdzQXnFfMK2u7TSWL5JA3">改一个参数，返回的数据跟着变</span></div>
+        <div class="stop-act" data-page-node-id="TdATGdhKb4xN8oYMOCbaK1">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="mHRrOEZXb6PzxQThEwBi9I">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="1sVRz8KELZKz3QcGmuxEZc">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="FX3BkCBivgtCBHqISpm7e1">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="G0vJmr9Cdb745MvhBs9BcD">
+          <span class="q" data-page-node-id="Gg1mhyQbSf5SyFlH8dZWp7">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="Uj6rdSBeF8tnChna1XdbhM">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="BARP8kgNVsRsxZDisowfHZ">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="Tm67dad6ahmA8KXueGHBl5">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="AneRC1ViNqtSOCRdHCAhfu">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="18" data-mod="1" data-name="部署上线" data-ico="🚀" data-page-node-id="STN1cNWaukH3khDOWEyTyZ">
+      <div class="stop-node" data-page-node-id="OMedARsZHjWcWbyoYwnrfe"><span class="rt-node" data-page-node-id="2NsOGF0D3hCVFcW6temVtA">🚀</span></div>
+      <div class="toon-card stop-card" data-page-node-id="M6em1cmAssRkA6pKIlTY98">
+        <div class="sc-top" data-page-node-id="lq756UAQE9BGPmbszZDB4R"><span class="stop-no" data-page-node-id="CTgBJYYciHBeRnABcc30Lp">STOP 19</span><span class="stop-time" data-page-node-id="hpDHsZtYcZ1D5pwr7WL6mi">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="AfTKFUmUnDgarc0G5D1MWF">走完前一站解锁</span></div>
+        <h3 data-page-node-id="fFqn0nZiVGMImegfXkbHAE">🚀 部署上线</h3>
+        <div class="stop-out" data-page-node-id="nfDbAwH9g2yaxHWI92FSCk"><span class="lbl" data-page-node-id="EHnTee059BUWOSWED9QaKv">你会做出</span><span class="val" data-page-node-id="t2sfDO5EDncVeXBW4FZGzp">看懂「本地能跑，线上不行」的七个原因</span></div>
+        <div class="stop-wow" data-page-node-id="DSRdGFdDzQDBP2yok0B8a2"><span class="lbl" data-page-node-id="9M9wfEG33RMJCPDbrv7rgo">⚡ 哇时刻</span><span class="val" data-page-node-id="XKXTVykIa8q1teq38OKtCi">对着清单，发现自己项目里的四个坑</span></div>
+        <div class="stop-act" data-page-node-id="EzapJbopdslC07tIu343HR">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="wUGP8qw92Of7DI5UR2CdE1">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="OxXfDDURmC7K1HDsGzjBDl">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="GRfLLWxjyDNE3wasKykOo8">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="zCw8nHaeNhsna2lyzt7oLh">
+          <span class="q" data-page-node-id="j3IodHjZCe3u6HErKAYjga">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="z2QqjOFydgOXHsbnzWWv04">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="jljEceDtbqpBAcEdFLgXBt">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="8qMShBVfyEmBOlj2rsLNQn">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="uQoQOvhO0IHC1GWvXduGSR">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="19" data-mod="1" data-name="云服务" data-ico="☁️" data-page-node-id="9wQFF0V2CAn9wDRwMecpmE">
+      <div class="stop-node" data-page-node-id="3K7F1A3LnDYT3Fw5awCAfi"><span class="rt-node" data-page-node-id="eBG8Qes2kzFJWY249xzEF7">☁️</span></div>
+      <div class="toon-card stop-card" data-page-node-id="5macurvrLfVBvJfYoS9c8k">
+        <div class="sc-top" data-page-node-id="whJ04BHi4nrEq8cBt6dA6f"><span class="stop-no" data-page-node-id="0isHZCs9GKdX0jwb7zf4gC">STOP 20</span><span class="stop-time" data-page-node-id="QbBYtHOENbllfOSmmJ9ONz">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="vBYHpJ8PlqfAYfehkLBcWm">走完前一站解锁</span></div>
+        <h3 data-page-node-id="XGhKBQkSN3FbP0NpixToQw">☁️ 云服务</h3>
+        <div class="stop-out" data-page-node-id="xeLP9O9tMhuBKtbtqfpXLg"><span class="lbl" data-page-node-id="U9esNCZKyRCUBdpk4ibSG0">你会做出</span><span class="val" data-page-node-id="drXqrEWzL8XmxaCh6I7kiK">看懂云服务怎么把门槛降到几十块</span></div>
+        <div class="stop-wow" data-page-node-id="HUfEmBxpqAtDH3p72FVzld"><span class="lbl" data-page-node-id="gDxc0AoxOd7pNyyGdrVLFS">⚡ 哇时刻</span><span class="val" data-page-node-id="3h78bdFIIR7WWmxf2Bqpb9">看到最低配云服务器，一个月真的只要几十块</span></div>
+        <div class="stop-act" data-page-node-id="OTN08KIdNoxY8usa6rpZyL">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="v4x5SgCLrk5gRiMW6c9gtg">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="o1kQvkzkh4Lj1TRxBCLnTs">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="9f4qMR9YiJalbCAUVxL8Jj">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="3GNTwqOJ3HCvGR5RgBxxWd">
+          <span class="q" data-page-node-id="cYv41EvpYtGF9ABT0q1q1H">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="ZNAbWP0A2GitKcpQFlHpTW">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="IB84NbxamA2muW4qDFvcPZ">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="osRiGFfLXfRsAklr5DaOsL">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="8YBAFExM0dvyxvlnkEG4TD">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+      </div>
+    </section>
+
+    <!-- ── 模块 3 · AI ── -->
+    <section class="mod" data-mod="2" id="mod2" data-page-node-id="EfiMot1fKD82klyuLDDrCg">
+      <div class="mod-head" data-page-node-id="3R4U0JpBzS8mDLB9hzrIFF">
+        <span class="mh-ico" data-page-node-id="IHrbt5bvkTPHmlA2xFWTBJ">🧠</span>
+        <div class="mh-body" data-page-node-id="LgyhoEGKA3gfjVO2S0YGRx">
+          <span class="mh-kind" data-page-node-id="1z9DCDT7JmeMiO43OQiDEC">主干必修</span>
+          <h2 data-page-node-id="83i8d7hpy42HvNsH9fDQui">AI</h2>
+          <div class="mh-desc" data-page-node-id="QYXt23y5BaIxNhN9JhzUWO">这十年最大的变化。不讲玄学，只讲它是什么、怎么用、边界在哪。走完你能指挥 AI 干活，也知道它什么时候在胡说。</div>
+        </div>
+        <div class="mh-side" data-page-node-id="ettY8kNJCMSgA5d7TXkspE">
+          <div class="mh-num" data-page-node-id="rhGH8KmtMXqM8SYEfhiDNe"><b id="modNum2" data-page-node-id="RnLq30FDi5NCOUOsgHyeBL">0</b><small data-page-node-id="xxC4i3uZsoO81RByqryCHq"> / 10 站 · 约 5.8 小时</small></div>
+          <div class="mh-bar" data-page-node-id="h7fEnCQqYTFOzDve5ci2XP"><i id="modBar2" data-page-node-id="aK7TQus9i7H3hpZwTWtN5A"></i></div>
+          <div class="mod-verdict" id="modFeel2" hidden data-page-node-id="eKJMjwIklCyBmDCQbaCJve"></div>
+        </div>
+      </div>
+      <div class="mod-locknote" id="modLock2" hidden data-page-node-id="8ZToWgOhFOGtxY2CEh5jpu"></div>
+      <div class="mod-stops" data-page-node-id="eVxbFA8lbNghbLEyHTKlUf">
+    <div class="stop" data-i="20" data-mod="2" data-name="AI、机器学习、深度学习、大模型是什么关系" data-ico="🧩" data-page-node-id="edzelvmJWBikT4adEr8rq9">
+      <div class="stop-node" data-page-node-id="dCPlY2DlLlRBvGKwlDyPmE"><span class="rt-node" data-page-node-id="aCt9jAR1aJvmP1rH9OCZM9">🧩</span></div>
+      <div class="toon-card stop-card" data-page-node-id="UMcLjyBKv36rC9YWAPcPT1">
+        <div class="sc-top" data-page-node-id="TBQrcicuJiujjLIoBgQXzg"><span class="stop-no" data-page-node-id="4lDwcnjpOKkwh6QL5AUkPZ">STOP 21</span><span class="stop-time" data-page-node-id="1WVj83EYxJCKKtd7n627LG">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="J38zOjP69E5VZLkWlhGLe0">走完前一站解锁</span></div>
+        <h3 data-page-node-id="SBfPeIO3ZF3WGGfmH6zmtl">🧩 AI、机器学习、深度学习、大模型是什么关系</h3>
+        <div class="stop-out" data-page-node-id="X6MY1oiiPFOlC8LKP0v1LY"><span class="lbl" data-page-node-id="Nu8ondCtf8IksypWeigqlv">你会做出</span><span class="val" data-page-node-id="Gs7Dldy8VKicp8vTGS2aK0">分清这四个词谁包含谁</span></div>
+        <div class="stop-wow" data-page-node-id="qTGiQEFKVpAV6OGh4KQKgL"><span class="lbl" data-page-node-id="Gibeea5ubLTNb7x7Jjeloc">⚡ 哇时刻</span><span class="val" data-page-node-id="c5cw0hu1oBEs0J8IWQZMcJ">相册认出你从没标记过的猫</span></div>
+        <div class="stop-act" data-page-node-id="RCAPN0JYmVnLhY7eXgL5Mm">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="6MfyLkD8qeOgc8C2kq7zxc">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="SxLZOW0zSewjO54Wj1EJqr">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="WchC8e1s2gFxN6yjegbdjM">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="PhkpML3V2vihApOfnutB67">
+          <span class="q" data-page-node-id="5OEyL14PpAPyEQaZDx6QWq">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="9zKT1wta0NemaaLvP0mExY">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="I4mHSy16y0S59T4Zx2sWmV">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="NZopVWUYCRt9DuaSihzhSJ">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="xOtCHWMiDSRb29NtGg2HCQ">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="21" data-mod="2" data-name="模型是什么" data-ico="🧠" data-page-node-id="eswqjs3qYHa3AijTkSVMCt">
+      <div class="stop-node" data-page-node-id="9Gw729ZV5HkP6mXsC2JMAZ"><span class="rt-node" data-page-node-id="yTy2N6ppa5SRgRGO0npiZB">🧠</span></div>
+      <div class="toon-card stop-card" data-page-node-id="RZyOpDR8rtmro9MACKMCFs">
+        <div class="sc-top" data-page-node-id="EmmBtBfpk5AIZilDqxviVp"><span class="stop-no" data-page-node-id="m4nZODU9ruFg3JxmcicQJ1">STOP 22</span><span class="stop-time" data-page-node-id="OUTT4RjOlBOtj3SZuAlaez">约 35 分钟</span><span class="sc-tag is-lock" data-page-node-id="OLrnSnPIsTxAhzeBgH2lvM">走完前一站解锁</span></div>
+        <h3 data-page-node-id="aXsC6GYQcqA1re5t5D5IKr">🧠 模型是什么</h3>
+        <div class="stop-out" data-page-node-id="hT8nOZbZTDl3OpGUr52bDB"><span class="lbl" data-page-node-id="cpv26CcIjvUTCyqB3hVIOI">你会做出</span><span class="val" data-page-node-id="yEGTBrljlRoNXfwff6teKH">看懂模型「输入变输出」的本质</span></div>
+        <div class="stop-wow" data-page-node-id="v64Oy15HTZyepDWCFhjif4"><span class="lbl" data-page-node-id="T6jYJBO6yswFUyhLoltbQ6">⚡ 哇时刻</span><span class="val" data-page-node-id="GKoDEYrWDuzpHYojK1CeHT">让它编一本不存在的书，它编得有鼻子有眼</span></div>
+        <div class="stop-act" data-page-node-id="losUywygEJLhjTqbb9jDhq">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="xDjlatV3fzpKVcq6C6hWUC">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="L4xOjI4OelhYCLUbAnwObK">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="EH50VDUz8IdpdR4KgxnML5">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="EOajIiHJTbLBOHfHD9RFkz">
+          <span class="q" data-page-node-id="DryqrI8JTEfK8hZ3BDvIf9">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="RtZ5ulxLoH5IHBrboTRUuy">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="SA9DC1JwP4qmI1EPLAgSrS">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="HFtacy5myb8PZz0PFeYwYZ">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="n8kOaOjrM4iTh6gp3rotcu">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="22" data-mod="2" data-name="训练是怎么回事" data-ico="🏋️" data-page-node-id="prNRYsLukYLCGTxPdrBXbA">
+      <div class="stop-node" data-page-node-id="xXIZjpHhEIpUrHMhP6CVlo"><span class="rt-node" data-page-node-id="BkIQtqUygtkOvT7kf3cGyn">🏋️</span></div>
+      <div class="toon-card stop-card" data-page-node-id="v2WpNxFNpWFOdsHCZrwVkx">
+        <div class="sc-top" data-page-node-id="xft2DqNng1nSyrae4LQ2RZ"><span class="stop-no" data-page-node-id="PqJyuX7VXkU6CqdUfPcBD7">STOP 23</span><span class="stop-time" data-page-node-id="WFpfy3ADcfZ1dYXVbWFXdc">约 40 分钟</span><span class="sc-tag is-lock" data-page-node-id="Y5lnE8v5lQKykHyaHTlgJX">走完前一站解锁</span></div>
+        <h3 data-page-node-id="MYXGlSLxRjYAH8Mkm4gvRA">🏋️ 训练是怎么回事</h3>
+        <div class="stop-out" data-page-node-id="M5QvRGZElqlgAv7EnTcqEk"><span class="lbl" data-page-node-id="93cDwx234QyKAjhZ5TV1SD">你会做出</span><span class="val" data-page-node-id="5vXK0Xnzp7FanOHCec42VH">用「给例子」让 AI 照你的风格来</span></div>
+        <div class="stop-wow" data-page-node-id="FIbrChJRbOgUlH1UJSZ13N"><span class="lbl" data-page-node-id="lElSUczZ4C9iuK6niQUqgW">⚡ 哇时刻</span><span class="val" data-page-node-id="RO5laiO6rmOMjWQxwQWhat">给几个例子，它自己总结出了规律</span></div>
+        <div class="stop-act" data-page-node-id="q8tjpmQZoisIjh0nqySby6">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="FghxxCXAUdjFMI5xdQ0zBj">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="fgFXjwM9bmwymlWCeqb29h">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="6GGeDzQwnzHs8ABwytEh7Y">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="Xlcb2RUxi5jv4lNAZKrDx3">
+          <span class="q" data-page-node-id="pYA8BPvxaO2rkTjfovzBdi">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="a5UzbPHadGnOvyPKKnGhnO">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="46MyyfjyKgbpABFFI0p0qV">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="IkJCmCdFBHdrsG4zriIEC8">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="j53hRzCoRjMfPWTPRrok1e">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="23" data-mod="2" data-name="提示词" data-ico="💬" data-page-node-id="l9E4Rcwa8eE05ggmQZLwdp">
+      <div class="stop-node" data-page-node-id="HCjuQCoqjtbbEudrmOWQ4m"><span class="rt-node" data-page-node-id="J9AjExFnwelelP9S1zJQbx">💬</span></div>
+      <div class="toon-card stop-card" data-page-node-id="vl75HSrhHLHpnjtQlnA8KM">
+        <div class="sc-top" data-page-node-id="MFWQpnJGBCrAUWLbcf1TFR"><span class="stop-no" data-page-node-id="YqyoOFx8AcuQ1b8SO5Vm1x">STOP 24</span><span class="stop-time" data-page-node-id="d1BmdDbxOfY647pkAp5EoW">约 40 分钟</span><span class="sc-tag is-lock" data-page-node-id="IJCqF5zLcFBKnJHaMEvoVZ">走完前一站解锁</span></div>
+        <h3 data-page-node-id="lX4dw5U1nqkfcSuEABXS3X">💬 提示词</h3>
+        <div class="stop-out" data-page-node-id="P3x29qxioe5FdDbhEneRZL"><span class="lbl" data-page-node-id="ulJNvhPbm6w6ipKpNfJJS0">你会做出</span><span class="val" data-page-node-id="pEfhVeJ7UNvINepi7QEiia">一套你自己的提问方法</span></div>
+        <div class="stop-wow" data-page-node-id="saxD46Jx6O78gD9HUSM5lb"><span class="lbl" data-page-node-id="Fuy5d8JdmxUNKEsbjGFfaf">⚡ 哇时刻</span><span class="val" data-page-node-id="vc69jg8Oa8ItWNIU1Twj20">同一个模型，问得细，答案立刻能用了</span></div>
+        <div class="stop-act" data-page-node-id="T3gf88FeA86DT5vGAbUy5J">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="fRJ9WmGDuiZPYNaT6bMWPy">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="ryVMqG1mfzAn0xludSWM7a">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="HExj47fkt6eSk8j49h4lJi">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="G3tRZEIY2CSBOUfdLIgbzg">
+          <span class="q" data-page-node-id="fjSrtXhikrJdQapcGcjLMJ">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="tDI7PwvMExwTQ44ZruEdZb">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="vdQd00dQIUlKZKa1KhIgds">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="ifXiuTgXyNU3UZRHICdzm7">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="GovSYbS466LDDEvFoM2c3R">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="24" data-mod="2" data-name="幻觉" data-ico="🪞" data-page-node-id="ow3r4acZkkuxLABMYiyD6l">
+      <div class="stop-node" data-page-node-id="aMkTUpHEnxMfhj44OCusWa"><span class="rt-node" data-page-node-id="1Ox67oXe9xyHbh3MNhLl5G">🪞</span></div>
+      <div class="toon-card stop-card" data-page-node-id="qvXn6RsDFk6EYcDlNcFmvF">
+        <div class="sc-top" data-page-node-id="jqDLA28hFfPuxZ9ImtQsDH"><span class="stop-no" data-page-node-id="3alreKxaEqnSWSjuE7xxXi">STOP 25</span><span class="stop-time" data-page-node-id="B4VVhSCDTaCYHDP9CekIhq">约 35 分钟</span><span class="sc-tag is-lock" data-page-node-id="j8ySnbrB0FpduCNqZNzumd">走完前一站解锁</span></div>
+        <h3 data-page-node-id="UqK29W8PYk1M9Cmc7Nx8wh">🪞 幻觉</h3>
+        <div class="stop-out" data-page-node-id="eunvUliGZ2sNwOFSUUnY5H"><span class="lbl" data-page-node-id="I4qdEN097FY5m7UZgrIEi8">你会做出</span><span class="val" data-page-node-id="8HQqjCHz7KRpQ0VsUQFeeW">学会防它一本正经地胡说</span></div>
+        <div class="stop-wow" data-page-node-id="mNAiLQBJsgpBHRoL6SjcOj"><span class="lbl" data-page-node-id="k4CImHhzHto7MjNhxGf6xP">⚡ 哇时刻</span><span class="val" data-page-node-id="kGh8yjmW54VF9TIGA7VBOM">亲眼看见它编出一个不存在的作者</span></div>
+        <div class="stop-act" data-page-node-id="awA6VIkaKaBC0zXvGkoGPX">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="amtAmhfA2AG6LnAluf9CrU">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="gAkrHnQJteFyO05MvazFk8">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="LtFfdScrhkpe3PGbWE4BKU">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="FwQoPAGzmIO6lGXBDbxLRa">
+          <span class="q" data-page-node-id="wuOCn0tAAfViuo56xgeRto">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="v4HgJC3Hcg4Rkom8J9FDIj">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="FnpeZCKhNSr2tPdfctQaT0">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="oQhQAGFL9rR8XwS2EUKKWR">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="uGOeZBkiXRStxmYfzqezqI">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="25" data-mod="2" data-name="微调" data-ico="🎛️" data-page-node-id="pzmKiGoF82pQQHerf8E9BB">
+      <div class="stop-node" data-page-node-id="oCkiAzfTYWxRz6MPjFRy7q"><span class="rt-node" data-page-node-id="FRyzxdoX9kAXEMcUzl1h99">🎛️</span></div>
+      <div class="toon-card stop-card" data-page-node-id="znWv8rSN784DfYFzBRpd6c">
+        <div class="sc-top" data-page-node-id="P0jvoWefCaV6VEyRqYtw01"><span class="stop-no" data-page-node-id="J9BWfYq2ZcfL67OSBuMjAC">STOP 26</span><span class="stop-time" data-page-node-id="mEVfozaMGwv6FIgJ8ITb3I">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="3DLEagiP0vYxDYEBeRAGdA">走完前一站解锁</span></div>
+        <h3 data-page-node-id="v7Ec043O3GRTmpwYWwvCAT">🎛️ 微调</h3>
+        <div class="stop-out" data-page-node-id="U8OrH8EknC85VLZmBqRHCA"><span class="lbl" data-page-node-id="4VQ1jq9cj0isltJNTt8zV7">你会做出</span><span class="val" data-page-node-id="ntYCRHENd3H1v6khrpa4DO">不用微调，也能固定 AI 的输出格式</span></div>
+        <div class="stop-wow" data-page-node-id="6F3OYgNYWg11EvG1DtDQGM"><span class="lbl" data-page-node-id="W8KOHOq3QC7Op6D6WGHB2J">⚡ 哇时刻</span><span class="val" data-page-node-id="EQVPNT2kP6ymheC7NwdgTz">一句「以后都这么写」，它真的记住了</span></div>
+        <div class="stop-act" data-page-node-id="cmFJxMuyYjHkXSq9Tby6lB">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="55oJFBncmNzUYSIaqbkHia">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="I22M4RKAqnmofIEtVZg0Sk">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="AvBuh9qCG8yhNy4mZAAS65">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="ct2ogRQltimuBYRB53K3y2">
+          <span class="q" data-page-node-id="ygIAS9tPAUhGDqip65ZxrE">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="8JeDHiswfpijzLaHMv7vj1">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="Gx1JlFUZs2MjZVWrP12JoO">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="SwzQjlql36olcLESyax8BB">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="WsftNm8BQhArX7lOwLV6uG">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="26" data-mod="2" data-name="RAG" data-ico="📚" data-page-node-id="TIzVEPXdp4e6cvtFuI03Xu">
+      <div class="stop-node" data-page-node-id="RYfyfyYVZOXU4ZaqkliLTg"><span class="rt-node" data-page-node-id="cle3DU7yXcSTeVrBJyJLQy">📚</span></div>
+      <div class="toon-card stop-card" data-page-node-id="LlHGKnIMvCWlYSG6a1eZds">
+        <div class="sc-top" data-page-node-id="cCU3vo9enohSwXfbCbEKHZ"><span class="stop-no" data-page-node-id="3nwTA4QnUDQmaaEDhKFomm">STOP 27</span><span class="stop-time" data-page-node-id="Q2p9khfred4gKA48oiOvS0">约 35 分钟</span><span class="sc-tag is-lock" data-page-node-id="t8cOKqCsPdLV6NzhAIVBic">走完前一站解锁</span></div>
+        <h3 data-page-node-id="YFnxGW45NI1o79GKbmpAfB">📚 RAG</h3>
+        <div class="stop-out" data-page-node-id="FhKjrmVFWRFnMH62xXvq5d"><span class="lbl" data-page-node-id="UscyPQmdHjHgSH62a3zUyM">你会做出</span><span class="val" data-page-node-id="XCzelDlFPxkuTDsKgyjiQ0">学会先查资料再让它回答</span></div>
+        <div class="stop-wow" data-page-node-id="CRuF6LDcaslCAY7C6V8yn4"><span class="lbl" data-page-node-id="BaQqlg0nKd9MhRCno2iHwe">⚡ 哇时刻</span><span class="val" data-page-node-id="S5xYf3Ubse08KoEqaGaIqO">给了资料它答得准，不给就开始编</span></div>
+        <div class="stop-act" data-page-node-id="JJRa7rDTQZSmULy8ukdpvA">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="zd7NIQhlpqGQT69qJpiZQI">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="EpKt4ZWLmF2jkwH7eMp9Xx">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="HBIuTD3dD4HYfPtVhbA2zE">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="PhnjH6nsxAXzGseuelL1Sw">
+          <span class="q" data-page-node-id="yyfOoctWE2lYmyhweNA5xy">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="u3x125MLyxpfsqDGPLdBTd">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="jplodXaDztXZifAZjnFaGQ">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="j4Evtqg9ycBh2nXhoMyHhU">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="TGtZMpGi2rBpqb3pSnyZIA">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="27" data-mod="2" data-name="Agent" data-ico="🤖" data-page-node-id="gMlRJBFHO7MqwKoyohEaWP">
+      <div class="stop-node" data-page-node-id="t8qvuYxFokRf3hoBD9CZ3W"><span class="rt-node" data-page-node-id="CBdDjjX9A1A3CkT2cihczg">🤖</span></div>
+      <div class="toon-card stop-card" data-page-node-id="dbM6TGxMUkRU1EMbbBmKAo">
+        <div class="sc-top" data-page-node-id="8bYy4BRQz12q0W5znM29si"><span class="stop-no" data-page-node-id="NVHkbM4E1StukTlUUO4MVA">STOP 28</span><span class="stop-time" data-page-node-id="KTnzyseDT4fhoLoPbBlD7R">约 40 分钟</span><span class="sc-tag is-lock" data-page-node-id="7TPsfDRbFls2fDPHCDr275">走完前一站解锁</span></div>
+        <h3 data-page-node-id="ZPYuRWdg9186JeT1uHVH57">🤖 Agent</h3>
+        <div class="stop-out" data-page-node-id="ICKkrb4fAnWqNhTvxhjAM7"><span class="lbl" data-page-node-id="UOc5bJQvtwE5eoo7t7A6Rj">你会做出</span><span class="val" data-page-node-id="KPMqba96GwuXiDvWxDjgpN">看懂 Agent 怎么自己动手干活</span></div>
+        <div class="stop-wow" data-page-node-id="00qlDZWsxYlbxRILjAJJ5x"><span class="lbl" data-page-node-id="nhR3dgqWPneCsgNGXsE5iv">⚡ 哇时刻</span><span class="val" data-page-node-id="A5rCSUKHhaqBxvCe4TDg4u">它自己查天气、自己判断要不要带伞</span></div>
+        <div class="stop-act" data-page-node-id="2FzJyKB2yQA50XtEIBKiyy">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="RluOfSVGJQJfcGBCpNHB0F">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="sX68fPJTJtyxnKzbbPMIjh">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="9dkgW1oF6D1woWBgr5VRqc">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="LKmDhZBih6ez2Jq88FRwvh">
+          <span class="q" data-page-node-id="nJ2ozxSAPiH3fnIqdyjSGS">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="lFKCvdCuF4Bpbjc2uhhGj3">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="nnTTk3dAahz55OUj8GgMJM">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="M2trrjJ7ScWp7TGYbwBoje">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="fdpfuZGnBS8vZnuXIaEcbw">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="28" data-mod="2" data-name="多模态" data-ico="👀" data-page-node-id="pOAO04hbHeTR96s0GpcUcv">
+      <div class="stop-node" data-page-node-id="hrJrzdVeU7LFdDn4RG7epq"><span class="rt-node" data-page-node-id="OEIRRtj4dHolIT36JoddxY">👀</span></div>
+      <div class="toon-card stop-card" data-page-node-id="B7JYXFpDgv1ob1zuS0fCVe">
+        <div class="sc-top" data-page-node-id="8X5GJvmIbkQs7h9HzNWSfU"><span class="stop-no" data-page-node-id="LkUtCMOl3nJU4eO3brK5yh">STOP 29</span><span class="stop-time" data-page-node-id="kKIEEMFAd5pASn1safGB6e">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="o0WMxkP6GJ9KKoS8EGHIcq">走完前一站解锁</span></div>
+        <h3 data-page-node-id="9z1RIV7P8hShOi4vAUbwm1">👀 多模态</h3>
+        <div class="stop-out" data-page-node-id="0MZ7JGmUxuwrhKHzacEbtq"><span class="lbl" data-page-node-id="cvBLJ9GTZ2HsgLpRB9FUv8">你会做出</span><span class="val" data-page-node-id="Gc8YGMIzGfIhjOsHWNQZdd">看懂 AI 看图的强项和短板</span></div>
+        <div class="stop-wow" data-page-node-id="XeN3IyR398Gn256FOVID88"><span class="lbl" data-page-node-id="jyftrSAgHEmajdtYmUAWZv">⚡ 哇时刻</span><span class="val" data-page-node-id="8WZGPosHVUhi4t0IofSCQi">它读得出图里的字，却数不清图里有几个</span></div>
+        <div class="stop-act" data-page-node-id="7JNtKjv5WbMkEavxsLuy9i">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="xAZcOE8sdSWMRZxg2Hnjfb">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="jXB6vYlFm8oKLom2LA6tsX">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="KA9O6vU4ay5Ae3kjF1lHAU">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="g7xZogsUkcwsoCnmO8NK7A">
+          <span class="q" data-page-node-id="lO4KswWu8vYmTu5FEmAaii">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="rlHMvAXfOKT5gSihCxMi1G">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="rocrok8oNabhhn2xnaZHHJ">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="4gEVn7lOYTMRAl3SQ3wWj2">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="YN5pqmVLWvEBTmaHCyJOB1">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="29" data-mod="2" data-name="现在最前沿的模型和 Agent" data-ico="🔭" data-page-node-id="nPpKMHAJsCs6XM0xdnBDdq">
+      <div class="stop-node" data-page-node-id="UZe7CTVUblvk11ButxL7yt"><span class="rt-node" data-page-node-id="CTKNELPnnTfnQXFQ7KScne">🔭</span></div>
+      <div class="toon-card stop-card" data-page-node-id="nNpxx8mcNpDuaLhUpMC2vl">
+        <div class="sc-top" data-page-node-id="wGsr0iObKlzmdmtmmYHvIq"><span class="stop-no" data-page-node-id="YDSTuSjdsEzeMEE0IQkXWi">STOP 30</span><span class="stop-time" data-page-node-id="vkOzCgEOAmDm4JCq0oM1QE">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="uCHKwY0bUKrap0XyEatcNC">走完前一站解锁</span></div>
+        <h3 data-page-node-id="rIK2spmuz0T54D4yfHfHdD">🔭 现在最前沿的模型和 Agent</h3>
+        <div class="stop-out" data-page-node-id="4bnX9yZT5saggvANqkbXs3"><span class="lbl" data-page-node-id="xpz3wfokhG0nNWEysLm106">你会做出</span><span class="val" data-page-node-id="snBSeDewa5XmmMS4sVPKQe">看懂当下 AI 能稳定做到什么</span></div>
+        <div class="stop-wow" data-page-node-id="HwtEX1dox8ExvQH0ZvRA6i"><span class="lbl" data-page-node-id="zrEhybFhB52zOYAafAT3hg">⚡ 哇时刻</span><span class="val" data-page-node-id="jI8ot2aQlVZJ3RMSoMokGX">它当场写出了能跑的代码</span></div>
+        <div class="stop-act" data-page-node-id="tlRg1BpOGCFPUf1LQbKubO">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="yKM9S1r0YngSVmdREzUaMA">走完前一站解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="c60OpREGpgQ3d8z8lQ8Pzh">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="vSVLVmGAgBAgMmzH1xd44A">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="QWpJu0YKiTepFvFp5mTgTG">
+          <span class="q" data-page-node-id="C0GwtcifSHqMWUVa6B7wFR">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="TH86bCrTrOgXxFUJ2EPQ1j">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="U7Mr8RZWlJg1UASqbYG3jK">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="smnOeZfItxGHT3HdjneE0u">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="kCQOluDjyBCKRZBUDJ4FEk">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+      </div>
+    </section>
+
+    <!-- ── 模块 4 · 产品初识 ── -->
+    <section class="mod is-opt" data-mod="3" id="mod3" data-page-node-id="TaxGy1DIjysoR9z3FjnN45">
+      <div class="mod-head" data-page-node-id="4cXlUmw3Rp2gB567FlOrcA">
+        <span class="mh-ico" data-page-node-id="5RosbKJr2HiZrrbkwAYBEU">🏗️</span>
+        <div class="mh-body" data-page-node-id="ZN6bvqUgYtHwXF2qWGev4I">
+          <span class="mh-kind" data-page-node-id="tcjsyyGPXibI0sK4PdRg8W">选做 · 看看别的岗位</span>
+          <h2 data-page-node-id="Z3kLmDSBgJjIHEUOZndvaN">产品初识</h2>
+          <div class="mh-desc" data-page-node-id="AXg2F0kh8FdlK3g6lUfoQE">不写代码的另一种活法。产品岗在干嘛、以前的产品干了啥、AI 让产品变了什么，五站摸清。</div>
+        </div>
+        <div class="mh-side" data-page-node-id="gGQqFNa1A4o2w2CFpqNDkV">
+          <div class="mh-num" data-page-node-id="17JgPGgoA25twKjAjpRKkO"><b id="modNum3" data-page-node-id="5aUaINayBl4xhDnUipIuAa">0</b><small data-page-node-id="uBla1l6sImldtK964dsC6f"> / 5 站 · 约 2.7 小时</small></div>
+          <div class="mh-bar" data-page-node-id="UywTCuzGUUdITM4rbsBGe1"><i id="modBar3" data-page-node-id="5zz7UdRkWuybVGFo2uABrI"></i></div>
+          <div class="mod-verdict" id="modFeel3" hidden data-page-node-id="0cjDwyam9Ol2ROzARL0fXB"></div>
+        </div>
+      </div>
+      <div class="mod-locknote" id="modLock3" hidden data-page-node-id="gRJv4V9RF67uo4yiu2isph"></div>
+      <div class="mod-stops" data-page-node-id="ojxso4j55kn9frOAr3EYuH">
+    <div class="stop" data-i="30" data-mod="3" data-name="一个产品是怎么做出来的" data-ico="🏗️" data-page-node-id="zQSADAjV8dxoufdd067L43">
+      <div class="stop-node" data-page-node-id="B3CraVS6pvgqVyhFGNJxwt"><span class="rt-node" data-page-node-id="1FM95KuPJhsirJQyr0NRIJ">🏗️</span></div>
+      <div class="toon-card stop-card" data-page-node-id="dM6tg36UBq7hvlxBKDPPfL">
+        <div class="sc-top" data-page-node-id="mgnD9i1XI0ysgBEJTFrDdN"><span class="stop-no" data-page-node-id="EPDfphOmKbC4l1g4wcWD86">STOP 31</span><span class="stop-time" data-page-node-id="lgiwkw3HkalNMJh5JDuTT4">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="AEDEIPAV9DQAnikjxjfYXO">走完主干解锁</span></div>
+        <h3 data-page-node-id="dVw3DT7T0uQWyWxqgQ4ivb">🏗️ 一个产品是怎么做出来的</h3>
+        <div class="stop-out" data-page-node-id="U20LBYul4bpGSL2TKON2Wg"><span class="lbl" data-page-node-id="EgTFyF3iGDPZDuSQQ7SEDX">你会做出</span><span class="val" data-page-node-id="XqwMq2A3iCbCeQjRpPHNSE">看懂一个功能从想法到上线的八步</span></div>
+        <div class="stop-wow" data-page-node-id="I5ymw52VylAQRHFTcHiKBq"><span class="lbl" data-page-node-id="HrdZLEWyHrHZboVmFb4Lfj">⚡ 哇时刻</span><span class="val" data-page-node-id="PBHGIKtxANB5QySW7Kv0Nw">发现你天天用的功能，背后是八步</span></div>
+        <div class="stop-act" data-page-node-id="eaOpnHGRfKYQm2mpzNdtn2">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="m7jvqGCQw798xOnVf3lGAB">走完主干解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="uDpNeRTzE8SKTJLE9EFT8D">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="gE88XfEKEfPFbiWjv2vcv2">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="Pvr9CTDL6pbu0SGzXeZDrA">
+          <span class="q" data-page-node-id="PzsKPCF4gkpkIrT6wIAA90">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="DkPHES1aWrNgCYDbuwdUCd">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="DmfimlWZAhWFc3TFokfY0N">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="enq8pCBtW6aViVtEz3JGwy">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="bFPcz14Rvpd7JGRFmvCvGe">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="31" data-mod="3" data-name="产品经理一天在干什么" data-ico="🧑‍💼" data-page-node-id="fXn7OY7dVjNcRtaqfEnqJA">
+      <div class="stop-node" data-page-node-id="LRtsCSUNm8ygkFNYFd7nfU"><span class="rt-node" data-page-node-id="nl0CnuNDjGhLApEqS70lk7">🧑‍💼</span></div>
+      <div class="toon-card stop-card" data-page-node-id="m5Mr5Xuzf1GP2ssuC37gpU">
+        <div class="sc-top" data-page-node-id="0G4piSWQ5mZR7NHrXDDV2i"><span class="stop-no" data-page-node-id="Z5gEACK4GpCsFAZP5vEWas">STOP 32</span><span class="stop-time" data-page-node-id="KT2FYJfKfVKeEK8A2J2p8X">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="ttIMFndvsuDLYxYw9eBYEe">走完主干解锁</span></div>
+        <h3 data-page-node-id="87bbA165PhVacOXk2NOAr1">🧑‍💼 产品经理一天在干什么</h3>
+        <div class="stop-out" data-page-node-id="p0VOS2OEGtTGWZnneDQdFf"><span class="lbl" data-page-node-id="5BaYlxOsiEMb6JHHIv3M7j">你会做出</span><span class="val" data-page-node-id="ieaTAxXNvlHR5Yh0EYftRe">看懂产品经理真正的时间花在哪</span></div>
+        <div class="stop-wow" data-page-node-id="zJBZxxcWQr6jYZ4bTG9dYB"><span class="lbl" data-page-node-id="UFWEt7lg548Nazas4JTGyw">⚡ 哇时刻</span><span class="val" data-page-node-id="pmFShcMXI1VH2eUiM2csVa">发现自己想要的功能，背后都有取舍</span></div>
+        <div class="stop-act" data-page-node-id="fOVN4F54cOeFlHAmycHddU">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="e6kJSpLPAHx2yyy8mzmUBP">走完主干解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="2xmA1scG8d2Kf1N919AdF9">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="HPy84xmlxPtSkaDqlcc9ug">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="KmBUcOKymrydEVStOreUpQ">
+          <span class="q" data-page-node-id="UVpKH3agQQ5pWUE5a1Fyy4">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="CqRzuPHUTbyC8YTiKKWFO7">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="m7gDJIl5dYj2TW5AvtKDvV">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="cbQ3356movZByH48ozeT4h">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="NAOXsHDhhSRGB04WjMN1sq">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="32" data-mod="3" data-name="以前的产品在干什么" data-ico="🕰️" data-page-node-id="puroa0FKsVSip7NA3ugDlS">
+      <div class="stop-node" data-page-node-id="ZHE1Fqk3M8RiDvtYFFj2tD"><span class="rt-node" data-page-node-id="3l3KbUSRT5RGMSw2g922D9">🕰️</span></div>
+      <div class="toon-card stop-card" data-page-node-id="CZagYlgumFUrXUYpYRzyJv">
+        <div class="sc-top" data-page-node-id="6CniqRLduPw61VpkHB0zQO"><span class="stop-no" data-page-node-id="6gQ7PLpelunQLWDYK00hrw">STOP 33</span><span class="stop-time" data-page-node-id="GNriifNObrmFkyNuuet580">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="EYWtyo7csdBhdOufFTweBD">走完主干解锁</span></div>
+        <h3 data-page-node-id="5DkxbywlcYGxCDOomKExQm">🕰️ 以前的产品在干什么</h3>
+        <div class="stop-out" data-page-node-id="DKCBNFHYhvroHMe4DCEnMR"><span class="lbl" data-page-node-id="YpYf3RXH5ka3Po5RqdMUcz">你会做出</span><span class="val" data-page-node-id="VHNd8BvweCrS8AeUfJrarV">看懂这二十年的产品都在干嘛</span></div>
+        <div class="stop-wow" data-page-node-id="TY57zwyBYwh0doUGXeKdkK"><span class="lbl" data-page-node-id="QH4Snk1vEWsSTNIoyWsBGZ">⚡ 哇时刻</span><span class="val" data-page-node-id="YXYUahIB4Kkua8mVAgjlCk">发现打车这件事，二十年怎么一步步变的</span></div>
+        <div class="stop-act" data-page-node-id="byrnGz5J0gheT1LG9zqWxZ">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="R6XYN2auf4k2xxmCJowATB">走完主干解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="FnlezJOOsCbdukzEHc2Zmg">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="acTtoEBFD4Ab0EZ8d9u0xc">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="6M2okkTowV6oKB2wrhGEHu">
+          <span class="q" data-page-node-id="7ZPVDlvdVoMoxRHUjp3zVF">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="qbv6OAwD6FuRTdhSmpaMSD">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="j2PFmD8o196IQr1YLrryI2">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="vD5d1BHb2oNlqpMky8N7OF">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="Y1KNLNfh9uCjsWOmJ567Pf">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="33" data-mod="3" data-name="AI 产品" data-ico="🧪" data-page-node-id="5HGg53AzmMnhTWwPLOF2C8">
+      <div class="stop-node" data-page-node-id="kFCoPs8p3pnIz52DMEHqYB"><span class="rt-node" data-page-node-id="wnJxhoNaTfJN1CMu5hFgnk">🧪</span></div>
+      <div class="toon-card stop-card" data-page-node-id="rxwoiwFQduvCzeaSAUBY67">
+        <div class="sc-top" data-page-node-id="fEz4Gz6WurnTLOYFJIk9jW"><span class="stop-no" data-page-node-id="rxoAmfIWvRV3dp17Gd4gmf">STOP 34</span><span class="stop-time" data-page-node-id="DEb3jWoZF4WlCeNM39c2JF">约 35 分钟</span><span class="sc-tag is-lock" data-page-node-id="zZ5LREZ1m6K8WDbAugzddT">走完主干解锁</span></div>
+        <h3 data-page-node-id="nchWhmEo9o17SQzitTEGE7">🧪 AI 产品</h3>
+        <div class="stop-out" data-page-node-id="kgF8HUyZaN9WrTzFfBiPep"><span class="lbl" data-page-node-id="ARpLKE5pxxdtrILctbAlIF">你会做出</span><span class="val" data-page-node-id="iXNYt9ZPx7uc8Z6LH0ITWb">学会用三把尺子量 AI 产品</span></div>
+        <div class="stop-wow" data-page-node-id="AD13Sy3Tl2L5OZyUoaWEOJ"><span class="lbl" data-page-node-id="CO8sTuXJ519UwfqjVtBHsb">⚡ 哇时刻</span><span class="val" data-page-node-id="rG6DqQqEA04J55jp6mEQOY">看出哪些产品是硬加的 AI</span></div>
+        <div class="stop-act" data-page-node-id="rJrZXhC3HWLQxJmhXykJ8b">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="NcZ1tUBlFYUHNsrVhglgOw">走完主干解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="1JfPpjlVkwepvJ5OmfGHBf">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="uJYeAY5D4jX3I6XXA7y52q">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="HAF0F03vyQbeeVC0vwqBlj">
+          <span class="q" data-page-node-id="DpMxINWPeBjFZkEl5CidQ5">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="HTjcnVHPHIOvIkYJYC3dnn">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="22RU3Hp3P4xThHxgAC8Mbc">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="kKAK4shCrhWZ1zxKf7HQEn">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="v5cCQHTFZB2ewL2RaJBAXY">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="34" data-mod="3" data-name="怎么判断一个需求值不值得做" data-ico="⚖️" data-page-node-id="UPMZE3SJPpQBArCUuF0atL">
+      <div class="stop-node" data-page-node-id="BnBqtOcaImZfY9SFX23Lsd"><span class="rt-node" data-page-node-id="t1KhCuMR3GDpmZ9UYI35hL">⚖️</span></div>
+      <div class="toon-card stop-card" data-page-node-id="48vhh7QqyBbOsCBhiXACue">
+        <div class="sc-top" data-page-node-id="vec6klNjgIq1trJmfFZCse"><span class="stop-no" data-page-node-id="bNtWjnQtFCfg2BtIdri3NX">STOP 35</span><span class="stop-time" data-page-node-id="q43qbr4Wae3YSibL2wFclR">约 35 分钟</span><span class="sc-tag is-lock" data-page-node-id="Euc0DkIQierfTFJ7uNtCiD">走完主干解锁</span></div>
+        <h3 data-page-node-id="5dItnGztvtSyxWmHYrdOnP">⚖️ 怎么判断一个需求值不值得做</h3>
+        <div class="stop-out" data-page-node-id="h6aJm6ByJCU3A5dVafFgjH"><span class="lbl" data-page-node-id="gciFGvoPeu9d2VvGNsohPY">你会做出</span><span class="val" data-page-node-id="b18KojtgOzp9VCG5BQyfCw">四个问题，筛掉不靠谱的点子</span></div>
+        <div class="stop-wow" data-page-node-id="u1mYJnIEZOd4Y070Z0TOrB"><span class="lbl" data-page-node-id="wKQjldRNvi4mMORK1GYdMB">⚡ 哇时刻</span><span class="val" data-page-node-id="SZnAcd6a6HDGABXq6UYdxj">你那个兴奋的点子，三问答不上来</span></div>
+        <div class="stop-act" data-page-node-id="nmbXI3pLoIUtIJT3czOVZg">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="Z4BxCgq0AtS9FjHpWlstnC">走完主干解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="hBmCNCEzKzBZ0wvLg0giIV">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="MNzRAoqSrY4I7icKJIlbQU">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="QjE032hqySTqZQXMfhlE8u">
+          <span class="q" data-page-node-id="Ceoeb6x0cl7gjaxifjiw6V">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="g6uOp8hT4eiJQwao7cUqzD">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="Tul6z4tZbuU5GvRSszwOzY">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="RBKwEq1EsM4x6TurV3dFbg">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="B0iEdGANUq1MsSAAxXb9OZ">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+      </div>
+    </section>
+
+    <!-- ── 模块 5 · 测试与运维初识 ── -->
+    <section class="mod is-opt" data-mod="4" id="mod4" data-page-node-id="tXkMqF0Wp4YLsVA3pe9W39">
+      <div class="mod-head" data-page-node-id="5czoug3hvWSRPUUiDMa0Lm">
+        <span class="mh-ico" data-page-node-id="cKER0GmcBIHFArUbUj3foU">🔧</span>
+        <div class="mh-body" data-page-node-id="ARXMOmHEzn6lfxPgAVVcrj">
+          <span class="mh-kind" data-page-node-id="oT3PyZH1wUiEwIUvlOBSNl">选做 · 看看别的岗位</span>
+          <h2 data-page-node-id="BN9DzKOADygpAV6yLuFlwh">测试与运维初识</h2>
+          <div class="mh-desc" data-page-node-id="3zXQAym2GqcF6ilTQsKBDD">东西上线之后谁管。三站看清：怎么证明没坏、谁在半夜救火、出事怎么第一时间知道。</div>
+        </div>
+        <div class="mh-side" data-page-node-id="Ft4LDb8JMv37ihyqS4TWGp">
+          <div class="mh-num" data-page-node-id="OPXRGtZPzmDdbBpPEa2uko"><b id="modNum4" data-page-node-id="qKlnLFvwErrKtzypLA8BBZ">0</b><small data-page-node-id="SEUMfkAnUMXdElk0uSfFfK"> / 3 站 · 约 1.6 小时</small></div>
+          <div class="mh-bar" data-page-node-id="SOkdh6PQZrzUpHFElVkkDE"><i id="modBar4" data-page-node-id="sNx4bEMfmOfApNlnhpdfEU"></i></div>
+          <div class="mod-verdict" id="modFeel4" hidden data-page-node-id="HlvEN0AxjjFyNiDl3DOLYC"></div>
+        </div>
+      </div>
+      <div class="mod-locknote" id="modLock4" hidden data-page-node-id="KrG31xf9OzGtGevowoGNKt"></div>
+      <div class="mod-stops" data-page-node-id="FYIrI5y6hVfTTkKlOpAuE8">
+    <div class="stop" data-i="35" data-mod="4" data-name="测试" data-ico="🐞" data-page-node-id="r4cw7VaRS7MorAf2eyMU5t">
+      <div class="stop-node" data-page-node-id="Ddlzv7Ym9jCWiKkH749ZY8"><span class="rt-node" data-page-node-id="FLT1tVgYExN3UfKZyBbGle">🐞</span></div>
+      <div class="toon-card stop-card" data-page-node-id="ON3NIMSLDU2IOBkH9MThXE">
+        <div class="sc-top" data-page-node-id="jYXFF5Kurc7No8MinusJ56"><span class="stop-no" data-page-node-id="xhPEL04TFUPZGflP3qFqIN">STOP 36</span><span class="stop-time" data-page-node-id="NWS05afwbi1YqP9K3PGcn6">约 35 分钟</span><span class="sc-tag is-lock" data-page-node-id="6NGWtOpP88KbkeIt20D5bN">走完主干解锁</span></div>
+        <h3 data-page-node-id="PQakbq17HkKJyiNxc4W1pA">🐞 测试</h3>
+        <div class="stop-out" data-page-node-id="PCnh807t0CPRDAYEPzhoFa"><span class="lbl" data-page-node-id="bFMHvlYe3fVb4nqeRMPMqP">你会做出</span><span class="val" data-page-node-id="iud71HWtJBqX5FamZb97Jb">看懂测试到底在干嘛</span></div>
+        <div class="stop-wow" data-page-node-id="5OAlK1zUUhZXhSeeEHVFd8"><span class="lbl" data-page-node-id="XSmqBQkw8rfHeD0iZaDVWE">⚡ 哇时刻</span><span class="val" data-page-node-id="SHr3GIzys2d8sLDxtbD11Q">一个点赞功能，能列出十条「什么算对」</span></div>
+        <div class="stop-act" data-page-node-id="VAI7QIh89v8KMlR3u6DU6k">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="xnOoJ1t1WkcfBijOnJu9MU">走完主干解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="OkaercpNHF8sSqXIpfFPJS">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="jUpEDvSs3nSUw3r0jZRXmX">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="HhACroxjU9fc7e5UzvArAe">
+          <span class="q" data-page-node-id="EjYp7Bcna3tjuvCjjAgf6r">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="NLwIgWl7JAmmWOg9sHKnkL">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="9Kr7jGsGT7cfoVaUxJw9s5">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="YEcauUSaBLlQHtqgbcCXtl">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="Esz170h0yofdZsGUYSjWGE">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="36" data-mod="4" data-name="运维" data-ico="🔧" data-page-node-id="YZCsVl3MgcLBmRyTLNTA6x">
+      <div class="stop-node" data-page-node-id="mH0IsMhjBEJ5SeMHhHScGo"><span class="rt-node" data-page-node-id="aqL5J17CfPzvRmh5MGKHf5">🔧</span></div>
+      <div class="toon-card stop-card" data-page-node-id="B6uAxJqw3CNFo5iPOqa8OS">
+        <div class="sc-top" data-page-node-id="vLSgyBoHho0BhsIGRaCARQ"><span class="stop-no" data-page-node-id="1J6hXK3aVbOVSUoxkjVtlG">STOP 37</span><span class="stop-time" data-page-node-id="2zDuL2TgOiSAPtExJLWbBW">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="SdIFwLj3kVtDhasRhIf4sL">走完主干解锁</span></div>
+        <h3 data-page-node-id="UUFyS25Mt9w5ZWR6Q1lNLA">🔧 运维</h3>
+        <div class="stop-out" data-page-node-id="agk9sEFXQ2vjnSVlJ5EqAu"><span class="lbl" data-page-node-id="WvhlPHpzUC0qF0jhoVNNfe">你会做出</span><span class="val" data-page-node-id="5ArBEvCLmzajUFjMKaHwc7">看懂运维的五块活</span></div>
+        <div class="stop-wow" data-page-node-id="jSesbDISRtNmAuyziKPwLu"><span class="lbl" data-page-node-id="cdGEhpKwErtH0cwmxvb5EL">⚡ 哇时刻</span><span class="val" data-page-node-id="QDdl5T9Z7rhCTpRJLgo6kL">走一遍「先恢复、再找原因」</span></div>
+        <div class="stop-act" data-page-node-id="eBu3AKmrgaTKlulKz1kmTo">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="TcHYuUEB7565ZlNQiZqvvE">走完主干解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="r4XuLZ1Cqb2mOSEMECkrgL">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="Ei2YvDFbHsiSpwxdCGTkIE">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="1uL3fQq5PvJ7m6XWiOSdPL">
+          <span class="q" data-page-node-id="4tLzZShFJK8hCOGwNGSFpe">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="K211M1KAPknstE53wyqmcY">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="8bUSBrCJkLSvzVRdwfWZuQ">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="Qvhcx0bhdmsEv0KAIVWB4R">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="XpTym6ZxeyZClD7bfB0vfN">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="37" data-mod="4" data-name="监控与告警" data-ico="🚨" data-page-node-id="d53rfE0r2Ga1pETVXWBjAa">
+      <div class="stop-node" data-page-node-id="X9ZgMJDFK6Ci5dsOwKGX31"><span class="rt-node" data-page-node-id="Ni0tnYjjMTT6nwZNIYqlY5">🚨</span></div>
+      <div class="toon-card stop-card" data-page-node-id="ekQzqUmB0Tp4sduzBMTOsZ">
+        <div class="sc-top" data-page-node-id="inW30ELTc8DXiEMb7LEJC4"><span class="stop-no" data-page-node-id="EzgGACEKMr8K1yXGmh5F8S">STOP 38</span><span class="stop-time" data-page-node-id="kNl3DKkNUV688nUkSH8eyB">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="WmD1tyrSZQ80sEkDUiovnt">走完主干解锁</span></div>
+        <h3 data-page-node-id="HKLSrK2UPBvY37DVq2GULM">🚨 监控与告警</h3>
+        <div class="stop-out" data-page-node-id="PvH6OKi3ETKkGdeuZT23Gr"><span class="lbl" data-page-node-id="nGOr71VcuTEOfDEzCTd7oO">你会做出</span><span class="val" data-page-node-id="965vhbJzEG9DAHistXgRal">看懂告警为什么宁少勿滥</span></div>
+        <div class="stop-wow" data-page-node-id="7pUEirwAjLerjO5bFoi3z7"><span class="lbl" data-page-node-id="n3pPLeNLk6kIryGOuZfxTt">⚡ 哇时刻</span><span class="val" data-page-node-id="R5PGnLHlSdKtfCALclRzws">发现自己手机里的提醒也是「告警」</span></div>
+        <div class="stop-act" data-page-node-id="y6yhT40oZ68N7xYpgDwVGZ">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="YL4tNsqUAQcSpWfe3ZUlOh">走完主干解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="CfiGfVFEV4lHkxRstOjBLB">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="ZRVDuGU8RGbI8igOlBRM9x">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="IU7EIngdOn4H7AuzJb1msK">
+          <span class="q" data-page-node-id="SbGP5EElZnYsmUBXLzgamo">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="ZnMSl0QshJCi6XOfS1hY22">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="60EJC8Cr9ngVNlvFscDChq">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="4aA9ZCHamUmT67G04LlGHJ">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="Ne8AzIo97j7IAOmvCZpC0w">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+      </div>
+    </section>
+
+    <!-- ── 模块 6 · 算法工程师初识 ── -->
+    <section class="mod is-opt" data-mod="5" id="mod5" data-page-node-id="vGXvRoG2hvZj1575ZDTQwI">
+      <div class="mod-head" data-page-node-id="9HaKeRVYoGmENSUSJaCyGW">
+        <span class="mh-ico" data-page-node-id="97VESUIF8JXXKfSDdHMrJr">📈</span>
+        <div class="mh-body" data-page-node-id="JCfsX9BynNsvztumTARdkD">
+          <span class="mh-kind" data-page-node-id="Vnh0ocd3TdNV0jRlEmtCZG">选做 · 看看别的岗位</span>
+          <h2 data-page-node-id="1NdDuCme35L55rakE0Atfp">算法工程师初识</h2>
+          <div class="mh-desc" data-page-node-id="64THWOVI89EKLKcNrUhloG">「做 AI」的另一种：不调模型，改模型。三站看清这个岗位到底在干嘛、数学占多大分量、大一能做什么准备。</div>
+        </div>
+        <div class="mh-side" data-page-node-id="Hdg0VlH7k9AXxk2sVMstv6">
+          <div class="mh-num" data-page-node-id="Oc674iUpvoT4eSEhzQnb3F"><b id="modNum5" data-page-node-id="NNn4dTzQ3Bbn3GgUXB21PK">0</b><small data-page-node-id="rDGt2Ovp3X673yoW9643w5"> / 3 站 · 约 1.6 小时</small></div>
+          <div class="mh-bar" data-page-node-id="NxNBJ4EcyVY4CbBhWxXqBc"><i id="modBar5" data-page-node-id="bjSQF4e067EKU2YC2DwCVP"></i></div>
+          <div class="mod-verdict" id="modFeel5" hidden data-page-node-id="fbxbdsHFEEtWrhsRK9TpWC"></div>
+        </div>
+      </div>
+      <div class="mod-locknote" id="modLock5" hidden data-page-node-id="QOpQQqeJzkPovIvwt4H2j9"></div>
+      <div class="mod-stops" data-page-node-id="Ak24GkvZDo489wTv29RwK5">
+    <div class="stop" data-i="38" data-mod="5" data-name="算法工程师到底在做什么" data-ico="📈" data-page-node-id="VWK5HABwGiK8X1MXW3TznX">
+      <div class="stop-node" data-page-node-id="FiNHVeIcZQMJCkuhsxQouD"><span class="rt-node" data-page-node-id="usGLtA01S35xubmBcP3Rcf">📈</span></div>
+      <div class="toon-card stop-card" data-page-node-id="8TQsmURwJt7TTynItpeosr">
+        <div class="sc-top" data-page-node-id="F8CDAWNoB9DAe2qBOfIgJE"><span class="stop-no" data-page-node-id="CgEjUPp3U6G2NivIzAlPOV">STOP 39</span><span class="stop-time" data-page-node-id="vgVpeBzzQV4sRFqpClx2rq">约 35 分钟</span><span class="sc-tag is-lock" data-page-node-id="AVTY8DsxBknNQJecWTeiZ4">走完主干解锁</span></div>
+        <h3 data-page-node-id="3tjta2R1mhyFWWen7EII3g">📈 算法工程师到底在做什么</h3>
+        <div class="stop-out" data-page-node-id="0FTB20Cwn3LgqlIqvAUXqN"><span class="lbl" data-page-node-id="j4OmiGWRaYpcu2WKGUHE60">你会做出</span><span class="val" data-page-node-id="21CdDV6D9Pn6sFAvy0bhkr">分清算法岗和开发岗</span></div>
+        <div class="stop-wow" data-page-node-id="h0FryEgOKUZjWMHk9UEhR8"><span class="lbl" data-page-node-id="KBkyRBYrqCxTXd9qA1dAK0">⚡ 哇时刻</span><span class="val" data-page-node-id="gmZo5dQhz5jVmdZxxipakr">发现推荐算法在哪猜错了你</span></div>
+        <div class="stop-act" data-page-node-id="s8s6KYtpeGfT09N2s6iree">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="ASvA9F0dbJGsn2vkEEK7xs">走完主干解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="U8Au7NbrtCJpnoV6qg3Iuc">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="ZlOViriBd4etNCxoXLwyS5">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="DuidxWHJI3lf1mHy38Q2GW">
+          <span class="q" data-page-node-id="dhtieKpCEqXZ6W8HRCHuQr">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="smrW9oIcQHXKi1YKI2ID7r">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="8VIDQ5GxIZVWK1DoVhofi2">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="LHYgGCEfiDIwMAW3quyosf">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="LzHuxDoAVF7gDwdrrxdTCt">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="39" data-mod="5" data-name="数学在这里扮演什么角色" data-ico="📐" data-page-node-id="GhusIjfm9ERFC5HZ9gx6Ap">
+      <div class="stop-node" data-page-node-id="A9GRY3z6PO3sMbIVQEpmA4"><span class="rt-node" data-page-node-id="oBgLFKr4C00XaQb9bOTtrL">📐</span></div>
+      <div class="toon-card stop-card" data-page-node-id="9f57eGFY8mOIHeTwNfdjMC">
+        <div class="sc-top" data-page-node-id="B6YCeudL1PGJQ88Ss6Oqa6"><span class="stop-no" data-page-node-id="jZgy2U8K2zNcI7MSw1JOpw">STOP 40</span><span class="stop-time" data-page-node-id="aiwNL9HC2UYIiGDxBOv6f6">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="LauSygKzsAt755d0eBmy3B">走完主干解锁</span></div>
+        <h3 data-page-node-id="c7fKBFWgK1KBJszMwoYpgT">📐 数学在这里扮演什么角色</h3>
+        <div class="stop-out" data-page-node-id="2CSWr3PtFPuBdthkVci5nh"><span class="lbl" data-page-node-id="AHBc3eXVhxH7OF1xvGTB0w">你会做出</span><span class="val" data-page-node-id="OO8zNHWlbinhhj3KGvan6F">看懂数学在 AI 里占多大分量</span></div>
+        <div class="stop-wow" data-page-node-id="WNLsSelbBYChEeAPyDgHCM"><span class="lbl" data-page-node-id="NcHbnFWQ6Cykog2Ye6xMxW">⚡ 哇时刻</span><span class="val" data-page-node-id="pYyTk5YAnwHii3XZqFneIY">一行 w1*x1+w2*x2+b，三门数学都在里面</span></div>
+        <div class="stop-act" data-page-node-id="dfFHq5S5ZeZuPUVV2Us0NA">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="Xxa0rh8EnIHAIK6Sky7DGQ">走完主干解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="DEbcIgHwVhPtFUtIxAAIVK">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="iTLJhcL2Gb0O2xeE2ixykg">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="KqEtkbE1pm0rFNrQiMKqkM">
+          <span class="q" data-page-node-id="oMYZokyqe9uKTHFRtiAVKY">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="nsY7HHh4jtfN7Trfe9Wv7b">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="4fpI60PM5Tk7vu4m8ObXQv">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="trVL7uktJBLMglp8T9jRNd">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="zXReqNfyBKjN2JTNPsBnCP">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+    <div class="stop" data-i="40" data-mod="5" data-name="大一现在能做什么准备" data-ico="🎒" data-page-node-id="KWcxOiNqowJzVDYWohfwxE">
+      <div class="stop-node" data-page-node-id="FnfqtdAShNCVskgmjQKDCx"><span class="rt-node" data-page-node-id="w9MsyrpLKEiyHaPqCfZA54">🎒</span></div>
+      <div class="toon-card stop-card" data-page-node-id="MeYK4tRNr42TuxnzMa8wmk">
+        <div class="sc-top" data-page-node-id="SCCBlheBmgHkOuSHTf5r5o"><span class="stop-no" data-page-node-id="iLKkEk5YjKVJAELvuET2YJ">STOP 41</span><span class="stop-time" data-page-node-id="zestOj6zE9ILL0NsQSYqgC">约 30 分钟</span><span class="sc-tag is-lock" data-page-node-id="ZYfRVCDGhCuG02mRR6o0xk">走完主干解锁</span></div>
+        <h3 data-page-node-id="nnm4BoKQNbXyARFgEKdrge">🎒 大一现在能做什么准备</h3>
+        <div class="stop-out" data-page-node-id="3X5kyBJdjObxOqIY3nYl2K"><span class="lbl" data-page-node-id="jlYZZKKvuqBkLPSNvOma3D">你会做出</span><span class="val" data-page-node-id="ptgJfabmMlErZ7wZ0mJPY7">一张你自己的大一安排表</span></div>
+        <div class="stop-wow" data-page-node-id="F8U0ouIP2UO9uCgHBc6iQD"><span class="lbl" data-page-node-id="NoxON1uvc0tsT6dGe24let">⚡ 哇时刻</span><span class="val" data-page-node-id="WqG0BwiKDLq5zHCFI2s5sD">写下第一行的瞬间，真的开始了</span></div>
+        <div class="stop-act" data-page-node-id="ad5CaGmMe6a1xlLT3LjMhC">
+          <button class="btn btn-outline checkin" type="button" data-page-node-id="WkxxYNBqGOGyrYOuBuF8Qj">走完主干解锁</button>
+          <a class="btn btn-outline act-link" href="07-node.html" hidden data-page-node-id="CTDy4EL1gGitbq4zdLYTKA">这一站的资料 →</a>
+          <span class="act-note" hidden data-page-node-id="wIFX4UOpUW8sTS5QfjP1RF">打卡后记录手感</span>
+        </div>
+        <div class="feel" data-page-node-id="SR1iYpFlGGUsiHxpjXxc1q">
+          <span class="q" data-page-node-id="jDt5xifaWLhk7RLemX26Gv">这一站的手感？</span>
+          <button class="feel-btn" type="button" data-v="3" data-page-node-id="NWr8NwAAMySpmGIz3WOTOB">🔥 上头了</button>
+          <button class="feel-btn" type="button" data-v="2" data-page-node-id="g7pI3gJnODzqzRh6vLdvyc">🙂 还行</button>
+          <button class="feel-btn" type="button" data-v="1" data-page-node-id="HTMBWNG4O4GaUqTs132uM6">🥱 没感觉</button>
+          <span class="feel-hint" data-page-node-id="S04yPJnjIjddLJYsFGeN6Q">走完这一站就能打分</span>
+        </div>
+      </div>
+    </div>
+      </div>
+    </section>
   </div>
 
+  <div class="trail-end" id="trailEnd" data-page-node-id="ovFXCsRmNcSesU5ndvIUBq">
+    <span class="undo-bar" id="undoBar" data-page-node-id="qVnSzliFtTGFDQhTiRdjkI">
+      <button class="btn btn-outline btn-sm" type="button" id="undoBtn" data-page-node-id="eWNRZjW3nopdWvvw4jmPQQ">↩ 撤销上一步</button>
+      <button class="reset-link" type="button" id="resetBtn" data-page-node-id="sMBXsHCt9lEcVhPaV0CPBc">重置进度</button>
+    </span>
+  </div>
   <!-- ══════════ 终点：方向体检 ══════════ -->
-  <div class="toon-card finish" id="finish">
-    <div style="display:flex;gap:16px;align-items:flex-start">
-      <span style="font-size:34px">🩺</span>
-      <div style="flex:1">
-        <h3 style="font-size:20px;font-weight:800;letter-spacing:-0.4px">终点 · 方向体检</h3>
-        <div class="lead" style="font-size:13.5px;margin-top:6px;line-height:1.75">
-          8 站走完，你会看到一张<strong style="color:#fff">手感图谱</strong>——每一站你打的分，会告诉我们你在哪类事情上眼睛会亮。
-          这不是性格测试，是你自己走出来的证据。
+  <div class="toon-card finish" id="finish" data-page-node-id="2Zt6afPdhSHN4fvLOeODRM">
+    <div style="display:flex;gap:16px;align-items:flex-start" data-page-node-id="RClPkZQtdvYdeLITZWxKXW">
+      <span style="font-size:34px" data-page-node-id="m8UYb0UqSkPrgeRxvvFtxn">🩺</span>
+      <div style="flex:1;min-width:0" data-page-node-id="2qFTFG3gQbqm6C76VEqFZI">
+        <h3 style="font-size:20px;font-weight:800;letter-spacing:-0.4px" data-page-node-id="1F8C8BRpj88Ry4WFwZRxfL">终点 · 方向体检</h3>
+        <div class="lead" style="font-size:13.5px;margin-top:6px;line-height:1.75" data-page-node-id="BDYBq5dbxzMTZlYSL4noYG">
+          每走完一站，打一个手感分。同一块的站分攒起来，就是这一块的高度。
+          哪块让你忘了时间，哪块让你坐不住，一眼就能看出来。这些分是你自己一站一站走出来的。
         </div>
 
-        <div class="taste">
-          <i style="height:38%"></i><i style="height:88%"></i><i style="height:62%"></i><i style="height:44%"></i>
-          <i style="height:30%"></i><i style="height:52%"></i><i style="height:96%"></i><i style="height:70%"></i>
+        <div class="taste" id="tasteChart" aria-hidden="true" data-page-node-id="cBTZIZslF3GiPGa53gJo3J">
+          <i data-i="0" data-page-node-id="mfTMxfi8tIjFggPwTM4SFk"></i><i data-i="1" data-page-node-id="huymy0FBpbRjdduq8qbJJL"></i><i data-i="2" data-page-node-id="qnK7YzVFCC48pY9pEdxl5X"></i><i data-i="3" data-page-node-id="ab4NEuzxMb4VDbdWIAQ609"></i><i data-i="4" data-page-node-id="njWpRzHNWEaU7aNpAmtN2N"></i><i data-i="5" data-page-node-id="XfsWWz91yfvFrsHKBEgb4R"></i>
         </div>
-        <div class="taste-lbl">
-          <span>黑窗口</span><span>脚本</span><span>Git</span><span>前端</span><span>服务器</span><span>数据库</span><span>AI</span><span>模型</span>
+        <div class="taste-lbl" aria-hidden="true" data-page-node-id="pkUeTSFhfFpPtF2MWq4lwG">
+          <span data-page-node-id="KAgO8q0VfPBIyuKbGSfYe6">计算机初识</span><span data-page-node-id="TY34EOC6ywve1xiReRvmoC">前后端初识</span><span data-page-node-id="ZLi72OQXCxxGMWDxVR5H6f">AI</span><span data-page-node-id="sj4bd7O8IQPlbYEWgpVPPs">产品初识</span><span data-page-node-id="SsggBZDZltBwSEz3ha31D9">测试与运维初识</span><span data-page-node-id="mAqwiWXqLLcWLIms8TvI6H">算法工程师初识</span>
         </div>
-
-        <div class="stop-out" style="margin-top:16px">
-          <span class="lbl">体检结论</span>
-          <span class="val">
-            你在「脚本」和「AI」上眼睛最亮，在「服务器」上明显坐不住。<br />
-            <span style="color:var(--pri)">→ 推荐方向：AI 应用开发（主）· 数据工程（备）· 后端（备）</span>
-          </span>
+        <div class="taste-legend" style="margin-top:10px" data-page-node-id="fibVTFZgCy1bHHXbjX6jk3">
+          <span data-page-node-id="L01C4gzlplcAfCHKGSETYM"><i class="v3" data-page-node-id="T1Qlb0Vimg8AAFJDSY3ayi"></i>上头了</span>
+          <span data-page-node-id="imBrCaOM33LXfiiiQDb2i7"><i class="v2" data-page-node-id="mNBzGnf5GDdvlV6w7YrmxH"></i>还行</span>
+          <span data-page-node-id="kxw3DDzM5fXHVef2TMPFJC"><i class="v1" data-page-node-id="t1KzqVgjfXNpEj1Gl5CDdA"></i>没感觉</span>
         </div>
 
-        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
-          <a class="btn btn-primary" href="04-survey.html">用这个结论，生成我的专属路线 →</a>
-          <a class="btn btn-outline" style="background:transparent;border-color:rgba(255,255,255,.3);color:#fff" href="03-direction.html">先看看这几个方向是干嘛的</a>
+        <div class="quiet" id="tasteWait" role="status" style="margin-top:16px" data-page-node-id="6KkvdcCcCFSwLU639hzgln">
+          <span class="q-ico" data-page-node-id="na7eO0GbkEQ1jhKD2w1KX3">✍️</span>
+          <span data-page-node-id="DE4WyFkp62p3NobfGMQCk6"><b id="tasteWaitTitle" data-page-node-id="SHVmKaeUc0WACwMUKqRLfC">还没打分</b><span id="tasteWaitText" data-page-node-id="WoKhLnhmzhQGu4VlpfojP7">每走完一站，在下面点一个表情，图谱就会长起来。</span></span>
+        </div>
+
+        <div id="verdictBox" hidden data-page-node-id="qLPm0eGRJAAEKU8zVL2AQY">
+          <div class="stop-out" style="margin-top:16px" data-page-node-id="kGiBJc3JKsPv7RVTAd4YTw">
+            <span class="lbl" data-page-node-id="ArGJC8PD8UsAf3sZ6w2BEc">体检结论</span>
+            <span class="val" id="verdictText" role="status" data-page-node-id="NXIV1jR8O3oKpi3efKrmC8"></span>
+          </div>
+          <div class="verdict-act" id="verdictAct" data-page-node-id="anGaTuY49HMbsXW1DNpv1o">
+            <a class="btn btn-primary" href="04-survey.html" data-page-node-id="HgrAwJzNA1hFPYxHPSiEjP">按这个方向定制路线 →</a>
+            <button class="btn btn-outline verdict-ghost" type="button" id="retryBtn" data-page-node-id="ic8AcFexoos5qF8hG9QE3O">重来一次</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- ══════════ 讲清楚它为什么这样设计 ══════════ -->
-  <section style="margin-top:46px">
-    <div class="blog-sec-head"><h2>为什么是"走一遍"而不是"做测试"</h2></div>
-    <div class="blog-sec-sub">这条路线背后的两个判断</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px" class="why-grid">
-      <div class="toon-card" style="padding:20px">
-        <div style="font-size:24px">🎯</div>
-        <b style="font-size:15px;font-weight:800;display:block;margin-top:8px">选错方向的代价，比想象中大</b>
-        <p style="font-size:13px;color:var(--ink-2);margin-top:6px;line-height:1.75">
+<!-- ══════════ 讲清楚它为什么这样设计 ══════════ -->
+  <section style="margin-top:46px" data-page-node-id="H1pnnUKYrsHRLMLlBTOjZY">
+    <div class="blog-sec-head" data-page-node-id="dCXn6Bl14k9iNucAs1yqBE"><h2 data-page-node-id="XKjuEEMdvQFdajW3cvpUdI">为什么是"走一遍"而不是"做测试"</h2></div>
+    <div class="blog-sec-sub" data-page-node-id="VkAbLWJN0Ylr26NPRlxjNp">这条路线背后的两个判断</div>
+    <div class="why-grid" data-page-node-id="sXaSVdA8hvRz166SKwa5Fy">
+      <div class="toon-card" style="padding:20px" data-page-node-id="WjjUPAqMZBICPoEXK4C3QY">
+        <div style="font-size:24px" data-page-node-id="dqUA9V9dTNNEzoz602Gm3T">🎯</div>
+        <b style="font-size:15px;font-weight:800;display:block;margin-top:8px" data-page-node-id="eD38sl3MsLFvhxWLBRpyBy">选错方向的代价，比想象中大</b>
+        <p style="font-size:13px;color:var(--ink-2);margin-top:6px;line-height:1.75" data-page-node-id="5ZXWBCw40afQe6ShYjNZRX">
           很多人大二才开始怀疑自己不喜欢写代码，但那时候已经投入了一年。
-          沉没成本会让人硬撑到毕业——四年下来，做着一份不喜欢的工作。
-          <strong>越早试错，越便宜。</strong>
+          沉没成本会让人硬撑到毕业，四年下来，做着一份不喜欢的工作。
+          <strong data-page-node-id="piKRlDJmXcCNPgp6qtKzY5">越早试错，越便宜。</strong>
         </p>
       </div>
-      <div class="toon-card" style="padding:20px">
-        <div style="font-size:24px">🧪</div>
-        <b style="font-size:15px;font-weight:800;display:block;margin-top:8px">兴趣是做出来的，不是想出来的</b>
-        <p style="font-size:13px;color:var(--ink-2);margin-top:6px;line-height:1.75">
+      <div class="toon-card" style="padding:20px" data-page-node-id="YSzWvXYHGKx7wvKI4t56BB">
+        <div style="font-size:24px" data-page-node-id="IOa56sg1Cjqux7R7idBLOE">🧪</div>
+        <b style="font-size:15px;font-weight:800;display:block;margin-top:8px" data-page-node-id="XWqkkQlVCx0JCOIYwiNwyk">兴趣是做出来的，不是想出来的</b>
+        <p style="font-size:13px;color:var(--ink-2);margin-top:6px;line-height:1.75" data-page-node-id="h2C0Rut43EPpS64LnTkIWJ">
           问卷问你"喜欢逻辑还是喜欢创意"，你根本答不准。
           但做完一站之后问你"刚才那两小时难受吗"，你一定答得准。
-          <strong>用行为数据代替自我描述，是这条路线唯一的方法论。</strong>
+          <strong data-page-node-id="XDSq1TPGt60g459j2ciBjC">用行为数据代替自我描述，是这条路线唯一的方法论。</strong>
         </p>
       </div>
     </div>
   </section>
 </main>
 
-<footer class="foot">
-  <div class="foot-inner">
-    <div class="foot-brand">
-      <div class="logo">
-        <span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
-        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+<footer class="foot" data-page-node-id="lAsjtu1CnbOq5auty3iPSV">
+  <div class="foot-inner" data-page-node-id="o0JeL2oD51qrJVCLuMClg9">
+    <div class="foot-brand" data-page-node-id="p5mMZpQl4OVDJzpwfs0Oyt">
+      <div class="logo" data-page-node-id="UuZar7JJNJJPMIfhYzGXR6">
+        <span class="logo-mark" data-page-node-id="0cmgGkTfogS7zhAcS0n5Wr"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="Qnpc1zx4cfkXrzPxnQAuOS"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" data-page-node-id="af4rtgVMn3tLIRPpStSPiD"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" data-page-node-id="xLlWtX3dw6GxnBKSnBpTz9"/></svg></span>
+        <span class="logo-text" data-page-node-id="vWiUI6lf7wlMSCrVwpACet"><b data-page-node-id="iy3qcPb3oZLoONDDYEYYf2">课搭</b><span data-page-node-id="84A2PydaZ4DOvdlGFeNQLr">大学生成长社区</span></span>
       </div>
-      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+      <p data-page-node-id="GOUuge0GjsdMqEvEsn7lV0">不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
     </div>
-    <div class="foot-col"><h4>探索</h4><a href="01-home.html">资料馆</a><a href="02-explore.html">探索路线</a><a href="04-survey.html">定制路线</a></div>
-    <div class="foot-col"><h4>结果服务</h4><a href="10-pricing.html">阶段验收</a><a href="09-cohort.html">项目组</a><a href="10-pricing.html">陪跑</a></div>
-    <div class="foot-col"><h4>关于</h4><a href="#">平台理念</a><a href="#">校园认证</a><a href="#">联系我们</a></div>
+    <div class="foot-col" data-page-node-id="4CEJV4hX3TQzexuRuiqXJM"><h4 data-page-node-id="tMFelnkN6b076Y8YHZQ7cS">探索</h4><a href="01-home.html" data-page-node-id="DMJgL34igjEl9DdASUXMBq">资料馆</a><a href="02-explore.html" data-page-node-id="9Eua9HCaeP4T9ywmKvh261">探索路线</a><a href="04-survey.html" data-page-node-id="EZnm49mRCHMvVYkV1wr2LI">定制路线</a></div>
+    <div class="foot-col" data-page-node-id="2Ly5j96sIZeuUV5gWRtHdY"><h4 data-page-node-id="a4rpbudPmjYwIqkmPaYr3N">结果服务</h4><a href="10-pricing.html" data-page-node-id="9vn0FhnDVs4Oy1ptKblEkO">阶段验收</a><a href="09-cohort.html" data-page-node-id="DBzj9CXN1nEtfpYgb7gmFF">项目组</a><a href="10-pricing.html" data-page-node-id="ZYmBuQ8O4Fl7bFwohFypH3">陪跑</a></div>
+    <div class="foot-col" data-page-node-id="C3QLtFBkT0hYmLJc7CmqhE"><h4 data-page-node-id="03TsdyuQ5rBWM8AkxKHwA5">关于</h4><a href="#" data-page-node-id="hWioX0Um7RDoKnhzn1z8xk">平台理念</a><a href="#" data-page-node-id="iSQODEBRCVKkHkUqtc5ecV">校园认证</a><a href="#" data-page-node-id="QG2dJtwgIzGQqYocrMFuP5">联系我们</a></div>
   </div>
-  <div class="foot-bottom">© 2026 课搭 · 知识在校园里流动</div>
+  <div class="foot-bottom" data-page-node-id="cFqStQeClM0nn4ZCNkY1RH">© 2026 课搭 · 知识在校园里流动</div>
 </footer>
 
 <script src="assets/app.js"></script>
 <script>
-/* ── 手绘路径：连接所有节点 ── */
-const trail = document.getElementById('trail');
-const svg = document.getElementById('trailSvg');
-const pTrack = document.getElementById('pTrack');
-const pDone  = document.getElementById('pDone');
-const pDash  = document.getElementById('pDash');
-const NODE_X = window.innerWidth <= 720 ? 26 : 48;
+(function () {
+  'use strict';
 
-function drawTrail(animate) {
-  const nodes = [...document.querySelectorAll('.stop-node .rt-node')];
-  const base = trail.getBoundingClientRect();
-  const pts = nodes.map(n => {
-    const r = n.getBoundingClientRect();
-    return { x: NODE_X, y: r.top - base.top + r.height / 2 };
-  });
-  if (pts.length < 2) return;
-  // Catmull-Rom → 贝塞尔，做出柔和蜿蜒
-  let d = `M ${pts[0].x} ${pts[0].y}`;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
-    const bend = 16;
-    const c1x = p1.x + (i % 2 === 0 ? bend : -bend), c1y = p1.y + (p2.y - p1.y) * 0.35;
-    const c2x = p2.x + (i % 2 === 0 ? -bend : bend), c2y = p1.y + (p2.y - p1.y) * 0.65;
-    d += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${p2.x} ${p2.y}`;
+  var TOTAL = 41;
+  var MAIN_MODS = 3;
+  var MODS = 6;
+  var MOD_OF = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5];
+  var STOP_NUM = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 1, 2, 3, 1, 2, 3];
+  var DEFAULT_DONE = [0, 1];          /* 首次打开：前两站已走过，第 3 站等你 */
+  var TODAY = new Date().toISOString().slice(0, 10);
+
+  /* 模块名（图谱标签） */
+  var MOD_NAMES = ['计算机初识', '前后端初识', 'AI', '产品初识', '测试与运维初识', '算法工程师初识'];
+  var MOD_HOURS = [6.4, 6.8, 5.8, 2.7, 1.6, 1.6];
+
+  var stops    = [].slice.call(document.querySelectorAll('.stop'));
+  var bars     = [].slice.call(document.querySelectorAll('#tasteChart i'));
+  var progNum  = document.getElementById('progNum');
+  var progLabel = document.getElementById('progLabel');
+  var progNext = document.getElementById('progNext');
+  var ringFg   = document.getElementById('ringFg');
+  var resetBtn = document.getElementById('resetBtn');
+  var retryBtn = document.getElementById('retryBtn');
+  var tasteWait = document.getElementById('tasteWait');
+  var tasteWaitTitle = document.getElementById('tasteWaitTitle');
+  var tasteWaitText = document.getElementById('tasteWaitText');
+  var verdictBox = document.getElementById('verdictBox');
+  var verdictText = document.getElementById('verdictText');
+
+  var done = [];
+  var scores = {};
+
+  /* ────────────── 状态读写 ────────────── */
+  function mainDone() {
+    var c = 0;
+    for (var i = 0; i < TOTAL; i++) if (MOD_OF[i] < MAIN_MODS && done.indexOf(i) === -1) c++;
+    return c === 0;
   }
-  svg.setAttribute('viewBox', `0 0 ${NODE_X * 2} ${base.height}`);
-  pTrack.setAttribute('d', d);
-  pDash.setAttribute('d', d);
+  function activeIndex() {
+    for (var i = 0; i < TOTAL; i++) {
+      if (done.indexOf(i) !== -1) continue;
+      if (MOD_OF[i] >= MAIN_MODS && !mainDone()) continue;   // 选做要等主干
+      return i;
+    }
+    return -1;
+  }
+  function stateOf(i) {
+    if (done.indexOf(i) !== -1) return 'done';
+    if (MOD_OF[i] >= MAIN_MODS && !mainDone()) return 'optlocked';
+    return i === activeIndex() ? 'active' : 'locked';
+  }
+  function persist() {
+    var p = KH.get('progress', {}) || {};
+    p.done = done.slice().sort(function (a, b) { return a - b; });
+    p.exploreAt = new Date().toISOString();
+    p.exploreV = 2;
+    KH.set('progress', p);
+    var t = {};
+    Object.keys(scores).forEach(function (k) { if (scores[k]) t[k] = scores[k]; });
+    KH.set('taste', t);
+  }
+  function restore() {
+    var p = KH.get('progress', null);
+    var t = KH.get('taste', null);
+    var params = new URLSearchParams(window.location.search);
+    var hard = params.has('reset');
+    /* 版本号：8 站旧版的数据和 41 站版对不上，旧数据直接作废 */
+    if (!hard && p && p.exploreV === 2 && Array.isArray(p.done)) {
+      done = p.done.filter(function (n) { return typeof n === 'number' && n >= 0 && n < TOTAL; });
+    } else {
+      done = hard ? [] : DEFAULT_DONE.slice();
+    }
+    if (!hard && t && typeof t === 'object') {
+      Object.keys(t).forEach(function (k) {
+        var v = Number(t[k]);
+        if (v >= 1 && v <= 3) scores[Number(k)] = v;
+      });
+    }
+    if (hard) { p = p || {}; p.done = []; KH.set('progress', p); KH.set('taste', {}); }
+  }
 
-  // 已走过的部分：连到当前站
-  const doneCount = document.querySelectorAll('.stop.is-done').length;
-  const currentIdx = doneCount; // 当前站索引
-  const cutY = pts[Math.min(currentIdx, pts.length - 1)].y;
-  pDone.style.strokeDasharray = '2000';
-  pDone.setAttribute('d', d);
-  const total = pDone.getTotalLength();
-  const ratio = (cutY - pts[0].y) / (pts[pts.length - 1].y - pts[0].y);
-  pDone.style.strokeDasharray = total;
-  pDone.style.strokeDashoffset = animate ? total : total * (1 - Math.max(0.06, ratio));
-  if (animate) requestAnimationFrame(() => { pDone.style.strokeDashoffset = total * (1 - Math.max(0.06, ratio)); });
-}
-drawTrail(false);
-window.addEventListener('resize', () => drawTrail(false));
+  /* ────────────── 渲染 ────────────── */
+  function setFeel(host, on) {
+    host.querySelectorAll('.feel-btn').forEach(function (b) { b.disabled = !on; });
+    host.classList.toggle('is-off', !on);
+    var hint = host.querySelector('.feel-hint');
+    if (hint) hint.hidden = on;
+  }
+  function renderStation(i) {
+    var stop = stops[i];
+    var st = stateOf(i);
+    var node = stop.querySelector('.rt-node');
+    var card = stop.querySelector('.stop-card');
+    var tag = stop.querySelector('.sc-tag');
+    var btn = stop.querySelector('.checkin');
+    var link = stop.querySelector('.act-link');
+    var note = stop.querySelector('.act-note');
+    var feel = stop.querySelector('.feel');
+    var name = stop.dataset.name, ico = stop.dataset.ico;
 
-/* ── 手感评分 ── */
-document.querySelectorAll('.feel').forEach(f => {
-  f.querySelectorAll('.feel-btn').forEach(b => {
-    b.addEventListener('click', () => {
-      f.querySelectorAll('.feel-btn').forEach(x => x.classList.remove('on'));
-      b.classList.add('on');
-      b.classList.remove('wiggle'); void b.offsetWidth; b.classList.add('wiggle');
+    stop.classList.toggle('is-done', st === 'done');
+    stop.classList.toggle('is-active', st === 'active');
+    stop.classList.toggle('is-locked', st === 'locked' || st === 'optlocked');
+
+    if (st === 'done') {
+      node.className = 'rt-node done';
+      node.innerHTML = ico + '<span class="rt-badge">✓</span>';
+      card.style.borderColor = '';
+      tag.className = 'sc-tag is-done';
+      tag.textContent = '✓ 已走过';
+      btn.className = 'btn checkin is-done-btn';
+      btn.textContent = '✓ 已记录 · ' + TODAY;
+      btn.disabled = true;
+      link.hidden = false;
+      note.hidden = false;
+      note.textContent = '这份资料已学完';
+      setFeel(feel, true);
+    } else if (st === 'active') {
+      node.className = 'rt-node active rt-halo';
+      node.innerHTML = ico;
+      card.style.borderColor = 'var(--pri)';
+      tag.className = 'sc-tag is-here';
+      tag.textContent = '你在这里';
+      btn.className = 'btn btn-primary checkin';
+      btn.textContent = '✓ 完成这一站';
+      btn.disabled = false;
+      link.hidden = true;
+      note.hidden = true;
+      setFeel(feel, false);
+    } else {
+      node.className = 'rt-node';
+      node.innerHTML = ico;
+      card.style.borderColor = '';
+      tag.className = 'sc-tag is-lock';
+      tag.textContent = st === 'optlocked' ? '走完主干解锁' : '走完前一站解锁';
+      btn.className = 'btn btn-outline checkin';
+      btn.textContent = tag.textContent;
+      btn.disabled = true;
+      link.hidden = true;
+      note.hidden = true;
+      setFeel(feel, false);
+    }
+  }
+
+  function modScore(mi) {
+    var sum = 0, n = 0;
+    for (var i = 0; i < TOTAL; i++) {
+      if (MOD_OF[i] !== mi) continue;
+      var v = scores[i];
+      if (v) { sum += v; n++; }
+    }
+    return n ? sum / n : 0;
+  }
+  function renderMods() {
+    var mn = mainDone();
+    for (var mi = 0; mi < MODS; mi++) {
+      var doneInMod = 0;
+      for (var i = 0; i < TOTAL; i++) if (MOD_OF[i] === mi && done.indexOf(i) !== -1) doneInMod++;
+      var num = document.getElementById('modNum' + mi);
+      var bar = document.getElementById('modBar' + mi);
+      var feel = document.getElementById('modFeel' + mi);
+      var lock = document.getElementById('modLock' + mi);
+      var cnt = 0;
+      for (var j = 0; j < TOTAL; j++) if (MOD_OF[j] === mi) cnt++;
+      if (num) num.textContent = doneInMod;
+      if (bar) bar.style.width = (doneInMod / cnt * 100) + '%';
+      if (mi >= MAIN_MODS && !mn) {
+        if (lock) { lock.hidden = false; lock.innerHTML = '🔒 这块等主干走完再开。别急，先把三块主干摸一遍。'; }
+      } else if (lock) {
+        lock.hidden = true;
+      }
+      var ms = modScore(mi);
+      if (feel && ms) {
+        feel.hidden = false;
+        var txt = ms >= 2.6 ? '这一块你上头了' : ms >= 2 ? '这一块还行' : '这一块不太对味';
+        feel.innerHTML = '这一块的手感：<b>' + txt + '</b>';
+      } else if (feel) feel.hidden = true;
+    }
+  }
+
+  function renderTaste() {
+    var anyScore = Object.keys(scores).length > 0;
+    bars.forEach(function (b, mi) {
+      var ms = modScore(mi);
+      b.className = ms >= 2.6 ? 'v3' : ms >= 2 ? 'v2' : ms >= 1 ? 'v1' : '';
+    });
+    if (!anyScore) {
+      tasteWait.hidden = false;
+      tasteWaitTitle.textContent = '还没打分';
+      tasteWaitText.textContent = '每走完一站，在下面点一个表情，图谱就会长起来。';
+    }
+  }
+
+  function verdict() {
+    var mn = mainDone();
+    var scorable = 0;
+    for (var mi = 0; mi < MODS; mi++) {
+      if (mi >= MAIN_MODS && !mn) continue;
+      scorable++;
+    }
+    var mainScored = true;
+    for (var mi = 0; mi < MAIN_MODS; mi++) {
+      if (!modScore(mi)) { mainScored = false; break; }
+    }
+    if (!mainScored) {
+      var left = 0;
+      for (var i = 0; i < TOTAL; i++) {
+        if (MOD_OF[i] < MAIN_MODS && !scores[i]) left++;
+      }
+      if (left) {
+        tasteWait.hidden = false;
+        tasteWaitTitle.textContent = '主干还有 ' + left + ' 站没打分';
+        tasteWaitText.textContent = '把主干每一站的手感都点一下，图谱才完整，结论才靠谱。';
+        verdictBox.hidden = true;
+        return;
+      }
+    }
+    tasteWait.hidden = true;
+    var order = [];
+    for (var mi = 0; mi < MODS; mi++) {
+      if (mi >= MAIN_MODS && !mn) continue;
+      order.push({ mi: mi, s: modScore(mi) });
+    }
+    order = order.filter(function (o) { return o.s > 0; }).sort(function (a, b) { return b.s - a.s; });
+    if (!order.length) return;
+    var top = order[0], second = order.length > 1 ? order[1] : null;
+    var T = top.s >= 2.6 ? '上头了' : top.s >= 2 ? '还行' : '没太多感觉';
+    var line = '「' + MOD_NAMES[top.mi] + '」这一块，你的手感是「' + T + '」';
+    if (second && second.s > 0 && Math.abs(top.s - second.s) < 0.6) {
+      line += '，「' + MOD_NAMES[second.mi] + '」也差不太多。';
+    } else if (second && second.s > 0) {
+      line += '，比「' + MOD_NAMES[second.mi] + '」高出一截。';
+    } else {
+      line += '。';
+    }
+    var go = '按这个方向去定制一条你的路线，先走一个月，再回来看看手感变没变。';
+    verdictText.textContent = line + ' ' + go;
+    verdictBox.hidden = false;
+  }
+
+  function renderAll() {
+    for (var i = 0; i < TOTAL; i++) renderStation(i);
+    renderMods();
+    renderTaste();
+    verdict();
+    var d = done.length;
+    progNum.textContent = d;
+    progLabel.textContent = d === 0 ? '还没开始' : '已走过 ' + d + ' 站';
+    var ai = activeIndex();
+    progNext.textContent = ai >= 0 ? ('下一站：' + stops[ai].dataset.ico + ' ' + stops[ai].dataset.name) : '全部走完，去看体检结论';
+    var ratio = TOTAL ? (d / TOTAL) : 0;
+    ringFg.style.strokeDashoffset = 314 * (1 - ratio);
+    var undo = document.getElementById('undoBar');
+    if (undo) {
+      var ubtn = document.getElementById('undoBtn');
+      if (ubtn) ubtn.disabled = done.length === 0;
+    }
+  }
+
+  /* ────────────── 事件 ────────────── */
+  stops.forEach(function (stop, i) {
+    var btn = stop.querySelector('.checkin');
+    btn.addEventListener('click', function () {
+      if (stateOf(i) !== 'active') return;
+      done.push(i);
+      persist();
+      renderAll();
+    });
+    stop.querySelectorAll('.feel-btn').forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (done.indexOf(i) === -1) return;
+        scores[i] = Number(b.dataset.v);
+        stop.querySelectorAll('.feel-btn').forEach(function (x) { x.classList.toggle('on', x === b); });
+        persist();
+        renderMods();
+        renderTaste();
+        verdict();
+      });
     });
   });
-});
+  if (resetBtn) resetBtn.addEventListener('click', function () {
+    done = []; scores = {}; persist(); renderAll();
+  });
+  var undoBtn = document.getElementById('undoBtn');
+  if (undoBtn) undoBtn.addEventListener('click', function () {
+    if (!done.length) return;
+    var last = done.pop();          // 撤销最后一次打卡
+    delete scores[last];            // 连这一站的手感一起撤掉
+    persist();
+    renderAll();
+  });
+  if (retryBtn) retryBtn.addEventListener('click', function () {
+    done = []; scores = {}; persist(); renderAll();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
-/* ── 完成当前站：印章 → 路径生长 → 云雾散开 → 解锁下一站 ── */
-document.getElementById('btnFinish').addEventListener('click', function () {
-  const btn = this;
-  btn.disabled = true;
-  btn.textContent = '正在记录…';
+  /* 已打分的高亮还原 */
+  restore();
+  Object.keys(scores).forEach(function (k) {
+    var stop = stops[Number(k)];
+    if (!stop) return;
+    stop.querySelectorAll('.feel-btn').forEach(function (b) {
+      if (Number(b.dataset.v) === scores[k]) b.classList.add('on');
+    });
+  });
+  renderAll();
+})();
 
-  const activeStop = document.getElementById('stopActive');
-  const node = activeStop.querySelector('.rt-node');
-
-  // ① 印章落下
-  const stamp = document.createElement('div');
-  stamp.className = 'stamp slam';
-  stamp.innerHTML = 'STOP 03<br/>已走过';
-  stamp.style.cssText += 'position:absolute;right:22px;top:var(--sy,70px);z-index:5';
-  activeStop.querySelector('.stop-card').appendChild(stamp);
-  const ring = document.createElement('div');
-  ring.className = 'ink-ring';
-  ring.style.cssText = 'width:74px;height:74px;right:22px;top:70px;position:absolute;z-index:4';
-  activeStop.querySelector('.stop-card').appendChild(ring);
-
-  // ② 节点变已完成 + 一句轻声反馈
-  setTimeout(() => {
-    node.className = 'rt-node done pop-in';
-    node.innerHTML = '🌿<span class="rt-badge">✓</span>';
-    activeStop.classList.add('is-done');
-    activeStop.querySelector('.sc-lock').outerHTML = '<span class="sc-done">✓ 已走过</span>';
-    btn.outerHTML = '<span class="feel-done">✓ 已记录 · 2026-09-14</span>';
-
-    // 手感评分出现
-    const feel = document.createElement('div');
-    feel.className = 'feel rise';
-    feel.innerHTML = '<span class="q">这一站的手感？</span>' +
-      '<button class="feel-btn">🔥 上头了</button><button class="feel-btn">🙂 还行</button><button class="feel-btn">🥱 没感觉</button>';
-    activeStop.querySelector('.stop-card').appendChild(feel);
-    feel.querySelectorAll('.feel-btn').forEach(b => b.addEventListener('click', () => {
-      feel.querySelectorAll('.feel-btn').forEach(x => x.classList.remove('on'));
-      b.classList.add('on'); b.classList.remove('wiggle'); void b.offsetWidth; b.classList.add('wiggle');
-    }));
-
-    // ③ 路径生长
-    drawTrail(true);
-
-    // ④ 下一站解锁 + 云雾散开
-    const next = document.querySelector('.stop[data-i="3"]');
-    setTimeout(() => {
-      next.classList.remove('is-locked');
-      const card = next.querySelector('.stop-card');
-      card.style.borderColor = 'var(--pri)';
-      card.querySelector('.sc-lock').outerHTML = '<span class="sc-lock" style="background:var(--pri-50);color:var(--pri-700)">你在这里</span>';
-      const n2 = next.querySelector('.rt-node');
-      n2.className = 'rt-node active rt-halo pressable pop-in';
-      const mist = next.querySelector('.rt-mist');
-      mist.classList.add('gone');
-      // 顶部进度
-      document.getElementById('progNum').textContent = '3';
-      document.getElementById('ringFg').style.strokeDashoffset = 314 * (1 - 3 / 8);
-      document.querySelectorAll('.pp-slot')[2].classList.add('on');
-      document.querySelector('.ex-prog div[style*="font-weight"]').textContent = '已走过 3 站';
-      document.querySelector('.toon-card.ex-prog div:nth-child(3)').textContent = '下一站：前端 · 让东西看得见';
-      next.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 520);
-  }, 260);
-});
 </script>
 </body>
 </html>

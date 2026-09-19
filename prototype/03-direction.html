@@ -49,6 +49,15 @@
 
   /* ── 对比表 ── */
   .tbl-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-xl); margin-top: 4px; }
+  .hs-wrap { position: relative; }
+  .hs-fade { position: absolute; top: 0; bottom: 0; width: 34px; pointer-events: none; z-index: 2;
+    transition: opacity var(--t-base) var(--ease-out); }
+  .hs-fade.left { left: 0; background: linear-gradient(90deg, #fff, rgba(255,255,255,0)); }
+  .hs-fade.right { right: 0; background: linear-gradient(270deg, #fff, rgba(255,255,255,0)); }
+  .hs-wrap.at-start .hs-fade.left { opacity: 0; }
+  .hs-wrap.at-end .hs-fade.right { opacity: 0; }
+  .hscroll-hint { font-size: 11.5px; color: var(--ink-faint); font-weight: 700; margin-top: 7px; transition: opacity var(--t-base); }
+  .hscroll-hint.hide { opacity: 0; }
   .cmp { width: 100%; min-width: 1000px; border-collapse: collapse; font-size: 12.5px; }
   .cmp th {
     text-align: left; padding: 12px 14px; font-size: 11.5px; font-weight: 800; letter-spacing: 0.04em;
@@ -84,7 +93,9 @@
     border: 1.5px solid var(--line); background: #fff; color: var(--ink);
     transition: 0.16s var(--ease-out);
   }
+  .sk-chip { cursor: pointer; }
   .sk-chip:hover { border-color: var(--pri); transform: translateY(-2px); box-shadow: var(--sticker); }
+  .sk-chip.tip-open { border-color: var(--pri); box-shadow: var(--sticker); }
   .sk-chip .lv { font-size: 10px; font-weight: 800; padding: 1.5px 7px; border-radius: 999px; }
   .lv-must { background: var(--pri); color: #fff; }
   .lv-plus { background: var(--mint-50); color: var(--mint); }
@@ -141,8 +152,12 @@
   .faq-q .arw { margin-left: auto; flex: none; color: var(--ink-faint); font-size: 15px; transition: transform 0.2s var(--ease-out); }
   .faq-item.open .faq-q { color: var(--pri-600); }
   .faq-item.open .faq-q .arw { transform: rotate(90deg); color: var(--pri); }
-  .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s var(--ease-out), opacity 0.24s; opacity: 0; }
-  .faq-item.open .faq-a { max-height: 340px; opacity: 1; }
+  .faq-a {
+    display: grid; grid-template-rows: 0fr; overflow: hidden; opacity: 0;
+    transition: grid-template-rows var(--t-base) var(--ease-out), opacity var(--t-base) var(--ease-out);
+  }
+  .faq-item.open .faq-a { grid-template-rows: 1fr; opacity: 1; }
+  .faq-a > .faq-a-in { min-height: 0; overflow: hidden; }
   .faq-a-in { padding: 0 2px 18px 40px; font-size: 13.5px; color: var(--ink-2); line-height: 1.85; }
   .faq-a-in b { color: var(--ink); }
 
@@ -212,7 +227,7 @@
         <div class="bm-kicker">Direction K-04 · 方向指南</div>
         <h1>不训练模型，<em>把模型用出真东西</em></h1>
         <p class="bm-tagline">
-          这是课搭「认真科普」的样板页——一个方向一篇，说清楚它每天到底在干什么、门槛在哪、要补什么。
+          这是课搭「认真科普」的样板页，一个方向一篇，说清楚它每天到底在干什么、门槛在哪、要补什么。
           这篇讲 AI 应用开发：一个被名字吓退、实际上一门语言底子就能上手的岗位。
         </p>
         <div class="dir-stats">
@@ -250,7 +265,7 @@
         <div class="blog-sec-sub">不用行话讲。下面是深圳一家做智能客服的公司里，一位 AI 应用开发实习生的普通一天。</div>
 
         <p class="lead-p">
-          一句话：<strong>你不训练模型，你负责模型外面那一整圈东西</strong>——喂给它什么上下文、允许它调哪些工具、它答错了怎么兜住、回答一次花多少钱、怎么证明它真的变好了。
+          一句话：<strong>你不训练模型，你负责模型外面那一整圈东西</strong>，喂给它什么上下文、允许它调哪些工具、它答错了怎么兜住、回答一次花多少钱、怎么证明它真的变好了。
           模型 API 代码里通常只占一行，剩下的全是让它稳定、便宜、可衡量地跑起来的部分。
         </p>
 
@@ -276,7 +291,7 @@
             <div class="day-rail"><i></i></div>
             <div class="toon-card day-card">
               <b>给检索库调参数</b>
-              <p>chunk 从 800 字切成 500 字带 80 字重叠，重排模型从小换到大，命中率又涨 6 个点。参数不是拍脑袋定的，是做了三组对照实验选出来的——这三组数据最后写进了验收报告。</p>
+              <p>chunk 从 800 字切成 500 字带 80 字重叠，重排模型从小换到大，命中率又涨 6 个点。参数不是拍脑袋定的，是做了三组对照实验选出来的，这三组数据最后写进了验收报告。</p>
             </div>
           </div>
           <div class="day-item">
@@ -284,7 +299,7 @@
             <div class="day-rail"><i></i></div>
             <div class="toon-card day-card">
               <b>写一个工具函数，让模型能用</b>
-              <p>产品说「用户问天气，应该直接去查」。你定义一个查天气的工具，把超时、返回空、城市名识别不出来这三种情况都处理掉——工具出错时模型该怎么说话，也是你设计的。</p>
+              <p>产品说「用户问天气，应该直接去查」。你定义一个查天气的工具，把超时、返回空、城市名识别不出来这三种情况都处理掉，工具出错时模型该怎么说话，也是你设计的。</p>
             </div>
           </div>
           <div class="day-item">
@@ -292,7 +307,7 @@
             <div class="day-rail"><i></i></div>
             <div class="toon-card day-card">
               <b>看成本和延迟</b>
-              <p>昨天调用 4.2 万次，花了 ¥380，P95 延迟 3.4 秒。缓存命中率只有 12%——你把高频问题的答案缓存起来，第二天成本掉到 ¥240。省钱这件事，在这行是能被量化的功劳。</p>
+              <p>昨天调用 4.2 万次，花了 ¥380，P95 延迟 3.4 秒。缓存命中率只有 12%，你把高频问题的答案缓存起来，第二天成本掉到 ¥240。省钱这件事，在这行是能被量化的功劳。</p>
             </div>
           </div>
           <div class="day-item">
@@ -308,7 +323,7 @@
             <div class="day-rail"><i></i></div>
             <div class="toon-card day-card">
               <b>写一句结论进周报</b>
-              <p>「检索质量是当前瓶颈，下版本引入混合检索。」——不写「完成了优化工作」这种话，写清楚判断和下一步。</p>
+              <p>「检索质量是当前瓶颈，下版本引入混合检索。」，不写「完成了优化工作」这种话，写清楚判断和下一步。</p>
             </div>
           </div>
         </div>
@@ -324,7 +339,7 @@
         <div class="blog-sec-head"><span class="sec-no">02</span><h2>它和隔壁几个方向的区别</h2></div>
         <div class="blog-sec-sub">这四个方向经常被混着叫「搞计算机的」，但一天的内容完全不同。表格可以左右滑。</div>
 
-        <div class="tbl-scroll">
+        <div class="hs-wrap" id="cmpWrap"><div class="tbl-scroll" id="cmpScroll">
           <table class="cmp">
             <thead>
               <tr>
@@ -371,7 +386,7 @@
               </tr>
             </tbody>
           </table>
-        </div>
+        </div><span class="hs-fade left"></span><span class="hs-fade right"></span></div><p class="hscroll-hint" id="cmpHint">← 左右滑动看完整对比 →</p>
 
         <div class="keynote" style="margin-top:18px">
           <b>这张表里最该看的是两列：</b>「门槛」决定你多久能有第一份实习，「什么性格的人干得下去」决定你能干几年。
@@ -389,7 +404,7 @@
           <div class="gap-row">
             <div class="gap-side gap-think"><span class="lbl">大家以为</span>做 AI 必须会训练模型，不然就是「调 API 的搬运工」。</div>
             <div class="gap-mid">→</div>
-            <div class="gap-side gap-real"><span class="lbl">实际上</span><b>80% 的岗位只要求你会调用和调优。</b>真正训模型的岗位集中在少数大厂和模型公司，剩下的全在做应用——把模型接进真实的业务里。这部分不需要 GPU，也不需要推导公式，需要的是工程判断力。</div>
+            <div class="gap-side gap-real"><span class="lbl">实际上</span><b>80% 的岗位只要求你会调用和调优。</b>真正训模型的岗位集中在少数大厂和模型公司，剩下的全在做应用，把模型接进真实的业务里。这部分不需要 GPU，也不需要推导公式，需要的是工程判断力。</div>
           </div>
           <div class="gap-row">
             <div class="gap-side gap-think"><span class="lbl">大家以为</span>数学不好做不了 AI，得先补线代概率。</div>
@@ -404,7 +419,7 @@
           <div class="gap-row">
             <div class="gap-side gap-think"><span class="lbl">大家以为</span>要读很多论文，英文不好直接劝退。</div>
             <div class="gap-mid">→</div>
-            <div class="gap-side gap-real"><span class="lbl">实际上</span><b>能读懂官方文档 + 会搜，就够用了。</b>90% 的日常工作靠文档、GitHub issue 和跑实验解决。真要读论文的场景是「线上效果卡住了」——那时你是带着问题去读的，和硬啃完全是两件事。</div>
+            <div class="gap-side gap-real"><span class="lbl">实际上</span><b>能读懂官方文档 + 会搜，就够用了。</b>90% 的日常工作靠文档、GitHub issue 和跑实验解决。真要读论文的场景是「线上效果卡住了」，那时你是带着问题去读的，和硬啃完全是两件事。</div>
           </div>
           <div class="gap-row">
             <div class="gap-side gap-think"><span class="lbl">大家以为</span>不会 Python 就进不来，得先把 Python 学扎实。</div>
@@ -424,7 +439,7 @@
           <div class="sk-row">
             <span class="sk-chip" data-tip="AI 生态的主力语言，几乎所有相关库都优先支持 Python。有别的语言底子的人，语法一天能看完。"><span>Python 3.11+</span><span class="lv lv-must">必须</span></span>
             <span class="sk-chip" data-tip="不是让你背八股。业务数据、日志、评测集，全都存在表里，取不出来就没法做分析。面试也一定会问。"><span>SQL</span><span class="lv lv-must">必须</span></span>
-            <span class="sk-chip" data-tip="写前端界面时够用就行——你要会的是把接口调通、把结果展示出来，不是做设计。"><span>JavaScript</span><span class="lv lv-know">了解即可</span></span>
+            <span class="sk-chip" data-tip="写前端界面时够用就行，你要会的是把接口调通、把结果展示出来，不是做设计。"><span>JavaScript</span><span class="lv lv-know">了解即可</span></span>
           </div>
         </div>
 
@@ -433,7 +448,7 @@
           <div class="sk-row">
             <span class="sk-chip" data-tip="国内外的模型服务大多兼容这套接口。学一次，换供应商只改 base_url 和模型名。"><span>OpenAI 兼容 API</span><span class="lv lv-must">必须</span></span>
             <span class="sk-chip" data-tip="把模型能力包成一个能被人调用的接口，最小的工程装备。Pydantic 用来约束模型的输出格式。"><span>FastAPI / Pydantic</span><span class="lv lv-must">必须</span></span>
-            <span class="sk-chip" data-tip="实习和课设场景用 pgvector 就够了，别一上来就上集群——面试里「按数据量选型」本身就是加分回答。"><span>向量库 pgvector / Qdrant</span><span class="lv lv-must">必须</span></span>
+            <span class="sk-chip" data-tip="实习和课设场景用 pgvector 就够了，别一上来就上集群，面试里「按数据量选型」本身就是加分回答。"><span>向量库 pgvector / Qdrant</span><span class="lv lv-must">必须</span></span>
             <span class="sk-chip" data-tip="有状态编排，多工具 Agent 目前的主流选择。"><span>LangGraph</span><span class="lv lv-plus">加分</span></span>
             <span class="sk-chip" data-tip="上手快，但别只会拖框架。面试官更想听你不看框架怎么讲清 RAG 的每一步。"><span>LangChain / LlamaIndex</span><span class="lv lv-know">了解即可</span></span>
             <span class="sk-chip" data-tip="让模型按你给的 schema 输出 JSON，字段错了自动重试。这是所有下游功能的地基。"><span>结构化输出</span><span class="lv lv-must">必须</span></span>
@@ -466,7 +481,7 @@
       <!-- ══════════ ⑤ 典型路线骨架 ══════════ -->
       <section class="blog-sec" id="s5">
         <div class="blog-sec-head"><span class="sec-no">05</span><h2>一条典型路线长什么样</h2></div>
-        <div class="blog-sec-sub">这是这个方向上一条被走通过的路，4 位已上岸的学长走过、验证过 3 轮。<b>你自己那条会按你的情况重排</b>——起点、节奏、主项目都不一样。</div>
+        <div class="blog-sec-sub">这是这个方向上一条被走通过的路，4 位已上岸的学长走过、验证过 3 轮。<b>你自己那条会按你的情况重排</b>，起点、节奏、主项目都不一样。</div>
 
         <div class="rt-line">
           <div class="rt-side"><span class="rt-node tmpl">1</span></div>
@@ -482,7 +497,7 @@
           <div class="toon-card rt-card">
             <div class="rh"><span class="stage-k">STAGE 02</span><span class="wk">2 周</span></div>
             <h4>能可靠地让模型输出你要的结构化结果</h4>
-            <div class="out"><span class="k">产出</span><span>「周报生成器」：一堆打卡记录进去，结构稳定的周报出来。模型输出必须是 JSON，字段错了自动重试——这是所有下游功能的地基。</span></div>
+            <div class="out"><span class="k">产出</span><span>「周报生成器」：一堆打卡记录进去，结构稳定的周报出来。模型输出必须是 JSON，字段错了自动重试，这是所有下游功能的地基。</span></div>
           </div>
         </div>
 
@@ -500,7 +515,7 @@
           <div class="toon-card rt-card">
             <div class="rh"><span class="stage-k">STAGE 04</span><span class="wk">3 周</span></div>
             <h4>能设计有工具、有记忆、会自我纠错的 Agent</h4>
-            <div class="out"><span class="k">产出</span><span>多工具任务 Agent（例：自动排查 CI 失败并给出修复建议）。工具出错怎么办、上下文太长怎么办、循环停不下来怎么办——这三个问题答不上来就不算做完。</span></div>
+            <div class="out"><span class="k">产出</span><span>多工具任务 Agent（例：自动排查 CI 失败并给出修复建议）。工具出错怎么办、上下文太长怎么办、循环停不下来怎么办，这三个问题答不上来就不算做完。</span></div>
           </div>
         </div>
 
@@ -524,7 +539,7 @@
 
         <div class="keynote">
           <b>六个阶段总共约 14 周（每天 2.5 小时）。</b>想快可以快：如果你已经会 Python、写过后端，前两个阶段可以申请免修直接跳。
-          每周能投入多少、哪个阶段该展开，问卷里说清楚，路线会按你的真实情况排——<b>宁可诚实报 1 小时，不要冲动报 4 小时。</b>
+          每周能投入多少、哪个阶段该展开，问卷里说清楚，路线会按你的真实情况排，<b>宁可诚实报 1 小时，不要冲动报 4 小时。</b>
         </div>
 
         <a class="btn btn-primary btn-lg" href="04-survey.html">定制我的专属路线 →</a>
@@ -541,7 +556,7 @@
           <div>
             <div class="case-top"><b>陈同学</b><span class="who">大三上 · 计算机学院 · 2026 年 3 月起实习</span><span class="auth">✓ 案例经本人授权</span></div>
             <div class="case-row"><span class="k">起点</span><span>大二学过 Java 和数据结构，没碰过 Python，绩点 3.2，不算突出。</span></div>
-            <div class="case-row"><span class="k">做了什么</span><span>走完 RAG 和 Agent 两个阶段，做了「选课助手」和「CI 失败排查 Agent」。第二个项目在项目组答辩上被学长追着问了 40 分钟，回去把错误处理重写了三遍——<b>他说那是他进步最快的一周</b>。</span></div>
+            <div class="case-row"><span class="k">做了什么</span><span>走完 RAG 和 Agent 两个阶段，做了「选课助手」和「CI 失败排查 Agent」。第二个项目在项目组答辩上被学长追着问了 40 分钟，回去把错误处理重写了三遍，<b>他说那是他进步最快的一周</b>。</span></div>
             <div class="case-row"><span class="k">现在</span><span>深圳一家 AI 创业公司做 AI 应用开发实习，日薪 350，目前在做 Agent 平台的工具接入层。</span></div>
           </div>
         </div>
@@ -568,7 +583,7 @@
 
         <div class="keynote">
           <b>注意这三个人有一个共同点：</b>他们的起点都不算好，决定结果的不是基础，是「手里有没有两个能打开链接、能被追问的项目」。
-          <b>课搭不承诺就业。</b>能承诺的是——这条路线上的每个阶段都有可交付的产出，走完你不会只有一句「我学过」。
+          <b>课搭不承诺就业。</b>能承诺的是，这条路线上的每个阶段都有可交付的产出，走完你不会只有一句「我学过」。
         </div>
       </section>
 
@@ -582,7 +597,7 @@
             <button class="faq-q"><span class="qmark">问</span>我完全没写过 Python，能直接开始吗？<span class="arw">›</span></button>
             <div class="faq-a"><div class="faq-a-in">
               可以，但建议先花一周补语法。路线第一阶段就是为跨语言的人设计的：<b>你有任何一门语言的基础，语法一天能看完</b>，剩下的环境管理、类型注解、工程习惯会被拆成任务带着你做。
-              唯一不适用的情况是：你连一门语言都没写过——那先走探索路线，别跳。
+              唯一不适用的情况是：你连一门语言都没写过，那先走探索路线，别跳。
             </div></div>
           </div>
 
@@ -598,7 +613,7 @@
             <button class="faq-q"><span class="qmark">问</span>数学和算法基础差，面试会被卡住吗？<span class="arw">›</span></button>
             <div class="faq-a"><div class="faq-a-in">
               应用岗的面试考的是系统设计：为什么这么切分、检索不准怎么办、成本怎么控、你怎么证明它变好了。这些都是工程题。
-              唯一会碰到数学的地方，是让你解释「余弦相似度是干嘛的」——大二水平够用，背不下来也没关系，讲清楚它在比什么就行。
+              唯一会碰到数学的地方，是让你解释「余弦相似度是干嘛的」，大二水平够用，背不下来也没关系，讲清楚它在比什么就行。
             </div></div>
           </div>
 
@@ -606,7 +621,7 @@
             <button class="faq-q"><span class="qmark">问</span>大二开始会不会太早？大三才开始来得及吗？<span class="arw">›</span></button>
             <div class="faq-a"><div class="faq-a-in">
               <b>大二是刚好的时间点</b>：一个学期打基础，暑假做出第一个能拿出手的项目，大三上投暑期实习正好。
-              大三上也不晚，但要把节奏压到每天 3 小时以上——因为暑期实习的投递窗口在大三下开学就开了，晚一个月就少一批岗位。
+              大三上也不晚，但要把节奏压到每天 3 小时以上，因为暑期实习的投递窗口在大三下开学就开了，晚一个月就少一批岗位。
             </div></div>
           </div>
 
@@ -615,7 +630,7 @@
             <div class="faq-a"><div class="faq-a-in">
               <b>不能保证，也不会保证。</b>任何承诺「包就业」的，都别信。
               能保证的是：路线里每个阶段都有可验收的产出，走完你手里有两个能打开链接、能被追问 5 层的项目，以及一套「遇到新东西能自己搞定」的方法。
-              剩下的取决于你投了多少家、面了多少场——这部分没有捷径，但有人可以问会快很多。
+              剩下的取决于你投了多少家、面了多少场，这部分没有捷径，但有人可以问会快很多。
             </div></div>
           </div>
         </div>
@@ -665,7 +680,7 @@
         <span style="font-size:30px">🧭</span>
         <div>
           <h3>看完了，还是不确定自己适不适合？</h3>
-          <p>那说明你需要的是手感，不是更多的文章。走一遍探索路线：8 个晚上，从黑窗口到 AI 各摸一遍，每站都做出一个能拿给室友看的小东西。用脚投票选出来的方向，才不容易后悔。</p>
+          <p>那说明你需要的是手感，不是更多的文章。走一遍探索路线：三块主干，把计算机摸一遍，每站都做出一个能拿给室友看的小东西。用脚投票选出来的方向，才不容易后悔。</p>
         </div>
         <a class="btn btn-outline" href="02-explore.html">先走探索路线 →</a>
       </div>
@@ -747,12 +762,64 @@
 <script src="assets/app.js"></script>
 <script>
   // 顶部锚点 chips
-  document.querySelectorAll('.blog-cats .bc-chip').forEach(function (c) {
+  var navChips = [].slice.call(document.querySelectorAll('.blog-cats .bc-chip'));
+  navChips.forEach(function (c) {
     c.addEventListener('click', function () {
-      document.querySelectorAll('.blog-cats .bc-chip').forEach(function (x) { x.classList.remove('on'); });
+      navChips.forEach(function (x) { x.classList.remove('on'); });
       c.classList.add('on');
     });
   });
+
+  /* 滚动时 chip 自己跟上：滚到第 5 节，chip 就不该还停在第 1 节 */
+  var secs = [].slice.call(document.querySelectorAll('.blog-main .blog-sec[id]'));
+  if ('IntersectionObserver' in window && secs.length) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        navChips.forEach(function (c) {
+          c.classList.toggle('on', c.getAttribute('href') === '#' + e.target.id);
+        });
+      });
+    }, { rootMargin: '-72px 0px -70% 0px' });
+    secs.forEach(function (sec) { spy.observe(sec); });
+  }
+
+  /* 技能 chip：hover 看不到的时候，点一下也能看到说明 */
+  var chips = [].slice.call(document.querySelectorAll('.sk-chip'));
+  chips.forEach(function (chip) {
+    chip.setAttribute('tabindex', '0');
+    chip.setAttribute('role', 'button');
+    function toggle() {
+      var open = chip.classList.contains('tip-open');
+      chips.forEach(function (x) { x.classList.remove('tip-open'); });
+      chip.classList.toggle('tip-open', !open);
+    }
+    chip.addEventListener('click', toggle);
+    chip.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.sk-chip')) {
+      chips.forEach(function (x) { x.classList.remove('tip-open'); });
+    }
+  });
+
+  /* 宽表：滚到头就把渐变遮罩淡掉 */
+  var wrap = document.getElementById('cmpWrap');
+  var box = document.getElementById('cmpScroll');
+  var hint = document.getElementById('cmpHint');
+  if (wrap && box) {
+    var syncScroll = function () {
+      var max = box.scrollWidth - box.clientWidth;
+      wrap.classList.toggle('at-start', box.scrollLeft <= 4);
+      wrap.classList.toggle('at-end', max <= 4 || box.scrollLeft >= max - 4);
+      if (hint) hint.classList.toggle('hide', max <= 4);
+    };
+    syncScroll();
+    box.addEventListener('scroll', syncScroll, { passive: true });
+    window.addEventListener('resize', syncScroll);
+  }
 
   // FAQ 折叠
   document.querySelectorAll('.faq-q').forEach(function (q) {

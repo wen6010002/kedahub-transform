@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<html lang="zh-CN" data-page-node-id="3C4KY0Sy3a1HvHfWbzztBR">
+<head data-page-node-id="L8Tp4Pjeu9kb77ZnHaA1mB">
+<meta charset="UTF-8" data-page-node-id="Wqv1fyf0N5ErPI5r6kc6jB" />
+<meta name="viewport" content="width=device-width, initial-scale=1" data-page-node-id="k5ezTLA8BH1vi2JK1YkBOk" />
 <title>资料库 · 课搭</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/kh.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="4miZYckCe6Z1cGPi53C3ja" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin data-page-node-id="1UgmabngGXNnrRoSoHwxAs" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" data-page-node-id="PSzn43BvBWttyxmyft1eNA" />
+<link rel="stylesheet" href="assets/kh.css" data-page-node-id="PMoGINcieED9em3D7B7Hye" />
 <style>
   /* ══════ 刊头 ══════ */
   .lib-mast { display: flex; align-items: flex-end; gap: 28px; flex-wrap: wrap; }
@@ -25,9 +25,18 @@
   .ls-box svg { color: var(--ink-faint); flex: none; }
   .ls-box input { flex: 1; min-width: 0; border: none; background: none; height: 100%; font-size: 14px; }
   .ls-box input::placeholder { color: var(--ink-faint); }
+  .ls-box input::-webkit-search-cancel-button { -webkit-appearance: none; display: none; }
+  .ls-clear {
+    flex: none; width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 13px; font-weight: 700; color: var(--ink-soft);
+    transition: background var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out);
+  }
+  .ls-clear:hover { background: var(--bg-soft); color: var(--ink); }
+  .ls-clear[hidden] { display: none; }
   .ls-hot { font-size: 11.5px; color: var(--ink-soft); margin-top: 9px; display: flex; gap: 9px; flex-wrap: wrap; align-items: center; }
   .ls-hot a { color: var(--ink-2); font-weight: 600; padding: 2px 9px; border-radius: 999px; background: var(--bg-soft); transition: 0.15s; }
   .ls-hot a:hover { background: var(--pri-50); color: var(--pri-600); }
+  .ls-hot a.on { background: var(--pri); color: #fff; }
 
   .lib-cats { margin-top: 22px; }
   .lib-cats .bc-chip .n { font-size: 11px; opacity: 0.5; font-weight: 600; margin-left: 2px; }
@@ -65,6 +74,14 @@
   .lib-list { border-top: 1px solid var(--line); }
   .feed-title code, .mk-item code { font-size: 12.5px; background: var(--bg-soft); padding: 1px 5px; border-radius: 4px; }
 
+  /* 点标题展开简介 */
+  .feed-row.is-open { background: var(--pri-50); }
+  .feed-row.is-open::before { transform: scaleY(1); }
+  .feed-row.is-open .feed-desc { white-space: normal; overflow: visible; }
+  .feed-row.is-open .feed-arrow { opacity: 1; transform: rotate(90deg); color: var(--pri-600); }
+
+  .lib-list[hidden], .empty[hidden], .pager[hidden] { display: none; }
+
   /* ── 分页 ── */
   .pager { display: flex; align-items: center; gap: 14px; padding: 22px 0 4px; flex-wrap: wrap; }
   .pg-info { font-size: 12.5px; color: var(--ink-soft); font-weight: 600; }
@@ -86,11 +103,25 @@
   .notice-line b { color: var(--ink); display: block; font-size: 11.5px; font-weight: 800; color: var(--ink-faint); letter-spacing: 0.04em; }
   .cat-stat { display: flex; justify-content: space-between; padding: 5px 0; font-size: 12.5px; color: var(--ink-2); border-radius: var(--r); }
   .cat-stat:hover { color: var(--pri-600); }
+  .cat-stat.on { color: var(--pri-700); font-weight: 800; }
   .cat-stat span:last-child { color: var(--ink-faint); font-weight: 600; }
+  .cat-stat.on span:last-child { color: var(--pri-600); }
 
   @media (max-width: 1180px) {
     .lib-body { grid-template-columns: 200px minmax(0, 1fr); }
     .lib-side { grid-column: 1 / -1; position: static; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  }
+  @media (max-width: 1000px) {
+    /* 导航项变多，提前折行，避免顶栏被挤出屏幕 */
+    .nav-search { display: none; }
+    .nav-inner { height: auto; flex-wrap: wrap; gap: 8px 14px; padding-top: 9px; padding-bottom: 9px; }
+    .nav-actions {
+      margin-left: 0; order: 3; width: 100%;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; padding-bottom: 2px;
+    }
+    .nav-actions::-webkit-scrollbar { display: none; }
+    .nav-actions > * { flex: none; }
   }
   @media (max-width: 900px) {
     .lib-body { grid-template-columns: minmax(0, 1fr); }
@@ -111,317 +142,129 @@
   }
 </style>
 </head>
-<body>
+<body data-page-node-id="9ylB5YM0q18nS1oFZ4356c">
 
 <!-- ══════════ 导航 ══════════ -->
-<nav class="nav">
-  <div class="nav-inner">
-    <a class="logo" href="01-home.html">
-      <span class="logo-mark">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+<nav class="nav" data-page-node-id="azjctpkLOQegTbztSXNqqj">
+  <div class="nav-inner" data-page-node-id="x42ldC5WHaD6bsI5TEiReq">
+    <a class="logo" href="01-home.html" data-page-node-id="xzF8bPJ4ROqEswme4B2QnC">
+      <span class="logo-mark" data-page-node-id="cn2euoDlVYBjFmBMoEAm4N">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="04CaVmbNvlxI64UCEC0gBw"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" data-page-node-id="9Wdgtmx7OyUbR6p3yOMcxA"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" data-page-node-id="pFBRqo6h0Qj3uD5cym1CEh"/></svg>
       </span>
-      <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      <span class="logo-text" data-page-node-id="eY2g2nT5VjhknV9msGZi6H"><b data-page-node-id="i7TAY7kfz0QDbAMVn6DPmQ">课搭</b><span data-page-node-id="kHup3jVAPd5tLNMuKZaF1T">大学生成长社区</span></span>
     </a>
-    <div class="nav-search">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <div class="nav-search" data-page-node-id="19OBUdASuIDEHgybgLo9Ed">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" data-page-node-id="2yozvsjJG9tVO3Fd7REvIT"><circle cx="11" cy="11" r="7" data-page-node-id="2iTOI0VopEtyw7pSICsjjc"/><path d="M20 20l-3.5-3.5" data-page-node-id="w5J3TqoAIglOdwdd38DEFt"/></svg>
       搜索资料、路线、学长经验…
     </div>
-    <div class="nav-actions">
-      <a class="nav-link on" href="01-home.html">首页</a>
-      <a class="nav-link" href="02-explore.html">🧭 探索路线</a>
-      <a class="nav-link" href="09-cohort.html">项目组</a>
-      <a class="nav-link" href="10-pricing.html">验收与付费</a>
-      <a class="btn btn-outline btn-sm" href="04-survey.html">登录</a>
-      <a class="btn btn-primary btn-sm" href="04-survey.html">定制我的路线</a>
+    <div class="nav-actions" data-page-node-id="2iHMaZXF04kMt8268x96bf">
+      <a class="nav-link" href="01-home.html" data-page-node-id="lO1eNiwi6HLIDcHininVBI">首页</a>
+      <a class="nav-link" href="02-explore.html" data-page-node-id="0i0hat9ezrn15dfGuMXyRl">🧭 探索路线</a>
+      <a class="nav-link" href="06-roadmap.html" data-page-node-id="nnItT0atPw2MTndTM4dY7t">我的路线</a>
+      <a class="nav-link on" href="08-library.html" data-page-node-id="rdDCMho8JBeBDgHw1YB0ey">资料库</a>
+      <a class="nav-link" href="09-cohort.html" data-page-node-id="HfK0yuUtqtxsn3nTxvqC3R">项目组</a>
+      <a class="nav-link" href="10-pricing.html" data-page-node-id="z9QgnJLYyNpRsqRQvDHDJQ">验收与付费</a>
+      <a class="btn btn-outline btn-sm" href="04-survey.html" data-page-node-id="uhdfd5yrzDTR2nRqCUgYEJ">登录</a>
+      <a class="btn btn-primary btn-sm" href="04-survey.html" data-page-node-id="8qnWFQCe1NyDKr3UcoTgs9">定制我的路线</a>
     </div>
   </div>
 </nav>
 
-<main class="page">
+<main class="page" data-page-node-id="Rvsj7OYAXlGSh1sClamkda">
 
   <!-- ══════════ 刊头 + 搜索 ══════════ -->
-  <header>
-    <div class="lib-mast">
-      <div class="lib-mast-main">
-        <div class="lh-kicker">Library · 资料是基础，路线是核心</div>
-        <h1>资料库</h1>
-        <p class="lh-tag">
-          学长学姐整理、署名可溯的 <b>136 份</b>资料，注册就能读——精点资料用积分兑换，不花钱。
+  <header data-page-node-id="vG7sktAtSLAkRzGZGGCrpA">
+    <div class="lib-mast" data-page-node-id="FxsMhqhocV2toCI53LGC0K">
+      <div class="lib-mast-main" data-page-node-id="04H07U83BzXWDeUMNpsNY7">
+        <div class="lh-kicker" data-page-node-id="TGZqTPG79nTpe2xCofOCtK">Library · 资料是基础，路线是核心</div>
+        <h1 data-page-node-id="iNdmVxZOnGZoFhZSMEclgA">资料库</h1>
+        <p class="lh-tag" data-page-node-id="CJFy74a00F0LuPErSaVwZT">
+          学长学姐整理、署名可溯的 <b id="mastCount" data-page-node-id="VlVXJifwOiEAZpfYZyU7k1">12</b> 份资料，注册就能读。精点资料用积分兑换，不花钱。
           它们现在还有第二个身份：每一份都挂在对应路线的关卡上，你走到那一关，它就自己出现在你面前，
           不用你先知道该搜什么词。
         </p>
       </div>
-      <div class="lib-search">
-        <div class="ls-box">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-          <input type="search" placeholder="搜资料名、作者、标签…" />
-          <button class="btn btn-primary btn-sm">搜索</button>
+      <div class="lib-search" data-page-node-id="wi1kuhnTWdD6qtOPX5RRNr">
+        <div class="ls-box" data-page-node-id="pWCQh6490eHvuvycjurIun">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" data-page-node-id="yA9JgXVNThTwjinZTIiUhA"><circle cx="11" cy="11" r="7" data-page-node-id="Ao76GQGvM9PApm4k790nLG"/><path d="M20 20l-3.5-3.5" data-page-node-id="bB35Y9TvHqcqRuLa3LArD2"/></svg>
+          <input id="searchInput" type="search" placeholder="搜资料名、作者、标签…" autocomplete="off" aria-label="搜索资料" data-page-node-id="7OIpFaHPNHpQh3SEGaMbWA" />
+          <button class="ls-clear" type="button" id="btnSearchClear" hidden aria-label="清除搜索" data-page-node-id="yc1IqJ9QI2pogmmqgJZKWY">✕</button>
         </div>
-        <div class="ls-hot">
-          <span>大家在搜</span>
-          <a href="#">Git</a><a href="#">保研</a><a href="#">408</a><a href="#">留学文书</a><a href="#">面经</a>
+        <div class="ls-hot" data-page-node-id="NLHbDyKyBL14UrJsHw6kDz">
+          <span data-page-node-id="2J4qrHGXZK7MujxGEYzZbg">大家在搜</span>
+          <a href="#" data-q="Git" data-page-node-id="T5Zy0cPL3CcQYpgWXdS5jt">Git</a><a href="#" data-q="保研" data-page-node-id="0gdoD3zqJpsRH6qap2gm87">保研</a><a href="#" data-q="408" data-page-node-id="YXoj0pB1fRf81oIGVuc01T">408</a><a href="#" data-q="留学文书" data-page-node-id="UxvnPhgFDEFOfjksycihgf">留学文书</a><a href="#" data-q="面经" data-page-node-id="ohmdhwlsPxXmW4WRkATUM5">面经</a>
         </div>
       </div>
     </div>
 
-    <nav class="blog-cats lib-cats">
-      <span class="bc-label">📚 分类</span>
-      <a class="bc-chip on" href="#">全部 <span class="n">136</span></a>
-      <a class="bc-chip" href="#">🎓 新生引路 <span class="n">12</span></a>
-      <a class="bc-chip" href="#">📖 课程学习 <span class="n">28</span></a>
-      <a class="bc-chip" href="#">🎯 升学备考 <span class="n">24</span></a>
-      <a class="bc-chip" href="#">✈️ 留学申请 <span class="n">31</span></a>
-      <a class="bc-chip" href="#">💼 求职实习 <span class="n">22</span></a>
-      <a class="bc-chip" href="#">🌱 成长视野 <span class="n">15</span></a>
-      <a class="bc-chip" href="#">🏫 家教教案 <span class="n">4</span></a>
-    </nav>
+    <nav class="blog-cats lib-cats" id="libCats" aria-label="资料分类" data-page-node-id="wA6VDMBD98JeDTIFnBAFUK"></nav>
   </header>
 
-  <div class="lib-body">
+  <div class="lib-body" data-page-node-id="4oVdR3Z9bXtqtmlmqQBQGz">
 
     <!-- ══════════ 左：筛选 ══════════ -->
-    <aside class="filters">
-      <div class="filters-head">
-        <b>筛选</b>
-        <button type="button" id="btnReset">清除</button>
+    <aside class="filters" data-page-node-id="QKjXJYQIsoYWr92qZU6j0k">
+      <div class="filters-head" data-page-node-id="HRiYzkhQDehfiayVLl4aBN">
+        <b data-page-node-id="IPyY4Hh4qAu7PIcxjWCiiO">筛选</b>
+        <button type="button" id="btnReset" data-page-node-id="9QiZjIFQ0zZVUguZDB8mlh">清除</button>
       </div>
-
-      <div class="fgroup" data-fgroup>
-        <div class="fg-title">分类</div>
-        <button class="fopt on" type="button"><span class="fo-dot"></span>全部<span class="fo-n">136</span></button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>🎓 新生引路<span class="fo-n">12</span></button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>📖 课程学习<span class="fo-n">28</span></button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>🎯 升学备考<span class="fo-n">24</span></button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>✈️ 留学申请<span class="fo-n">31</span></button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>💼 求职实习<span class="fo-n">22</span></button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>🌱 成长视野<span class="fo-n">15</span></button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>🏫 家教教案<span class="fo-n">4</span></button>
-      </div>
-
-      <div class="fgroup" data-fgroup>
-        <div class="fg-title">免费 / 精点</div>
-        <button class="fopt on" type="button"><span class="fo-dot"></span>全部</button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>免费<span class="fo-n">118</span></button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>精点<span class="fo-n">18</span></button>
-      </div>
-
-      <div class="fgroup" data-fgroup>
-        <div class="fg-title">类型</div>
-        <button class="fopt on" type="button"><span class="fo-dot"></span>全部</button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>文档</button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>习题</button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>模板</button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>图谱</button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>清单</button>
-      </div>
-
-      <div class="fgroup" data-fgroup>
-        <div class="fg-title">排序</div>
-        <button class="fopt on" type="button"><span class="fo-dot"></span>最新收录</button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>最多浏览</button>
-        <button class="fopt" type="button"><span class="fo-dot"></span>最多收藏</button>
-      </div>
+      <div id="fgroups" data-page-node-id="FIEuSs79sztZd8FXtiVxdB"></div>
     </aside>
 
     <!-- ══════════ 中：资料列表 ══════════ -->
-    <div class="lib-main">
-      <div class="lib-list-head">
-        <h2>全部资料</h2>
-        <span class="ll-count">共 136 份 · 按收录时间倒序</span>
+    <div class="lib-main" data-page-node-id="ShcKjHIrpQPqUQMda1aXOg">
+      <div class="lib-list-head" id="libListHead" data-page-node-id="spezIjyhJiJqWch0elZX68">
+        <h2 id="listTitle" data-page-node-id="fmbfpB1FRCQxPqFzFPU93Q">全部资料</h2>
+        <span class="ll-count" id="listCount" aria-live="polite" data-page-node-id="yYlCkJ6DuWPA6zLKB0mip1">共 12 份 · 按收录时间倒序</span>
       </div>
-      <div class="lib-list-sub">点标题看简介，点作者看 TA 的其它资料。资料库里没有付费墙，精点资料用积分兑换。</div>
+      <div class="lib-list-sub" data-page-node-id="2BUk6WL4t4WAVasZeucUcR">点标题看简介，点作者看 TA 的其它资料。资料库里没有付费墙，精点资料用积分兑换。</div>
 
-      <div class="lib-list">
+      <div class="lib-list" id="libList" data-page-node-id="CjVF4Dc6EwHOxK98N2bEAN"></div>
 
-        <a class="feed-row" href="#">
-          <div class="feed-date"><b>09</b><small>09月</small></div>
-          <div>
-            <div class="feed-eyebrow">📖 课程学习 · 习题 <span class="fr-pill free">免费</span></div>
-            <div class="feed-title">C语言基础练习题：66 题从 Hello World 到课程设计</div>
-            <div class="feed-desc">66 道题覆盖 C 语言期末全部基础语法。每题带可直接编译运行的参考代码和讲解（全部代码已用 gcc 实测编译通过）。</div>
-            <div class="feed-meta"><b>温昊璇</b><span>👁 1,204</span><span>⭐ 96</span><span class="tag">#C语言</span><span class="tag">#期末复习</span></div>
-          </div>
-          <div class="feed-arrow">›</div>
-        </a>
-
-        <a class="feed-row" href="#">
-          <div class="feed-date"><b>05</b><small>09月</small></div>
-          <div>
-            <div class="feed-eyebrow">🏫 家教教案 · 文档 <span class="fr-pill free">免费</span></div>
-            <div class="feed-title">家教第一课</div>
-            <div class="feed-desc">第一次去家教怎么备课、怎么开场、怎么和家长谈课时费——从进门到下课的全流程，包括我第一节课踩的三个坑。</div>
-            <div class="feed-meta"><b>温昊璇</b><span>👁 312</span><span>⭐ 27</span><span class="tag">#家教经验</span></div>
-          </div>
-          <div class="feed-arrow">›</div>
-        </a>
-
-        <a class="feed-row" href="#">
-          <div class="feed-date"><b>05</b><small>09月</small></div>
-          <div>
-            <div class="feed-eyebrow">🎯 升学备考 · 文档 <span class="fr-pill free">免费</span></div>
-            <div class="feed-title">计算机考研 408 指南</div>
-            <div class="feed-desc">408 四门课（数据结构 / 组成原理 / 操作系统 / 计算机网络）的复习顺序、每门课用什么资料、最晚什么时候必须开始。</div>
-            <div class="feed-meta"><b>温昊璇</b><span>👁 415</span><span>⭐ 41</span><span class="tag">#考研</span><span class="tag">#408</span></div>
-          </div>
-          <div class="feed-arrow">›</div>
-        </a>
-
-        <a class="feed-row" href="#">
-          <div class="feed-date"><b>05</b><small>09月</small></div>
-          <div>
-            <div class="feed-eyebrow">🌱 成长视野 · 图谱 <span class="fr-pill fine">精点</span></div>
-            <div class="feed-title">计算机方向全景图</div>
-            <div class="feed-desc">计算机岗位方向全览：后端、前端、AI、安全、测试的技能要求、每天在干嘛、天花板在哪，一页表格看完。</div>
-            <div class="feed-meta"><b>温昊璇</b><span>👁 1,876</span><span>⭐ 210</span><span class="tag">#方向选择</span><span class="tag">#新生必读</span></div>
-          </div>
-          <div class="feed-arrow">›</div>
-        </a>
-
-        <a class="feed-row" href="#">
-          <div class="feed-date"><b>28</b><small>08月</small></div>
-          <div>
-            <div class="feed-eyebrow">🌱 成长视野 · 图谱 <span class="fr-pill free">免费</span></div>
-            <div class="feed-title">大学路线选择：一张图看清四年</div>
-            <div class="feed-desc">保研、考研、留学、就业四条路的真实门槛和时间线画在一张图上。大一看到最好，大二看还来得及，大三看会很赶。</div>
-            <div class="feed-meta"><b>课搭教研组</b><span>👁 2,431</span><span>⭐ 268</span><span class="tag">#保研</span><span class="tag">#考研</span><span class="tag">#就业</span></div>
-          </div>
-          <div class="feed-arrow">›</div>
-        </a>
-
-        <a class="feed-row" href="#">
-          <div class="feed-date"><b>21</b><small>08月</small></div>
-          <div>
-            <div class="feed-eyebrow">🌱 成长视野 · 图谱 <span class="fr-pill free">免费</span></div>
-            <div class="feed-title">程序员世界地图</div>
-            <div class="feed-desc">从编程语言到岗位、从校园到工业界——一张图告诉你「学计算机」这句话底下到底有多少条岔路，每条岔路的入口在哪。</div>
-            <div class="feed-meta"><b>课搭教研组</b><span>👁 1,102</span><span>⭐ 154</span><span class="tag">#技术栈</span><span class="tag">#全览</span></div>
-          </div>
-          <div class="feed-arrow">›</div>
-        </a>
-
-        <a class="feed-row" href="#">
-          <div class="feed-date"><b>14</b><small>08月</small></div>
-          <div>
-            <div class="feed-eyebrow">🎯 升学备考 · 文档 <span class="fr-pill fine">精点</span></div>
-            <div class="feed-title">保研全流程：从大一绩点到大四拟录取</div>
-            <div class="feed-desc">完整时间线：什么时候进实验室、什么时候联系导师、夏令营材料清单长什么样，附一份可直接改的材料模板。</div>
-            <div class="feed-meta"><b>c_lin 学姐</b><span>👁 1,530</span><span>⭐ 188</span><span class="tag">#保研</span><span class="tag">#夏令营</span></div>
-          </div>
-          <div class="feed-arrow">›</div>
-        </a>
-
-        <a class="feed-row" href="#">
-          <div class="feed-date"><b>30</b><small>07月</small></div>
-          <div>
-            <div class="feed-eyebrow">🎓 新生引路 · 清单 <span class="fr-pill free">免费</span></div>
-            <div class="feed-title">深大计算机学院奖学金助学金评定制度汇总</div>
-            <div class="feed-desc">深大计算机学院奖学金与助学金的评定细则汇总：绩点怎么算、综测加分项有哪些、哪些材料必须在什么时间交。</div>
-            <div class="feed-meta"><b>温昊璇</b><span>👁 986</span><span>⭐ 74</span><span class="tag">#奖学金</span><span class="tag">#深大</span></div>
-          </div>
-          <div class="feed-arrow">›</div>
-        </a>
-
-        <a class="feed-row" href="#">
-          <div class="feed-date"><b>18</b><small>07月</small></div>
-          <div>
-            <div class="feed-eyebrow">🌱 成长视野 · 图谱 <span class="fr-pill free">免费</span></div>
-            <div class="feed-title">GitHub 淘金地图</div>
-            <div class="feed-desc">哪些仓库值得收藏、怎么从零参与一个开源项目、校招面试官真的会点开你 GitHub 看什么——按这三件事拆开讲。</div>
-            <div class="feed-meta"><b>陈学长</b><span>👁 1,344</span><span>⭐ 176</span><span class="tag">#GitHub</span><span class="tag">#开源</span></div>
-          </div>
-          <div class="feed-arrow">›</div>
-        </a>
-
-        <a class="feed-row" href="#">
-          <div class="feed-date"><b>22</b><small>06月</small></div>
-          <div>
-            <div class="feed-eyebrow">✈️ 留学申请 · 模板 <span class="fr-pill fine">精点</span></div>
-            <div class="feed-title">留学文书写作模板合集</div>
-            <div class="feed-desc">个人陈述、推荐信、简历共 12 份范文与逐段拆解，每篇都标了「哪一句在打动招生官、为什么这一句有效」。</div>
-            <div class="feed-meta"><b>Z 学长</b><span>👁 2,768</span><span>⭐ 342</span><span class="tag">#留学</span><span class="tag">#PS</span><span class="tag">#推荐信</span></div>
-          </div>
-          <div class="feed-arrow">›</div>
-        </a>
-
-        <a class="feed-row" href="#">
-          <div class="feed-date"><b>09</b><small>06月</small></div>
-          <div>
-            <div class="feed-eyebrow">📖 课程学习 · 文档 <span class="fr-pill free">免费</span></div>
-            <div class="feed-title">四六级自救指南：30 天从 380 到 520</div>
-            <div class="feed-desc">30 天每日计划表（可以直接打印），听力、阅读、写作分开讲——重点说清哪些分是能靠技巧捡回来的。</div>
-            <div class="feed-meta"><b>c_chen 学长</b><span>👁 1,690</span><span>⭐ 205</span><span class="tag">#四六级</span><span class="tag">#英语</span></div>
-          </div>
-          <div class="feed-arrow">›</div>
-        </a>
-
-        <a class="feed-row" href="#">
-          <div class="feed-date"><b>21</b><small>05月</small></div>
-          <div>
-            <div class="feed-eyebrow">💼 求职实习 · 清单 <span class="fr-pill fine">精点</span></div>
-            <div class="feed-title">后端面经大全：200+ 真题与回答框架</div>
-            <div class="feed-desc">Java 后端 200+ 道真实面试题，按「场景题 / 八股 / 项目追问」分类，每题给的是回答框架，不是标准答案。</div>
-            <div class="feed-meta"><b>课搭教研组</b><span>👁 3,102</span><span>⭐ 421</span><span class="tag">#Java</span><span class="tag">#面试</span><span class="tag">#真题</span></div>
-          </div>
-          <div class="feed-arrow">›</div>
-        </a>
-
+      <div class="empty" id="libEmpty" hidden data-page-node-id="lQytAHJKbkyYAh4qV96b6N">
+        <div class="em-ico" data-page-node-id="jz8qN5TuZaIoeAy86rF91f">🗂️</div>
+        <b data-page-node-id="JrqkxTqs8NpxQ14aNPsk6N">这个条件下还没有资料</b>
+        <p data-page-node-id="mFuJD3Y5AY6SMYJCbPFoI6">换个条件试试，或者一键清掉。</p>
+        <button class="btn btn-primary btn-sm" type="button" id="btnEmptyReset" data-page-node-id="roJdreVC5TFZUtIcJWyKkH">清除全部筛选</button>
       </div>
 
       <!-- ══════════ 分页 ══════════ -->
-      <div class="pager">
-        <span class="pg-info">共 136 份 · 第 1 / 12 页</span>
-        <div class="pg-btns">
-          <button class="pg-btn" disabled>‹ 上一页</button>
-          <button class="pg-btn on">1</button>
-          <button class="pg-btn">2</button>
-          <button class="pg-btn">3</button>
-          <span class="pg-dots">…</span>
-          <button class="pg-btn">12</button>
-          <button class="pg-btn">下一页 ›</button>
-        </div>
+      <div class="pager" id="pager" hidden data-page-node-id="dQHfErLvh5jEUwP87Z6CrP">
+        <span class="pg-info" id="pgInfo" data-page-node-id="2Q2yrwIH3BUzR4QSvCMo1t"></span>
+        <div class="pg-btns" id="pgBtns" data-page-node-id="tg5u9PuVjOco3QzM7VJlmP"></div>
       </div>
     </div>
 
     <!-- ══════════ 右：侧栏 ══════════ -->
-    <aside class="blog-side">
+    <aside class="blog-side" data-page-node-id="CnHZIP1mTwcjZ7HZ8U1P5E">
 
-      <div class="side-box">
-        <h3>🔥 本周收藏榜</h3>
-        <div class="sb-sub">按本周收藏数排名</div>
-        <div class="rank-item"><span class="rank-no t1">1</span><span class="rank-av sq" style="background:#ff6b4a">🎯</span><span class="rank-info"><b>保研全流程</b><span>升学备考</span></span><span class="rank-metric">188</span></div>
-        <div class="rank-item"><span class="rank-no t2">2</span><span class="rank-av sq" style="background:#10b981">🌱</span><span class="rank-info"><b>计算机方向全景图</b><span>成长视野</span></span><span class="rank-metric">210</span></div>
-        <div class="rank-item"><span class="rank-no t3">3</span><span class="rank-av sq" style="background:#6366f1">✈️</span><span class="rank-info"><b>留学文书写作模板合集</b><span>留学申请</span></span><span class="rank-metric">342</span></div>
-        <div class="rank-item"><span class="rank-no">4</span><span class="rank-av sq" style="background:#e8638f">💼</span><span class="rank-info"><b>后端面经大全</b><span>求职实习</span></span><span class="rank-metric">421</span></div>
-        <div class="rank-item"><span class="rank-no">5</span><span class="rank-av sq" style="background:#f59e0b">📖</span><span class="rank-info"><b>C语言 66 题</b><span>课程学习</span></span><span class="rank-metric">96</span></div>
+      <div class="side-box" data-page-node-id="TxM4UFwHmst96yOpOjkkGq">
+        <h3 data-page-node-id="8WCIHcibGfFx9ZcDMc10Sk">🔥 本周收藏榜</h3>
+        <div class="sb-sub" data-page-node-id="6JWzSE2aBJnp4PPZqiD2x1">按本周收藏数排名</div>
+        <div id="rankList" data-page-node-id="QAtKWIJecO9vLYNNQrORlI"></div>
       </div>
 
-      <div class="side-box" style="background:var(--pri-50);border-color:#ffd9cd">
-        <h3>🧭 别在这儿瞎逛</h3>
-        <div class="sb-sub" style="color:var(--pri-700)">不知道要什么的时候，路线比搜索好用</div>
-        <p style="font-size:12.5px;color:var(--pri-700);line-height:1.7">
+      <div class="side-box" style="background:var(--pri-50);border-color:#ffd9cd" data-page-node-id="EdRevORlRL5wHmGZpZ5dQw">
+        <h3 data-page-node-id="ovXSGM1kytHk5VQGMwodVi">🧭 别在这儿瞎逛</h3>
+        <div class="sb-sub" style="color:var(--pri-700)" data-page-node-id="7pWvmFtfNpN76n7h5B2tna">不知道要什么的时候，路线比搜索好用</div>
+        <p style="font-size:12.5px;color:var(--pri-700);line-height:1.7" data-page-node-id="BOZmweRDO73L7OrRSYXMff">
           每条路线的每一关都挂了对应的资料。走到那一关，资料自己会递到你手上。
         </p>
-        <a class="btn btn-primary btn-block btn-sm" style="margin-top:11px" href="02-explore.html">看看探索路线 →</a>
+        <a class="btn btn-primary btn-block btn-sm" style="margin-top:11px" href="02-explore.html" data-page-node-id="JIDhC4soiPLOxkH0estDx0">看看探索路线 →</a>
       </div>
 
-      <div class="side-box">
-        <h3>📢 公告</h3>
-        <div class="sb-sub">资料库动态</div>
-        <div class="notice-line"><b>2026 / 9 / 14</b>资料库改版：每份资料现在都挂在路线的关卡上，走到那一关会自动出现。</div>
-        <div class="notice-line"><b>2026 / 9 / 10</b>新增 12 份 2026 秋季学期课程资料，含 3 份期末真题。</div>
-        <div class="notice-line"><b>2026 / 9 / 02</b>精点资料改为积分兑换，不再需要付费。</div>
+      <div class="side-box" data-page-node-id="MtYxSCJd0ahwXUAPBM4PHq">
+        <h3 data-page-node-id="9eTjlpUQk7w3TvjdFvC8uQ">📢 公告</h3>
+        <div class="sb-sub" data-page-node-id="c68hccECW2nUA2A21AgzYP">资料库动态</div>
+        <div class="notice-line" data-page-node-id="4CnYwm3QHTq7UliwOfWYGD"><b data-page-node-id="G2wGkzo7SvkJ36msR0eDHP">2026 / 9 / 14</b>资料库改版：每份资料现在都挂在路线的关卡上，走到那一关会自动出现。</div>
+        <div class="notice-line" data-page-node-id="JaWrNveG1BPV2owsPjRPH0"><b data-page-node-id="6S619722vlBTAMQhQBvuBt">2026 / 9 / 10</b>新增 3 份 2026 秋季学期的课程资料，含一份 C 语言期末题。</div>
+        <div class="notice-line" data-page-node-id="eNg5LeWDVhOkZHkko4Dmzu"><b data-page-node-id="zbRqBkKFBV9XchZC5A2lSZ">2026 / 9 / 02</b>精点资料改为积分兑换，不再需要付费。</div>
       </div>
 
-      <div class="side-box">
-        <h3>🗂️ 资料分类统计</h3>
-        <div class="sb-sub">共 136 份 · 点进入目录</div>
-        <a class="cat-stat" href="#"><span>🎓 新生引路</span><span>12</span></a>
-        <a class="cat-stat" href="#"><span>📖 课程学习</span><span>28</span></a>
-        <a class="cat-stat" href="#"><span>🎯 升学备考</span><span>24</span></a>
-        <a class="cat-stat" href="#"><span>✈️ 留学申请</span><span>31</span></a>
-        <a class="cat-stat" href="#"><span>💼 求职实习</span><span>22</span></a>
-        <a class="cat-stat" href="#"><span>🌱 成长视野</span><span>15</span></a>
-        <a class="cat-stat" href="#"><span>🏫 家教教案</span><span>4</span></a>
+      <div class="side-box" data-page-node-id="iwV6M8QBdGwDeebYACFQHK">
+        <h3 data-page-node-id="ICLnkngKGmLqGkYFBsH2oO">🗂️ 资料分类统计</h3>
+        <div class="sb-sub" data-page-node-id="GtSXcWT4Tqhs0CtLdFhl5P">共 <span id="sideTotal" data-page-node-id="z7usHEpmlBW40u6fxSxMSi">12</span> 份 · 点进入目录</div>
+        <div id="catStats" data-page-node-id="daDOUE3KtHtUYFbDdw7mbK"></div>
       </div>
 
     </aside>
@@ -429,62 +272,421 @@
 </main>
 
 <!-- ══════════ 页脚 ══════════ -->
-<footer class="foot">
-  <div class="foot-inner">
-    <div class="foot-brand">
-      <div class="logo">
-        <span class="logo-mark">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+<footer class="foot" data-page-node-id="hdkwdx42oxGwuWUgGOi2Jd">
+  <div class="foot-inner" data-page-node-id="oeVHCN4v0p8R73UAQqAss0">
+    <div class="foot-brand" data-page-node-id="M8eF41uUYseXnWinFjrGnk">
+      <div class="logo" data-page-node-id="F5I3STEJ5W7gBpQa9AzjPM">
+        <span class="logo-mark" data-page-node-id="nhqEcGMhTKKQDVkEFaCSho">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="wOk3y5twvZTTAyRAM6RVfN"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" data-page-node-id="FmoCtYySnWbAO9aksDJWpJ"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" data-page-node-id="Br2dTjC6CmAfYVkxFSttkI"/></svg>
         </span>
-        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+        <span class="logo-text" data-page-node-id="31LaBp2jJrYEZG5zDGGBWD"><b data-page-node-id="ksSTEOk3SjLHM6HqmCsHro">课搭</b><span data-page-node-id="F6wGCbF6CHOSXWvmgs9Blr">大学生成长社区</span></span>
       </div>
-      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
-      <p class="creed">「愿课搭陪你走过每一次选方向的焦虑，需要时也总能搭把手。」</p>
+      <p data-page-node-id="An6eTHHNvkz2wPnsYVJpMV">不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+      <p class="creed" data-page-node-id="7felRkxwfBxAQELtctV7Ok">「愿课搭陪你走过每一次选方向的焦虑，需要时也总能搭把手。」</p>
     </div>
-    <div class="foot-col"><h4>探索</h4><a href="01-home.html">首页</a><a href="02-explore.html">探索路线</a><a href="04-survey.html">定制路线</a><a href="08-library.html">资料库</a></div>
-    <div class="foot-col"><h4>结果服务</h4><a href="10-pricing.html">阶段验收</a><a href="09-cohort.html">项目组</a><a href="10-pricing.html">深度陪跑</a></div>
-    <div class="foot-col"><h4>关于</h4><a href="#">平台理念</a><a href="#">校园认证</a><a href="#">联系我们</a></div>
+    <div class="foot-col" data-page-node-id="8SYQUkhCp0KPAagblG3w4w"><h4 data-page-node-id="jkiUG7kFQzrcpk7AGeMyt9">探索</h4><a href="01-home.html" data-page-node-id="oLUtXqzFFdXHf5SDYiWpV3">首页</a><a href="02-explore.html" data-page-node-id="pueoPYxSi0tOIhih3Uae9I">探索路线</a><a href="04-survey.html" data-page-node-id="MisVR7SIYzCro4FFkU5KuF">定制路线</a><a href="08-library.html" data-page-node-id="qLlG6DF9PfIty3OftNa2PG">资料库</a></div>
+    <div class="foot-col" data-page-node-id="dhaYibOg4m1tJ8YDnEdplY"><h4 data-page-node-id="Ew1POPTUESzw4zFy1HSdwD">结果服务</h4><a href="10-pricing.html" data-page-node-id="8xv8IA5AXyMXEVmj6SO7Qj">阶段验收</a><a href="09-cohort.html" data-page-node-id="Qqo5pOxMEDsJT6WwUhnrHB">项目组</a><a href="10-pricing.html" data-page-node-id="peqrDyL9XckUDG7GZ3W3UU">深度陪跑</a></div>
+    <div class="foot-col" data-page-node-id="vLFjPPuvrM4Z6XyHat03EF"><h4 data-page-node-id="AzYyO0iH7IuQN75fuBCRmc">关于</h4><a href="#" data-page-node-id="H1p7ZxZafJxS3Boc7QqFjr">平台理念</a><a href="#" data-page-node-id="bBEIHzHnZrnlL42WnHudma">校园认证</a><a href="#" data-page-node-id="z7AQV3PS4r7H0WFXU62GG9">联系我们</a></div>
   </div>
-  <div class="foot-bottom">© 2026 课搭 · 知识在校园里流动</div>
+  <div class="foot-bottom" data-page-node-id="l3cRym6icjKDmDNWNPddps">© 2026 课搭 · 知识在校园里流动</div>
 </footer>
 
 <script src="assets/app.js"></script>
 <script>
 (function () {
-  /* 分类 chips：单选 */
-  document.querySelectorAll('.lib-cats .bc-chip').forEach(function (c) {
-    c.addEventListener('click', function (e) {
-      e.preventDefault();
-      document.querySelectorAll('.lib-cats .bc-chip').forEach(function (x) { x.classList.remove('on'); });
-      c.classList.add('on');
+  'use strict';
+
+  /* ════════════════════════════════════════════
+     1. 数据：12 份资料，页面上的所有数字都从这儿算
+     ════════════════════════════════════════════ */
+  var DATA = [
+    { id: 'e01', title: '计算机初识路线都会学什么', cat: '方向科普', pay: '免费', type: '路线科普',
+      stars: 318, week: 318, views: 2510, date: '2026-09-14', author: '课搭教研组', short: '计算机初识 9 站', tags: ['#探索路线', '#计算机初识'],
+      desc: '探索路线第一块：电脑怎么工作、二进制与编码、文件与目录、黑窗口、Shell、脚本、装软件、Git，9 站把底子打全。每站一份资料、一个小作品。' },
+    { id: 'e02', title: '前后端初识路线都会学什么', cat: '方向科普', pay: '免费', type: '路线科普',
+      stars: 296, week: 296, views: 2245, date: '2026-09-14', author: '课搭教研组', short: '前后端初识 11 站', tags: ['#探索路线', '#前后端'],
+      desc: '探索路线第二块：一个网页怎么到你屏幕上、前端技术栈、后端、服务器、网络、数据库、各种数据库、接口、部署、云服务，11 站看清一个网站从头到尾怎么跑。' },
+    { id: 'e03', title: 'AI 路线都会学什么', cat: '方向科普', pay: '免费', type: '路线科普',
+      stars: 402, week: 402, views: 3387, date: '2026-09-14', author: '课搭教研组', short: 'AI 10 站', tags: ['#探索路线', '#AI'],
+      desc: '探索路线第三块：四个词的关系、模型、训练、提示词、幻觉、微调、RAG、Agent、多模态、最前沿，10 站不讲玄学，学会指挥 AI 干活，也学会防它胡说。' },
+    { id: 'e04', title: '产品初识路线都会学什么', cat: '方向科普', pay: '免费', type: '路线科普',
+      stars: 187, week: 187, views: 1420, date: '2026-09-14', author: '课搭教研组', short: '产品初识 5 站', tags: ['#探索路线', '#产品'],
+      desc: '选做块：一个产品怎么做的、产品经理一天在干什么、以前的产品在干什么、AI 产品、怎么判断需求值不值得做，5 站看清不写代码的活法。' },
+    { id: 'e05', title: '测试与运维路线都会学什么', cat: '方向科普', pay: '免费', type: '路线科普',
+      stars: 154, week: 154, views: 1108, date: '2026-09-14', author: '课搭教研组', short: '测试运维 3 站', tags: ['#探索路线', '#测试运维'],
+      desc: '选做块：测试怎么证明一个东西没坏、运维管上线之后、监控与告警怎么第一时间知道出事，3 站看清这两个岗位。' },
+    { id: 'e06', title: '算法工程师路线都会学什么', cat: '方向科普', pay: '免费', type: '路线科普',
+      stars: 231, week: 231, views: 1763, date: '2026-09-14', author: '课搭教研组', short: '算法工程师 3 站', tags: ['#探索路线', '#算法'],
+      desc: '选做块：算法工程师到底在做什么、数学占多大分量、大一现在能做什么准备，3 站看清这个岗位适不适合你。' },
+    { id: 'd01', title: 'C语言基础练习题：66 题从 Hello World 到课程设计', cat: '课程学习', pay: '免费', type: '习题',
+      stars: 96, week: 96, views: 1204, date: '2026-09-09', author: '温昊璇', short: 'C语言 66 题', tags: ['#C语言', '#期末复习'],
+      desc: '66 道题覆盖 C 语言期末全部基础语法。每题带可直接编译运行的参考代码和讲解（全部代码已用 gcc 实测编译通过）。' },
+    { id: 'd02', title: '家教第一课', cat: '家教教案', pay: '免费', type: '文档',
+      stars: 27, views: 312, date: '2026-09-05', author: '温昊璇', short: '家教第一课', tags: ['#家教经验'],
+      desc: '第一次去家教怎么备课、怎么开场、怎么和家长谈课时费，从进门到下课的全流程，包括我第一节课踩的三个坑。' },
+    { id: 'd03', title: '计算机考研 408 指南', cat: '升学备考', pay: '免费', type: '文档',
+      stars: 41, views: 415, date: '2026-09-05', author: '温昊璇', short: '408 指南', tags: ['#考研', '#408'],
+      desc: '408 四门课（数据结构 / 组成原理 / 操作系统 / 计算机网络）的复习顺序、每门课用什么资料、最晚什么时候必须开始。' },
+    { id: 'd04', title: '计算机方向全景图', cat: '成长视野', pay: '精点', type: '图谱',
+      stars: 210, week: 210, views: 1876, date: '2026-09-05', author: '温昊璇', short: '计算机方向全景图', tags: ['#方向选择', '#新生必读'],
+      desc: '计算机岗位方向全览：后端、前端、AI、安全、测试的技能要求、每天在干嘛、天花板在哪，一页表格看完。' },
+    { id: 'd05', title: '大学路线选择：一张图看清四年', cat: '成长视野', pay: '免费', type: '图谱',
+      stars: 268, views: 2431, date: '2026-08-28', author: '课搭教研组', short: '一张图看清四年', tags: ['#保研', '#考研', '#就业'],
+      desc: '保研、考研、留学、就业四条路的真实门槛和时间线画在一张图上。大一看到最好，大二看还来得及，大三看会很赶。' },
+    { id: 'd06', title: '程序员世界地图', cat: '成长视野', pay: '免费', type: '图谱',
+      stars: 154, views: 1102, date: '2026-08-21', author: '课搭教研组', short: '程序员世界地图', tags: ['#技术栈', '#全览'],
+      desc: '从编程语言到岗位、从校园到工业界，一张图告诉你「学计算机」这句话底下到底有多少条岔路，每条岔路的入口在哪。' },
+    { id: 'd07', title: '保研全流程：从大一绩点到大四拟录取', cat: '升学备考', pay: '精点', type: '文档',
+      stars: 188, week: 188, views: 1530, date: '2026-08-14', author: 'c_lin 学姐', short: '保研全流程', tags: ['#保研', '#夏令营'],
+      desc: '完整时间线：什么时候进实验室、什么时候联系导师、夏令营材料清单长什么样，附一份可直接改的材料模板。' },
+    { id: 'd08', title: '深大计算机学院奖学金助学金评定制度汇总', cat: '新生引路', pay: '免费', type: '清单',
+      stars: 74, views: 986, date: '2026-07-30', author: '温昊璇', short: '奖学金评定汇总', tags: ['#奖学金', '#深大'],
+      desc: '深大计算机学院奖学金与助学金的评定细则汇总：绩点怎么算、综测加分项有哪些、哪些材料必须在什么时间交。' },
+    { id: 'd09', title: 'GitHub 淘金地图', cat: '成长视野', pay: '免费', type: '图谱',
+      stars: 176, views: 1344, date: '2026-07-18', author: '陈学长', short: 'GitHub 淘金地图', tags: ['#GitHub', '#开源'],
+      desc: '哪些仓库值得收藏、怎么从零参与一个开源项目、校招面试官真的会点开你 GitHub 看什么，按这三件事拆开讲。' },
+    { id: 'd10', title: '留学文书写作模板合集', cat: '留学申请', pay: '精点', type: '模板',
+      stars: 342, week: 342, views: 2768, date: '2026-06-22', author: 'Z 学长', short: '留学文书写作模板合集', tags: ['#留学', '#PS', '#推荐信'],
+      desc: '个人陈述、推荐信、简历共 12 份范文与逐段拆解，每篇都标了「哪一句在打动招生官、为什么这一句有效」。' },
+    { id: 'd11', title: '四六级自救指南：30 天从 380 到 520', cat: '课程学习', pay: '免费', type: '文档',
+      stars: 205, views: 1690, date: '2026-06-09', author: 'c_chen 学长', short: '四六级自救指南', tags: ['#四六级', '#英语'],
+      desc: '30 天每日计划表（可以直接打印），听力、阅读、写作分开讲，重点说清哪些分是能靠技巧捡回来的。' },
+    { id: 'd12', title: '后端面经大全：200+ 真题与回答框架', cat: '求职实习', pay: '精点', type: '清单',
+      stars: 421, week: 421, views: 3102, date: '2026-05-21', author: '课搭教研组', short: '后端面经大全', tags: ['#Java', '#面试', '#真题'],
+      desc: 'Java 后端 200+ 道真实面试题，按「场景题 / 八股 / 项目追问」分类，每题配的是回答框架。' }
+  ];
+
+  var CATS = [
+    { name: '新生引路', icon: '🎓', color: '#6366f1' },
+    { name: '课程学习', icon: '📖', color: '#f59e0b' },
+    { name: '升学备考', icon: '🎯', color: '#ff6b4a' },
+    { name: '留学申请', icon: '✈️', color: '#0ea5e9' },
+    { name: '求职实习', icon: '💼', color: '#e8638f' },
+    { name: '方向科普', icon: '🧭', color: '#22c55e' },
+    { name: '成长视野', icon: '🌱', color: '#10b981' },
+    { name: '家教教案', icon: '🏫', color: '#8b5cf6' }
+  ];
+  var PAYS = ['免费', '精点'];
+  var TYPES = ['文档', '习题', '模板', '图谱', '清单'];
+  var SORTS = [
+    { name: '最新收录', hint: '按收录时间倒序', cmp: function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; } },
+    { name: '最多浏览', hint: '按浏览量倒序', cmp: function (a, b) { return b.views - a.views; } },
+    { name: '最多收藏', hint: '按收藏数倒序', cmp: function (a, b) { return b.stars - a.stars; } }
+  ];
+  var ALL = '全部';
+  var PAGE_SIZE = 6;
+
+  var GROUPS = [
+    { dim: 'cat', title: '分类', values: [ALL].concat(CATS.map(function (c) { return c.name; })) },
+    { dim: 'pay', title: '免费 / 精点', values: [ALL].concat(PAYS) },
+    { dim: 'type', title: '类型', values: [ALL].concat(TYPES) },
+    { dim: 'sort', title: '排序', values: SORTS.map(function (s) { return s.name; }) }
+  ];
+
+  var state = { cat: ALL, pay: ALL, type: ALL, sort: SORTS[0].name, q: '', page: 1 };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var catsEl = $('libCats'), groupsEl = $('fgroups'), listEl = $('libList'), emptyEl = $('libEmpty');
+  var pagerEl = $('pager'), pgInfoEl = $('pgInfo'), pgBtnsEl = $('pgBtns');
+  var titleEl = $('listTitle'), countEl = $('listCount'), searchEl = $('searchInput');
+  var clearEl = $('btnSearchClear'), rankEl = $('rankList'), catStatsEl = $('catStats');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ════════════════════════════════════════════
+     2. 筛选 / 排序 / 搜索
+     ════════════════════════════════════════════ */
+  function catMeta(name) {
+    for (var i = 0; i < CATS.length; i++) if (CATS[i].name === name) return CATS[i];
+    return { name: name, icon: '📄', color: '#81858d' };
+  }
+  function hay(it) {
+    return (it.title + ' ' + it.cat + ' ' + it.type + ' ' + it.pay + ' ' + it.author + ' ' + it.tags.join(' ') + ' ' + it.desc).toLowerCase();
+  }
+  function pass(it, o) {
+    if (o.cat !== ALL && it.cat !== o.cat) return false;
+    if (o.pay !== ALL && it.pay !== o.pay) return false;
+    if (o.type !== ALL && it.type !== o.type) return false;
+    if (o.q && hay(it).indexOf(o.q) === -1) return false;
+    return true;
+  }
+  /* 某一个选项单独被选中时还剩几份（其余条件照旧生效） */
+  function facet(dim, value) {
+    var o = { cat: state.cat, pay: state.pay, type: state.type, q: state.q };
+    o[dim] = value;
+    var n = 0;
+    for (var i = 0; i < DATA.length; i++) if (pass(DATA[i], o)) n++;
+    return n;
+  }
+  function results() {
+    var o = { cat: state.cat, pay: state.pay, type: state.type, q: state.q };
+    var cmp = SORTS[0].cmp;
+    for (var i = 0; i < SORTS.length; i++) if (SORTS[i].name === state.sort) cmp = SORTS[i].cmp;
+    return DATA.filter(function (it) { return pass(it, o); }).sort(cmp);
+  }
+  function sortHint() {
+    for (var i = 0; i < SORTS.length; i++) if (SORTS[i].name === state.sort) return SORTS[i].hint;
+    return '';
+  }
+  function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+  /* ════════════════════════════════════════════
+     3. 渲染
+     ════════════════════════════════════════════ */
+  /* 分类 chips：建一次，之后只改状态和数字，免得点一下焦点就没了 */
+  function buildChips() {
+    var html = '<span class="bc-label">📚 分类</span>';
+    html += '<a class="bc-chip" href="#" data-cat="' + ALL + '">' + ALL + ' <span class="n">' + DATA.length + '</span></a>';
+    CATS.forEach(function (c) {
+      html += '<a class="bc-chip" href="#" data-cat="' + c.name + '">' + c.icon + ' ' + c.name + ' <span class="n">0</span></a>';
     });
+    catsEl.innerHTML = html;
+  }
+  function syncChips() {
+    catsEl.querySelectorAll('.bc-chip').forEach(function (el) {
+      var v = el.getAttribute('data-cat');
+      el.classList.toggle('on', state.cat === v);
+      el.querySelector('.n').textContent = facet('cat', v);
+    });
+  }
+
+  /* 四个筛选组：同样建一次 */
+  function buildGroups() {
+    var html = '';
+    GROUPS.forEach(function (g) {
+      html += '<div class="fgroup" data-fgroup><div class="fg-title">' + g.title + '</div>';
+      g.values.forEach(function (v) {
+        var label = (g.dim === 'cat' && v !== ALL) ? catMeta(v).icon + ' ' + v : v;
+        html += '<button class="fopt" type="button" data-dim="' + g.dim + '" data-val="' + v + '">' +
+                  '<span class="fo-dot"></span><span class="fo-label">' + label + '</span><span class="fo-n"></span>' +
+                '</button>';
+      });
+      html += '</div>';
+    });
+    groupsEl.innerHTML = html;
+  }
+  function syncGroups() {
+    groupsEl.querySelectorAll('.fopt').forEach(function (el) {
+      var dim = el.getAttribute('data-dim'), v = el.getAttribute('data-val');
+      var cur = dim === 'sort' ? state.sort : state[dim];
+      el.classList.toggle('on', cur === v);
+      el.querySelector('.fo-n').textContent = dim === 'sort' ? '' : facet(dim, v);
+    });
+  }
+
+  function rowHTML(it) {
+    var d = it.date.split('-');
+    var pill = it.pay === '免费' ? '<span class="fr-pill free">免费</span>' : '<span class="fr-pill fine">精点</span>';
+    var tags = it.tags.map(function (t) { return '<span class="tag">' + t + '</span>'; }).join('');
+    return '<a class="feed-row" href="#" data-id="' + it.id + '">' +
+      '<div class="feed-date"><b>' + d[2] + '</b><small>' + d[1] + '月</small></div>' +
+      '<div>' +
+        '<div class="feed-eyebrow">' + catMeta(it.cat).icon + ' ' + it.cat + ' · ' + it.type + ' ' + pill + '</div>' +
+        '<div class="feed-title">' + it.title + '</div>' +
+        '<div class="feed-desc">' + it.desc + '</div>' +
+        '<div class="feed-meta"><b>' + it.author + '</b><span>👁 ' + fmt(it.views) + '</span><span>⭐ ' + it.stars + '</span>' + tags + '</div>' +
+      '</div>' +
+      '<div class="feed-arrow">›</div>' +
+    '</a>';
+  }
+
+  function pageList(cur, total) {
+    var out = [], i;
+    if (total <= 7) { for (i = 1; i <= total; i++) out.push(i); return out; }
+    out.push(1);
+    var s = Math.max(2, cur - 1), e = Math.min(total - 1, cur + 1);
+    if (s > 2) out.push('…');
+    for (i = s; i <= e; i++) out.push(i);
+    if (e < total - 1) out.push('…');
+    out.push(total);
+    return out;
+  }
+
+  function paint() {
+    var list = results();
+    var total = list.length;
+    var pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if (state.page > pages) state.page = pages;
+    if (state.page < 1) state.page = 1;
+
+    syncChips();
+    syncGroups();
+
+    /* 标题与计数 */
+    titleEl.textContent = state.cat === ALL ? '全部资料' : catMeta(state.cat).icon + ' ' + state.cat;
+    countEl.textContent = '共 ' + total + ' 份 · ' + sortHint();
+
+    /* 列表 / 空态 */
+    if (total === 0) {
+      listEl.innerHTML = '';
+      listEl.hidden = true;
+      emptyEl.hidden = false;
+      pagerEl.hidden = true;
+    } else {
+      listEl.hidden = false;
+      emptyEl.hidden = true;
+      var start = (state.page - 1) * PAGE_SIZE;
+      listEl.innerHTML = list.slice(start, start + PAGE_SIZE).map(rowHTML).join('');
+      pagerEl.hidden = pages <= 1;
+    }
+
+    /* 分页 */
+    if (!pagerEl.hidden) {
+      pgInfoEl.textContent = '共 ' + total + ' 份 · 第 ' + state.page + ' / ' + pages + ' 页';
+      var html = '<button class="pg-btn" type="button" data-pg="prev"' + (state.page === 1 ? ' disabled' : '') + '>‹ 上一页</button>';
+      pageList(state.page, pages).forEach(function (p) {
+        html += p === '…'
+          ? '<span class="pg-dots">…</span>'
+          : '<button class="pg-btn' + (p === state.page ? ' on' : '') + '" type="button" data-pg="' + p + '">' + p + '</button>';
+      });
+      html += '<button class="pg-btn" type="button" data-pg="next"' + (state.page === pages ? ' disabled' : '') + '>下一页 ›</button>';
+      pgBtnsEl.innerHTML = html;
+    }
+
+    /* 侧栏：分类统计跟着数据走 */
+    catStatsEl.querySelectorAll('.cat-stat').forEach(function (el) {
+      var v = el.getAttribute('data-cat');
+      el.classList.toggle('on', state.cat === v);
+    });
+
+    /* 搜索清除按钮：有字才出现 */
+    clearEl.hidden = searchEl.value.length === 0;
+    document.querySelectorAll('.ls-hot a').forEach(function (a) {
+      a.classList.toggle('on', !!state.q && a.getAttribute('data-q').toLowerCase() === state.q);
+    });
+  }
+
+  /* ════════════════════════════════════════════
+     4. 侧栏（只建一次）
+     ════════════════════════════════════════════ */
+  function buildSide() {
+    /* 本周收藏榜：只放上了榜的几份，按本周收藏数从多到少 */
+    var top = DATA.filter(function (it) { return it.week; })
+                  .sort(function (a, b) { return b.week - a.week; });
+    rankEl.innerHTML = top.map(function (it, i) {
+      var cls = i === 0 ? ' t1' : i === 1 ? ' t2' : i === 2 ? ' t3' : '';
+      var m = catMeta(it.cat);
+      return '<div class="rank-item">' +
+        '<span class="rank-no' + cls + '">' + (i + 1) + '</span>' +
+        '<span class="rank-av sq" style="background:' + m.color + '">' + m.icon + '</span>' +
+        '<span class="rank-info"><b>' + it.short + '</b><span>' + it.cat + '</span></span>' +
+        '<span class="rank-metric">' + it.week + '</span>' +
+      '</div>';
+    }).join('');
+
+    catStatsEl.innerHTML = CATS.map(function (c) {
+      var n = DATA.filter(function (it) { return it.cat === c.name; }).length;
+      return '<a class="cat-stat" href="#" data-cat="' + c.name + '">' +
+        '<span>' + c.icon + ' ' + c.name + '</span><span>' + n + '</span></a>';
+    }).join('');
+
+    $('mastCount').textContent = DATA.length;
+    $('sideTotal').textContent = DATA.length;
+  }
+
+  /* ════════════════════════════════════════════
+     5. 交互
+     ════════════════════════════════════════════ */
+  function resetAll() {
+    state.cat = ALL; state.pay = ALL; state.type = ALL;
+    state.sort = SORTS[0].name; state.q = ''; state.page = 1;
+    searchEl.value = '';
+    paint();
+  }
+  function goTop() {
+    var el = $('libListHead');
+    var top = el.getBoundingClientRect().top + window.pageYOffset - 74;
+    window.scrollTo({ top: top < 0 ? 0 : top, behavior: reduce ? 'auto' : 'smooth' });
+  }
+  function pickCat(name) {
+    state.cat = name; state.page = 1;
+    paint(); goTop();
+  }
+
+  /* 分类 chips */
+  catsEl.addEventListener('click', function (e) {
+    var a = e.target.closest('.bc-chip');
+    if (!a) return;
+    e.preventDefault();
+    state.cat = a.getAttribute('data-cat');
+    state.page = 1;
+    paint();
   });
 
-  /* 筛选组：组内单选 */
-  document.querySelectorAll('[data-fgroup]').forEach(function (g) {
-    g.querySelectorAll('.fopt').forEach(function (o) {
-      o.addEventListener('click', function () {
-        g.querySelectorAll('.fopt').forEach(function (x) { x.classList.remove('on'); });
-        o.classList.add('on');
-      });
+  /* 四个筛选组（含排序） */
+  groupsEl.addEventListener('click', function (e) {
+    var b = e.target.closest('.fopt');
+    if (!b) return;
+    var dim = b.getAttribute('data-dim'), val = b.getAttribute('data-val');
+    if (dim === 'sort') state.sort = val; else state[dim] = val;
+    state.page = 1;
+    paint();
+  });
+
+  /* 搜索：输入即过滤 */
+  searchEl.addEventListener('input', function () {
+    state.q = searchEl.value.trim().toLowerCase();
+    state.page = 1;
+    paint();
+  });
+  clearEl.addEventListener('click', function () {
+    searchEl.value = '';
+    state.q = '';
+    state.page = 1;
+    paint();
+    searchEl.focus();
+  });
+
+  /* 大家在搜 */
+  document.querySelectorAll('.ls-hot a').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var q = a.getAttribute('data-q');
+      if (searchEl.value === q) { searchEl.value = ''; state.q = ''; }
+      else { searchEl.value = q; state.q = q.toLowerCase(); }
+      state.page = 1;
+      paint();
     });
   });
 
   /* 清除筛选 */
-  document.getElementById('btnReset').addEventListener('click', function () {
-    document.querySelectorAll('[data-fgroup]').forEach(function (g) {
-      g.querySelectorAll('.fopt').forEach(function (x, i) { x.classList.toggle('on', i === 0); });
-    });
+  $('btnReset').addEventListener('click', resetAll);
+  $('btnEmptyReset').addEventListener('click', function () { resetAll(); goTop(); });
+
+  /* 分页 */
+  pgBtnsEl.addEventListener('click', function (e) {
+    var b = e.target.closest('.pg-btn');
+    if (!b || b.disabled) return;
+    var v = b.getAttribute('data-pg');
+    if (v === 'prev') state.page--;
+    else if (v === 'next') state.page++;
+    else state.page = parseInt(v, 10);
+    paint();
+    goTop();
   });
 
-  /* 分页：单选高亮 */
-  document.querySelectorAll('.pg-btn').forEach(function (b) {
-    b.addEventListener('click', function () {
-      if (b.disabled || /上一页|下一页|‹|›/.test(b.textContent)) return;
-      document.querySelectorAll('.pg-btn').forEach(function (x) { x.classList.remove('on'); });
-      b.classList.add('on');
-    });
+  /* 列表行：点一下把被截断的简介展开 */
+  listEl.addEventListener('click', function (e) {
+    var row = e.target.closest('.feed-row');
+    if (!row) return;
+    e.preventDefault();
+    row.classList.toggle('is-open');
   });
+
+  /* 侧栏分类统计：点进目录 */
+  catStatsEl.addEventListener('click', function (e) {
+    var a = e.target.closest('.cat-stat');
+    if (!a) return;
+    e.preventDefault();
+    pickCat(a.getAttribute('data-cat'));
+  });
+
+  /* ════════════════════════════════════════════
+     6. 启动
+     ════════════════════════════════════════════ */
+  buildChips();
+  buildGroups();
+  buildSide();
+  paint();
 })();
 </script>
 </body>

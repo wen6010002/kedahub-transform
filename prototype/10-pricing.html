@@ -84,8 +84,16 @@
   .fq-q:hover { background: var(--bg-soft); }
   .fq-q .ar { margin-left: auto; color: var(--ink-faint); transition: transform .22s var(--ease-out); font-size: 13px; }
   .fq.open .fq-q .ar { transform: rotate(90deg); }
-  .fq-a { display: none; padding: 0 20px 18px 20px; font-size: 13.5px; color: var(--ink-2); line-height: 1.85; }
-  .fq.open .fq-a { display: block; animation: rise .3s var(--ease-out) both; }
+  .fq-a {
+    display: grid; grid-template-rows: 0fr; padding: 0 20px;
+    font-size: 13.5px; color: var(--ink-2); line-height: 1.85;
+    transition: grid-template-rows var(--t-base) var(--ease-out), padding-bottom var(--t-base) var(--ease-out);
+  }
+  .fq.open .fq-a { grid-template-rows: 1fr; padding-bottom: 18px; }
+  .fq-a> div { overflow: hidden; min-height: 0; }
+
+  /* 只看差异时藏起来的行 */
+  table.cmp tr[hidden] { display: none; }
 
   /* 验收关 · 两扇门 */
   .doors { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 22px; }
@@ -117,6 +125,56 @@
   .judge-c.no { background: var(--bg-soft); border-style: dashed; }
   .judge-c.no li::before { content: '—'; color: var(--ink-faint); }
 
+  /* 档位卡：可点选中 */
+  .tier { cursor: pointer; transition: transform var(--t-fast) var(--ease-out), box-shadow var(--t-fast), border-color var(--t-fast); }
+  .tier:hover { transform: translateY(-3px); box-shadow: var(--sticker-lg); border-color: #ffd9cd; }
+  .tier.picked { border-color: var(--pri); box-shadow: 0 0 0 3px rgba(255,107,74,.18), var(--sticker-lg); }
+  .tier.picked::after {
+    content: '已选'; position: absolute; top: -11px; right: 12px;
+    background: var(--ink); color: #fff; font-size: 10.5px; font-weight: 800;
+    padding: 3px 10px; border-radius: 999px;
+  }
+  @keyframes kpulse { 0% { box-shadow: 0 0 0 0 rgba(255,107,74,.45); } 100% { box-shadow: 0 0 0 16px rgba(255,107,74,0); } }
+  .tier.pulse { animation: kpulse .7s var(--ease-out); }
+
+  /* 底部对比条 */
+  .cmpr {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 70; padding: 12px 0;
+    background: rgba(255,255,255,.95); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line); animation: rise .3s var(--ease-out) both;
+  }
+  .cmpr[hidden] { display: none; }
+  .cmpr-in { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .cm-k { font-size: 14px; font-weight: 800; letter-spacing: -.25px; }
+  .cm-d { font-size: 12.5px; color: var(--ink-2); flex: 1; min-width: 180px; line-height: 1.6; }
+  .cm-d b { color: var(--pri-700); }
+
+  /* 只看差异开关 */
+  .bd-toggle {
+    margin-left: auto; border: 1.5px solid var(--line); background: #fff; border-radius: 999px;
+    padding: 5px 14px; font-size: 12.5px; font-weight: 700; color: var(--ink-2);
+    transition: all var(--t-fast) var(--ease-out); flex: none;
+  }
+  .bd-toggle:hover { border-color: var(--pri); color: var(--pri-600); }
+  .bd-toggle.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+  /* 横向滚动提示 */
+  .hs-wrap { position: relative; }
+  .hs-fade {
+    position: absolute; top: 0; bottom: 0; width: 36px; pointer-events: none; z-index: 2;
+    transition: opacity var(--t-base) var(--ease-out);
+  }
+  .hs-fade.left { left: 0; background: linear-gradient(90deg, #fff, rgba(255,255,255,0)); }
+  .hs-fade.right { right: 0; background: linear-gradient(270deg, #fff, rgba(255,255,255,0)); }
+  .hs-wrap.at-start .hs-fade.left { opacity: 0; }
+  .hs-wrap.at-end .hs-fade.right { opacity: 0; }
+  .hscroll-hint { font-size: 11.5px; color: var(--ink-faint); font-weight: 700; margin-top: 7px; transition: opacity var(--t-base); }
+  .hscroll-hint.hide { opacity: 0; }
+
+  /* 场景卡可点 */
+  .scene-c { cursor: pointer; transition: transform var(--t-fast) var(--ease-out), box-shadow var(--t-fast), border-color var(--t-fast); }
+  .scene-c:hover { transform: translateY(-3px); box-shadow: var(--sticker-lg); border-color: #ffd9cd; }
+
   @media (max-width: 1180px) { .tiers { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 860px) {
     .scene, .logic, .legal-grid, .doors, .judge, .gate-sub { grid-template-columns: 1fr; }
@@ -141,6 +199,7 @@
       <a class="nav-link" href="01-home.html">首页</a>
       <a class="nav-link" href="02-explore.html">🧭 探索路线</a>
       <a class="nav-link" href="06-roadmap.html">我的路线</a>
+      <a class="nav-link" href="08-library.html">资料库</a>
       <a class="nav-link" href="09-cohort.html">项目组</a>
       <a class="nav-link on" href="10-pricing.html">验收与付费</a>
     </div>
@@ -156,7 +215,7 @@
     <p>
       课搭不卖课、不卖资料、不卖"入门到精通"。整条路线的学习内容你随便走，
       我们不会在半路上拦着你要钱。<br /><br />
-      收费只在<strong>验收关</strong>——那个决定"这个阶段算不算走完了"的地方。它卖两样东西：
+      收费只在<strong>验收关</strong>，那个决定"这个阶段算不算走完了"的地方。它卖两样东西：
       <strong>"我做对了没有"（¥9）</strong>，和<strong>"有人认我了"（¥39）</strong>。
     </p>
   </header>
@@ -168,14 +227,14 @@
   <!-- ══════════ 价格卡 ══════════ -->
   <section class="tiers">
 
-    <div class="toon-card tier">
+    <div class="toon-card tier" data-tier="free" tabindex="0" role="button">
       <h3>免费</h3>
       <div class="tdesc">够你从零走到有一个能拿出手的项目</div>
       <div class="price"><i>¥</i><b>0</b></div>
       <div class="pnote">永久免费 · 不需要绑卡</div>
       <ul>
         <li>全部资料库（136 份）</li>
-        <li><b>计算机探索路线</b>全 8 站</li>
+        <li><b>计算机探索路线</b>全 41 站</li>
         <li>一条专属路线，<b>学习内容全程可走</b></li>
         <li><b>验收关每周 1 次免费额度</b></li>
         <li>打卡、进度、周窗口、休整券</li>
@@ -186,9 +245,9 @@
       <a class="btn btn-outline btn-block" href="02-explore.html">现在就开始</a>
     </div>
 
-    <div class="toon-card tier hot">
+    <div class="toon-card tier hot" data-tier="sys" tabindex="0" role="button">
       <span class="tier-tag">最轻的一次尝试</span>
-      <h3>AI 验收</h3>
+      <h3>系统验收</h3>
       <div class="tdesc">一道验收关的入场券，也是最快的一次"我到底做对没有"</div>
       <div class="price"><i>¥</i><b>9</b><span>/ 关</span></div>
       <div class="pnote">免费用户每周送 1 次 · 组内不限次</div>
@@ -203,13 +262,13 @@
       <a class="btn btn-primary btn-block" href="06-roadmap.html">去解锁一道关</a>
     </div>
 
-    <div class="toon-card tier">
+    <div class="toon-card tier" data-tier="senior" tabindex="0" role="button">
       <h3>学长验收</h3>
       <div class="tdesc">把"系统说跑通了"变成"真人看过，署名认可"</div>
       <div class="price"><i>¥</i><b>39</b><span>/ 阶段</span></div>
-      <div class="pnote">含一次 AI 验收 · 不通过免费重提</div>
+      <div class="pnote">含一次 系统验收 · 不通过免费重提</div>
       <ul>
-        <li>已有的 <b>AI 验收结论 + 截图证据</b></li>
+        <li>已有的 <b>系统验收结论 + 截图证据</b></li>
         <li><b>真人助教 48 小时内给评语</b>，逐条说好在哪、差在哪</li>
         <li>通过 → 该阶段的<b>编号印记</b>（可查、可挂简历）</li>
         <li>通过 → 一份能力说明：你强在哪、下一步补哪</li>
@@ -219,13 +278,13 @@
       <a class="btn btn-outline btn-block" href="06-roadmap.html">去我的路线申请</a>
     </div>
 
-    <div class="toon-card tier">
+    <div class="toon-card tier" data-tier="cohort" tabindex="0" role="button">
       <h3>项目组</h3>
       <div class="tdesc">同方向 25–30 人一期，有学长带、有同伴陪</div>
       <div class="price"><i>¥</i><b>449</b><span>/ 期（1 个月）</span></div>
       <div class="pnote">🎉 首次 14 天免费 · 内测价 ¥199（仅前 3 期）</div>
       <ul>
-        <li><b>AI 验收不限次数</b>（单买 ¥9/次）</li>
+        <li><b>系统验收不限次数</b>（单买 ¥9/次）</li>
         <li>本期<b>全部学长验收</b>（通常 5–6 次，单买要 ¥234）</li>
         <li>每周一次学长答疑（直播 + 文字）</li>
         <li>组内进度星图：看见谁和你卡在同一关</li>
@@ -236,7 +295,7 @@
       <a class="btn btn-outline btn-block" href="09-cohort.html">看看本期项目组</a>
     </div>
 
-    <div class="toon-card tier">
+    <div class="toon-card tier" data-tier="coach" tabindex="0" role="button">
       <h3>一对一陪跑</h3>
       <div class="tdesc">有具体目标、需要有人盯着你走完的人</div>
       <div class="price"><i>¥</i><b>1,299</b><span>/ 月</span></div>
@@ -257,30 +316,42 @@
   <!-- ══════════ 验收关长什么样 ══════════ -->
   <section>
     <div class="blog-sec-head"><h2>验收关长什么样</h2></div>
-    <div class="blog-sec-sub">你交一个能跑起来的东西，AI 真的把它打开点一遍</div>
+    <div class="blog-sec-sub">你交一个能跑起来的东西，系统真的把它打开看一遍</div>
 
     <div class="gate-sub">
       <div class="toon-card gate-s">
-        <span class="gs-i">🔗</span>
-        <b>一个能打开的链接</b>
-        <p>无头浏览器打开它，照标准点一遍：该有的按钮在不在、点了有没有反应、中途会不会报错。每一步截图。</p>
-      </div>
-      <div class="toon-card gate-s">
         <span class="gs-i">📦</span>
-        <b>一个仓库地址</b>
-        <p>拉下来，读 README，看目录结构，能跑就把测试跑一遍。</p>
+        <b>给个仓库地址</b>
+        <p>系统把公开仓库拉下来，装依赖、跑起来，再打开看一遍。提交记录、README、目录结构都在这里看。</p>
       </div>
       <div class="toon-card gate-s">
-        <span class="gs-i">🎬</span>
-        <b>一段录屏</b>
-        <p>视觉模型看一遍，逐条对照标准核。适合还没部署到公网的东西。</p>
+        <span class="gs-i">🗜</span>
+        <b>或者传个压缩包</b>
+        <p>仓库还是私有的、代码还没推上去，就把代码打包传上来。别把密钥文件打进去，系统不读 .env。</p>
       </div>
+      <div class="toon-card gate-s">
+        <span class="gs-i">🌐</span>
+        <b>或者给个已部署的地址</b>
+        <p>已经上线了就直接给地址。这条路只查打不打得开、点得动点不动，看不到源码。</p>
+      </div>
+    </div>
+
+    <div class="burn" style="margin-bottom:46px">
+      <div class="burn-h">🔒 你交上来的东西怎么处理</div>
+      <dl>
+        <dt class="gone">验收一结束</dt>
+        <dd>代码副本、压缩包、装出来的依赖，全部删掉</dd>
+        <dt class="gone">不读</dt>
+        <dd>不打开 .env 和任何密钥文件，也不把代码内容写进日志</dd>
+        <dt class="keep">留下来的</dt>
+        <dd>这份结论，和几条只截界面的证据图</dd>
+      </dl>
     </div>
 
     <div class="judge">
       <div class="toon-card judge-c yes">
-        <h4>✅ AI 判这些</h4>
-        <div class="ju-sub">事实 —— 机器几秒就能查清</div>
+        <h4>✅ 系统判这些</h4>
+        <div class="ju-sub">事实，机器几秒就能查清</div>
         <ul>
           <li>做出来了没有</li>
           <li>跑不跑得起来</li>
@@ -289,8 +360,8 @@
         </ul>
       </div>
       <div class="toon-card judge-c no">
-        <h4>🙅 AI 不判这些</h4>
-        <div class="ju-sub">判断 —— 只有真人判了才有人认</div>
+        <h4>🙅 系统不判这些</h4>
+        <div class="ju-sub">判断，只有真人判了才有人认</div>
         <ul>
           <li>做得好不好</li>
           <li>代码写得漂不漂亮</li>
@@ -305,17 +376,17 @@
     <div class="doors">
       <div class="toon-card door a">
         <span class="d-tag">第一档</span>
-        <h4>AI 验收 · ¥9/次</h4>
+        <h4>系统验收 · ¥9/次</h4>
         <div class="d-price">3 分钟 · 免费用户每周送 1 次 · 组内不限次</div>
         <p>
           给你<strong>"做对了没有"</strong>这个事实：逐条 ✓/✗、截图证据、卡在哪一步。
-          它快、便宜、可以一直跑——所以它值 9 块，不值 39。
+          它快、便宜、可以一直跑，所以它值 9 块，不值 39。
         </p>
       </div>
       <div class="toon-card door b">
         <span class="d-tag">第二档</span>
         <h4>学长验收 · ¥39/阶段</h4>
-        <div class="d-price">48 小时内 · 真人署名 · 含一次 AI 验收</div>
+        <div class="d-price">48 小时内 · 真人署名 · 含一次 系统验收</div>
         <p>
           给你<strong>"做得怎么样"</strong>这个判断：好在哪、差在哪、下一步补哪，
           以及一枚可以拿给别人看的编号印记。<strong>只有这一档的结论能对外背书。</strong>
@@ -326,32 +397,34 @@
     <div class="toon-card" style="padding:18px 20px;background:var(--bg-soft);margin-bottom:46px">
       <div style="font-size:13.5px;font-weight:800;display:flex;align-items:center;gap:8px">🔒 关卡是锁着的，但你知道它考什么</div>
       <p style="font-size:13px;color:var(--ink-2);margin-top:7px;line-height:1.8">
-        每道验收关进去之前，你能看到它<strong>验证哪几项能力</strong>（比如「结构化输出 · 错误处理 · 接口封装」）——
+        每道验收关进去之前，你能看到它<strong>验证哪几项能力</strong>（比如「结构化输出 · 错误处理 · 接口封装」），
         但<strong>具体要交什么、按哪几条判，解锁之后才显示</strong>。
         <br /><br />
-        这么设计是因为：标准和任务一旦公开，它就会变成一份能被搜到答案的作业。而验收本来就该考"你有没有真的做出来"，
-        不是"你能不能照着标准凑出来"。
+        这么设计是因为：标准和任务一旦公开，它就会变成一份能被搜到答案的作业。而验收本来就该考"你有没有真的做出来"，而不是"能不能照着标准凑出来"。
         <br /><br />
-        <strong>但我们不会让你买盲盒。</strong>能力清单一律公开——你掏钱买的是一个自己认可的挑战，不是一次抽奖。
+        <strong>但我们不会让你买盲盒。</strong>能力清单一律公开，你掏钱买的是一个自己认可的挑战，不是一次抽奖。
       </p>
     </div>
   </section>
 
   <!-- ══════════ 对比表 ══════════ -->
   <section>
-    <div class="blog-sec-head"><h2>一张表看清差别</h2></div>
+    <div class="blog-sec-head"><h2>一张表看清差别</h2>
+      <button class="bd-toggle" id="btnDiff" type="button" aria-pressed="false"><span class="bd-txt">只看差异</span></button>
+    </div>
     <div class="blog-sec-sub">同样的免费路线，加上不同的"被认可程度"</div>
-    <div class="cmp-wrap">
+    <div class="hs-wrap" id="cmpWrap">
+      <div class="cmp-wrap" id="cmpScroll">
       <table class="cmp">
         <thead>
           <tr>
-            <th>你会得到</th><th>免费</th><th>AI 验收 ¥9</th><th>学长验收 ¥39</th><th>项目组 ¥449</th><th>陪跑 ¥1299</th>
+            <th>你会得到</th><th>免费</th><th>系统验收 ¥9</th><th>学长验收 ¥39</th><th>项目组 ¥449</th><th>陪跑 ¥1299</th>
           </tr>
         </thead>
         <tbody>
           <tr class="sect"><td colspan="6">走路线（全部免费）</td></tr>
           <tr><td>完整资料库</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>探索路线（8 站）</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>探索路线（主干 30 站）</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
           <tr><td>专属定制路线（学习内容）</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
           <tr><td>打卡 / 进度 / 周窗口</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
           <tr><td>学习内容会不会被锁</td><td class="no">不会</td><td class="no">不会</td><td class="no">不会</td><td class="no">不会</td><td class="no">不会</td></tr>
@@ -360,7 +433,7 @@
           <tr><td>进验收关的额度</td><td class="em">每周 1 次免费</td><td class="em">按次 ¥9</td><td class="em">按次 ¥9</td><td class="em">不限次</td><td class="em">不限次</td></tr>
           <tr><td>解锁关卡：看到要交什么、按哪几条判</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
           <tr><td>逐条 ✓/✗ + 每一步截图证据</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
-          <tr><td>AI 结论能不能对外背书</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td></tr>
+          <tr><td>系统结论能不能对外背书</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td><td class="no">不能</td></tr>
 
           <tr class="sect"><td colspan="6">验收关 · 有没有人认</td></tr>
           <tr><td><b>真人学长署名验收</b></td><td class="no">—</td><td class="no">—</td><td class="em">48 小时内</td><td class="em">优先 24 小时</td><td class="em">随时</td></tr>
@@ -380,7 +453,11 @@
           <tr><td>退款</td><td class="no">—</td><td class="yes">未用可退</td><td class="yes">未评审可退</td><td class="yes">7 天无理由</td><td class="yes">7 天无理由</td></tr>
         </tbody>
       </table>
+      </div>
+      <span class="hs-fade left"></span>
+      <span class="hs-fade right"></span>
     </div>
+    <p class="hscroll-hint" id="cmpHint">← 左右滑动看全部 5 档 →</p>
   </section>
 
   <!-- ══════════ 什么时候你才需要付费 ══════════ -->
@@ -392,7 +469,7 @@
         <span class="si">📄</span>
         <b>你要拿它去换点什么的时候</b>
         <p>
-          简历上写"熟悉 RAG"，面试官会追问。但如果你能放一个二维码，扫开是一份带编号、有学长署名的阶段验收说明——那是完全不同的分量。
+          简历上写"熟悉 RAG"，面试官会追问。但如果你能放一个二维码，扫开是一份带编号、有学长署名的阶段验收说明，那是完全不同的分量。
         </p>
         <span class="sug">→ 学长验收 ¥39</span>
       </div>
@@ -408,7 +485,7 @@
         <span class="si">🎯</span>
         <b>你有明确 deadline 的时候</b>
         <p>
-          大三上要投暑期实习、考研复试要讲项目、留学要交 portfolio——有具体时间点、需要有人按节奏盯你的时候，1v1 才划算。
+          大三上要投暑期实习、考研复试要讲项目、留学要交 portfolio，有具体时间点、需要有人按节奏盯你的时候，1v1 才划算。
         </p>
         <span class="sug">→ 陪跑 ¥1,299/月</span>
       </div>
@@ -423,7 +500,7 @@
       <div class="toon-card logic-c">
         <b>① 为什么学习不收费，通过才收费</b>
         <p>
-          学习内容是"信息"，信息在今天是免费的——你花点时间总能找到替代品，收费只会逼走用户。
+          学习内容是"信息"，信息在今天是免费的，你花点时间总能找到替代品，收费只会逼走用户。
           <br /><br />
           而"通过"是两件事：一个是<strong>事实</strong>（跑不跑得起来），一个是<strong>判断</strong>（做得好不好）。
           事实机器几秒钟就能查清，所以只值 ¥9；判断要一个人的半小时，而且只有真人的判断才有人认，所以值 ¥39。
@@ -439,29 +516,29 @@
         </p>
       </div>
       <div class="toon-card logic-c">
-        <b>③ 为什么 AI 验收是 ¥9，既不免费也不 ¥39</b>
+        <b>③ 为什么 系统验收是 ¥9，既不免费也不 ¥39</b>
         <p>
           <strong>不卖 ¥39，是因为不值。</strong>它的成本是四毛钱，判的是"跑不跑得起来"这种机器几秒钟能查清的事实。
           为一个近乎零成本的事实收 39 块，用户想明白的那天，信任就没了。
           <br /><br />
           <strong>不能全免费，是因为免费的东西没人珍惜。</strong>随手可得的清单，扫一眼就扔了。
-          收 9 块钱，他会认真读完每一条 ✓/✗——这 9 块买的不是结论，是"我会认真对待它"。
+          收 9 块钱，他会认真读完每一条 ✓/✗。这 9 块买的不是结论，是"我会认真对待它"。
           <br /><br />
-          <strong>但每周必须送一次。</strong>一个从没体验过 AI 验收的人，不会去买学长验收——他不知道那东西长什么样。
+          <strong>但每周必须送一次。</strong>一个从没体验过系统验收的人，不会去买学长验收，他不知道那东西长什么样。
         </p>
       </div>
       <div class="toon-card logic-c">
         <b>④ 为什么项目组比单次验收划算这么多</b>
         <p>
           这是故意的。学长验收 ¥39 × 6 个阶段 = ¥234，项目组 ¥449 却多给了答疑、互评、答辩和同伴。
-          我们不希望你一次次零散地买——<strong>一次验收是交易，一期项目组才是真正的产品。</strong>
+          我们不希望你一次次零散地买。<strong>一次验收是交易，一期项目组才是真正的产品。</strong>
           ¥39 的存在，是让你能用最低成本先试一次，然后自己算明白这笔账。
         </p>
       </div>
       <div class="toon-card logic-c">
         <b>⑤ 关于多邻国：学位置感，不学扣心</b>
         <p>
-          值得学的是它的<strong>位置感</strong>：主线永远免费，付费只出现在可选的地方；还有连胜和排行榜——这两样课搭都有现成的。
+          值得学的是它的<strong>位置感</strong>：主线永远免费，付费只出现在可选的地方。
           不学的是扣心机制：答错几题就没心，要么等要么付。那是<strong>拿失败惩罚用户</strong>，
           在一个治"方向焦虑"的产品里，方向是反的。我们收的是"被认可"的钱，不是"别掉队"的钱。
         </p>
@@ -469,7 +546,7 @@
       <div class="toon-card logic-c">
         <b>⑥ 为什么试用只给项目组，不给陪跑</b>
         <p>
-          四个产品里，只有项目组是"不进去就感受不到"的——星图、同伴、每周答疑，看介绍页看不出来。
+          五个档位里，只有项目组是"不进去就感受不到"的，星图、同伴、每周答疑，看介绍页看不出来。
           陪跑是纯人力，两周等于 2 次 1v1 白送；而且每期只收 10 人，试用会把产能占满，付钱的人反而进不来。
           <strong>陪跑已经有更好的筛选器了：先通过 2 次学长验收。</strong>
         </p>
@@ -486,7 +563,7 @@
       <div class="legal-i"><span>✕</span><span><strong>不代做项目、不代写代码。</strong>你的产出必须是你自己写的。发现代做，撤销验收结果且不退款。</span></div>
       <div class="legal-i"><span>✕</span><span><strong>不提供任何形式的贷款、分期、预付费包。</strong>不诱导超前消费，不卖年卡。</span></div>
       <div class="legal-i"><span>✕</span><span><strong>不做大额预收费。</strong>单笔最高 ¥1,299，且按月结算，随时可停。</span></div>
-      <div class="legal-i"><span>✕</span><span><strong>AI 验收的结论不构成凭证。</strong>它是一份自查工具，页面上会写明"AI 结论不对外背书"。只有学长验收后签发的编号印记，才是课搭的凭证。</span></div>
+      <div class="legal-i"><span>✕</span><span><strong>系统验收的结论不构成凭证。</strong>它是一份自查工具，页面上会写明"系统结论不对外背书"。只有学长验收后签发的编号印记，才是课搭的凭证。</span></div>
       <div class="legal-i"><span>✕</span><span><strong>验收关不是盲盒。</strong>能力清单一律公开，只有具体任务和评分细则在解锁后显示。用户花的钱要买的是一个自己认可的挑战，不是一次抽奖。</span></div>
       <div class="legal-i"><span>✕</span><span><strong>每周免费额度不累积、不折现、不作废收费。</strong>当周不用，下周照常发一次。</span></div>
       <div class="legal-i"><span>✕</span><span><strong>不做"到期静默转付费"。</strong>免费试用不绑卡、不自动续费、到期不扣款。一个校园邮箱只能试用一次。</span></div>
@@ -503,90 +580,89 @@
     <div class="blog-sec-sub">还有疑问可以直接问我们</div>
     <div class="faq">
       <div class="fq">
-        <div class="fq-q">AI 验收是怎么做的？会不会是随便打个分？<span class="ar">›</span></div>
-        <div class="fq-a">
-          你把一个<strong>能跑起来的东西</strong>交上去——一个链接、一个仓库、或者一段录屏。
-          AI 会用无头浏览器<strong>真的把它打开、点一遍</strong>：该有的按钮在不在、点了有没有反应、中途会不会报错，每一步都截图。
+        <div class="fq-q">系统验收是怎么做的？会不会是随便打个分？<span class="ar">›</span></div>
+        <div class="fq-a"><div>
+          你把一个<strong>能跑起来的东西</strong>交上去，一个链接、一个仓库、或者一段录屏。
+          系统会用无头浏览器<strong>真的把它打开、点一遍</strong>：该有的按钮在不在、点了有没有反应、中途会不会报错，每一步都截图。
           <br /><br />
           交回来的是一份<strong>逐条的 ✓/✗ + 截图证据 + 卡在哪一步</strong>，不是一句"通过/不通过"。
-          它判的是<strong>事实</strong>——做出来了没有、跑不跑得起来；它<strong>不判</strong>做得好不好、代码漂不漂亮，那是学长的事。
+          它判的是<strong>事实</strong>，做出来了没有、跑不跑得起来；它<strong>不判</strong>做得好不好、代码漂不漂亮，那是学长的事。
           <br /><br />
-          价格：<strong>解锁一道关 ¥9</strong>，免费用户每周送 1 次。<strong>这道关解锁之后，改完可以免费重跑，不限次数</strong>——
-          收的是"进这道门"的钱，不是"每跑一次"的钱。
-        </div>
+          价格：<strong>解锁一道关 ¥9</strong>，免费用户每周送 1 次。<strong>这道关解锁之后，改完可以免费重跑，不限次数</strong>，收的是"进这道门"的钱，不是"每跑一次"的钱。
+        </div></div>
       </div>
       <div class="fq">
-        <div class="fq-q">AI 验收的结论能写进简历吗？<span class="ar">›</span></div>
-        <div class="fq-a">
+        <div class="fq-q">系统验收的结论能写进简历吗？<span class="ar">›</span></div>
+        <div class="fq-a"><div>
           <strong>不能，我们也不会让它变成能。</strong>
-          AI 验收是一份自查工具，页面上会写明"AI 结论不对外背书"。
+          系统验收是一份自查工具，页面上会写明"系统结论不对外背书"。
           <br /><br />
-          原因很实际：如果 AI 说通过就算数，那所有人都会通过，这枚印记也就一文不值了。
-          能拿给别人看的只有一种——<strong>学长验收后签发的那枚编号印记</strong>，真人署名、可查、有编号。
-        </div>
+          原因很实际：如果系统说通过就算数，那所有人都会通过，这枚印记也就一文不值了。
+          能拿给别人看的只有一种，<strong>学长验收后签发的那枚编号印记</strong>，真人署名、可查、有编号。
+        </div></div>
       </div>
       <div class="fq">
         <div class="fq-q">验收不通过怎么办？会一直卡着吗？<span class="ar">›</span></div>
-        <div class="fq-a">
+        <div class="fq-a"><div>
           不会卡住。你的路线照常往下走，只是这一阶段暂时没有印记。
-          按意见改完之后<strong>免费重新提交，不限次数</strong>——AI 验收和学长验收都是。
+          按意见改完之后<strong>免费重新提交，不限次数</strong>，系统验收和学长验收都一样。
           实际上第一次没过的人里，有 7 成在第二次就过了，意见本身就是最值钱的部分。
-        </div>
+        </div></div>
       </div>
       <div class="fq">
         <div class="fq-q">关卡锁着，我付了钱发现不合适怎么办？<span class="ar">›</span></div>
-        <div class="fq-a">
+        <div class="fq-a"><div>
           <strong>能力清单是公开的，不是盲盒。</strong>解锁之前你就能看到这道关验证哪几项能力
-          （比如「结构化输出 · 错误处理 · 接口封装」）——只是具体要交什么、按哪几条判，解锁后才显示。
+          （比如「结构化输出 · 错误处理 · 接口封装」），只是具体要交什么、按哪几条判，解锁后才显示。
           <br /><br />
           这么设计是因为：标准和任务一旦公开，它就会变成一份能被搜到答案的作业。而验收本来就该考"你有没有真的做出来"，
           不是"你能不能照着标准凑出来"。
           <br /><br />
-          花的钱买的是一个你认可的挑战，不是一次抽奖——这条是底线，越线就变成盲盒生意了。
-        </div>
+          花的钱买的是一个你认可的挑战，不是一次抽奖，这条是底线，越线就变成盲盒生意了。
+        </div></div>
       </div>
       <div class="fq">
         <div class="fq-q">免费用户能走完整条路线吗？验收关会不会被拦？<span class="ar">›</span></div>
-        <div class="fq-a">
+        <div class="fq-a"><div>
           <strong>学习内容全程免费，不会在半路被拦。</strong>24 关的学习内容、全部资料、整条路线都看得到，随便走。
           <br /><br />
           验收关是独立关卡，不在学习路径上：你不解锁它，照样能往下学，只是那道门一直亮着"未通过"。
-          <strong>免费用户每周还有 1 次免费的 AI 验收额度</strong>，够你试一次。
+          <strong>免费用户每周还有 1 次免费的 系统验收额度</strong>，够你试一次。
           <br /><br />
           你唯一缺的，是"有一个真人署名认了你走完了"。
-        </div>
+        </div></div>
       </div>
       <div class="fq">
         <div class="fq-q">14 天免费体验怎么算？到期会自动扣款吗？<span class="ar">›</span></div>
-        <div class="fq-a">
+        <div class="fq-a"><div>
           <strong>不会。我们不绑卡、不自动续费、到期一分钱不扣。</strong>
           试用只针对项目组，从开组那天起算 14 天；到期后你还在组里，只是不再享受新用户权益，想继续再单独买。
           <br /><br />
-          一个校园邮箱一生只能试用一次——这条比手机号好使，换手机号容易，换学号不容易。
+          一个校园邮箱一生只能试用一次，这条比手机号好使，换手机号容易，换学号不容易。
           <br /><br />
           陪跑不参与试用：它是纯人力产品，两周等于 2 次 1v1 白送，而且每期只收 10 人。
-        </div>
+        </div></div>
       </div>
       <div class="fq">
         <div class="fq-q">我可以只买一次学长验收，不进项目组吗？<span class="ar">›</span></div>
-        <div class="fq-a">
+        <div class="fq-a"><div>
           可以。学长验收就是为"我只想试一次"设计的。
           不过说句实话：项目组里那 27 个和你卡在同一关的人，可能比验收本身更有用。
-        </div>
+        </div></div>
       </div>
       <div class="fq">
         <div class="fq-q">价格以后会涨吗？<span class="ar">›</span></div>
-        <div class="fq-a">
+        <div class="fq-a"><div>
           会。内测价 ¥199 只对前 3 期项目组开放，之后回到 ¥449。
           已经购买的不受影响，按购买时的价格结算。
-        </div>
+        </div></div>
       </div>
       <div class="fq">
         <div class="fq-q">我大一，什么都没学，现在付费是不是浪费钱？<span class="ar">›</span></div>
-        <div class="fq-a">
+        <div class="fq-a"><div>
           是。大一的同学<strong>先走完探索路线（完全免费），确定方向之后再说</strong>。
           在你还不知道自己喜不喜欢之前，任何付费都是浪费。这也是我们把探索路线免费的原因。
-        </div>
+        </div></div>
       </div>
     </div>
   </section>
@@ -596,7 +672,7 @@
     <div style="font-size:26px">🧭</div>
     <b style="font-size:20px;font-weight:800;display:block;margin-top:10px;letter-spacing:-.4px">先别管钱，先走走看</b>
     <p style="font-size:13.5px;color:var(--ink-2);margin-top:8px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.8">
-      8 个晚上，把计算机摸一遍。走完之后你会知道自己想去哪——那时候再决定要不要为"被认可"花钱，一点都不晚。
+      三块主干，把计算机摸一遍。走完之后你会知道自己想去哪，那时候再决定要不要为"被认可"花钱，一点都不晚。
     </p>
     <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
       <a class="btn btn-primary btn-lg" href="02-explore.html">开始探索路线</a>
@@ -605,6 +681,15 @@
   </div>
 
 </main>
+
+<div class="cmpr" id="cmpr" hidden>
+  <div class="cmpr-in">
+    <span class="cm-k" id="cmK"></span>
+    <span class="cm-d" id="cmD"></span>
+    <button class="btn btn-light btn-sm" type="button" id="cmClear">取消选择</button>
+    <a class="btn btn-primary btn-sm" href="#" id="cmGo">去看看 →</a>
+  </div>
+</div>
 
 <footer class="foot">
   <div class="foot-inner">
@@ -624,9 +709,116 @@
 
 <script src="assets/app.js"></script>
 <script>
-  document.querySelectorAll('.fq-q').forEach(q => {
-    q.addEventListener('click', () => q.closest('.fq').classList.toggle('open'));
+(function () {
+  'use strict';
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── FAQ：高度无关的展开 ── */
+  document.querySelectorAll('.fq-q').forEach(function (q) {
+    q.setAttribute('role', 'button');
+    q.setAttribute('tabindex', '0');
+    function toggle() { q.closest('.fq').classList.toggle('open'); }
+    q.addEventListener('click', toggle);
+    q.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
   });
+
+  /* ── 档位卡：点一下就选中，底部浮出对比条 ── */
+  var TIER = {
+    free:   { name: '免费', note: '先走完探索路线再决定要不要花钱，一分钱不用出', href: '02-explore.html' },
+    sys:    { name: '系统验收', note: '一道关的入场券，改完免费重跑，不限次数', href: '06-roadmap.html' },
+    senior: { name: '学长验收', note: '真人署名，含一次系统验收，不通过免费重提', href: '06-roadmap.html' },
+    cohort: { name: '项目组', note: '比单买 6 次学长验收省 <b>¥234</b>，还多给答疑、互评、答辩', href: '09-cohort.html' },
+    coach:  { name: '一对一陪跑', note: '每月 1v1，需要先通过 2 次学长验收', href: '#faq' }
+  };
+  var cmpr = document.getElementById('cmpr');
+
+  function pick(tier) {
+    var k = tier.dataset.tier;
+    var d = TIER[k];
+    if (!d) return;
+    document.querySelectorAll('.tier').forEach(function (x) { x.classList.toggle('picked', x === tier); });
+    document.getElementById('cmK').textContent = '你选了「' + d.name + '」';
+    document.getElementById('cmD').innerHTML = d.note;
+    document.getElementById('cmGo').href = d.href;
+    cmpr.hidden = false;
+  }
+
+  document.querySelectorAll('.tier').forEach(function (tier) {
+    tier.addEventListener('click', function (e) {
+      if (e.target.closest('a, button')) return;   // 卡上的按钮照常跳转
+      pick(tier);
+    });
+    tier.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(tier); }
+    });
+  });
+
+  document.getElementById('cmClear').addEventListener('click', function () {
+    document.querySelectorAll('.tier').forEach(function (x) { x.classList.remove('picked'); });
+    cmpr.hidden = true;
+  });
+
+  /* ── 场景卡：点一下跳到对应档位并脉冲 ── */
+  var SCENE = ['senior', 'cohort', 'coach'];
+  document.querySelectorAll('.scene-c').forEach(function (c, i) {
+    c.setAttribute('tabindex', '0');
+    c.setAttribute('role', 'button');
+    function go() {
+      var tier = document.querySelector('.tier[data-tier="' + SCENE[i] + '"]');
+      if (!tier) return;
+      pick(tier);
+      tier.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+      if (!reduced) {
+        tier.classList.remove('pulse'); void tier.offsetWidth; tier.classList.add('pulse');
+      }
+    }
+    c.addEventListener('click', go);
+    c.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
+    });
+  });
+
+  /* ── 只看差异 ── */
+  var diffOnly = false;
+  var btnDiff = document.getElementById('btnDiff');
+  btnDiff.addEventListener('click', function () {
+    diffOnly = !diffOnly;
+    btnDiff.classList.toggle('on', diffOnly);
+    btnDiff.setAttribute('aria-pressed', diffOnly ? 'true' : 'false');
+    btnDiff.querySelector('.bd-txt').textContent = diffOnly ? '显示全部' : '只看差异';
+
+    document.querySelectorAll('table.cmp tbody tr:not(.sect)').forEach(function (r) {
+      if (!diffOnly) { r.hidden = false; return; }
+      var cells = [].slice.call(r.children).slice(1).map(function (c) { return c.textContent.trim(); });
+      r.hidden = cells.length> 1 && cells.every(function (v) { return v === cells[0]; });
+    });
+    document.querySelectorAll('table.cmp tbody tr.sect').forEach(function (sect) {
+      if (!diffOnly) { sect.hidden = false; return; }
+      var n = sect.nextElementSibling, any = false;
+      while (n && !n.classList.contains('sect')) {
+        if (!n.hidden) any = true;
+        n = n.nextElementSibling;
+      }
+      sect.hidden = !any;
+    });
+  });
+
+  /* ── 宽表横向提示 ── */
+  var wrap = document.getElementById('cmpWrap');
+  var box = document.getElementById('cmpScroll');
+  var hint = document.getElementById('cmpHint');
+  function syncScroll() {
+    var max = box.scrollWidth - box.clientWidth;
+    wrap.classList.toggle('at-start', box.scrollLeft <= 4);
+    wrap.classList.toggle('at-end', max <= 4 || box.scrollLeft>= max - 4);
+    hint.classList.toggle('hide', max <= 4);
+  }
+  syncScroll();
+  box.addEventListener('scroll', syncScroll, { passive: true });
+  window.addEventListener('resize', syncScroll);
+})();
 </script>
 </body>
 </html>
