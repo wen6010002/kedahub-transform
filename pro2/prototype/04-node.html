@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>单关卡 · 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  .lv-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .lv-top .lv-back { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); }
+  .lv-top .lv-back:hover { color: var(--pri-600); }
+  .lv-top .lv-pos { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+
+  .lv-done-tip {
+    display: flex; align-items: center; gap: 10px; font-size: 12.5px; font-weight: 700;
+    color: var(--mint); background: var(--mint-50); border-radius: var(--r);
+    padding: 9px 14px; margin-bottom: 16px;
+  }
+  .lv-done-tip button { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; }
+
+  .lv-main { max-width: 720px; }
+  .lv-end { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line); }
+  .lv-note { font-size: 11.5px; color: var(--ink-faint); margin-top: 14px; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<div id="khNav"></div>
+<div id="khCrumb" data-crumb="首页,闯关路线,单关卡"></div>
+
+<main class="page">
+  <div class="lv-layout">
+    <div class="lv-main">
+
+      <div class="lv-top">
+        <a class="lv-back" id="lvBack" href="03-map.html">← 返回闯关地图</a>
+        <span class="lv-pos" id="lvPos">第 1 关 / 共 9 关</span>
+      </div>
+
+      <div class="lv-review-tip" id="lvReviewTip" hidden>
+        <span style="flex:none">✅</span>
+        <div style="flex:1;min-width:0">
+          <b>这一关你已经通关了 · 现在直接进入回顾模式</b>
+          <div style="margin-top:3px">
+            全部知识讲解、课堂练习的正确答案与解析、过关检测的答案都<b>已经展开</b>
+          </div>
+        </div>
+        <button type="button" id="lvRedo" class="btn btn-outline btn-sm" style="flex:none;align-self:center">再走一遍</button>
+      </div>
+
+      <div class="vip-hint" id="lvPhTip" hidden style="margin-bottom:16px">
+        📝 这一关当前是<b>示例结构</b>：这一站的正文还没录入，下面的讲解、课堂练习、过关检测与真实关卡完全一致，只是内容换成了通用示例。
+      </div>
+
+      <header class="lv-head">
+        <div class="lv-kicker" id="lvKicker">计算机初识</div>
+        <h1 id="lvTitle">电脑是怎么工作的</h1>
+        <div class="lv-sub">
+          <span class="lv-xp" id="lvXp">+20 XP</span>
+          <span id="lvTime">约 45 分钟</span>
+          
+        </div>
+      </header>
+
+      <div id="lvBody"></div>
+
+      <div class="lv-end">
+        <a class="btn btn-light btn-sm" id="lvExit" href="03-map.html">保存进度并退出</a>
+        <span style="font-size:11.5px;color:var(--ink-soft);align-self:center">
+          滴水穿石，不是因其力量，而是因其坚韧不拔、锲而不舍。—— 拉蒂默
+        </span>
+      </div>
+      
+    </div>
+
+    <aside class="lv-side">
+      <div class="lv-steps">
+        <h3>这一关的结构</h3>
+        <div id="lvSteps"></div>
+      </div>
+
+      <div class="info" style="border:1px solid var(--line);border-radius:var(--r-lg);padding:15px 16px;background:#fff">
+        <h3 style="font-size:13.5px;font-weight:800;margin-bottom:9px">📚 这一站的资料</h3>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.8">
+          探索版 · 讲解正文<br />
+          精通版 · 想再往下挖时看
+        </div>
+        <a class="btn btn-outline btn-sm btn-block" style="margin-top:10px" href="09-library.html">去资料库看</a>
+      </div>
+
+      <div class="vip-hint">
+        ♛ 会员可开启自由解锁，跳过关卡顺序锁
+        <a href="11-member.html">了解一下</a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<!-- ══════════ 通关庆祝弹窗（简约轻量） ══════════ -->
+<dialog class="cele" id="celeDlg">
+  <div class="cele-in">
+    <span class="cl-stamp">🏅</span>
+    <h3 id="celeTitle">这一关走完了</h3>
+    <p id="celeDesc">节点已点亮，下一关解锁。</p>
+    <span class="cele-xp">＋20 XP · 累计 <span id="celeXp">0</span> XP</span>
+  </div>
+  <div class="cele-acts">
+    <button class="btn btn-outline" type="button" id="celeBack">标记完成并返回</button>
+    <button class="btn btn-primary" type="button" id="celeNext">进入下一关 →</button>
+  </div>
+</dialog>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo"><span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span></div>
+      <p>找资料，先来课搭。然后，我们一起把它走完。</p>
+    </div>
+    <div class="foot-col"><h4>学习</h4><a href="02-routes.html">闯关路线</a><a href="03-map.html">闯关地图</a><a href="09-library.html">资料库</a></div>
+    <div class="foot-col"><h4>会员</h4><a href="11-member.html">会员中心</a><a href="08-roadmap.html">专属进阶路线</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 基础路线永久免费</div>
+</footer>
+
+<script src="assets/levels.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  'use strict';
+  var KH = window.KH;
+
+  /* 关卡内容库在 assets/levels.js 里（按路线模块拆开维护，这里只读取）
+     已录入：计算机初识 9 关 + 前后端初识 11 关 + AI 初识 10 关 = 30 关。
+     没录入的关卡走下面的 fallback()，结构与真实关卡完全一致。 */
+  var LEVELS = window.LEVELS || {};
+
+  /* 兜底：其余关卡先用同一套结构占位，交互完全一致 */
+  function fallback(name) {
+    return { placeholder: true, h: name, segs: [
+      { t: 'text', h: '这一站在解决什么问题', b:
+        '<p>「<strong>' + name + '</strong>」这一站的正文正在录入中。当前页面展示的是这一关的<strong>完整结构</strong>：讲解 → 课堂练习 → 讲解 → 过关检测，交互与正式关卡完全一致。</p>' +
+        '<p>录入完成后，这里会换成这一站的讲解正文，中间在关键处插入课堂练习。</p>' },
+      { t: 'quiz', q: '（示例）关于「' + name + '」，下面哪一项更接近它的定位？',
+        opts: ['它是一个需要动手做出东西的站点', '它只是一份可以下载看的文档', '它只在会员开通后才存在', '它和计算机学习无关'], a: 0,
+        why: '课搭的每一站都要求产出一个能拿给别人看的小东西，不是读完就算。' },
+      { t: 'text', h: '关键处的下一步讲解', b:
+        '<p>这一段在正式关卡里是「答对上一题才解锁」的内容。现在的示例关卡同样遵守这个规则：上面的练习没答对，这一段就保持折叠隐藏。</p>' },
+      { t: 'quiz', q: '（示例）课堂练习的作用是什么？',
+        opts: ['凑时长', '确认你真的看懂了刚才那段，并据此解锁下一段', '给系统打分排名', '决定你能不能看资料库'], a: 1,
+        why: '练习只控制这一关内部的解锁，和资料库权限无关 —— 资料库对所有用户免费开放。' },
+      { t: 'final', qs: [
+        { q: '（示例）过关检测通过后会发生什么？', opts: ['什么都不会发生', '这一关节点点亮，下一关解锁', '资料库被锁上', '必须付费才能继续'], a: 1, why: '基础路线永久免费，通关只影响闯关节点状态，不影响资料库。' },
+        { q: '（示例）关卡没解锁，会影响资料库吗？', opts: ['会，资料也被锁', '不会，资料库对所有用户免费开放', '只有会员能看', '要等全部通关'], a: 1, why: '资料库与闯关进度解耦，这是硬规则。' },
+        { q: '（示例）会员在这条基础路线上能得到什么？', opts: ['提前看到未解锁的收费课程', '自由解锁关卡特权等增值服务', '把免费内容变成付费内容', '没有任何差别'], a: 1, why: '会员只做增值，基础路线永久免费。' }
+      ]}
+    ]};
+  }
+
+  /* ══════════ 解析参数 ══════════ */
+  var q = new URLSearchParams(location.search);
+  var rid = q.get('route') || 'm1';
+  var n = parseInt(q.get('n') || '1', 10);
+
+  var route = KH.findRoute ? KH.findRoute(rid) : null;
+  if (!route) route = KH.ROUTES[0];
+  rid = route.id;
+  var total = route.stations.length;
+  if (n < 1) n = 1;
+  if (n > total) n = total;
+
+  var stationName = route.stations[n - 1];
+  var level = LEVELS[rid + '-' + n] || fallback(stationName);
+  var isDone = KH.isDone(rid, n);
+  /* 通关后保留解锁状态：再次进入直接进「回顾模式」，
+     所有讲解 / 课堂练习答案与解析 / 过关检测答案全部展开，不再要求重做。 */
+  /* ?demo=review：演示用，强制把当前关卡当回顾态（不影响 localStorage）。
+     评审时用它能一键进入「通关后」视角，不用先跑去打一遍。 */
+  var demoReview = q.get('demo') === 'review';
+  var review = isDone || demoReview;
+
+  /* ══════════ 渲染状态 ══════════ */
+  var segs = level.segs;
+  var answered = {};      // 已答对/已通过的练习下标
+  var passed = false;
+
+  /* ── 头部 ── */
+  document.getElementById('lvKicker').textContent = route.name + ' · 第 ' + n + ' 关';
+  document.getElementById('lvTitle').textContent = stationName;
+  document.getElementById('lvPos').textContent = '第 ' + n + ' 关 / 共 ' + total + ' 关';
+  document.getElementById('lvBack').href = '03-map.html?route=' + rid;
+  document.getElementById('lvExit').href = '03-map.html?route=' + rid;
+  if (level.placeholder) {
+    document.getElementById('lvXp').textContent = '+20 XP · 示例内容';
+    document.getElementById('lvPhTip').hidden = false;
+    document.getElementById('lvRule').textContent = '示例内容 · 结构与真实关卡一致';
+  }
+  if (review) {
+    /* 解锁状态保留：把所有练习 / 检测都标记为已通过 */
+    segs.forEach(function (s, i) { if (s.t === 'quiz' || s.t === 'final') answered[i] = true; });
+    document.getElementById('lvReviewTip').hidden = false;
+    
+  }
+  document.getElementById('lvRedo').addEventListener('click', function () {
+    KH.unfinish(rid, n);   /* 只重来这一关，不影响其它已通关的关卡 */
+    location.reload();
+  });
+
+  function firstBlock() {
+    for (var i = 0; i < segs.length; i++) {
+      var s = segs[i];
+      if ((s.t === 'quiz' || s.t === 'final') && !answered[i]) return i;
+    }
+    return -1;
+  }
+
+  function stepsHtml() {
+    var out = '';
+    segs.forEach(function (s, i) {
+      var label = s.t === 'text' ? '讲解 · ' + s.h
+        : (s.t === 'final' ? '过关检测' : '课堂练习');
+      var on = s.t === 'text' ? (i < firstBlock() || firstBlock() < 0) : !!answered[i];
+      var lock = !on;
+      out += '<div class="ls-item ' + (on ? 'on' : 'lock') + '">' +
+        '<span class="ls-d">' + (on ? '✓' : '·') + '</span>' + label + '</div>';
+    });
+    return out;
+  }
+
+  function render() {
+    var block = firstBlock();
+    var host = document.getElementById('lvBody');
+    var html = '';
+
+    for (var i = 0; i < segs.length; i++) {
+      var s = segs[i];
+      if (block >= 0 && i > block) break;
+      if (s.t === 'text') {
+        html += '<section class="seg' + (i === 0 ? '' : ' revealable') + '"><div class="seg-body">' +
+          '<h3>' + s.h + '</h3>' + s.b + '</div></section>';
+      } else if (s.t === 'quiz') {
+        html += quizHtml(s, i, '课堂练习');
+      } else {
+        html += finalHtml(s);
+      }
+    }
+
+    if (block >= 0 && block < segs.length) {
+      var what = segs[block].t === 'final' ? '过关检测' : '课堂练习';
+      html += '<section class="seg gate"><span class="g-ico">🔒</span>' +
+        '<b>后面的内容已折叠</b>' +
+        '<span>答对上面的' + what + '，才会解锁下一段讲解。</span></section>';
+    }
+
+    host.innerHTML = html;
+    document.getElementById('lvSteps').innerHTML = stepsHtml();
+    bind();
+  }
+
+  function quizHtml(s, i, tag) {
+    return '<div class="qz" data-i="' + i + '">' +
+      '<div class="qz-h"><span class="qz-tag">' + tag + '</span><b>答对才解锁后面的讲解</b>' +
+      '<span class="qz-no">未作答</span></div>' +
+      '<div class="qz-b"><div class="qz-q">' + s.q + '</div>' +
+      '<div class="qz-opts">' + s.opts.map(function (o, k) {
+        return '<button type="button" class="qz-opt" data-k="' + k + '">' +
+          '<span class="ok">✓</span><span><span class="ol">' + 'ABCD'[k] + '.</span>' + o + '</span></button>';
+      }).join('') + '</div>' +
+      '<div class="qz-fb"><b>为什么：</b>' + s.why + '</div></div></div>';
+  }
+
+  function finalHtml(s) {
+    return '<div class="qz final" data-final="1">' +
+      '<div class="qz-h"><span class="qz-tag">过关检测</span><b>全部答对才算通过</b>' +
+      '<span class="qz-no">' + s.qs.length + ' 题</span></div>' +
+      '<div class="qz-b">' + s.qs.map(function (it, k) {
+        return '<div class="qz-item" data-k="' + k + '" style="padding-bottom:14px' +
+          (k < s.qs.length - 1 ? ';border-bottom:1px solid var(--line-2);margin-bottom:14px' : '') + '">' +
+          '<div class="qz-q"><b>第 ' + (k + 1) + ' 题 · </b>' + it.q + '</div>' +
+          '<div class="qz-opts">' + it.opts.map(function (o, j) {
+            return '<button type="button" class="qz-opt" data-k="' + j + '">' +
+              '<span class="ok">✓</span><span><span class="ol">' + 'ABCD'[j] + '.</span>' + o + '</span></button>';
+          }).join('') + '</div>' +
+          '<div class="qz-fb"><b>为什么：</b>' + it.why + '</div></div>';
+      }).join('') +
+      '<button class="btn btn-primary btn-block" type="button" id="finalSubmit" style="margin-top:6px">提交检测</button>' +
+      '</div></div>';
+  }
+
+  function bind() {
+    /* 课堂练习 */
+    document.querySelectorAll('#lvBody .qz:not([data-final])').forEach(function (box) {
+      var i = parseInt(box.dataset.i, 10);
+      if (answered[i]) { lockQuiz(box, segs[i].a, false, review); return; }
+      box.querySelectorAll('.qz-opt').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var k = parseInt(btn.dataset.k, 10);
+          var s = segs[i];
+          if (k === s.a) {
+            answered[i] = true;
+            lockQuiz(box, k, true, false);
+            KH.toast('答对了 · 下一段讲解已解锁');
+            setTimeout(render, 260);
+          } else {
+            btn.classList.add('wrong');
+            btn.querySelector('.ok').textContent = '✕';
+            box.querySelector('.qz-fb').innerHTML = '<b>还不对。</b>再读一遍上面那段，或者换个选项试试 —— 答对才会解锁后面的内容。';
+            box.querySelector('.qz-fb').classList.add('show');
+          }
+        });
+      });
+    });
+
+    /* 过关检测 */
+    var fb = document.querySelector('#lvBody .qz[data-final]');
+    if (fb) { if (review) reviewFinal(fb); else bindFinal(fb); }
+  }
+
+  /* 通关回顾：直接摊开过关检测的全部答案与解析，不再要求提交 */
+  function reviewFinal(box) {
+    var s = segs[segs.length - 1];
+    box.classList.add('is-review');
+    s.qs.forEach(function (it, k) {
+      var item = box.querySelector('.qz-item[data-k="' + k + '"]');
+      if (!item) return;
+      item.querySelectorAll('.qz-opt').forEach(function (b, j) {
+        b.disabled = true;
+        if (j === it.a) { b.classList.add('right'); b.querySelector('.ok').textContent = '✓'; }
+        else b.querySelector('.ok').textContent = '';
+      });
+      item.querySelector('.qz-fb').classList.add('show');
+    });
+    var no = box.querySelector('.qz-no');
+    if (no) { no.textContent = '已通关'; no.style.color = 'var(--mint)'; }
+    var hd = box.querySelector('.qz-h b');
+    if (hd) hd.textContent = '这一关已通关 · 直接看答案与解析';
+    var btn = box.querySelector('#finalSubmit');
+    if (btn) {
+      btn.textContent = '✓ 已通过 · 回顾模式';
+      btn.className = 'btn btn-light btn-block';
+      btn.disabled = true;
+    }
+  }
+
+  function lockQuiz(box, right, just, rv) {
+    box.querySelectorAll('.qz-opt').forEach(function (b, k) {
+      b.disabled = true;
+      if (k === right) { b.classList.add('right'); b.querySelector('.ok').textContent = '✓'; }
+      else b.querySelector('.ok').textContent = '';
+    });
+    /* 已答对的练习始终保留解析，回头再看也看得见 */
+    box.querySelector('.qz-fb').classList.add('show');
+    var st = box.querySelector('.qz-no');
+    var tag = box.querySelector('.qz-tag');
+    var hd = box.querySelector('.qz-h b');
+    if (rv) {
+      box.classList.add('is-review');
+      if (tag) tag.textContent = '课堂练习 · 已通过';
+      if (hd) hd.textContent = '这一关已通关 · 直接看答案与解析';
+      if (st) { st.textContent = '已通关'; st.style.color = 'var(--mint)'; }
+    } else if (just) {
+      if (st) { st.textContent = '已通过'; st.style.color = 'var(--mint)'; }
+      if (tag) tag.textContent = '课堂练习 · 已通过';
+    }
+  }
+
+  function bindFinal(box) {
+    var s = segs[segs.length - 1];
+    var picks = [];
+    box.querySelectorAll('.qz-item').forEach(function (item) {
+      var k = parseInt(item.dataset.k, 10);
+      item.querySelectorAll('.qz-opt').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          picks[k] = parseInt(btn.dataset.k, 10);
+          item.querySelectorAll('.qz-opt').forEach(function (b) { b.classList.remove('right', 'wrong'); b.querySelector('.ok').textContent = ''; });
+          btn.classList.add('right'); btn.querySelector('.ok').textContent = '✓';
+        });
+      });
+    });
+    box.querySelector('#finalSubmit').addEventListener('click', function () {
+      var s2 = segs[segs.length - 1];
+      var wrong = [];
+      s2.qs.forEach(function (it, k) {
+        if (picks[k] !== it.a) wrong.push(k);
+      });
+      s2.qs.forEach(function (it, k) {
+        var item = box.querySelector('.qz-item[data-k="' + k + '"]');
+        item.querySelectorAll('.qz-opt').forEach(function (b, j) {
+          b.disabled = true;
+          if (j === it.a) { b.classList.add('right'); b.querySelector('.ok').textContent = '✓'; }
+          else if (j === picks[k]) { b.classList.add('wrong'); b.querySelector('.ok').textContent = '✕'; }
+        });
+        item.querySelector('.qz-fb').classList.add('show');
+      });
+
+      if (wrong.length === 0) {
+        pass();
+      } else {
+        this.textContent = '还有 ' + wrong.length + ' 题不对 · 再看一遍重做';
+        this.className = 'btn btn-outline btn-block';
+        KH.toast('还有 ' + wrong.length + ' 题没答对，读一遍解析再重来');
+        setTimeout(function () {
+          s2.qs.forEach(function (it, k) {
+            var item = box.querySelector('.qz-item[data-k="' + k + '"]');
+            item.querySelectorAll('.qz-opt').forEach(function (b) { b.disabled = false; b.classList.remove('right', 'wrong'); b.querySelector('.ok').textContent = ''; });
+            item.querySelector('.qz-fb').classList.remove('show');
+          });
+          picks = [];
+          var btn = box.querySelector('#finalSubmit');
+          btn.textContent = '重新提交检测';
+          btn.className = 'btn btn-primary btn-block';
+        }, 1400);
+      }
+    });
+  }
+
+  /* ══════════ 通关 ══════════ */
+  function pass() {
+    if (passed) return;
+    passed = true;
+    answered[segs.length - 1] = true;
+
+    if (!KH.isDone(rid, n)) KH.finish(rid, n);
+    var xp = KH.addXp(20);
+
+    document.getElementById('celeXp').textContent = xp;
+    document.getElementById('celeDesc').textContent = n < total
+      ? '节点已点亮，第 ' + (n + 1) + ' 关已解锁。'
+      : '这是这条路线的最后一关，整条路线已全部通关。';
+    if (n >= total) {
+      document.getElementById('celeNext').textContent = '回到地图看看';
+      document.getElementById('celeNext').dataset.act = 'map';
+    }
+    document.getElementById('celeDlg').showModal();
+  }
+
+  document.getElementById('celeNext').addEventListener('click', function () {
+    if (this.dataset.act === 'map') location.href = '03-map.html?route=' + rid;
+    else location.href = KH.nodeUrl(rid, n + 1);
+  });
+  document.getElementById('celeBack').addEventListener('click', function () {
+    location.href = '03-map.html?route=' + rid;
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

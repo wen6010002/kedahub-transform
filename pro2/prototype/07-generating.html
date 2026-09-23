@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>正在为你制定专属路线 · 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  /* ═══ 本页专属：路线生成仪式 ═══ */
+  .gen-page { padding-top: 34px; }
+  .gen { max-width: 900px; margin: 0 auto; text-align: center; }
+
+  .gen-dai { margin: 0 auto 16px; display: block; width: 52px; }
+  .gen-kicker { font-size: 11.5px; font-weight: 800; letter-spacing: 0.22em; color: var(--pri-600); text-transform: uppercase; }
+  .gen h1 { font-size: 34px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.24; margin-top: 10px; }
+  .gen h1 em { font-style: normal; color: var(--pri); }
+  .gen-sub { font-size: 14px; color: var(--ink-2); margin: 13px auto 0; max-width: 620px; line-height: 1.82; }
+  .gen-sub b { color: var(--ink); }
+
+  /* ── 中央路线图 ── */
+  .gen-map { position: relative; max-width: 880px; margin: 30px auto 0; }
+  .gen-svg { width: 100%; aspect-ratio: 920 / 160; height: auto; display: block; overflow: visible; }
+  .gen-svg .g-track { fill: none; stroke: var(--line); stroke-width: 8; stroke-linecap: round; }
+  .gen-svg .g-grow { fill: none; stroke: var(--pri); stroke-width: 8; stroke-linecap: round; }
+
+  .gnode .gn-halo { fill: none; stroke: var(--pri); stroke-width: 3; opacity: 0; }
+  .gnode .gn-dot { fill: var(--bg-deep); stroke: #fff; stroke-width: 3; transition: fill 0.35s var(--ease-out); }
+  .gnode .gn-tick {
+    fill: #fff; font-family: var(--font); font-size: 13px; font-weight: 800;
+    text-anchor: middle; opacity: 0; transition: opacity 0.25s 0.1s;
+  }
+  .gnode.on .gn-dot { fill: url(#gPri); animation: gnPop 0.52s var(--ease-pop); }
+  .gnode.on .gn-tick { opacity: 1; }
+  .gnode.on .gn-halo { animation: gnHalo 0.66s var(--ease-out) forwards; }
+  @keyframes gnPop { 0% { transform: scale(1); } 45% { transform: scale(1.24); } 100% { transform: scale(1); } }
+  @keyframes gnHalo { 0% { transform: scale(0.65); opacity: 0.7; } 100% { transform: scale(2); opacity: 0; } }
+
+  /* ── 印章 ── */
+  .gen-stamp-wrap { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 5; }
+  .gen-stamp-inner { position: relative; }
+  .gen-stamp { width: 96px; height: 96px; font-size: 12px; background: rgba(255, 250, 248, 0.94); box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.6); }
+  .gen-stamp-inner .ink-ring { inset: 0; }
+
+  /* ── 过程日志 ── */
+  .gen-logs { max-width: 620px; margin: 32px auto 0; text-align: left; min-height: 348px; }
+  .log-row { display: flex; gap: 12px; align-items: baseline; padding: 9px 0; opacity: 0; }
+  .log-row .tick {
+    flex: none; width: 20px; text-align: center;
+    font-size: 13px; font-weight: 800; color: var(--ink-faint);
+    opacity: 0.3; transition: color 0.3s var(--ease-pop), opacity 0.3s var(--ease-pop);
+  }
+  .log-row.on .tick { color: var(--pri); opacity: 1; }
+  .log-row .lt { font-size: 14px; font-weight: 600; color: var(--ink-2); line-height: 1.6; }
+  .log-row.on .lt { color: var(--ink); }
+  .log-row .lt small { display: block; font-size: 12px; font-weight: 500; color: var(--ink-soft); margin-top: 2px; line-height: 1.6; }
+  .log-row.final .lt { font-size: 15.5px; font-weight: 800; letter-spacing: -0.3px; color: var(--ink); }
+
+  /* ── 收尾 ── */
+  .gen-actions { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 8px; min-height: 60px; }
+  .gen-actions .gn-note { font-size: 12.5px; color: var(--ink-soft); flex: 1; min-width: 220px; text-align: left; }
+
+  /* ── 按问卷结果推荐的地图 ── */
+  .gen-rec { max-width: 620px; margin: 30px auto 0; text-align: left; }
+  .gen-rec[hidden] { display: none; }
+  .gr-label {
+    font-size: 11px; font-weight: 800; letter-spacing: .16em; color: var(--pri-600);
+    text-transform: uppercase; margin-bottom: 9px; text-align: center;
+  }
+  .gr-card {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--pri-50);
+    border-color: #ffd9cd; padding: 15px 17px;
+  }
+  .gr-card .gr-ico { font-size: 26px; flex: none; }
+  .gr-card .gr-b { flex: 1; min-width: 220px; }
+  .gr-card .gr-b b { display: block; font-size: 15px; font-weight: 800; letter-spacing: -.3px; }
+  .gr-card .gr-b span { display: block; font-size: 12.5px; color: var(--ink-2); line-height: 1.7; margin-top: 3px; }
+  .gen-src {
+    font-size: 12.5px; color: var(--ink-soft); line-height: 1.75;
+    max-width: 620px; margin: 30px auto 0; padding-top: 18px; border-top: 1px dashed var(--line);
+  }
+  .gen-src b { color: var(--ink-2); }
+
+  /* 顶部总进度线：让等待有边界 */
+  .gen-prog { position: fixed; left: 0; right: 0; top: 0; height: 3px; z-index: 90; pointer-events: none; }
+  .gen-prog i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--pri), var(--pri-600)); transition: width .3s linear; }
+
+  .gen-skip {
+    display: block; margin: 14px auto 0; font-size: 12px; font-weight: 700;
+    color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px;
+  }
+  .gen-skip:hover { color: var(--pri-600); }
+  .gen-skip[hidden] { display: none; }
+
+  @media (max-width: 720px) {
+    .gen h1 { font-size: 25px; }
+    .gen-stamp { width: 76px; height: 76px; font-size: 10.5px; }
+    .gen-logs { min-height: 400px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ 导航 ══════════ -->
+<div id="khNav"></div>
+
+<div class="gen-prog" aria-hidden="true"><i id="genProg"></i></div>
+
+<main class="page gen-page">
+  <section class="gen">
+
+    <span class="gen-dai dai-bob">
+      <svg width="52" height="52" viewBox="0 0 64 64">
+        <rect x="19" y="47" width="9" height="11" rx="4.5" fill="#d04a2a"/>
+        <rect x="36" y="47" width="9" height="11" rx="4.5" fill="#d04a2a"/>
+        <rect x="8" y="9" width="48" height="44" rx="16" fill="#ff6b4a"/>
+        <rect x="8" y="9" width="48" height="44" rx="16" fill="url(#gdb)" opacity=".35"/>
+        <circle cx="24" cy="29" r="4.2" fill="#fff"/><circle cx="40" cy="29" r="4.2" fill="#fff"/>
+        <circle cx="25" cy="30" r="2.2" fill="#1a1d23"/><circle cx="41" cy="30" r="2.2" fill="#1a1d23"/>
+        <path d="M27 39q5 5 10 0" stroke="#1a1d23" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <defs><linearGradient id="gdb" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient></defs>
+      </svg>
+    </span>
+
+    <div class="gen-kicker rise d1">Building Your Route · 路线装配中</div>
+    <h1 class="rise d2">正在为你<em>制定路线</em></h1>
+    <p class="gen-sub rise d3">
+      你的 16 个答案正在变成一条具体的东西：<b>从哪一关开始、每周排多少、主项目做什么、每个阶段考哪几项能力</b>。
+      大约 5 秒，你不用做任何操作。
+    </p>
+
+    <!-- ══════════ 中央：正在生长的路线图 ══════════ -->
+    <div class="gen-map rise d4">
+      <svg class="gen-svg" id="genSvg" viewBox="0 46 920 160" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <linearGradient id="gPri" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ff6b4a" /><stop offset="1" stop-color="#ed4e2d" />
+          </linearGradient>
+        </defs>
+        <path class="g-track" id="genTrack" d="" />
+        <path class="g-grow" id="genGrow" d="" />
+        <g id="genNodes"></g>
+      </svg>
+
+      <div class="gen-stamp-wrap" id="stampWrap" hidden>
+        <div class="gen-stamp-inner">
+          <div class="stamp slam gen-stamp" id="genStamp">已生成<br />专属路线</div>
+          <span class="ink-ring"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ 过程日志 ══════════ -->
+    <div class="gen-logs" id="genLogs"></div>
+
+    <!-- ══════════ 按问卷结果推荐的一张地图 ══════════ -->
+    <div class="gen-rec" id="genRec" hidden>
+      <div class="gr-label">For You · 推荐先走这张地图</div>
+      <div class="gr-card">
+        <span class="gr-ico" id="grIco">🤖</span>
+        <div class="gr-b">
+          <b id="grName">AI 初识</b>
+          <span id="grWhy">先把大模型、提示词、幻觉这几件事的直觉建起来，再动手接接口。</span>
+        </div>
+        <a class="btn btn-primary btn-sm" id="grGo" href="03-map.html?route=m3">从这张地图开始 →</a>
+      </div>
+    </div>
+
+    <!-- ══════════ 兜底按钮：会员走专属路线，非会员走普通闯关路线 ══════════ -->
+    <div class="gen-actions" id="genActions" hidden>
+      <a class="btn btn-primary btn-lg" id="goRoute" href="02-routes.html">进入我的路线 →</a>
+      <a class="btn btn-outline btn-sm" href="02-routes.html">看看全部闯关地图</a>
+      <span class="gn-note" id="gnNote">路线已经排好了，点进去就能开始第一关</span>
+    </div>
+
+    <button class="gen-skip" type="button" id="btnSkip">跳过动画，直接看结果</button>
+
+    <p class="gen-src rise d5">
+      这条路线的每一关，都由<b>已上岸的学长</b>验证过是真的走得通的，再按你的情况排成你这一条。<br />
+      排完你看到的就是你的版本，没有"标准版"可以对，也没有别人的路线给你参照。
+    </p>
+
+  </section>
+</main>
+
+<!-- ══════════ 页脚 ══════════ -->
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">
+        <span class="logo-mark">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      </div>
+      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+      <p class="creed">「愿课搭陪你走过每一次选方向的焦虑，需要时也总能搭把手。」</p>
+    </div>
+    <div class="foot-col"><h4>探索</h4><a href="01-home.html">资料馆</a><a href="02-routes.html">闯关路线</a><a href="06-survey.html">定制路线</a></div>
+    <div class="foot-col"><h4>结果服务</h4><a href="11-member.html">阶段验收</a><a href="10-cohort.html">项目训练营</a><a href="11-member.html">陪跑</a></div>
+    <div class="foot-col"><h4>关于</h4><a href="#">平台理念</a><a href="#">校园认证</a><a href="#">联系我们</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 知识在校园里流动</div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  const NS = 'http://www.w3.org/2000/svg';
+
+  /* ═══ 1. 读上一页的答案，让文案接得上 ═══ */
+  let a = null;
+  try { a = JSON.parse(localStorage.getItem('kh:survey') || 'null'); } catch (e) {}
+  if (!a) { try { a = JSON.parse(sessionStorage.getItem('kh_survey') || 'null'); } catch (e) {} }
+  a = a || {};
+
+  const dirName = a.dir || 'AI 应用';
+  const ROUTE = {
+    '前端': '前端成长', '后端': 'Java 后端成长', '算法与数据结构': '算法与数据结构',
+    'AI 应用': 'AI 应用开发', '数据': '数据工程', '测试与运维': '测试与运维',
+    '安全': 'Web 安全', '我还不太确定': '计算机探索'
+  };
+  const routeName = ROUTE[dirName] || dirName;
+
+  const HOUR_LBL = ['3 小时以下', '3–6 小时', '6–10 小时', '10–20 小时', '20 小时以上'];
+  const HOUR_M   = [12, 9, 6, 4, 3];
+  const hi = (a.hours === 0 || a.hours) ? a.hours : 2;
+  const hoursTxt = HOUR_LBL[hi];
+  const months   = HOUR_M[hi];
+
+  /* 起点：只讲「从哪儿开始」，不讲「跳过了什么」 */
+  const START_AT = {
+    '完全没写过':   { n: '「终端与第一个脚本」', s: '第一关不写代码，先让你把电脑用明白' },
+    '照着敲过':     { n: '「脱离教程做一个小东西」', s: '先把"自己写不出来"这个坎迈过去' },
+    '课程作业量':   { n: '「把作业改造成作品」', s: '你手上已有的东西不用重做' },
+    '做过完整项目': { n: '「工程规范与项目复盘」', s: '直接从能拿出手的层次往上走' }
+  };
+  const start = START_AT[a.prior] || START_AT['课程作业量'];
+
+  /* 单次时长：按你说的可用时段切 */
+  const SESSION = { '工作日下午': 90, '晚上': 60, '周末整块': 120, '碎片时间': 20 };
+  const sessionLen = SESSION[a.when] || 60;
+
+  /* 主项目：按方向选 */
+  const PROJ = {
+    '前端': '「一个能发链接给室友的自我介绍页」',
+    '后端': '「一个扛得住全班同时刷的成绩查询服务」',
+    '算法与数据结构': '「一套你自己整理的题解笔记」',
+    'AI 应用': '「一个能回答课程问题的小助手」',
+    '数据': '「一份能从数据里看出问题的分析报告」',
+    '测试与运维': '「一套给同学项目用的自动部署流程」',
+    '安全': '「一次对校园系统的合规渗透测试报告」',
+    '我还不太确定': '「一台属于你自己的小服务器」'
+  };
+  const projName = PROJ[dirName] || PROJ['AI 应用'];
+
+  /* 节奏偏好 */
+  const PACE_TXT = {
+    '需要有人催': '已打开每周提醒，并在你的路线里标出了同方向的项目训练营',
+    '自己按计划走': '只保留进度条，掉队超过两周才会提醒一次',
+    '随心': '已关掉所有提醒，关卡之间排得更宽松'
+  };
+  const paceTxt = PACE_TXT[a.pace] || PACE_TXT['自己按计划走'];
+
+  const gradeTxt = a.grade || '大二';
+  const goalTxt  = a.goal || (a.explored === '走完了' ? '做出能拿出手的项目' : '求职拿 offer');
+
+  /* ═══ 2b. 按问卷结果推荐一张先走的地图 ═══ */
+  const REC = {
+    '前端':         { id: 'm2', why: '你要做的是能发出去的页面，先看清一个网页是怎么到你屏幕上的。' },
+    '后端':         { id: 'm2', why: '先看清一次请求从浏览器到数据库走了哪些地方，再动手写接口。' },
+    '算法与数据结构': { id: 'm6', why: '先看清楚这个岗位每天到底在做什么，再决定要不要往里投时间。' },
+    'AI 应用':      { id: 'm3', why: '先把大模型、提示词、幻觉这几件事的直觉建起来，再动手接接口。' },
+    '数据':         { id: 'm6', why: '先确认数据这条路的日常是什么样，再看要补哪些数学。' },
+    '测试与运维':    { id: 'm5', why: '先看代码写完之后的那个世界，再决定从哪一头切进去。' },
+    '安全':         { id: 'm1', why: '安全这一行得先把机器本身摸透，从计算机初识走起最省事。' },
+    '我还不太确定':   { id: 'm1', why: '不确定就先摸一遍计算机本身，走完这 9 关，方向会自己清楚一点。' }
+  };
+  const rec = REC[dirName] || REC['我还不太确定'];
+  const recRoute = (window.KH && KH.findRoute && KH.findRoute(rec.id)) ||
+                   { ico: '🖥️', name: '计算机初识', stations: [] };
+
+  const recBox = document.getElementById('genRec');
+  document.getElementById('grIco').textContent  = recRoute.ico;
+  document.getElementById('grName').textContent = recRoute.name + ' · ' + recRoute.stations.length + ' 关';
+  document.getElementById('grWhy').textContent  = rec.why;
+  document.getElementById('grGo').href = '03-map.html?route=' + rec.id;
+
+  /* ═══ 2c. 「进入我的路线」：按会员状态分流 ═══
+     会员 → 会员专属进阶路线（08-roadmap）
+     非会员 → 普通用户走的闯关路线（02-routes），基础地图全免费、随便挑 */
+  const isVip = !!(window.KH && KH.isVip && KH.isVip());
+  const goRoute = document.getElementById('goRoute');
+  goRoute.href = isVip ? '08-roadmap.html' : '02-routes.html';
+  goRoute.textContent = isVip ? '进入我的专属路线 →' : '进入我的闯关路线 →';
+  document.getElementById('gnNote').textContent = isVip
+    ? '会员专属进阶路线已解锁 · 基础地图一样随时可以回去走'
+    : '六张基础地图全免费，挑一张就能开始第一关 —— 不用先走完谁';
+
+  /* ═══ 2. 日志文案 ═══ */
+  const LOGS = [
+    { t: '正在读取你的情况…', s: gradeTxt + ' · 每周 ' + hoursTxt + ' · 目标：' + goalTxt },
+    { t: '已算出你的起点', s: '从 ' + start.n + ' 开始，' + start.s },
+    { t: '正在按你的可用时段切关卡…', s: '单次约 ' + sessionLen + ' 分钟，' + (a.when || '晚上') + '刚好排得下' },
+    { t: '正在确定主项目…', s: projName + '，和你说的目标对得上' },
+    { t: '正在排 6 道阶段验收关…', s: '每道考的能力都不一样，进去之前看不到具体考什么' },
+    { t: '正在按你的节奏偏好做设置…', s: paceTxt },
+    { t: '路线生成完毕', s: routeName + ' · 6 个阶段 · 约 ' + months + ' 个月走完', final: true }
+  ];
+
+  const logsBox = document.getElementById('genLogs');
+  const rows = LOGS.map((L, i) => {
+    const el = document.createElement('div');
+    el.className = 'log-row' + (L.final ? ' final' : '');
+    el.innerHTML = '<span class="tick">✓</span><span class="lt">' + L.t +
+                   (L.s ? '<small>' + L.s + '</small>' : '') + '</span>';
+    logsBox.appendChild(el);
+    return el;
+  });
+
+  /* ═══ 3. 路线图：路径 + 节点 ═══ */
+  const D = 'M 60 160 C 115 160, 169 92, 224 92 S 333 160, 388 160 S 497 92, 552 92 S 661 160, 716 160 S 825 92, 880 92';
+  const track = document.getElementById('genTrack');
+  const grow  = document.getElementById('genGrow');
+  track.setAttribute('d', D);
+  grow.setAttribute('d', D);
+
+  const LEN = grow.getTotalLength ? grow.getTotalLength() : 1000;
+  grow.style.strokeDasharray = LEN;
+  grow.style.strokeDashoffset = LEN;
+
+  const NODES = 6;
+  const nodesG = document.getElementById('genNodes');
+  const nodeEls = [];
+  for (let i = 0; i < NODES; i++) {
+    const p = grow.getPointAtLength(LEN * i / (NODES - 1));
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'gnode');
+    g.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ')');
+    g.innerHTML = '<circle class="gn-halo" r="14"></circle>' +
+                  '<circle class="gn-dot" r="13"></circle>' +
+                  '<text class="gn-tick" y="4.5">✓</text>';
+    nodesG.appendChild(g);
+    nodeEls.push(g);
+  }
+
+  /* 进度：向 target 缓动，节点随路径逐个亮起 */
+  let prog = 0, from = 0, target = 0, t0 = 0, dur = 620, running = false;
+
+  function frame(now) {
+    const k = Math.min(1, (now - t0) / dur);
+    const e = 1 - Math.pow(1 - k, 3);
+    prog = from + (target - from) * e;
+    grow.style.strokeDashoffset = LEN * (1 - prog);
+    nodeEls.forEach((g, i) => {
+      if (prog >= i / (NODES - 1) - 0.012) g.classList.add('on');
+    });
+    if (k < 1) requestAnimationFrame(frame);
+    else running = false;
+  }
+  function to(v, d) {
+    from = prog; target = v; dur = d || 620; t0 = performance.now();
+    if (!running) { running = true; requestAnimationFrame(frame); }
+  }
+
+  /* ═══ 4. 节奏：日志逐条浮现，路线随之生长 ═══ */
+  const START = 500, GAP = 620;
+  const timers = [];
+  rows.forEach((el, i) => {
+    timers.push(setTimeout(() => {
+      el.classList.add('rise', 'on');
+      const tick = el.querySelector('.tick');
+      tick.classList.add('pop-in');
+      to((i + 1) / rows.length * 0.9, GAP);
+    }, START + i * GAP));
+  });
+
+  const LAST = START + (rows.length - 1) * GAP;   // ≈ 4220ms
+  const STAMP_AT = LAST + 750;
+
+  /* ═══ 5. 顶部进度线：走满就说明结束了，不用干等 ═══ */
+  const progEl = document.getElementById('genProg');
+  const T0 = performance.now();
+  const T_END = STAMP_AT + 900;
+  const pt = setInterval(() => {
+    const k = Math.max(0, Math.min(1, (performance.now() - T0 - START) / (T_END - START)));
+    progEl.style.width = (k * 100) + '%';
+    if (k >= 1) clearInterval(pt);
+  }, 60);
+
+  /* ═══ 6. 收尾：印章落下，然后停在这儿等你自己点 ═══ */
+  function finish() {
+    document.getElementById('stampWrap').hidden = false;
+    to(1, 900);
+    const acts = document.getElementById('genActions');
+    acts.hidden = false;
+    acts.classList.add('pop-in');
+    recBox.hidden = false;
+    recBox.classList.add('pop-in');
+    document.getElementById('btnSkip').hidden = true;
+  }
+
+  timers.push(setTimeout(finish, STAMP_AT));
+
+  /* 跳过动画：第二次看的人不用再等一遍 */
+  document.getElementById('btnSkip').addEventListener('click', () => {
+    timers.forEach(clearTimeout);
+    clearInterval(pt);
+    rows.forEach(el => el.classList.add('rise', 'on'));
+    prog = 1; from = 1; target = 1;
+    grow.style.strokeDashoffset = 0;
+    nodeEls.forEach(g => g.classList.add('on'));
+    progEl.style.width = '100%';
+    finish();
+  });
+})();
+</script>
+</body>
+</html>

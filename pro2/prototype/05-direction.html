@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI 应用开发 · 方向指南 — 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  /* ═══ 本页专属：方向指南 ═══ */
+  .blog-main .blog-sec-head h2 { font-size: 21px; letter-spacing: -0.5px; }
+  code { background: var(--bg-soft); padding: 1px 6px; border-radius: 4px; font-size: 12.5px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--pri-700); }
+
+  .sec-no {
+    width: 24px; height: 24px; border-radius: 7px; flex: none;
+    background: var(--ink); color: #fff; display: grid; place-items: center;
+    font-size: 11.5px; font-weight: 800; letter-spacing: 0;
+  }
+  .blog-sec-head { align-items: center; }
+
+  /* 页头数据条 */
+  .dir-stats { display: flex; gap: 30px; flex-wrap: wrap; margin-top: 20px; }
+  .dir-stats div b { display: block; font-size: 21px; font-weight: 800; letter-spacing: -0.6px; line-height: 1.25; }
+  .dir-stats div b em { font-style: normal; color: var(--pri); }
+  .dir-stats div span { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
+
+  .lead-p { font-size: 14.5px; color: var(--ink-2); line-height: 1.85; margin-bottom: 14px; }
+  .lead-p strong { color: var(--ink); }
+
+  /* ── 典型一天：纯 CSS 时间轴 ── */
+  .day { margin-top: 6px; }
+  .day-item { display: grid; grid-template-columns: 56px 30px 1fr; gap: 0 10px; }
+  .day-time { font-size: 12.5px; font-weight: 800; color: var(--ink-2); text-align: right; padding-top: 15px; font-variant-numeric: tabular-nums; }
+  .day-rail { position: relative; display: flex; justify-content: center; }
+  .day-rail::before { content: ''; position: absolute; top: 0; bottom: -14px; left: 50%; width: 2px; background: var(--line); transform: translateX(-50%); }
+  .day-item:last-child .day-rail::before { bottom: 50%; }
+  .day-rail i { position: relative; z-index: 1; width: 13px; height: 13px; border-radius: 50%; background: #fff; border: 3px solid var(--line); margin-top: 17px; }
+  .day-item.hot .day-rail i { border-color: var(--pri); box-shadow: 0 0 0 4px rgba(255, 107, 74, 0.16); }
+  .day-card { padding: 12px 16px; margin-bottom: 14px; border-width: 1.5px; }
+  .day-card b { font-size: 14px; font-weight: 800; letter-spacing: -0.2px; display: block; }
+  .day-card p { font-size: 13px; color: var(--ink-2); line-height: 1.75; margin-top: 4px; }
+  .day-card .num { color: var(--pri-700); font-weight: 700; }
+
+  /* 重点块 */
+  .keynote { border-left: 3px solid var(--pri); background: var(--pri-50); border-radius: 0 var(--r-lg) var(--r-lg) 0; padding: 16px 20px; margin: 20px 0; font-size: 13.5px; color: var(--ink-2); line-height: 1.85; }
+  .keynote b { color: var(--ink); }
+
+  /* ── 对比表 ── */
+  .tbl-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-xl); margin-top: 4px; }
+  .hs-wrap { position: relative; }
+  .hs-fade { position: absolute; top: 0; bottom: 0; width: 34px; pointer-events: none; z-index: 2;
+    transition: opacity var(--t-base) var(--ease-out); }
+  .hs-fade.left { left: 0; background: linear-gradient(90deg, #fff, rgba(255,255,255,0)); }
+  .hs-fade.right { right: 0; background: linear-gradient(270deg, #fff, rgba(255,255,255,0)); }
+  .hs-wrap.at-start .hs-fade.left { opacity: 0; }
+  .hs-wrap.at-end .hs-fade.right { opacity: 0; }
+  .hscroll-hint { font-size: 11.5px; color: var(--ink-faint); font-weight: 700; margin-top: 7px; transition: opacity var(--t-base); }
+  .hscroll-hint.hide { opacity: 0; }
+  .cmp { width: 100%; min-width: 1000px; border-collapse: collapse; font-size: 12.5px; }
+  .cmp th {
+    text-align: left; padding: 12px 14px; font-size: 11.5px; font-weight: 800; letter-spacing: 0.04em;
+    color: var(--ink-soft); background: var(--bg-soft); border-bottom: 1px solid var(--line); white-space: nowrap;
+  }
+  .cmp td { padding: 14px; border-bottom: 1px solid var(--line-2); color: var(--ink-2); vertical-align: top; line-height: 1.7; }
+  .cmp tr:last-child td { border-bottom: none; }
+  .cmp td:first-child { font-size: 13.5px; font-weight: 800; color: var(--ink); white-space: nowrap; }
+  .cmp tr.hot td { background: var(--pri-50); }
+  .cmp tr.hot td:first-child { color: var(--pri-700); }
+  .cmp .lv { display: inline-block; font-size: 11px; font-weight: 800; padding: 2px 9px; border-radius: 999px; }
+  .lv-hi { background: var(--fine-50); color: var(--fine); }
+  .lv-mid { background: var(--warn-50); color: #a16207; }
+  .lv-lo { background: var(--mint-50); color: var(--mint); }
+
+  /* ── 信息差对照卡 ── */
+  .gap-list { display: grid; gap: 12px; }
+  .gap-row { display: grid; grid-template-columns: 1fr 42px 1fr; align-items: stretch; }
+  .gap-side { padding: 15px 17px; border-radius: var(--r-xl); font-size: 13px; line-height: 1.7; }
+  .gap-think { background: var(--bg-soft); color: var(--ink-soft); border: 1px solid var(--line); }
+  .gap-think .lbl { display: block; font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 6px; }
+  .gap-real { background: #fff; border: 1.5px solid #ffd9cd; color: var(--ink); box-shadow: var(--sticker); }
+  .gap-real .lbl { display: block; font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; color: var(--pri-600); margin-bottom: 6px; }
+  .gap-mid { display: grid; place-items: center; color: var(--pri); font-size: 17px; font-weight: 800; }
+
+  /* ── 技能 chips ── */
+  .sk-group { margin-bottom: 18px; }
+  .sk-group h4 { font-size: 12px; font-weight: 800; color: var(--ink-soft); letter-spacing: 0.06em; margin-bottom: 9px; }
+  .sk-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sk-chip {
+    position: relative; display: inline-flex; align-items: center; gap: 7px; cursor: default;
+    font-size: 12.5px; font-weight: 700; padding: 6px 12px; border-radius: 999px;
+    border: 1.5px solid var(--line); background: #fff; color: var(--ink);
+    transition: 0.16s var(--ease-out);
+  }
+  .sk-chip { cursor: pointer; }
+  .sk-chip:hover { border-color: var(--pri); transform: translateY(-2px); box-shadow: var(--sticker); }
+  .sk-chip.tip-open { border-color: var(--pri); box-shadow: var(--sticker); }
+  .sk-chip .lv { font-size: 10px; font-weight: 800; padding: 1.5px 7px; border-radius: 999px; }
+  .lv-must { background: var(--pri); color: #fff; }
+  .lv-plus { background: var(--mint-50); color: var(--mint); }
+  .lv-know { background: var(--bg-deep); color: var(--ink-soft); }
+  .sk-chip::after {
+    content: attr(data-tip); position: absolute; bottom: calc(100% + 11px); left: 50%;
+    width: 236px; transform: translateX(-50%) translateY(5px);
+    background: var(--ink); color: #fff; font-size: 11.5px; font-weight: 500; line-height: 1.65;
+    padding: 9px 12px; border-radius: 9px; opacity: 0; pointer-events: none;
+    transition: 0.16s var(--ease-out); z-index: 30; text-align: left;
+  }
+  .sk-chip::before {
+    content: ''; position: absolute; bottom: calc(100% + 5px); left: 50%; transform: translateX(-50%);
+    border: 6px solid transparent; border-top-color: var(--ink); opacity: 0; transition: 0.16s; z-index: 30;
+  }
+  .sk-chip:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .sk-chip:hover::before { opacity: 1; }
+  .sk-legend { font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
+  /* 悬停说明只在宽屏且支持 hover 时出现（窄屏放不下，也避免撑出横向滚动） */
+  @media (hover: none), (max-width: 900px) { .sk-chip::after, .sk-chip::before { display: none; } }
+
+  /* ── 路线骨架 ── */
+  .rt-line { display: grid; grid-template-columns: 62px 1fr; gap: 0 16px; }
+  .rt-side { position: relative; display: flex; justify-content: center; }
+  .rt-side::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; transform: translateX(-50%); background: var(--line-2); border-radius: 2px; }
+  .rt-line:first-child .rt-side::before { top: 34px; }
+  .rt-line:last-child .rt-side::before { bottom: calc(100% - 34px); }
+  .rt-side .rt-node { position: relative; z-index: 1; }
+  .rt-node.tmpl { background: #fff; border-color: #ffd9cd; color: var(--pri-600); box-shadow: var(--sticker); }
+  .rt-card { margin-bottom: 14px; padding: 15px 19px; }
+  .rt-card .rh { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .rt-card .stage-k { font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; color: var(--ink-faint); }
+  .rt-card .wk { font-size: 11px; font-weight: 800; color: var(--ink-soft); background: var(--bg-soft); padding: 2px 9px; border-radius: 999px; }
+  .rt-card h4 { font-size: 15.5px; font-weight: 800; letter-spacing: -0.3px; margin-top: 7px; }
+  .rt-card .out { font-size: 12.5px; color: var(--ink-2); line-height: 1.7; margin-top: 8px; background: var(--bg-soft); border-radius: var(--r-lg); padding: 9px 12px; display: flex; gap: 9px; }
+  .rt-card .out .k { font-size: 10.5px; font-weight: 800; color: var(--ink-soft); flex: none; padding-top: 2px; letter-spacing: 0.04em; }
+
+  /* ── 案例 ── */
+  .case { padding: 17px 19px; display: grid; grid-template-columns: 50px 1fr; gap: 14px; margin-bottom: 12px; }
+  .case-av { width: 50px; height: 50px; border-radius: 15px; display: grid; place-items: center; font-size: 19px; font-weight: 800; color: #fff; box-shadow: var(--sticker); }
+  .case-top { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 7px; }
+  .case-top b { font-size: 14.5px; font-weight: 800; letter-spacing: -0.2px; }
+  .case-top .who { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
+  .auth { margin-left: auto; font-size: 10px; font-weight: 800; color: var(--mint); background: var(--mint-50); padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .case-row { font-size: 12.5px; color: var(--ink-2); line-height: 1.75; display: flex; gap: 8px; margin-top: 5px; }
+  .case-row .k { font-size: 10.5px; font-weight: 800; color: var(--ink-faint); flex: none; width: 54px; padding-top: 3px; letter-spacing: 0.02em; white-space: nowrap; }
+  .case-row b { color: var(--ink); }
+
+  /* ── FAQ ── */
+  .faq-item { border-bottom: 1px solid var(--line); }
+  .faq-q { width: 100%; text-align: left; display: flex; align-items: flex-start; gap: 11px; padding: 16px 2px; font-size: 14.5px; font-weight: 700; letter-spacing: -0.2px; transition: color 0.15s; }
+  .faq-q:hover { color: var(--pri-600); }
+  .faq-q .qmark { flex: none; font-size: 12px; font-weight: 800; color: var(--pri); border: 1.5px solid currentColor; border-radius: 5px; padding: 2px 7px; margin-top: 1px; }
+  .faq-q .arw { margin-left: auto; flex: none; color: var(--ink-faint); font-size: 15px; transition: transform 0.2s var(--ease-out); }
+  .faq-item.open .faq-q { color: var(--pri-600); }
+  .faq-item.open .faq-q .arw { transform: rotate(90deg); color: var(--pri); }
+  .faq-a {
+    display: grid; grid-template-rows: 0fr; overflow: hidden; opacity: 0;
+    transition: grid-template-rows var(--t-base) var(--ease-out), opacity var(--t-base) var(--ease-out);
+  }
+  .faq-item.open .faq-a { grid-template-rows: 1fr; opacity: 1; }
+  .faq-a > .faq-a-in { min-height: 0; overflow: hidden; }
+  .faq-a-in { padding: 0 2px 18px 40px; font-size: 13.5px; color: var(--ink-2); line-height: 1.85; }
+  .faq-a-in b { color: var(--ink); }
+
+  /* ── 底部推荐 ── */
+  .go-explore { display: flex; align-items: center; gap: 18px; padding: 20px 22px; background: linear-gradient(120deg, #fff, var(--pri-50)); border-color: #ffd9cd; flex-wrap: wrap; }
+  .go-explore h3 { font-size: 16.5px; font-weight: 800; letter-spacing: -0.3px; }
+  .go-explore p { font-size: 13px; color: var(--ink-2); margin-top: 5px; line-height: 1.7; max-width: 620px; }
+  .go-explore .btn { margin-left: auto; }
+
+  @media (max-width: 1080px) {
+    .gap-row { grid-template-columns: 1fr; }
+    .gap-mid { padding: 6px 0; transform: rotate(90deg); }
+  }
+  @media (max-width: 720px) {
+    /* 窄屏：目录行的简介改成换行，避免横向溢出（nav 由 kh.css 统一处理） */
+    .feed-desc { white-space: normal; }
+    .dir-stats { gap: 18px; }
+    .day-item { grid-template-columns: 44px 22px 1fr; gap: 0 8px; }
+    .day-time { font-size: 11.5px; }
+    .rt-line { grid-template-columns: 44px 1fr; gap: 0 10px; }
+    .rt-line .rt-node { width: 42px; height: 42px; font-size: 15px; }
+    .rt-line:first-child .rt-side::before { top: 24px; }
+    .rt-line:last-child .rt-side::before { bottom: calc(100% - 24px); }
+    .faq-a-in { padding-left: 0; }
+    .go-explore .btn { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ 导航 ══════════ -->
+<div id="khNav"></div>
+
+<main class="page">
+
+  <div class="notice">
+    <span class="nt-tag">公开</span>
+    <span>方向指南全部免费阅读，不注册也能看完整篇。看得下去再决定要不要定制路线。</span>
+    <a href="06-survey.html">直接定制 →</a>
+  </div>
+
+  <!-- ══════════ 刊头 ══════════ -->
+  <header>
+    <div class="blog-mast">
+      <div class="blog-mast-main">
+        <div class="bm-kicker">Direction K-04 · 方向指南</div>
+        <h1>不训练模型，<em>把模型用出真东西</em></h1>
+        <p class="bm-tagline">
+          这是课搭「认真科普」的样板页，一个方向一篇，说清楚它每天到底在干什么、门槛在哪、要补什么。
+          这篇讲 AI 应用开发：一个被名字吓退、实际上一门语言底子就能上手的岗位。
+        </p>
+        <div class="dir-stats">
+          <div><b><em>14</em> 周</b><span>标准周期 · 按你情况伸缩</span></div>
+          <div><b>1,102</b><span>人正在走这条路线</span></div>
+          <div><b>137</b><span>人已抵达（拿到实习/offer）</span></div>
+          <div><b>无需注册</b><span>本页完全公开</span></div>
+        </div>
+      </div>
+      <div class="blog-mast-side">
+        公开层 · 不登录可读全篇<br />
+        最后更新 <span class="bm-count">09-12</span><br />
+        由 4 位在岗学长交叉校对
+      </div>
+    </div>
+    <div class="bm-rule"></div>
+    <nav class="blog-cats">
+      <span class="bc-label">本页</span>
+      <a class="bc-chip on" href="#s1">① 每天在干嘛</a>
+      <a class="bc-chip" href="#s2">② 和隔壁方向的区别</a>
+      <a class="bc-chip" href="#s3">③ 真实门槛与信息差</a>
+      <a class="bc-chip" href="#s4">④ 技能栈全景</a>
+      <a class="bc-chip" href="#s5">⑤ 典型路线骨架</a>
+      <a class="bc-chip" href="#s6">⑥ 真实去向</a>
+      <a class="bc-chip" href="#s7">⑦ 常见问题</a>
+    </nav>
+  </header>
+
+  <div class="blog-layout">
+    <div class="blog-main">
+
+      <!-- ══════════ ① 这个方向到底是干什么的 ══════════ -->
+      <section class="blog-sec" id="s1">
+        <div class="blog-sec-head"><span class="sec-no">01</span><h2>这个方向，一天到底在干嘛</h2></div>
+        <div class="blog-sec-sub">不用行话讲。下面是深圳一家做智能客服的公司里，一位 AI 应用开发实习生的普通一天。</div>
+
+        <p class="lead-p">
+          一句话：<strong>你不训练模型，你负责模型外面那一整圈东西</strong>，喂给它什么上下文、允许它调哪些工具、它答错了怎么兜住、回答一次花多少钱、怎么证明它真的变好了。
+          模型 API 代码里通常只占一行，剩下的全是让它稳定、便宜、可衡量地跑起来的部分。
+        </p>
+
+        <div class="day">
+          <div class="day-item">
+            <div class="day-time">09:30</div>
+            <div class="day-rail"><i></i></div>
+            <div class="toon-card day-card">
+              <b>先看昨天的 badcase 列表</b>
+              <p>运营标了 12 条「答非所问」。你逐条翻 trace：<span class="num">5 条</span>是检索压根没召回对的段落，<span class="num">3 条</span>是提示词里没写清楚「不知道就说不知道」，模型自己编了。</p>
+            </div>
+          </div>
+          <div class="day-item hot">
+            <div class="day-time">10:10</div>
+            <div class="day-rail"><i></i></div>
+            <div class="toon-card day-card">
+              <b>改提示词，然后跑评测集</b>
+              <p>把「你必须基于检索内容回答」改成「只允许使用 &lt;context&gt; 里的信息，没有就说没有」，顺手补两个反例。跑一遍 30 条评测集，通过率 <span class="num">71% → 84%</span>。这一步没有玄学，就是改一版、测一版。</p>
+            </div>
+          </div>
+          <div class="day-item hot">
+            <div class="day-time">11:30</div>
+            <div class="day-rail"><i></i></div>
+            <div class="toon-card day-card">
+              <b>给检索库调参数</b>
+              <p>chunk 从 800 字切成 500 字带 80 字重叠，重排模型从小换到大，命中率又涨 6 个点。参数不是拍脑袋定的，是做了三组对照实验选出来的，这三组数据最后写进了验收报告。</p>
+            </div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">14:00</div>
+            <div class="day-rail"><i></i></div>
+            <div class="toon-card day-card">
+              <b>写一个工具函数，让模型能用</b>
+              <p>产品说「用户问天气，应该直接去查」。你定义一个查天气的工具，把超时、返回空、城市名识别不出来这三种情况都处理掉，工具出错时模型该怎么说话，也是你设计的。</p>
+            </div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">16:00</div>
+            <div class="day-rail"><i></i></div>
+            <div class="toon-card day-card">
+              <b>看成本和延迟</b>
+              <p>昨天调用 4.2 万次，花了 ¥380，P95 延迟 3.4 秒。缓存命中率只有 12%，你把高频问题的答案缓存起来，第二天成本掉到 ¥240。省钱这件事，在这行是能被量化的功劳。</p>
+            </div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">17:30</div>
+            <div class="day-rail"><i></i></div>
+            <div class="toon-card day-card">
+              <b>把今天的坑写成测试用例</b>
+              <p>今天踩的 8 个新问题补进评测集，进 CI。以后每次改提示词自动跑一遍，防止「修好了 A，弄坏了 B」。这是应用开发和「调 API 做套壳」最本质的分界线。</p>
+            </div>
+          </div>
+          <div class="day-item">
+            <div class="day-time">19:00</div>
+            <div class="day-rail"><i></i></div>
+            <div class="toon-card day-card">
+              <b>写一句结论进周报</b>
+              <p>「检索质量是当前瓶颈，下版本引入混合检索。」，不写「完成了优化工作」这种话，写清楚判断和下一步。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="keynote">
+          <b>一句话定位：</b>这个岗位 = 大模型能力 × 工程落地力。它的日常是「改一版 → 测一版 → 看数据 → 再改一版」，
+          更接近做产品，而不是做研究。<b>如果你喜欢的是「东西真的被用起来」，而不是「指标又涨了 0.3 个点」，那你会喜欢这里。</b>
+        </div>
+      </section>
+
+      <!-- ══════════ ② 和隔壁方向的区别 ══════════ -->
+      <section class="blog-sec" id="s2">
+        <div class="blog-sec-head"><span class="sec-no">02</span><h2>它和隔壁几个方向的区别</h2></div>
+        <div class="blog-sec-sub">这四个方向经常被混着叫「搞计算机的」，但一天的内容完全不同。表格可以左右滑。</div>
+
+        <div class="hs-wrap" id="cmpWrap"><div class="tbl-scroll" id="cmpScroll">
+          <table class="cmp">
+            <thead>
+              <tr>
+                <th>方向</th>
+                <th>每天在干嘛</th>
+                <th>需要什么基础</th>
+                <th>门槛</th>
+                <th>天花板</th>
+                <th>什么性格的人干得下去</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hot">
+                <td>AI 应用开发</td>
+                <td>调模型、搭 RAG/Agent、做评测、盯成本和延迟、把服务发上线</td>
+                <td>Python + 一门后端语言 + 会读官方文档</td>
+                <td><span class="lv lv-lo">中</span> 不卡学历和数学，卡的是工程能力</td>
+                <td><span class="lv lv-hi">高</span> AI 应用架构师、AI 产品负责人</td>
+                <td>喜欢「先跑通再说」，能接受技术栈半年一换，对「用户觉得好不好用」敏感</td>
+              </tr>
+              <tr>
+                <td>算法工程师</td>
+                <td>训模型、跑实验、刷指标、复现论文，大量时间在等训练和调参</td>
+                <td>高数、线代、概率 + 深度学习 + 读论文</td>
+                <td><span class="lv lv-hi">高</span> 校招普遍硕士起步，卡学校</td>
+                <td><span class="lv lv-hi">很高</span> 但入口窄，进不去的人很多</td>
+                <td>坐得住，对数字和实验敏感，受得了 90% 的实验失败还被催进度</td>
+              </tr>
+              <tr>
+                <td>后端开发</td>
+                <td>写接口、改表结构、排查线上问题、扛流量、对账</td>
+                <td>一门语言 + 数据库 + 网络 + 操作系统</td>
+                <td><span class="lv lv-mid">中</span> 本科够用，但要背的八股最多</td>
+                <td><span class="lv lv-mid">中高</span> 稳定，但同质化严重</td>
+                <td>细心、有条理，对「不出事」有执念，能忍受重复性的维护工作</td>
+              </tr>
+              <tr>
+                <td>数据科学</td>
+                <td>取数、做分析、写报表、给业务提建议</td>
+                <td>SQL + 统计 + 业务理解，工具以 BI 为主</td>
+                <td><span class="lv lv-lo">低</span> 入门最容易</td>
+                <td><span class="lv lv-mid">中</span> 容易停在「取数工具人」</td>
+                <td>会沟通、对业务好奇，能接受自己辛苦得出的结论不被采纳</td>
+              </tr>
+            </tbody>
+          </table>
+        </div><span class="hs-fade left"></span><span class="hs-fade right"></span></div><p class="hscroll-hint" id="cmpHint">← 左右滑动看完整对比 →</p>
+
+        <div class="keynote" style="margin-top:18px">
+          <b>这张表里最该看的是两列：</b>「门槛」决定你多久能有第一份实习，「什么性格的人干得下去」决定你能干几年。
+          多数人选方向时只看了前两列，三年后后悔的却是后一列。<br />
+          <span style="font-size:12px;color:var(--ink-soft)">门槛与天花板为 2026 年公开 JD 与社区讨论的中位体感，个体差异很大，只用来判断量级。</span>
+        </div>
+      </section>
+
+      <!-- ══════════ ③ 真实门槛与信息差 ══════════ -->
+      <section class="blog-sec" id="s3">
+        <div class="blog-sec-head"><span class="sec-no">03</span><h2>真实的门槛，和信息差</h2></div>
+        <div class="blog-sec-sub">这一节是本页最重要的部分。下面每一条，都是问过 4 位在岗学长之后确认过的。</div>
+
+        <div class="gap-list">
+          <div class="gap-row">
+            <div class="gap-side gap-think"><span class="lbl">大家以为</span>做 AI 必须会训练模型，不然就是「调 API 的搬运工」。</div>
+            <div class="gap-mid">→</div>
+            <div class="gap-side gap-real"><span class="lbl">实际上</span><b>80% 的岗位只要求你会调用和调优。</b>真正训模型的岗位集中在少数大厂和模型公司，剩下的全在做应用，把模型接进真实的业务里。这部分不需要 GPU，也不需要推导公式，需要的是工程判断力。</div>
+          </div>
+          <div class="gap-row">
+            <div class="gap-side gap-think"><span class="lbl">大家以为</span>数学不好做不了 AI，得先补线代概率。</div>
+            <div class="gap-mid">→</div>
+            <div class="gap-side gap-real"><span class="lbl">实际上</span><b>应用层用到的数学，大二高数水平就够。</b>你真正要能看懂的是评测指标（命中率、准确率、P95 延迟）和「余弦相似度」这个概念。反向传播怎么推导，面试官不会问应用岗。</div>
+          </div>
+          <div class="gap-row">
+            <div class="gap-side gap-think"><span class="lbl">大家以为</span>这行已经饱和了，都在卷。</div>
+            <div class="gap-mid">→</div>
+            <div class="gap-side gap-real"><span class="lbl">实际上</span><b>会做 RAG 和 Agent 落地的人严重不足。</b>招聘 JD 已经从「了解大模型」升级成「有 RAG/Agent 落地经验」，而大部分同学的项目还停在调 API 做套壳。做过两个能跑通的真实项目，你就已经站在前面了。</div>
+          </div>
+          <div class="gap-row">
+            <div class="gap-side gap-think"><span class="lbl">大家以为</span>要读很多论文，英文不好直接劝退。</div>
+            <div class="gap-mid">→</div>
+            <div class="gap-side gap-real"><span class="lbl">实际上</span><b>能读懂官方文档 + 会搜，就够用了。</b>90% 的日常工作靠文档、GitHub issue 和跑实验解决。真要读论文的场景是「线上效果卡住了」，那时你是带着问题去读的，和硬啃完全是两件事。</div>
+          </div>
+          <div class="gap-row">
+            <div class="gap-side gap-think"><span class="lbl">大家以为</span>不会 Python 就进不来，得先把 Python 学扎实。</div>
+            <div class="gap-mid">→</div>
+            <div class="gap-side gap-real"><span class="lbl">实际上</span><b>语法一周能上手，卡人的是工程习惯。</b>有任意一门语言底子的人，语法一天看完；真正要花时间的是虚拟环境、类型注解、以及「同一个问题有八个库」时的选型判断。路线第一阶段就专门补这个。</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ ④ 技能栈全景 ══════════ -->
+      <section class="blog-sec" id="s4">
+        <div class="blog-sec-head"><span class="sec-no">04</span><h2>技能栈全景</h2></div>
+        <div class="blog-sec-sub">把鼠标停在标签上，会告诉你这个东西在真实工作里到底干嘛用。</div>
+
+        <div class="sk-group">
+          <h4>语言</h4>
+          <div class="sk-row">
+            <span class="sk-chip" data-tip="AI 生态的主力语言，几乎所有相关库都优先支持 Python。有别的语言底子的人，语法一天能看完。"><span>Python 3.11+</span><span class="lv lv-must">必须</span></span>
+            <span class="sk-chip" data-tip="不是让你背八股。业务数据、日志、评测集，全都存在表里，取不出来就没法做分析。面试也一定会问。"><span>SQL</span><span class="lv lv-must">必须</span></span>
+            <span class="sk-chip" data-tip="写前端界面时够用就行，你要会的是把接口调通、把结果展示出来，不是做设计。"><span>JavaScript</span><span class="lv lv-know">了解即可</span></span>
+          </div>
+        </div>
+
+        <div class="sk-group">
+          <h4>框架与库</h4>
+          <div class="sk-row">
+            <span class="sk-chip" data-tip="国内外的模型服务大多兼容这套接口。学一次，换供应商只改 base_url 和模型名。"><span>OpenAI 兼容 API</span><span class="lv lv-must">必须</span></span>
+            <span class="sk-chip" data-tip="把模型能力包成一个能被人调用的接口，最小的工程装备。Pydantic 用来约束模型的输出格式。"><span>FastAPI / Pydantic</span><span class="lv lv-must">必须</span></span>
+            <span class="sk-chip" data-tip="实习和课设场景用 pgvector 就够了，别一上来就上集群，面试里「按数据量选型」本身就是加分回答。"><span>向量库 pgvector / Qdrant</span><span class="lv lv-must">必须</span></span>
+            <span class="sk-chip" data-tip="有状态编排，多工具 Agent 目前的主流选择。"><span>LangGraph</span><span class="lv lv-plus">加分</span></span>
+            <span class="sk-chip" data-tip="上手快，但别只会拖框架。面试官更想听你不看框架怎么讲清 RAG 的每一步。"><span>LangChain / LlamaIndex</span><span class="lv lv-know">了解即可</span></span>
+            <span class="sk-chip" data-tip="让模型按你给的 schema 输出 JSON，字段错了自动重试。这是所有下游功能的地基。"><span>结构化输出</span><span class="lv lv-must">必须</span></span>
+          </div>
+        </div>
+
+        <div class="sk-group">
+          <h4>工具与工程</h4>
+          <div class="sk-row">
+            <span class="sk-chip" data-tip="面试官点开你简历的第一个动作，就是找你的 GitHub 链接。仓库读得懂，比项目多重要。"><span>Git / GitHub</span><span class="lv lv-must">必须</span></span>
+            <span class="sk-chip" data-tip="依赖管理。踩过一次依赖地狱的人，都知道这一条为什么排这么前。"><span>uv / 虚拟环境</span><span class="lv lv-must">必须</span></span>
+            <span class="sk-chip" data-tip="能一条命令把服务跑起来，在实习团队里非常吃香，也是「做过部署」的证据。"><span>Docker</span><span class="lv lv-plus">加分</span></span>
+            <span class="sk-chip" data-tip="trace 追踪和成本监控。会看这个的人，在面试里天然像「做过生产系统」而不是「做过作业」。"><span>Langfuse / trace 工具</span><span class="lv lv-plus">加分</span></span>
+            <span class="sk-chip" data-tip="自己定义「什么叫好」，是应届生和培训班学员最大的分水岭。"><span>评测集思维</span><span class="lv lv-plus">加分</span></span>
+          </div>
+        </div>
+
+        <div class="sk-group">
+          <h4>加分项</h4>
+          <div class="sk-row">
+            <span class="sk-chip" data-tip="不是「会写咒语」，是能把一个模糊需求拆成模型能稳定执行的指令，并且知道它什么时候会失效。"><span>提示词调优经验</span><span class="lv lv-must">必须</span></span>
+            <span class="sk-chip" data-tip="简历上「能打开链接」的项目，比三个只能在你电脑上跑的 demo 有说服力。"><span>一个已上线的项目</span><span class="lv lv-must">必须</span></span>
+            <span class="sk-chip" data-tip="知道什么时候该微调、什么时候改提示词就行。应用岗真用上的机会不多。"><span>LoRA 微调</span><span class="lv lv-know">了解即可</span></span>
+            <span class="sk-chip" data-tip="面算法岗才需要。面应用岗是锦上添花，但别为了它推迟做项目。"><span>论文复现经历</span><span class="lv lv-plus">加分</span></span>
+          </div>
+        </div>
+        <div class="sk-legend">🔴 必须 = 走到第 3 阶段前就得会 ｜ 🟢 加分 = 面试时能把你和别人区分开 ｜ ⚪ 了解即可 = 知道是什么、能聊两句就够</div>
+      </section>
+
+      <!-- ══════════ ⑤ 典型路线骨架 ══════════ -->
+      <section class="blog-sec" id="s5">
+        <div class="blog-sec-head"><span class="sec-no">05</span><h2>一条典型路线长什么样</h2></div>
+        <div class="blog-sec-sub">这是这个方向上一条被走通过的路，4 位已上岸的学长走过、验证过 3 轮。<b>你自己那条会按你的情况重排</b>，起点、节奏、主项目都不一样。</div>
+
+        <div class="rt-line">
+          <div class="rt-side"><span class="rt-node tmpl">1</span></div>
+          <div class="toon-card rt-card">
+            <div class="rh"><span class="stage-k">STAGE 01</span><span class="wk">1–2 周</span></div>
+            <h4>能用 Python 工程化的方式写程序</h4>
+            <div class="out"><span class="k">产出</span><span>把你以前写过的某个课设脚本用 Python 重写一遍：能跑、有类型注解、别人 clone 下来一句命令就能运行。</span></div>
+          </div>
+        </div>
+
+        <div class="rt-line">
+          <div class="rt-side"><span class="rt-node tmpl">2</span></div>
+          <div class="toon-card rt-card">
+            <div class="rh"><span class="stage-k">STAGE 02</span><span class="wk">2 周</span></div>
+            <h4>能可靠地让模型输出你要的结构化结果</h4>
+            <div class="out"><span class="k">产出</span><span>「周报生成器」：一堆打卡记录进去，结构稳定的周报出来。模型输出必须是 JSON，字段错了自动重试，这是所有下游功能的地基。</span></div>
+          </div>
+        </div>
+
+        <div class="rt-line">
+          <div class="rt-side"><span class="rt-node tmpl">3</span></div>
+          <div class="toon-card rt-card">
+            <div class="rh"><span class="stage-k">STAGE 03</span><span class="wk">3 周</span></div>
+            <h4>能独立完成一个 RAG 应用的搭建、调优与评测</h4>
+            <div class="out"><span class="k">产出</span><span>深大校园问答机器人：混合检索 + 重排 + 引用溯源，配 30 条自己标的评测集，命中率做到 85% 以上。这个项目是简历上最能被追问的一个。</span></div>
+          </div>
+        </div>
+
+        <div class="rt-line">
+          <div class="rt-side"><span class="rt-node tmpl">4</span></div>
+          <div class="toon-card rt-card">
+            <div class="rh"><span class="stage-k">STAGE 04</span><span class="wk">3 周</span></div>
+            <h4>能设计有工具、有记忆、会自我纠错的 Agent</h4>
+            <div class="out"><span class="k">产出</span><span>多工具任务 Agent（例：自动排查 CI 失败并给出修复建议）。工具出错怎么办、上下文太长怎么办、循环停不下来怎么办，这三个问题答不上来就不算做完。</span></div>
+          </div>
+        </div>
+
+        <div class="rt-line">
+          <div class="rt-side"><span class="rt-node tmpl">5</span></div>
+          <div class="toon-card rt-card">
+            <div class="rh"><span class="stage-k">STAGE 05</span><span class="wk">2 周</span></div>
+            <h4>能把 Demo 变成敢上线的服务</h4>
+            <div class="out"><span class="k">产出</span><span>把上面的项目改造一遍：轨迹可查、成本有看板、高频问题有缓存、越界提问有护栏。<b>这是后端底子的人反超的赛段。</b></span></div>
+          </div>
+        </div>
+
+        <div class="rt-line">
+          <div class="rt-side"><span class="rt-node tmpl">6</span></div>
+          <div class="toon-card rt-card">
+            <div class="rh"><span class="stage-k">STAGE 06</span><span class="wk">3 周</span></div>
+            <h4>能把两个项目讲成 20 分钟的面试故事</h4>
+            <div class="out"><span class="k">产出</span><span>两个项目的简历语言、被追问 5 层也不崩的叙事、3 场模拟面试（组内互面 + 学长终面）。</span></div>
+          </div>
+        </div>
+
+        <div class="keynote">
+          <b>六个阶段总共约 14 周（每天 2.5 小时）。</b>想快可以快：如果你已经会 Python、写过后端，前两个阶段可以申请免修直接跳。
+          每周能投入多少、哪个阶段该展开，问卷里说清楚，路线会按你的真实情况排，<b>宁可诚实报 1 小时，不要冲动报 4 小时。</b>
+        </div>
+
+        <a class="btn btn-primary btn-lg" href="06-survey.html">定制我的专属路线 →</a>
+        <span style="font-size:12.5px;color:var(--ink-soft);margin-left:12px">免费 · 约 3 分钟 · 前 2 个阶段免费走完</span>
+      </section>
+
+      <!-- ══════════ ⑥ 真实去向 ══════════ -->
+      <section class="blog-sec" id="s6">
+        <div class="blog-sec-head"><span class="sec-no">06</span><h2>走完这条路的人，现在在哪</h2></div>
+        <div class="blog-sec-sub">三个真实案例。为保护隐私，姓名与公司做了模糊处理；三个案例均经本人授权发布。</div>
+
+        <div class="toon-card case">
+          <span class="case-av" style="background:linear-gradient(150deg,#ff6b4a,#d04a2a)">陈</span>
+          <div>
+            <div class="case-top"><b>陈同学</b><span class="who">大三上 · 计算机学院 · 2026 年 3 月起实习</span><span class="auth">✓ 案例经本人授权</span></div>
+            <div class="case-row"><span class="k">起点</span><span>大二学过 Java 和数据结构，没碰过 Python，绩点 3.2，不算突出。</span></div>
+            <div class="case-row"><span class="k">做了什么</span><span>走完 RAG 和 Agent 两个阶段，做了「选课助手」和「CI 失败排查 Agent」。第二个项目在项目训练营答辩上被学长追着问了 40 分钟，回去把错误处理重写了三遍，<b>他说那是他进步最快的一周</b>。</span></div>
+            <div class="case-row"><span class="k">现在</span><span>深圳一家 AI 创业公司做 AI 应用开发实习，日薪 350，目前在做 Agent 平台的工具接入层。</span></div>
+          </div>
+        </div>
+
+        <div class="toon-card case">
+          <span class="case-av" style="background:linear-gradient(150deg,#10b981,#0e9c6d)">林</span>
+          <div>
+            <div class="case-top"><b>林同学</b><span class="who">大二下 · 软件工程 · 2026 年 7 月起实习</span><span class="auth">✓ 案例经本人授权</span></div>
+            <div class="case-row"><span class="k">起点</span><span>只会写课设，Python 只在大一基础课写过，没有任何项目经历。</span></div>
+            <div class="case-row"><span class="k">做了什么</span><span>暑假用 11 周走完前四个阶段。做的「校园问答机器人」被学院公众号推了一次，累计 2,000+ 次提问；靠这个项目加一份评测报告，拿到了第一个面试机会。</span></div>
+            <div class="case-row"><span class="k">现在</span><span>广州一家做智能客服的公司做应用算法实习，主要负责检索质量优化。</span></div>
+          </div>
+        </div>
+
+        <div class="toon-card case">
+          <span class="case-av" style="background:linear-gradient(150deg,#6366f1,#4f46e5)">郑</span>
+          <div>
+            <div class="case-top"><b>郑同学</b><span class="who">大三下 · 转专业进入计算机 · 2026 年 5 月起实习</span><span class="auth">✓ 案例经本人授权</span></div>
+            <div class="case-row"><span class="k">起点</span><span>原专业工商管理，大二转到计算机，基础比同届慢一学期，一度想过放弃。</span></div>
+            <div class="case-row"><span class="k">做了什么</span><span>没硬啃算法，选了应用方向，用「会做产品」的优势补基础差距。在项目训练营里负责给同学的项目做互评，被学长评价「最能挑出用户会用不下去的地方」。</span></div>
+            <div class="case-row"><span class="k">现在</span><span>深圳一家 To B SaaS 公司做 AI 产品实习，兼做原型设计。</span></div>
+          </div>
+        </div>
+
+        <div class="keynote">
+          <b>注意这三个人有一个共同点：</b>他们的起点都不算好，决定结果的不是基础，是「手里有没有两个能打开链接、能被追问的项目」。
+          <b>课搭不承诺就业。</b>能承诺的是，这条路线上的每个阶段都有可交付的产出，走完你不会只有一句「我学过」。
+        </div>
+      </section>
+
+      <!-- ══════════ ⑦ FAQ ══════════ -->
+      <section class="blog-sec" id="s7">
+        <div class="blog-sec-head"><span class="sec-no">07</span><h2>常见问题</h2></div>
+        <div class="blog-sec-sub">点一下展开。这些都是后台提问最多的五个。</div>
+
+        <div class="faq-list">
+          <div class="faq-item open">
+            <button class="faq-q"><span class="qmark">问</span>我完全没写过 Python，能直接开始吗？<span class="arw">›</span></button>
+            <div class="faq-a"><div class="faq-a-in">
+              可以，但建议先花一周补语法。路线第一阶段就是为跨语言的人设计的：<b>你有任何一门语言的基础，语法一天能看完</b>，剩下的环境管理、类型注解、工程习惯会被拆成任务带着你做。
+              唯一不适用的情况是：你连一门语言都没写过，那先走闯关路线，别跳。
+            </div></div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q"><span class="qmark">问</span>要买 GPU 吗？学下来得花多少钱？<span class="arw">›</span></button>
+            <div class="faq-a"><div class="faq-a-in">
+              不需要 GPU。学习阶段用国内模型的 API，一个月几十块钱够用；项目训练营里有共享额度，走完前两个阶段的同学可以申请。
+              <b>真正贵的不是模型调用，是你没有评测集、反复瞎调浪费掉的那几十个小时。</b>
+            </div></div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q"><span class="qmark">问</span>数学和算法基础差，面试会被卡住吗？<span class="arw">›</span></button>
+            <div class="faq-a"><div class="faq-a-in">
+              应用岗的面试考的是系统设计：为什么这么切分、检索不准怎么办、成本怎么控、你怎么证明它变好了。这些都是工程题。
+              唯一会碰到数学的地方，是让你解释「余弦相似度是干嘛的」，大二水平够用，背不下来也没关系，讲清楚它在比什么就行。
+            </div></div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q"><span class="qmark">问</span>大二开始会不会太早？大三才开始来得及吗？<span class="arw">›</span></button>
+            <div class="faq-a"><div class="faq-a-in">
+              <b>大二是刚好的时间点</b>：一个学期打基础，暑假做出第一个能拿出手的项目，大三上投暑期实习正好。
+              大三上也不晚，但要把节奏压到每天 3 小时以上，因为暑期实习的投递窗口在大三下开学就开了，晚一个月就少一批岗位。
+            </div></div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q"><span class="qmark">问</span>走完能找到工作吗？课搭能保证吗？<span class="arw">›</span></button>
+            <div class="faq-a"><div class="faq-a-in">
+              <b>不能保证，也不会保证。</b>任何承诺「包就业」的，都别信。
+              能保证的是：路线里每个阶段都有可验收的产出，走完你手里有两个能打开链接、能被追问 5 层的项目，以及一套「遇到新东西能自己搞定」的方法。
+              剩下的取决于你投了多少家、面了多少场，这部分没有捷径，但有人可以问会快很多。
+            </div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════ ⑧ 相关路线推荐 ══════════ -->
+      <section class="blog-sec" style="margin-bottom:0">
+        <div class="blog-sec-head"><span class="sec-no">08</span><h2>相关路线</h2></div>
+        <div class="blog-sec-sub">看完还是想走这条方向，就从下面这几条里挑一条开始。</div>
+
+        <div class="feed-row" style="padding-left:14px">
+          <div class="feed-date"><b>01</b><small>AI 应用</small></div>
+          <div>
+            <div class="feed-eyebrow">🌱 成长视野 · 6 阶段 26 关卡 <span class="fr-pill free">学习全程免费</span></div>
+            <div class="feed-title">AI 应用开发路线：会用大模型做出真东西</div>
+            <div class="feed-desc">本页方向对应的路线。不教你训模型，教你把模型用起来：Prompt → RAG → Agent → 生产化 → 求职。</div>
+            <div class="feed-meta"><b>课搭教研组</b><span>👥 1,102 人在走</span><span class="tag">#AI</span><span class="tag">#RAG</span><span class="tag">#Agent</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </div>
+
+        <div class="feed-row" style="padding-left:14px">
+          <div class="feed-date"><b>02</b><small>后端转</small></div>
+          <div>
+            <div class="feed-eyebrow">💼 求职实习 · 8 阶段 32 关卡 <span class="fr-pill free">学习全程免费</span></div>
+            <div class="feed-title">Java 后端 → AI Agent 开发：用老底子切入新方向</div>
+            <div class="feed-desc">写过后端的人走这条更省时间：Spring 的分层、异步、中间件思维在 Agent 编排里全部有对应物。</div>
+            <div class="feed-meta"><b>课搭教研组</b><span>👥 218 人在走</span><span class="tag">#Java</span><span class="tag">#转方向</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </div>
+
+        <div class="feed-row" style="padding-left:14px;border-bottom:none">
+          <div class="feed-date"><b>03</b><small>数据</small></div>
+          <div>
+            <div class="feed-eyebrow">💼 求职实习 · 5 阶段 20 关卡 <span class="fr-pill free">学习全程免费</span></div>
+            <div class="feed-title">数据工程路线：比算法好进，比后端有意思</div>
+            <div class="feed-desc">如果你喜欢跟数据打交道、不想天天改提示词，这条的门槛更低、岗位更多。先看看再决定。</div>
+            <div class="feed-meta"><b>课搭教研组</b><span>👥 341 人在走</span><span class="tag">#SQL</span><span class="tag">#数据</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </div>
+      </section>
+
+      <!-- ══════════ 底部引导：还不确定 ══════════ -->
+      <div class="toon-card go-explore" style="margin-top:20px">
+        <span style="font-size:30px">🧭</span>
+        <div>
+          <h3>看完了，还是不确定自己适不适合？</h3>
+          <p>那说明你需要的是手感，不是更多的文章。挑一张闯关地图走一遍，把计算机摸一遍，每关都做出一个能拿给室友看的小东西。用脚投票选出来的方向，才不容易后悔。</p>
+        </div>
+        <a class="btn btn-outline" href="02-routes.html">先走闯关路线 →</a>
+      </div>
+
+    </div>
+
+    <!-- ══════════ 侧栏 ══════════ -->
+    <aside class="blog-side">
+      <div class="side-box">
+        <h3>📌 本方向速览</h3>
+        <div class="sb-sub">AI 应用开发 · K-04</div>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:2">
+          <div style="display:flex;justify-content:space-between"><span>标准周期</span><b style="color:var(--ink)">14 周</b></div>
+          <div style="display:flex;justify-content:space-between"><span>起步要求</span><b style="color:var(--ink)">会一门语言</b></div>
+          <div style="display:flex;justify-content:space-between"><span>日均投入</span><b style="color:var(--ink)">2.5 小时</b></div>
+          <div style="display:flex;justify-content:space-between"><span>需要 GPU</span><b style="color:var(--mint)">不需要</b></div>
+          <div style="display:flex;justify-content:space-between"><span>卡学历</span><b style="color:var(--mint)">不卡</b></div>
+        </div>
+      </div>
+
+      <div class="side-box">
+        <h3>↔️ 和隔壁方向比</h3>
+        <div class="sb-sub">重点看「门槛」和「什么性格」</div>
+        <div style="font-size:12.5px">
+          <a style="display:flex;justify-content:space-between;padding:5px 0;color:var(--pri-600);font-weight:700" href="#s2">AI 应用开发 <span>← 本页</span></a>
+          <a style="display:flex;justify-content:space-between;padding:5px 0;color:var(--ink-2)" href="#s2">算法工程师 <span style="color:var(--ink-faint)">卡学历</span></a>
+          <a style="display:flex;justify-content:space-between;padding:5px 0;color:var(--ink-2)" href="#s2">后端开发 <span style="color:var(--ink-faint)">八股最多</span></a>
+          <a style="display:flex;justify-content:space-between;padding:5px 0;color:var(--ink-2)" href="#s2">数据科学 <span style="color:var(--ink-faint)">门槛最低</span></a>
+        </div>
+      </div>
+
+      <div class="side-box" style="background:var(--pri-50);border-color:#ffd9cd">
+        <h3>🧩 觉得就是它了？</h3>
+        <div class="sb-sub" style="color:var(--pri-700)">3 分钟问卷，生成只属于你的那条路线</div>
+        <a class="btn btn-primary btn-block btn-sm" href="06-survey.html">定制我的路线 →</a>
+        <div style="font-size:11.5px;color:var(--pri-700);margin-top:9px;text-align:center">免费 · 前 2 个阶段免费走完</div>
+      </div>
+
+      <div class="side-box">
+        <h3>👥 想有人一起走</h3>
+        <div class="sb-sub">同方向的人进同一个项目训练营，按月滚动开班</div>
+        <a class="btn btn-outline btn-block btn-sm" href="10-cohort.html">看看本期项目训练营 →</a>
+        <div style="font-size:11.5px;color:var(--ink-soft);margin-top:9px">本期 28/30 · 9/15 开班</div>
+      </div>
+
+      <div class="side-box">
+        <h3>📖 相关阅读</h3>
+        <div class="sb-sub">读完这篇接着看</div>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.7">
+          <a style="display:block;padding:5px 0" href="#">⏰ 大厂暑期实习，其实大三上就要投了</a>
+          <a style="display:block;padding:5px 0" href="#">🪤 这 7 类证书和培训，别报</a>
+          <a style="display:block;padding:5px 0" href="#">🎓 保研、考研、留学、就业，四条路的真实门槛</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<!-- ══════════ 页脚 ══════════ -->
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">
+        <span class="logo-mark">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      </div>
+      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+      <p class="creed">「愿课搭陪你走过每一次选方向的焦虑，需要时也总能搭把手。」</p>
+    </div>
+    <div class="foot-col"><h4>方向</h4><a href="05-direction.html">AI 应用开发</a><a href="02-routes.html">后端开发 · 筹备中</a><a href="02-routes.html">算法工程师 · 筹备中</a><a href="02-routes.html">数据科学 · 筹备中</a></div>
+    <div class="foot-col"><h4>走起来</h4><a href="02-routes.html">闯关路线</a><a href="06-survey.html">定制我的路线</a><a href="10-cohort.html">项目训练营</a><a href="11-member.html">会员中心</a></div>
+    <div class="foot-col"><h4>关于</h4><a href="#">平台理念</a><a href="#">校园认证</a><a href="#">原创保护</a><a href="#">联系我们</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 知识在校园里流动</div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+  // 顶部锚点 chips
+  var navChips = [].slice.call(document.querySelectorAll('.blog-cats .bc-chip'));
+  navChips.forEach(function (c) {
+    c.addEventListener('click', function () {
+      navChips.forEach(function (x) { x.classList.remove('on'); });
+      c.classList.add('on');
+    });
+  });
+
+  /* 滚动时 chip 自己跟上：滚到第 5 节，chip 就不该还停在第 1 节 */
+  var secs = [].slice.call(document.querySelectorAll('.blog-main .blog-sec[id]'));
+  if ('IntersectionObserver' in window && secs.length) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        navChips.forEach(function (c) {
+          c.classList.toggle('on', c.getAttribute('href') === '#' + e.target.id);
+        });
+      });
+    }, { rootMargin: '-72px 0px -70% 0px' });
+    secs.forEach(function (sec) { spy.observe(sec); });
+  }
+
+  /* 技能 chip：hover 看不到的时候，点一下也能看到说明 */
+  var chips = [].slice.call(document.querySelectorAll('.sk-chip'));
+  chips.forEach(function (chip) {
+    chip.setAttribute('tabindex', '0');
+    chip.setAttribute('role', 'button');
+    function toggle() {
+      var open = chip.classList.contains('tip-open');
+      chips.forEach(function (x) { x.classList.remove('tip-open'); });
+      chip.classList.toggle('tip-open', !open);
+    }
+    chip.addEventListener('click', toggle);
+    chip.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.sk-chip')) {
+      chips.forEach(function (x) { x.classList.remove('tip-open'); });
+    }
+  });
+
+  /* 宽表：滚到头就把渐变遮罩淡掉 */
+  var wrap = document.getElementById('cmpWrap');
+  var box = document.getElementById('cmpScroll');
+  var hint = document.getElementById('cmpHint');
+  if (wrap && box) {
+    var syncScroll = function () {
+      var max = box.scrollWidth - box.clientWidth;
+      wrap.classList.toggle('at-start', box.scrollLeft <= 4);
+      wrap.classList.toggle('at-end', max <= 4 || box.scrollLeft >= max - 4);
+      if (hint) hint.classList.toggle('hide', max <= 4);
+    };
+    syncScroll();
+    box.addEventListener('scroll', syncScroll, { passive: true });
+    window.addEventListener('resize', syncScroll);
+  }
+
+  // FAQ 折叠
+  document.querySelectorAll('.faq-q').forEach(function (q) {
+    q.addEventListener('click', function () {
+      q.parentElement.classList.toggle('open');
+    });
+  });
+</script>
+</body>
+</html>

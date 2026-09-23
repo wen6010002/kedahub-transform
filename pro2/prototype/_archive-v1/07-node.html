@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="Ru8bcangua9XzlpbNq2BKQ">
+<head data-page-node-id="tCevTronu0HfNvmLXvztGJ">
+<meta charset="UTF-8" data-page-node-id="3kPzN0VV0bA0HaPDvsgEPs" />
+<meta name="viewport" content="width=device-width, initial-scale=1" data-page-node-id="dKWDeiG3l7pFvmYidE1557" />
+<title>Git · 给代码一台时间机器 — 第 3 站 · 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" data-page-node-id="BK7kHAG5HYg3CFEk0cgWT6" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin data-page-node-id="Pl3RYlBGK02KDTxkVxcfoY" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" data-page-node-id="WdfG75ahUfAR737BEFI9nN" />
+<link rel="stylesheet" href="assets/kh.css" data-page-node-id="ZeJJ3m7Twi1ZQFOfltE1lE" />
+<style>
+  /* ══════ 关卡头 ══════ */
+  .nd-head { margin-bottom: 30px; }
+  .crumb { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-soft); font-weight: 600; flex-wrap: wrap; margin-bottom: 20px; }
+  .crumb a:hover { color: var(--pri-600); }
+  .crumb .cr-sep { color: var(--ink-faint); }
+  .crumb b { color: var(--ink); }
+  .nd-top { display: flex; gap: 20px; align-items: flex-start; }
+  .nd-top-main { min-width: 0; flex: 1; }
+  .nd-kicker { font-size: 11.5px; font-weight: 800; letter-spacing: 0.18em; color: var(--pri-600); text-transform: uppercase; }
+  .nd-top h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1.22; margin-top: 8px; }
+  .nd-lead { font-size: 14.5px; color: var(--ink-2); margin-top: 10px; max-width: 660px; line-height: 1.8; }
+  .nd-meta { display: flex; gap: 26px; margin-top: 16px; flex-wrap: wrap; }
+  .nd-meta div b { display: block; font-size: 15px; font-weight: 800; letter-spacing: -0.3px; }
+  .nd-meta div span { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
+
+  /* ══════ 四拍 ══════ */
+  .beat { margin-bottom: 44px; scroll-margin-top: 82px; }
+  .beat-head { display: flex; align-items: center; gap: 12px; padding-top: 16px; border-top: 2px solid var(--ink); }
+  .bh-seal {
+    width: 40px; height: 40px; border-radius: 50%; flex: none;
+    display: grid; place-items: center; font-size: 17px; font-weight: 800;
+    background: #fff; border: 2.5px solid var(--ink); color: var(--ink);
+    box-shadow: var(--sticker);
+  }
+  .beat-head h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.45px; }
+  .beat-head .bh-meta { margin-left: auto; font-size: 11.5px; font-weight: 700; color: var(--ink-soft); white-space: nowrap; }
+  .beat-sub { font-size: 13px; color: var(--ink-soft); margin: 8px 0 18px; line-height: 1.75; }
+  .beat-learn .bh-seal { border-color: var(--ink); color: var(--ink); }
+  .beat-drill .bh-seal { border-color: var(--pri); color: var(--pri-600); }
+  .beat-make .bh-seal { background: var(--pri); border-color: var(--pri); color: #fff; box-shadow: 0 3px 0 rgba(208, 74, 42, .32); }
+  .beat-check .bh-seal { border-color: var(--mint); color: var(--mint); }
+
+  /* ── 第一拍 · 学 ── */
+  .res-hero {
+    display: flex; gap: 18px; padding: 22px 24px; position: relative;
+    background: linear-gradient(140deg, #fff 0%, var(--pri-50) 100%); border-color: #ffd9cd;
+  }
+  .rh-badge {
+    position: absolute; top: 0; left: 24px; transform: translateY(-50%);
+    background: var(--pri); color: #fff; font-size: 10.5px; font-weight: 800;
+    letter-spacing: 0.08em; padding: 3px 11px; border-radius: 999px;
+  }
+  .rh-ic {
+    width: 52px; height: 52px; border-radius: 14px; flex: none; display: grid; place-items: center;
+    font-size: 25px; background: #fff; border: 2px solid #ffd9cd;
+  }
+  .rh-body { flex: 1; min-width: 0; }
+  .rh-t { display: block; font-size: 18px; font-weight: 800; letter-spacing: -0.4px; line-height: 1.4; }
+  .rh-d { display: block; font-size: 13px; color: var(--ink-2); margin-top: 7px; line-height: 1.75; }
+  .rh-m { display: flex; gap: 14px; margin-top: 11px; font-size: 11.5px; color: var(--ink-soft); font-weight: 600; flex-wrap: wrap; }
+  .rh-go { align-self: center; flex: none; }
+
+  .alt-wrap { margin-top: 12px; }
+  .alt-wrap summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center; gap: 9px;
+    font-size: 13px; font-weight: 700; color: var(--ink-2);
+    padding: 12px 16px; border: 1.5px dashed var(--line); border-radius: var(--r-lg); transition: 0.15s;
+  }
+  .alt-wrap summary::-webkit-details-marker { display: none; }
+  .alt-wrap summary:hover { border-color: var(--pri); color: var(--pri-600); background: var(--pri-50); }
+  .alt-wrap summary .alt-caret { color: var(--pri); font-weight: 800; transition: transform 0.2s var(--ease-out); }
+  .alt-wrap[open] summary .alt-caret { transform: rotate(90deg); }
+  .alt-wrap summary .alt-count { margin-left: auto; font-size: 11.5px; color: var(--ink-faint); font-weight: 600; }
+  .alt-list { margin-top: 4px; }
+  .alt-row {
+    display: flex; gap: 13px; align-items: flex-start; padding: 13px 16px;
+    border-bottom: 1px solid var(--line-2); transition: background 0.15s;
+  }
+  .alt-row:last-child { border-bottom: none; }
+  .alt-row:hover { background: var(--pri-50); }
+  .alt-row .ar-kind { font-size: 19px; flex: none; line-height: 1.35; }
+  .alt-row .ar-t { font-size: 13.5px; font-weight: 700; line-height: 1.55; }
+  .alt-row .ar-d { font-size: 12px; color: var(--ink-soft); margin-top: 2px; line-height: 1.65; }
+  .alt-row .ar-m { font-size: 11.5px; color: var(--ink-faint); flex: none; white-space: nowrap; font-weight: 700; padding-top: 2px; }
+
+  /* ── 第二拍 · 练 ── */
+  .done-hint {
+    display: none; align-items: center; gap: 10px; margin-bottom: 14px;
+    background: var(--mint-50); border: 1.5px solid #b8ebd6; border-radius: var(--r-toon);
+    padding: 12px 18px; font-size: 13.5px; font-weight: 700; color: #0a7d59;
+  }
+  .done-hint.show { display: flex; animation: popIn 0.42s var(--ease-pop) both; }
+  .done-hint .dh-emoji { font-size: 19px; animation: wiggle 0.6s var(--ease-pop) both; }
+  .done-hint a { margin-left: auto; font-size: 12.5px; font-weight: 800; color: #0a7d59; white-space: nowrap; }
+  .done-hint a:hover { text-decoration: underline; }
+
+  .tasks { border: 2px solid var(--line); border-radius: var(--r-toon); box-shadow: var(--sticker); background: #fff; overflow: hidden; }
+  .task {
+    display: grid; grid-template-columns: 26px 34px minmax(0, 1fr) auto; gap: 0 13px;
+    padding: 16px 20px; border-bottom: 1px solid var(--line-2);
+    transition: background 0.28s var(--ease-out);
+  }
+  .task:last-child { border-bottom: none; }
+  .task:hover { background: var(--bg-soft); }
+  .task.done { background: var(--pri-50); }
+  .task.done:hover { background: #ffe8e0; }
+  .tk-ck {
+    width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--line);
+    background: #fff; display: grid; place-items: center; margin-top: 1px;
+    transition: 0.18s var(--ease-out); flex: none;
+  }
+  .tk-ck:hover { border-color: var(--pri); }
+  .task.done .tk-ck { background: var(--pri); border-color: var(--pri); animation: ckPop 0.34s var(--ease-pop); }
+  .tk-ck svg { width: 13px; height: 13px; }
+  .tk-ck svg path { stroke: #fff; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; fill: none;
+    stroke-dasharray: 22; stroke-dashoffset: 22; transition: stroke-dashoffset 0.28s var(--ease-out) 0.05s; }
+  .task.done .tk-ck svg path { stroke-dashoffset: 0; }
+  @keyframes ckPop { 0% { transform: scale(0.7); } 55% { transform: scale(1.16); } 100% { transform: scale(1); } }
+  .tk-no { font-size: 12px; font-weight: 800; color: var(--ink-faint); letter-spacing: 0.06em; padding-top: 4px; }
+  .task.done .tk-no { color: var(--pri); }
+  .tk-body { min-width: 0; }
+  .tk-t {
+    font-size: 14.5px; font-weight: 700; letter-spacing: -0.2px; line-height: 1.55; display: inline;
+    background-image: linear-gradient(var(--ink-faint), var(--ink-faint));
+    background-repeat: no-repeat; background-position: 0 58%; background-size: 0% 1.5px;
+    transition: background-size 0.38s var(--ease-out), color 0.3s var(--ease-out);
+  }
+  .task.done .tk-t { background-size: 100% 1.5px; color: var(--ink-soft); }
+  .tk-out { font-size: 12.5px; color: var(--ink-2); margin-top: 6px; line-height: 1.7; transition: color 0.3s; }
+  .tk-out b { color: var(--pri-700); font-weight: 800; }
+  .task.done .tk-out { color: var(--ink-soft); }
+  .tk-time { font-size: 11.5px; font-weight: 700; color: var(--ink-soft); background: var(--bg-soft); padding: 3px 10px; border-radius: 999px; white-space: nowrap; align-self: start; margin-top: 2px; }
+  .task.done .tk-time { background: #fff; }
+
+  /* ── 第三拍 · 创 ── */
+  .make-card { background: var(--ink); border-color: var(--ink); color: #fff; padding: 28px 30px; position: relative; overflow: hidden; }
+  .make-card .mk-kicker { font-size: 10.5px; font-weight: 800; letter-spacing: 0.2em; color: var(--pri); }
+  .make-card h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-top: 9px; line-height: 1.3; }
+  .make-card .mk-lead { font-size: 13.5px; color: rgba(255,255,255,.72); line-height: 1.85; margin-top: 9px; max-width: 640px; }
+  .mk-block { margin-top: 22px; }
+  .mk-lbl { font-size: 11.5px; font-weight: 800; letter-spacing: 0.08em; color: rgba(255,255,255,.5); margin-bottom: 9px; }
+  .mk-list { display: grid; gap: 8px; }
+  .mk-item { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; line-height: 1.65; color: rgba(255,255,255,.9); }
+  .mk-item .mk-tick { color: var(--pri); font-weight: 800; flex: none; font-size: 13px; padding-top: 1px; }
+  .mk-get {
+    margin-top: 20px; padding: 14px 16px; border-radius: var(--r-lg);
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.13);
+    font-size: 13px; color: rgba(255,255,255,.86); line-height: 1.8;
+  }
+  .mk-get b { color: var(--pri); }
+  .mk-act { margin-top: 22px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .mk-note { font-size: 11.5px; color: rgba(255,255,255,.45); }
+  .mk-status { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 13px; font-weight: 700; color: #7ee2b8; }
+  .mk-status a { color: rgba(255,255,255,.72); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  .mk-status a:hover { color: #fff; }
+  .vfy-clean {
+    display: flex; gap: 9px; align-items: flex-start; margin-top: 12px;
+    font-size: 12.5px; color: var(--ink-2); line-height: 1.7;
+    background: var(--mint-50); border: 1.5px solid #b8ebd6; border-radius: var(--r-lg); padding: 11px 14px;
+  }
+  .vfy-clean[hidden] { display: none; }
+  .make-card .stamp {
+    position: absolute; right: 26px; top: 26px;
+    background: rgba(255, 107, 74, .16); border-color: var(--pri); color: var(--pri);
+  }
+
+  /* 提交面板 */
+  .sub-dlg {
+    border: none; padding: 0; border-radius: var(--r-toon-lg); width: min(560px, calc(100vw - 36px));
+    max-height: calc(100vh - 60px); background: #fff; color: var(--ink);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .3);
+    margin: auto; /* kh.css 的 * { margin: 0 } 会覆盖 UA 的居中，这里补回来 */
+  }
+  .sub-dlg::backdrop { background: rgba(26, 29, 35, .52); backdrop-filter: blur(3px); }
+  .sub-dlg[open] { animation: popIn 0.34s var(--ease-pop) both; }
+  .sub-form { padding: 24px 26px 22px; }
+  .sd-head { display: flex; align-items: flex-start; gap: 12px; }
+  .sd-head h3 { font-size: 18px; font-weight: 800; letter-spacing: -0.35px; }
+  .sd-head .sd-sub { font-size: 12px; color: var(--ink-soft); margin-top: 3px; font-weight: 600; }
+  .sd-x { margin-left: auto; width: 30px; height: 30px; border-radius: 8px; color: var(--ink-soft); font-size: 15px; flex: none; transition: 0.15s; }
+  .sd-x:hover { background: var(--bg-soft); color: var(--ink); }
+  .sd-field { display: block; margin-top: 18px; }
+  .sd-lbl { display: block; font-size: 12.5px; font-weight: 800; margin-bottom: 7px; }
+  .sd-lbl i { font-style: normal; font-size: 11px; color: var(--ink-faint); font-weight: 600; margin-left: 4px; }
+  .sd-pick { display: flex; gap: 7px; margin-bottom: 10px; flex-wrap: wrap; }
+  .pk {
+    font-size: 12.5px; font-weight: 700; padding: 6px 13px; border-radius: 999px;
+    border: 1.5px solid var(--line); color: var(--ink-2); background: #fff; transition: 0.15s;
+  }
+  .pk:hover { border-color: var(--pri); color: var(--pri-600); }
+  .pk.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .sd-field input, .sd-field textarea {
+    width: 100%; border: 1.5px solid var(--line); border-radius: var(--r-lg);
+    padding: 10px 13px; font-size: 13.5px; background: #fff; resize: vertical;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .sd-field input:focus, .sd-field textarea:focus { border-color: var(--pri); box-shadow: 0 0 0 3px rgba(255, 107, 74, .14); }
+  .sd-pane[hidden] { display: none; }
+  .sd-tip {
+    font-size: 11.5px; color: var(--ink-soft); line-height: 1.7; margin-top: 8px;
+    background: var(--bg-soft); border-radius: var(--r-lg); padding: 9px 11px;
+  }
+  .sd-tip b { color: var(--ink-2); font-weight: 800; }
+  .sd-drop {
+    border: 1.5px dashed var(--line); border-radius: var(--r-lg); padding: 20px 16px; text-align: center;
+    font-size: 13px; font-weight: 700; color: var(--ink-2); cursor: pointer; transition: 0.15s;
+    background: #fff;
+  }
+  .sd-drop:hover, .sd-drop.over { border-color: var(--pri); background: var(--pri-50); color: var(--pri-600); }
+  .sd-drop.has-file { border-style: solid; border-color: var(--mint); background: var(--mint-50); color: #0a7d59; }
+  .sd-drop small { display: block; font-size: 11.5px; font-weight: 500; color: var(--ink-faint); margin-top: 5px; }
+  .sd-drop.has-file small { color: #0a7d59; opacity: .8; }
+  .sd-foot { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .sd-foot .sd-free { font-size: 12px; color: var(--mint); font-weight: 700; }
+  .sd-foot .btn { margin-left: auto; }
+
+  /* ── 第四拍 · 验 ── */
+  .rubric { display: grid; gap: 10px; }
+  .rb {
+    display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; cursor: pointer;
+    border: 2px solid var(--line); border-radius: var(--r-toon); background: #fff;
+    box-shadow: var(--sticker); transition: 0.2s var(--ease-out);
+  }
+  .rb:hover { border-color: #ffd9cd; transform: translateY(-2px); }
+  .rb.on { border-color: var(--mint); background: var(--mint-50); }
+  .rb-ring {
+    width: 26px; height: 26px; border-radius: 50%; flex: none; margin-top: 2px;
+    border: 2.5px solid var(--line); position: relative; display: grid; place-items: center;
+    transition: border-color 0.3s var(--ease-out); background: #fff;
+  }
+  .rb:hover .rb-ring { border-color: var(--pri); }
+  .rb.on .rb-ring { border-color: var(--mint); }
+  .rb-dot {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--mint); display: block;
+    transform: scale(0); transition: transform 0.34s var(--ease-pop);
+  }
+  .rb.on .rb-dot { transform: scale(1); }
+  .rb-body { flex: 1; min-width: 0; }
+  .rb-t { font-size: 14px; font-weight: 700; line-height: 1.6; letter-spacing: -0.15px; transition: color 0.25s; }
+  .rb.on .rb-t { color: #0a7d59; }
+  .rb-d { font-size: 12.5px; color: var(--ink-soft); margin-top: 4px; line-height: 1.7; }
+  .rb-hint { font-size: 11.5px; font-weight: 800; color: var(--ink-faint); flex: none; padding-top: 4px; transition: 0.25s; }
+  .rb.on .rb-hint { color: var(--mint); }
+  .rubric-note {
+    margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--ink-soft);
+    display: flex; align-items: center; gap: 8px; transition: color 0.3s;
+  }
+  .rubric-note.done { color: #0a7d59; }
+  .rubric-note.done .rn-ico { animation: wiggle 0.6s var(--ease-pop) both; }
+
+  /* ══════ 侧栏 ══════ */
+  .prog-row { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; font-weight: 700; margin-top: 12px; }
+  .prog-row .pr-n { color: var(--ink-soft); font-weight: 600; }
+  .prog-bar { height: 6px; border-radius: 999px; background: var(--bg-deep); overflow: hidden; margin-top: 6px; }
+  .prog-bar i { display: block; height: 100%; width: 0; border-radius: 999px; background: var(--pri); transition: width 0.45s var(--ease-out); }
+  .prog-bar.mint i { background: var(--mint); }
+  .next-nav { display: grid; gap: 2px; }
+  .nn-row { display: flex; gap: 10px; align-items: center; padding: 9px 8px; border-radius: var(--r-lg); transition: 0.15s; }
+  .nn-row:hover { background: var(--pri-50); }
+  .nn-row .nn-ar { font-size: 14px; color: var(--ink-faint); flex: none; font-weight: 800; }
+  .nn-row .nn-body { min-width: 0; }
+  .nn-row .nn-k { font-size: 10.5px; font-weight: 800; letter-spacing: 0.08em; color: var(--ink-faint); }
+  .nn-row .nn-t { font-size: 13px; font-weight: 700; line-height: 1.45; }
+  .nn-row.cur { background: var(--pri-50); }
+  .nn-row.cur .nn-t { color: var(--pri-700); }
+  .nn-row.lock .nn-t { color: var(--ink-soft); }
+  .nn-row.lock:hover { background: var(--bg-soft); }
+
+  .waive-note { font-size: 12.5px; color: var(--ink-2); line-height: 1.75; }
+  .waive-done { font-size: 12.5px; font-weight: 700; color: var(--mint); line-height: 1.7; }
+
+  @media (max-width: 1080px) {
+    .nd-top { flex-direction: column; gap: 14px; }
+  }
+  @media (max-width: 720px) {
+    /* 窄屏导航：只留文字入口，避免顶栏横向溢出 */
+    .logo-text span { display: none; }
+    .nav-actions { gap: 2px; }
+    .nav-link { padding: 6px 8px; font-size: 12.5px; }
+    .nav-actions .btn { display: none; }
+    .nd-top h1 { font-size: 24px; }
+    .beat-head .bh-meta { display: none; }
+    .task { grid-template-columns: 24px minmax(0, 1fr); gap: 0 11px; padding: 15px 16px; }
+    .tk-no { display: none; }
+    .tk-time { grid-column: 2; justify-self: start; margin-top: 8px; }
+    .res-hero { flex-direction: column; }
+    .rh-go { align-self: flex-start; }
+    .make-card { padding: 22px 20px; }
+    .make-card .stamp { position: static; transform: rotate(-12deg); margin-bottom: 14px; }
+  }
+</style>
+</head>
+<body data-page-node-id="A9qvrNAHZl4H5tVMEyCjWB">
+
+<!-- ══════════ 导航 ══════════ -->
+<nav class="nav" data-page-node-id="f8yfg93BnRgGUWmFnW3aVL">
+  <div class="nav-inner" data-page-node-id="9lvgetXuQBMAjFtZIFq0yR">
+    <a class="logo" href="01-home.html" data-page-node-id="UCH5NSjGb41xq97KvS2yBp">
+      <span class="logo-mark" data-page-node-id="eNZA9mSoUAb9sU5bQqJHKs">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="ZhRc1qsDr0gx0GrEXxQD1p"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" data-page-node-id="aufcbmCditBTnu6k30jxXb"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" data-page-node-id="wLpnd0Zaxv9gm4cWmjN8gh"/></svg>
+      </span>
+      <span class="logo-text" data-page-node-id="opWOWwqNfDrp1Fc3FGjR1N"><b data-page-node-id="yVAfyByYVSzSnBcE7IPnZ5">课搭</b><span data-page-node-id="95e7vpekro6pL3kFHhXkBA">大学生成长社区</span></span>
+    </a>
+    <div class="nav-search" data-page-node-id="WiSiEUVya2FVZ7n0GBTrYI">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" data-page-node-id="nDK8iKAIU7aE3nURRcWkl3"><circle cx="11" cy="11" r="7" data-page-node-id="ZXn211ELpegHl5ill6beFA"/><path d="M20 20l-3.5-3.5" data-page-node-id="ZZgUTAN5B5gnKGbXx3QjtJ"/></svg>
+      搜索资料、路线、学长经验…
+    </div>
+    <div class="nav-actions" data-page-node-id="vi2YBfwtGNGvym7BBdJEwY">
+      <a class="nav-link" href="01-home.html" data-page-node-id="SpTZStXsEFlxAR0j9VoYJn">首页</a>
+      <a class="nav-link on" href="02-explore.html" data-page-node-id="NWnnuAnwz5PXIWbjC14KgN">🧭 探索路线</a>
+      <a class="nav-link" href="09-cohort.html" data-page-node-id="7UXvDdXC6LTM98TQvTY2L8">项目组</a>
+      <a class="nav-link" href="10-pricing.html" data-page-node-id="LIFyYHQHZI9iwVBjM0DbGa">验收与付费</a>
+      <a class="btn btn-outline btn-sm" href="04-survey.html" data-page-node-id="CnQvgzhb04jASIDwmk6Rac">登录</a>
+      <a class="btn btn-primary btn-sm" href="04-survey.html" data-page-node-id="GzAjeYu9RM0OzlBZYDL5PM">定制我的路线</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page" data-page-node-id="DpC6xdEMe49ADhAQ7uDS2n">
+
+  <!-- ══════════ 关卡头 ══════════ -->
+  <header class="nd-head" data-page-node-id="LNlQONYpwDHbjynPDC7Hqz">
+    <div class="crumb" data-page-node-id="jBHiBziNd7OGjQH0JHd0Zy">
+      <a href="06-roadmap.html" data-page-node-id="sLjrHXmRlTPgSPRUwgv9dJ">我的路线</a><span class="cr-sep" data-page-node-id="6ZwGsHRLPllqjYzcvxFmdn">/</span>
+      <a href="02-explore.html" data-page-node-id="AISbMBokkU0IyfAlUdAixf">探索路线</a><span class="cr-sep" data-page-node-id="qWfcPYRLKJ2HoCK99vy2pt">/</span>
+      <span data-page-node-id="RiV4gBxsFvuSNKwoAJWs81">第 3 站</span><span class="cr-sep" data-page-node-id="UpF1A1pC8Gk2QNKwxhJ8u6">/</span>
+      <b data-page-node-id="m2FYBZpiWvlhkqKsfggTNY">Git</b>
+    </div>
+    <div class="nd-top" data-page-node-id="kMwc2CfdpMd0g3BLIDzxQn">
+      <span class="rt-node active rt-halo" data-page-node-id="xnQtvqsWUtJHJpweMLOOSC">🌿</span>
+      <div class="nd-top-main" data-page-node-id="3IQL3h55UkEhvfieYOqDYR">
+        <div class="nd-kicker" data-page-node-id="zMfthhb4H29jpNPkFfzrzW">Stop 03 · 探索路线 · 免费</div>
+        <h1 data-page-node-id="PwCthFquoUwSAixe0ldshG">Git · 给代码一台时间机器</h1>
+        <p class="nd-lead" data-page-node-id="ttMWXMpTyy6hVytmB7NgAx">
+          删错代码、改崩了、想回到昨天的版本，Git 就是干这个的。它还是你和别人一起写东西的唯一方式。
+          这一关不背命令，只要求一件事：<strong data-page-node-id="ITXPraCG0xu6yqAl23TbOK">你真的在终端里敲过一遍</strong>。
+        </p>
+        <div class="nd-meta" data-page-node-id="uH5XlVrSXaxWyJAPouzffy">
+          <div data-page-node-id="tf06RkgApp8m9kvZ7ufkey"><b data-page-node-id="VEOASzegYTN2QdAjeUeB2T">约 1.5 小时</b><span data-page-node-id="T66y321oMb2Mv7yEukMpRk">本关总时长</span></div>
+          <div data-page-node-id="93D8xLu629Z5sdnVglCfHG"><b data-page-node-id="SedeuY4z9BBsxLt6tKdV2f">共 4 个小任务</b><span data-page-node-id="JvUoIvNFiMLKH8AC6wNsEp">做完有产出</span></div>
+          <div data-page-node-id="qDDG8EAB8nHjNj5A7K8r6W"><b data-page-node-id="MgFEgKuFtPl759BS2zWqA4">1,147 人</b><span data-page-node-id="RlEaGyYLaaeesgG8yqtbix">已走过这一站</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="blog-layout" data-page-node-id="iHPZLojbz9NtYb2OHkvCZ1">
+    <div class="blog-main" data-page-node-id="N0jcbI8FlsFBJA70omPfgH">
+
+      <!-- ════════ 第一拍 · 学 ════════ -->
+      <section class="beat beat-learn" data-page-node-id="PQI9wOHCkmxGSnT2zDOu7f">
+        <div class="beat-head" data-page-node-id="ODIykkxnY8xXvkcWRwBUfQ">
+          <span class="bh-seal" data-page-node-id="aIPiEeUlaYl652F8LP0WBq">学</span>
+          <h2 data-page-node-id="NZPd8Ll0FalZFZQizJzTVL">先看懂：Git 到底在解决什么问题</h2>
+          <span class="bh-meta" data-page-node-id="LWwHlVjfIoKf4qwPyXyAma">1 篇必读 · 约 25 分钟</span>
+        </div>
+        <div class="beat-sub" data-page-node-id="WemlYnQkD2vIshZEpr8zNF">
+          这一关只有一篇是必读的。另外两份是备选，看不进文字就换视频，别在「挑资料」上耗掉半小时。
+        </div>
+
+        <a class="toon-card hoverable res-hero" href="#" data-page-node-id="hfkx8wfwNC60gqjDu8WIag">
+          <span class="rh-badge" data-page-node-id="e56ckZcqIDuKL5JGiUaiL7">先读这个</span>
+          <span class="rh-ic" data-page-node-id="lEmSEq7XQnBLC46FCLaaWL">📘</span>
+          <span class="rh-body" data-page-node-id="NC3hBbgcCEFCyP2M4BaGM0">
+            <span class="rh-t" data-page-node-id="Y9quktui0sYBfS88wXETTo">Git：从「改崩了怎么办」到「和别人一起写」</span>
+            <span class="rh-d" data-page-node-id="BXPZ5wmoK258Rrr45us1tX">
+              不讲命令大全。只讲三件事：为什么要存快照、分支到底在干什么、冲突的时候你该看哪一行。
+              每个命令后面都跟着一句「你什么时候会用到它」，读完你就能上手，不用先背完再动手。
+            </span>
+            <span class="rh-m" data-page-node-id="e65zPpyOMjBDGhp5eHTvNj"><span data-page-node-id="O5RvZyOYSA8GyYoDBeo5mY">课搭出品 · 陈学长（后端 · 走过这条路线）</span><span data-page-node-id="HCNL9zUpJLKKrFhwjKw6ym">📖 图文 · 约 25 分钟</span><span data-page-node-id="WZOI8FWITFIwWgeaLkBgUo">免费</span></span>
+          </span>
+          <span class="rh-go" data-page-node-id="CnkNj1hi3rElTzDttsXgqL"><span class="btn btn-primary" data-page-node-id="eogcDyUIKrHjgwbkoE4ZQs">开始阅读</span></span>
+        </a>
+
+        <details class="alt-wrap" data-page-node-id="vTDAm09t3GjWR07s8d0eFo">
+          <summary data-page-node-id="ETXs9e8iHKLrRXzc1FVtq4">
+            <span class="alt-caret" data-page-node-id="OqjJc3XTC2DCUHbG8Q0qvK">▸</span>
+            还有 2 份补充资料（主资料没讲透的时候再看）
+            <span class="alt-count" data-page-node-id="2jrznn67MJ35K967H0XyQC">默认折叠</span>
+          </summary>
+          <div class="alt-list" data-page-node-id="nKHQf9VeXZJPcAtsW5ppuE">
+            <div class="alt-row" data-page-node-id="QGT2D7CGS2K7nSYOxVSGLD">
+              <span class="ar-kind" data-page-node-id="DljhyPXRRQWH6ex6RAQetd">📕</span>
+              <span style="flex:1;min-width:0" data-page-node-id="qKxgUD8uTm7S6mxWC6ZiYx">
+                <span class="ar-t" style="display:block" data-page-node-id="M7rCfqdDnGXXuoKxAhSUvn">《Pro Git》中文版 · 第 2 章「Git 基础」</span>
+                <span class="ar-d" style="display:block" data-page-node-id="NqoDav5Bazv1Ugl3awDfVi">官方免费书，命令覆盖最全。想系统学就啃这本，读到「撤销操作」那一节就够了。</span>
+              </span>
+              <span class="ar-m" data-page-node-id="9cpqvuUhyn2YIsADwBbx8y">约 50 分钟</span>
+            </div>
+            <div class="alt-row" data-page-node-id="8oZHX1fDulnZusPPEpAIsW">
+              <span class="ar-kind" data-page-node-id="mfxYbrulWzqBEoE8LeHhmP">🎬</span>
+              <span style="flex:1;min-width:0" data-page-node-id="NCofIB2APj45Qkbv86Nn8B">
+                <span class="ar-t" style="display:block" data-page-node-id="Zaat0zlG5HrFxsDAVCTFPO">视频 · 分支到底是怎么工作的（动画演示）</span>
+                <span class="ar-d" style="display:block" data-page-node-id="paMx5r4Sgub0UGYEQw0vAj">15 分钟的动画把「指针在挪」这件事画出来了。看完再回去读文字，会突然通。</span>
+              </span>
+              <span class="ar-m" data-page-node-id="2kcTt4AmD4DUNhrFYG4tUV">约 15 分钟</span>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ════════ 第二拍 · 练 ════════ -->
+      <section class="beat beat-drill" id="beat-drill" data-page-node-id="y8nrHp7T8FY1r0i7bZa4x7">
+        <div class="beat-head" data-page-node-id="1rTidoNix3F7foDlGfT2AD">
+          <span class="bh-seal" data-page-node-id="koZLsjUVELjEvHGhBFVDYR">练</span>
+          <h2 data-page-node-id="JF9cjLPf3Yicr6uIwUjztx">动手：四步，按顺序做</h2>
+          <span class="bh-meta" data-page-node-id="XPJF2JgJLrTniHD4y8Rwcj">勾完 4 条解锁产出</span>
+        </div>
+        <div class="beat-sub" data-page-node-id="ifK3SY9uZ7O4CaY1QSadjm">
+          看懂和敲过是两回事。每一步都真的在终端里做一遍，卡住了就回第一拍翻那一段，别硬扛。
+        </div>
+
+        <div class="done-hint" id="doneHint" data-page-node-id="KA0Eah0G6s2snuInQHt8Fx">
+          <span class="dh-emoji" data-page-node-id="l7B71zILA9xzCtmuUkWmSh">🎉</span>
+          <span data-page-node-id="iCNSRUljIB8VRWJbFhBLCu">练完了，可以去创造环节了</span>
+          <a href="#beat-make" data-page-node-id="bxJF9d8P55NfGOphh66mmf">去做产出 →</a>
+        </div>
+
+        <div class="tasks" id="taskList" data-page-node-id="swHyd1LU9eEEQFNdFNYuXG">
+          <div class="task" data-page-node-id="ebDmGuBFJiac92vwYXrI4q">
+            <button class="tk-ck" type="button" aria-label="标记完成" data-page-node-id="B4KG3qgZKJCAGUfNJZrBuT"><svg viewBox="0 0 16 16" data-page-node-id="pzH75Mpotr4SoQT0sbD7iM"><path d="M3 8.5 L6.4 12 L13 4.5" data-page-node-id="ouXHwahydeOmXPHuNp3oOL"/></svg></button>
+            <span class="tk-no" data-page-node-id="aOkKZz4XFkjvTxPYlW2fwS">01</span>
+            <span class="tk-body" data-page-node-id="GGj5hTUnEF6XdbFchFACTS">
+              <span class="tk-t" data-page-node-id="XvStwxpMdnoIryURdUKWle">在自己电脑上建一个仓库，把第一份文件提交上去</span>
+              <span class="tk-out" data-page-node-id="gi1BRWZRa2dH9Debl6psDl"><b data-page-node-id="GLCAf3sYvoJoIlPwPcdeyz">→ 你会得到：</b>一个真实存在的仓库，里面躺着你的第一条提交记录（带时间和一句你写的说明）</span>
+            </span>
+            <span class="tk-time" data-page-node-id="Iq3LjmlARhCE0JfBgYg3VF">约 15 分钟</span>
+          </div>
+
+          <div class="task" data-page-node-id="7E8dWExCnfO57BRG1ySG62">
+            <button class="tk-ck" type="button" aria-label="标记完成" data-page-node-id="wjqDBXlZ0VQDxJSJLxaayn"><svg viewBox="0 0 16 16" data-page-node-id="PBO6SMi84RjckX9dp4y3U5"><path d="M3 8.5 L6.4 12 L13 4.5" data-page-node-id="8uhsKDevOll7vO4CjMBw4j"/></svg></button>
+            <span class="tk-no" data-page-node-id="XB1RF4wWYTLuqnsIQCLUzB">02</span>
+            <span class="tk-body" data-page-node-id="pVD4AgSWfdHKktDegkTkS4">
+              <span class="tk-t" data-page-node-id="XFYA3rBOMw8bAkC1DD1XBP">故意把一个文件改崩，再用 Git 把它变回来</span>
+              <span class="tk-out" data-page-node-id="spFr3DLLss4toWMhT5eZ0F"><b data-page-node-id="Nqa47UfzZiOD3rI4EMml8z">→ 你会得到：</b>一次真的「后悔药」体验。删掉一整个文件、敲一条命令、文件回来了，这条命令救过所有人的命</span>
+            </span>
+            <span class="tk-time" data-page-node-id="XVEaBrNVQCWoeUSjYmqWXX">约 20 分钟</span>
+          </div>
+
+          <div class="task" data-page-node-id="3UDCsYBoyAFZsimEpcYJ8j">
+            <button class="tk-ck" type="button" aria-label="标记完成" data-page-node-id="OYcCPE88eDaPaGZobCwBZv"><svg viewBox="0 0 16 16" data-page-node-id="DY12SdkCY6s8wMH1LT4VCM"><path d="M3 8.5 L6.4 12 L13 4.5" data-page-node-id="xzdAkL5tlmiMbTiPfeccsQ"/></svg></button>
+            <span class="tk-no" data-page-node-id="rykFHGNwVCNiA6WXSW18Np">03</span>
+            <span class="tk-body" data-page-node-id="eTJyP10Mt2OVsDBYYgGOHC">
+              <span class="tk-t" data-page-node-id="Uf52xnqE0COEtToz5id9xj">开一个分支，在上面加一行字，再合并回主干</span>
+              <span class="tk-out" data-page-node-id="RQFJlgxnZrZcR23gmW796B"><b data-page-node-id="43JltdJaz7j0oJ67LxfIAl">→ 你会得到：</b>一张能画出来的分叉图（<code data-page-node-id="fGhFj5Pp9IP3zuIJ9i5ga8">git log --graph</code>），你会第一次看见「分支」长什么样</span>
+            </span>
+            <span class="tk-time" data-page-node-id="i9kH3jRuURLtkyqlRHEV7M">约 20 分钟</span>
+          </div>
+
+          <div class="task" data-page-node-id="68PTI4ARNVoRMLdHABbt7o">
+            <button class="tk-ck" type="button" aria-label="标记完成" data-page-node-id="yECdvckLpKyNfW9ePCPdiC"><svg viewBox="0 0 16 16" data-page-node-id="hWlmKaoXTHB5EcBU4bPTn6"><path d="M3 8.5 L6.4 12 L13 4.5" data-page-node-id="8qyBAbDVgFVelzFyH5kDtT"/></svg></button>
+            <span class="tk-no" data-page-node-id="RgsjUyezUqZnTbRpZhUJdM">04</span>
+            <span class="tk-body" data-page-node-id="MoMrN0X1gCY4Pwn7Ke7SDW">
+              <span class="tk-t" data-page-node-id="BeVCxUt4a0yYAUqQdZjR8L">把仓库推到 GitHub，在网页上改一次，再拉回本地</span>
+              <span class="tk-out" data-page-node-id="Zu04Y4BP6B9BQhiOj9XAh4"><b data-page-node-id="V7ovh9tX4Wk82xxI3Myr7R">→ 你会得到：</b>一个能直接发给同学的公开链接，以及一次完整的「本地 ↔ 远端」往返</span>
+            </span>
+            <span class="tk-time" data-page-node-id="Nb7y8HYoaQyBTmGLFL2LVD">约 15 分钟</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ 第三拍 · 创 ════════ -->
+      <section class="beat beat-make" id="beat-make" data-page-node-id="ao1gok0I1irWYEwhZIfwYz">
+        <div class="beat-head" data-page-node-id="aucmMtc2bpDltzD34PHoa3">
+          <span class="bh-seal" data-page-node-id="b42kdjnBobR2va2eC4VChx">创</span>
+          <h2 data-page-node-id="UplQnzUpow8CA5APWoFAjC">做出东西：你的第一个仓库</h2>
+          <span class="bh-meta" data-page-node-id="dEEcPpClZBn5Ckhcj9zsjs">这一关的产出物</span>
+        </div>
+        <div class="beat-sub" data-page-node-id="vummpKXzWpr6dNGutU191T">
+          这是你这一关要交出来的东西。标准是公开的，做不到就改到做到，没有「差不多就行」。
+        </div>
+
+        <div class="toon-card make-card" id="makeCard" data-page-node-id="oBswqZsevTSa3rK84dajN4">
+          <div class="mk-kicker" data-page-node-id="Q5CHO6tsoqvIofMnSavnKI">DELIVERABLE · 本关产出</div>
+          <h3 data-page-node-id="oh4tF5z6DyeG4kSbgynlAM">一个公开的 GitHub 仓库，README 5 行说清它是什么</h3>
+          <p class="mk-lead" data-page-node-id="8XkN1c50455ht8Ikf9tlH1">
+            不用是什么了不起的项目，一个记录你学习笔记的仓库就够。重要的是它<strong style="color:#fff" data-page-node-id="yVEAXlnGW4fCHFB3fggJ8y">结构完整</strong>：
+            README 说清这是什么、怎么跑、你学到的最意外的一点；提交记录能看出你一步步做了什么。
+          </p>
+
+          <div class="mk-block" data-page-node-id="5d8y39f1G8JPiktbVhll2c">
+            <div class="mk-lbl" data-page-node-id="8pSzmdwDWzFrr4adGuDMmu">验收标准（3 条 · 学长按这三条看）</div>
+            <div class="mk-list" data-page-node-id="rBTnAtsjTtZXnDXU8D847t">
+              <div class="mk-item" data-page-node-id="RNwb1vxdaRKC0siheIDaF1"><span class="mk-tick" data-page-node-id="OKNwMCypwXsEoc2xWJdtkz">✓</span><span data-page-node-id="akQQApp8Ou6kne4S0ZM1rM">仓库公开可访问，README 里有「这是什么 / 怎么跑 / 学到什么」三行</span></div>
+              <div class="mk-item" data-page-node-id="ZcVdGHHksE4GTwQq3z0Rw3"><span class="mk-tick" data-page-node-id="lmivVf4Uu0LCWJjgHszDfX">✓</span><span data-page-node-id="IW3wiOGgKDz7HgUV0tIcBb">提交记录 ≥ 3 条，每条说明都在讲「我做了什么」，而不是清一色 update</span></div>
+              <div class="mk-item" data-page-node-id="ozgSTD4WbUIglQBpG1UeBn"><span class="mk-tick" data-page-node-id="zfOHIAfKQOxB8TAPql7lfi">✓</span><span data-page-node-id="q9Ani16Fm2O8BXCtfXTaIZ">有一次真实的分支合并：<code data-page-node-id="E48ybUGsNmcEqBcnCwj8Xd">git log --graph</code> 能画出分叉和合流</span></div>
+            </div>
+          </div>
+
+          <div class="mk-get" data-page-node-id="FUJRbjYU4UhUiOpWVM50FP">
+            <b data-page-node-id="HplvMEEHfFUfeuJl6cJ6ko">做完之后你会得到：</b>你简历上第一个能放链接的东西，也是你以后所有项目的家。
+            往后每一关的产出都会提交到这个账号下，大二找实习的时候，你的 GitHub 首页会替你说话。
+          </div>
+
+          <div class="mk-act" id="makeAct" data-page-node-id="BoHx3OjZEoRWuyfCAQnsR4">
+            <button class="btn btn-primary btn-lg" id="btnSubmit" data-opens="submitDlg" data-page-node-id="DvbArNijzv9S9WFukKoQhA">提交产出</button>
+            <span class="mk-note" data-page-node-id="LPfI0LnA2bT1JInOgbKCef">提交后系统会照着上面 3 条标准跑一遍 · 想要真人署名再申请学长验收</span>
+          </div>
+        </div>
+
+        <!-- 提交之后：验收过程 -->
+        <div class="vfy" id="vfyBox" hidden style="margin-top:16px" data-page-node-id="fJkvT129E1HFluECE8Bo1Q">
+          <div class="vfy-h" data-page-node-id="LY04A02oQbrjQ1TIJZHajJ">
+            <span class="vfy-ico" data-page-node-id="NI8uaUgg1UlBFaDozcY6gL">🔎</span>
+            <div data-page-node-id="ZCM6aYZ1W9jwoEuA0zKuz7">
+              <b id="vfyTitle" data-page-node-id="JAV8AQpOPHDpPfXf9xy4IL">系统正在给你验收</b>
+              <span class="vfy-sub" id="vfySub" data-page-node-id="KufMRhEJToUujB43zpbB0P">正在把你的仓库拉下来</span>
+            </div>
+            <span class="vfy-pct" id="vfyPct" data-page-node-id="j25cGN6D1FyDBCR4L9GjDR">0 / 5</span>
+          </div>
+          <div class="vfy-list" id="vfyList" data-page-node-id="NzctSIhHQVsphl1WQYqGAP"></div>
+          <div class="vfy-acts" data-page-node-id="4cAFXxgUxLGz6J02BOTdjo">
+            <button class="btn-skip" type="button" id="vfySkip" data-page-node-id="cBD6sMVwDIRNBvOH9sghwE">跳过动画，直接看结果</button>
+          </div>
+          <div class="vfy-verdict" id="vfyVerdict" hidden data-page-node-id="8CFeMt6MyFjpBjc6rfkBRI">
+            <span class="vv-k" id="vvK" data-page-node-id="eq7uSd7fkdN3EA4SMKJkIl"></span>
+            <span class="vv-d" id="vvD" data-page-node-id="mAdd4wCdgHonUNHNvZDBRT"></span>
+            <button class="btn btn-outline btn-sm" type="button" id="vvAgain" data-page-node-id="EDjS1Vf1ePZu4t7633QB6D">改好了，重新提交</button>
+            <a class="btn btn-primary btn-sm" href="10-pricing.html" data-page-node-id="jSsZIccT69kmibC0LBxX23">申请学长验收 · ¥39</a>
+          </div>
+        </div>
+
+        <p class="vfy-clean" id="vfyClean" hidden data-page-node-id="nJRZiaDht23YXETsS88aoS">
+          🧹 你的仓库副本和依赖已经删掉了。这份结论和 5 条证据图留着，你自己随时能翻。
+        </p>
+      </section>
+
+      <!-- ════════ 第四拍 · 验 ════════ -->
+      <section class="beat beat-check" id="beat-check" data-page-node-id="clDPJRVMH2nCbMpT1fFYj2">
+        <div class="beat-head" data-page-node-id="Tk9rF6zfGw3J6tNe7M96oy">
+          <span class="bh-seal" data-page-node-id="rYxEnZDuOcr4LJG1SArIjo">验</span>
+          <h2 data-page-node-id="Z4guHkvH39YMjtGt37xiF4">确认学会了：点亮的每一句都得是真的</h2>
+          <span class="bh-meta" data-page-node-id="lxlIHxzLPMlLRbrbc3nG5c">自查 · 没人打分</span>
+        </div>
+        <div class="beat-sub" data-page-node-id="lwwN1N43rQa1FsDDo4DrQD">
+          这一拍不用提交、没人打分，是你自己给自己的确认。手上没数之前别点。
+          （阶段末尾另有一道<b data-page-node-id="BKxezMkeP3pB4635lxz0cZ">验收关</b>，那里要交一个能跑起来的东西，系统会真的打开点一遍。两回事。）
+        </div>
+
+        <div class="rubric" id="rubric" data-page-node-id="g6GKNZrgqtXyHDw66DOlwo">
+          <div class="rb" data-page-node-id="WsreHHpDLaGvETGkdH6sCg">
+            <span class="rb-ring" data-page-node-id="ZHRSqeJYDm9jt6fVmrU9Wu"><i class="rb-dot" data-page-node-id="DEuw8DQ5CgR9BNJK2l8tBV"></i></span>
+            <span class="rb-body" data-page-node-id="nEr1u7XijTtuGHWgvhGn20">
+              <span class="rb-t" style="display:block" data-page-node-id="RnxZENBzN1qZdT1hhafCux">不看教程，我能说清 Git 到底在解决什么问题</span>
+              <span class="rb-d" style="display:block" data-page-node-id="HLGEbPwEyDzfuo2IMi0MlK">用你自己的话，而不是背「分布式版本控制系统」这八个字。</span>
+            </span>
+            <span class="rb-hint" data-page-node-id="39nvUaLEo11NR8Wuw0RwtK">点我点亮</span>
+          </div>
+          <div class="rb" data-page-node-id="NkukdlqkCYfyro6FeBsEfR">
+            <span class="rb-ring" data-page-node-id="d1d1gYEBon53uJ3JqpiUEH"><i class="rb-dot" data-page-node-id="WrpNvJCsvU9eupHGBeSgGb"></i></span>
+            <span class="rb-body" data-page-node-id="U5YlcpnxKqYwXWT9nWSE5F">
+              <span class="rb-t" style="display:block" data-page-node-id="DcEQMxFg4VvmRhSr70kuky">改崩文件的时候，我知道该敲哪条命令，也知道为什么是它</span>
+              <span class="rb-d" style="display:block" data-page-node-id="mbI0hj2et9GldveYL3he2w">不是碰运气试出来的，你知道它从哪儿把文件捞回来。</span>
+            </span>
+            <span class="rb-hint" data-page-node-id="8zRjaCgUHwDIdnBnex90uo">点我点亮</span>
+          </div>
+          <div class="rb" data-page-node-id="EYbQ6JEwbHiqrMkvZxcQgp">
+            <span class="rb-ring" data-page-node-id="6sDMurdDeObyPLlwATyfGW"><i class="rb-dot" data-page-node-id="CHNKlNPODjtCxeI8Fu1s09"></i></span>
+            <span class="rb-body" data-page-node-id="6VGmAQst7nzUNVNxYpKvE4">
+              <span class="rb-t" style="display:block" data-page-node-id="WnXS67NQiUEhCTUnMfyz72">我能把「分支和合并」讲给一个没学过 Git 的同学听</span>
+              <span class="rb-d" style="display:block" data-page-node-id="dNkGCSxYDP3yi02FKIvOyM">能讲明白，才算真懂了。讲的过程中卡住的地方，就是还没通透的地方。</span>
+            </span>
+            <span class="rb-hint" data-page-node-id="vCSJhvVsOEcWhJZ8SCTYSp">点我点亮</span>
+          </div>
+        </div>
+        <div class="rubric-note" id="rubricNote" data-page-node-id="1ljAfhPKKcUxqTvoIoXZzw">
+          <span class="rn-ico" data-page-node-id="PAjJe5j0gpUT2xyIs8fk4P">⭕</span>
+          <span id="rubricNoteText" data-page-node-id="3EOyk2LM5i8EhZeZBWckCN">三条都点亮后，这一关就完成了。</span>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ══════════ 侧栏 ══════════ -->
+    <aside class="blog-side" data-page-node-id="Bw53EmepJ5AxF6R9W3b88x">
+
+      <div class="side-box" data-page-node-id="ORsydphVYsADv4fM11Iyh4">
+        <h3 data-page-node-id="4229KdGH2WozTPwMu7HNEM">📍 本关进度</h3>
+        <div class="sb-sub" data-page-node-id="pJg5VrpjI0mFFzWCEC1MuC">勾选和点亮都会实时记下来</div>
+
+        <div class="prog-row" data-page-node-id="ny4US5EIe07tsnPPVhbC3M"><span data-page-node-id="jbpv7w95DTtNZtOXd2CCzF">小任务</span><span class="pr-n" id="numTask" data-page-node-id="H27patU5nAiOVZ7Kruqyee">0 / 4</span></div>
+        <div class="prog-bar" data-page-node-id="LjcXwWc8HMn2NT57HTQvNc"><i id="barTask" data-page-node-id="ZOnVFhHlKQP5RQdkXCMhYa"></i></div>
+
+        <div class="prog-row" data-page-node-id="3gL5UiCNtdXtzLHzCOFeVQ"><span data-page-node-id="8CGRKqwLooVcFy2ENKDnPT">自我确认</span><span class="pr-n" id="numRing" data-page-node-id="QbcJuw213nWjL0VNACi5iR">0 / 3</span></div>
+        <div class="prog-bar mint" data-page-node-id="wDWAoAGVAV1B6d4mPazWDf"><i id="barRing" data-page-node-id="d9bA3CWPsFWKeykxresYSq"></i></div>
+
+        <div class="prog-row" style="margin-top:16px;padding-top:13px;border-top:1px solid var(--line)" data-page-node-id="DJUfEzv2qcXZxdGLHvvnVj">
+          <span data-page-node-id="X4wHvFIf5kZjMWB66uzbfm">本关完成度</span><span class="pr-n" id="numAll" style="color:var(--pri-600);font-weight:800" data-page-node-id="hw9Ks6jgKmwj7KhDbrNaMi">0%</span>
+        </div>
+      </div>
+
+      <div class="side-box" data-page-node-id="uB6Cy79qaVA8eVMiSSYarJ">
+        <h3 data-page-node-id="PkrWMYAqi0V5dEQZPUsRGI">🗺️ 路线导航</h3>
+        <div class="sb-sub" data-page-node-id="iHTZyLJ493XkiUpclF7HKu">探索路线 · 共 41 站</div>
+        <div class="next-nav" data-page-node-id="BVaLfDpGIVWm374n19ZzuY">
+          <a class="nn-row" href="02-explore.html" data-page-node-id="6amDnAO7pjJNShubGT2k4S">
+            <span class="nn-ar" data-page-node-id="hlqtUyfw10aHgw9LLLnAkB">←</span>
+            <span class="nn-body" data-page-node-id="5wDBrlIpCB18Cp12NakMPH">
+              <span class="nn-k" style="display:block" data-page-node-id="RSHFZRZMCGDRsv3H8PC4yJ">上一关 · 已走过</span>
+              <span class="nn-t" style="display:block" data-page-node-id="EEM9C7WPoTUlvD4sC99bX9">📜 脚本 · 让电脑替你干活</span>
+            </span>
+          </a>
+          <div class="nn-row cur" data-page-node-id="A206Gcecd1VtNDyd5xGBsc">
+            <span class="nn-ar" data-page-node-id="oxdGOTQzNFIzoqC98OiKoN">·</span>
+            <span class="nn-body" data-page-node-id="KI0tH88jfdwuJpbudBjP87">
+              <span class="nn-k" style="display:block;color:var(--pri-600)" data-page-node-id="Wb9VleezGCT3i1Qz0Ywfhb">你在这里</span>
+              <span class="nn-t" style="display:block" data-page-node-id="OYAM7In8oj062KST5xkA4h">🌿 Git · 给代码一台时间机器</span>
+            </span>
+          </div>
+          <a class="nn-row lock" href="#" data-page-node-id="85ynuYuWKKfhMS15HPADsO">
+            <span class="nn-ar" data-page-node-id="g5R1jjMF1PGGhkJdvKVqCV">→</span>
+            <span class="nn-body" data-page-node-id="jZdDervQIGLu0BmU0yV2RL">
+              <span class="nn-k" style="display:block" data-page-node-id="fOhUAa79rpjTsOQJUd50ci">下一关 · 完成本关后解锁</span>
+              <span class="nn-t" style="display:block" data-page-node-id="6qxHC3dLnvwDEq9s1M4qpu">🎨 前端 · 让东西看得见</span>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <div class="side-box" data-page-node-id="QgnGDLzzP3YVkQBPgai5Dv">
+        <h3 data-page-node-id="8PM0JIj59UCrZlasesDqXl">⚖️ 系统看什么，不看什么</h3>
+        <div class="sb-sub" data-page-node-id="guKtPBCAZ4yvvmrBkrpFdq">这一关的验收边界，交之前就该知道</div>
+        <div class="vfy-bound" style="grid-template-columns:1fr;margin-top:0" data-page-node-id="k8ihpbR4tK3mfxlONDrC7r">
+          <div class="yes" data-page-node-id="DFGD5xJ9spxnwelICLqcqx">
+            <h5 data-page-node-id="Imo1M6aoEopF8IGryjufbi">会查的（都是事实）</h5>
+            <ul data-page-node-id="z2c8MLijLwRwDyHGRC2qcH">
+              <li data-page-node-id="roxQi1XBY2mUu7oWOXbxO2">仓库打得开吗</li>
+              <li data-page-node-id="Np0KXeUJG3DVYBouFKME2G">README 写没写清三行</li>
+              <li data-page-node-id="55nImL2OF417RwVLjjqyCg">提交记录有几条、说明是不是在讲人话</li>
+              <li data-page-node-id="UEwISfi6AnfPSXyyGWcL5m">有没有一次真的分支合并</li>
+              <li data-page-node-id="KzLaUElBweXFVMox6DrZa2">有没有把密钥一起传上来</li>
+            </ul>
+          </div>
+          <div class="no" data-page-node-id="JSfkfSyXzBaxqzzM4eWUI5">
+            <h5 data-page-node-id="jytYVRDm40MdqHConxTBYI">不查的（都是判断）</h5>
+            <ul data-page-node-id="6F2nXcRMJoEQCn3EOb3Ynq">
+              <li data-page-node-id="yafachcNb3nvr5K4BIrd2X">这个仓库做得有没有意思</li>
+              <li data-page-node-id="XhQmsWba2zlrd0DjDHfli7">README 文笔好不好</li>
+              <li data-page-node-id="Uyltaa9wLxFDToEaJRKtHd">够不够写进简历</li>
+            </ul>
+          </div>
+        </div>
+        <div style="font-size:11.5px;color:var(--ink-soft);margin-top:10px;line-height:1.6" data-page-node-id="cGzKXrlcgV6eqCUfNYXn0Q">
+          系统只替你确认「该做的做没做」。好不好、值不值得，那是学长和面试官的事。
+        </div>
+      </div>
+
+      <div class="side-box" style="background:var(--bg-soft)" data-page-node-id="hlBhgAg2xTNU56HDxKWoCn">
+        <h3 data-page-node-id="XqNQTyMKIE1qrNUB5ydHjk">⏭️ 免修申请</h3>
+        <div class="sb-sub" data-page-node-id="sCNFzff66Ral3dFuCSlKrR">已经会了就别浪费时间</div>
+        <div class="waive-note" id="waiveNote" data-page-node-id="EARbF2tYnzItg6X0Opz4ig">
+          如果你已经用过 Git、能自己处理分支冲突，可以申请跳过这一关。
+          我们会给你一个 <b data-page-node-id="j6hp1yS8OsW33oIBNBM02Q">10 分钟的小测验</b>，过了直接盖章，不用再走一遍。
+        </div>
+        <button class="btn btn-outline btn-block btn-sm" id="btnWaive" style="margin-top:11px" data-page-node-id="8jGt4zxgDYrL4GQjrH8LmC">申请免修 →</button>
+      </div>
+
+    </aside>
+  </div>
+</main>
+
+<!-- ══════════ 提交面板 ══════════ -->
+<dialog class="sub-dlg" id="submitDlg" aria-labelledby="sdTitle" data-page-node-id="NsqKRDrY2CAzax0ESsk3bu">
+  <form class="sub-form" id="submitForm" data-page-node-id="rlsLMHeOxCzfhBbR9hDXO3">
+    <div class="sd-head" data-page-node-id="xr9MdnNaX0wyV3zErxN0tH">
+      <div data-page-node-id="VOdNth470KsnuTy9KtaCqP">
+        <h3 id="sdTitle" data-page-node-id="EZDFSUnc6gcedv5zX19Sgz">提交产出 · Git 时间机器</h3>
+        <div class="sd-sub" data-page-node-id="L1uiUpdPEFeW1079TsYAJK">第 3 站 · 探索路线</div>
+      </div>
+      <button class="sd-x" type="button" id="btnCloseDlg" aria-label="关闭" data-page-node-id="guCN71WYUn5N9vGalkBrRl">✕</button>
+    </div>
+
+    <div class="sd-field" data-page-node-id="aT7mEjua5KHykJPHrREGgk">
+      <span class="sd-lbl" id="kindLbl" data-page-node-id="nqIHz6kPbV5qjbFHv7qyxp">交什么 <i data-page-node-id="yXT6X2SJVPMv3lxaizE43v">三选一 · 必填</i></span>
+      <div class="sd-pick" id="pickKind" role="group" aria-labelledby="kindLbl" data-page-node-id="ARw5Sje28joyxdoWlJnGaX">
+        <button type="button" class="pk on" data-k="repo" aria-pressed="true" data-page-node-id="LqFT2CLP70lDB8cXb4NhDo">📦 仓库地址</button>
+        <button type="button" class="pk" data-k="zip" aria-pressed="false" data-page-node-id="NGc0jh5iC8vPFkUAGPBqzK">🗜 压缩包</button>
+        <button type="button" class="pk" data-k="live" aria-pressed="false" data-page-node-id="eedP27Gb7uOz5NoFBfzF5v">🌐 已部署的地址</button>
+      </div>
+
+      <div class="sd-pane" data-pane="repo" data-page-node-id="Grr9aoAc3lD2uQc3VNA5GY">
+        <input type="url" id="fRepo" placeholder="https://github.com/你的用户名/仓库名" data-page-node-id="C53AtITjPM5azNYWkQnIWp" />
+        <p class="sd-tip" data-page-node-id="GU7uzPDE3N43aZpUqM91dr">
+          系统会自己把仓库拉下来，装依赖、跑起来，再打开看一遍。<b data-page-node-id="REW9qfzL1n5OEojAUpdP3z">得是公开仓库</b>，私有的我们拿不到。
+        </p>
+      </div>
+
+      <div class="sd-pane" data-pane="zip" hidden data-page-node-id="kbmzdBRCk2JUecRQ4wFnUo">
+        <div class="sd-drop" id="dropZone" tabindex="0" role="button" aria-label="选择压缩包" data-page-node-id="qkNyMc0dAqAXfRgOdX6cII">
+          🗜 点击选择，或把 .zip 拖进来
+          <small data-page-node-id="zo9CFRzZ49bgmW8KCNeUSe">不超过 50MB · 别把 node_modules 打进去</small>
+        </div>
+        <input type="file" id="fZip" accept=".zip,application/zip" class="sr-only" data-page-node-id="Ivy0umnzqQdcAFeKAbHF4U" />
+        <p class="sd-tip" data-page-node-id="HMab3yDZKZBoJqmrCH9qzN">
+          仓库还是私有的、代码还没推上去，就用这个。<b data-page-node-id="CoVkT8FY44HW0ywv0NfsMr">打包前把密钥文件删掉</b>，系统不读 .env。
+        </p>
+      </div>
+
+      <div class="sd-pane" data-pane="live" hidden data-page-node-id="6lfyDTU4skqUNBxpXvSk3j">
+        <input type="url" id="fLive" placeholder="https://你的项目.vercel.app" data-page-node-id="ZeyOXLyfzEcZg3MDb1doOv" />
+        <p class="sd-tip" data-page-node-id="bkzqIprvLBJuxvg1Jw828S">
+          已经部署好了就直接给地址。这条路只查「打不打得开、点得动点不动」，<b data-page-node-id="wmFg3MHBwrZK2e3V7iqGTE">看不到源码</b>，所以提交记录那一条不判。
+        </p>
+      </div>
+    </div>
+
+    <label class="sd-field" data-page-node-id="INPm9H0SOBWUKmDAyopeVp">
+      <span class="sd-lbl" data-page-node-id="TAJqtJcCLIADTaSBknXN3v">一段说明 <i data-page-node-id="XThDAKhsB4obhrjVq05Lfi">3–5 句就够</i></span>
+      <textarea rows="4" id="fNote" placeholder="这一关你卡在哪、怎么解决的、哪一步最意外？这段话以后面试能直接用。"></textarea>
+    </label>
+
+    <div class="sd-field" data-page-node-id="vlsGVgSGjFqErAUnsPAmGz">
+      <span class="sd-lbl" data-page-node-id="3eDxLYxJazJDelAiAyDN4e">截图 <i data-page-node-id="9wlSGQc3uA77EC0BawTdio">选填 · 最多 3 张</i></span>
+      <div class="sd-drop" id="shotZone" tabindex="0" role="button" aria-label="选择截图" data-page-node-id="AnlZDhlbszBPFTPGO4wfAE">
+        🖼 点击选择，或把截图拖进来
+        <small data-page-node-id="R0YXEQWe2KCp4hWdfHtDiy">README 截图、git log --graph 的截图都行</small>
+      </div>
+      <input type="file" id="fShots" accept="image/*" multiple class="sr-only" data-page-node-id="TRfmraAfWScRJQtwFwbGYv" />
+    </div>
+
+    <div class="burn" style="margin-top:20px" data-page-node-id="TKdtKspuCT5UUni7bywpAu">
+      <div class="burn-h" data-page-node-id="l5Qzp6KZuWXkhF9gHxDyvu">🔒 你交上来的东西怎么处理</div>
+      <dl data-page-node-id="qcYAKhrkSa5cfjyF63z1My">
+        <dt class="gone" data-page-node-id="5Cg8gxT2NWcMGcUFdAomW2">验收一结束</dt>
+        <dd data-page-node-id="kIEVPgyzYSuHxFEhotFIFm">代码副本、压缩包、装出来的依赖，全删</dd>
+        <dt class="gone" data-page-node-id="lMOiNxeUqMWXvVafzVmqlZ">不读</dt>
+        <dd data-page-node-id="6zkxzvQuGOgmSt32zwARUx">不打开 .env 和任何密钥文件，也不把代码内容写进日志</dd>
+        <dt class="keep" data-page-node-id="kryohm3AS0D6QUiksVUIUh">留下来的</dt>
+        <dd data-page-node-id="MiGkPxbox4OsIAKHVPwBaP">这份结论，和 5 条只截界面的证据图</dd>
+      </dl>
+    </div>
+
+    <div class="sd-foot" data-page-node-id="sG2HoFB1t9Fak4nQoiELid">
+      <span class="sd-free" data-page-node-id="5V1Wf7ju8hJvB4zCWu8fo1">¥9/次 · 免费用户每周 1 次</span>
+      <button class="btn btn-primary" type="submit" id="sdSubmit" data-page-node-id="KjOu5b8qt2ZYhMCpN2U2ah">提交，让系统跑一遍</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+  // 三选一：切换提交形态时，只显示对应的那一栏
+  (function () {
+    var box = document.getElementById('pickKind');
+    if (!box) return;
+    var panes = [].slice.call(document.querySelectorAll('.sd-pane'));
+    box.addEventListener('click', function (e) {
+      var btn = e.target.closest('.pk');
+      if (!btn) return;
+      box.querySelectorAll('.pk').forEach(function (b) {
+        var on = b === btn;
+        b.classList.toggle('on', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      panes.forEach(function (p) { p.hidden = p.dataset.pane !== btn.dataset.k; });
+    });
+  })();
+</script>
+
+<!-- ══════════ 页脚 ══════════ -->
+<footer class="foot" data-page-node-id="BnPt9B6H7iCqJQj31HAALD">
+  <div class="foot-inner" data-page-node-id="8mxvRSoYUwejav51t3nthL">
+    <div class="foot-brand" data-page-node-id="TJrE9ErWhnXvRaaTniRSIo">
+      <div class="logo" data-page-node-id="YlUewyDpqJfvklBVT2rgNy">
+        <span class="logo-mark" data-page-node-id="J6F26JBuvY4QSuw8JAZrsf">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="Wd9tAwqiAReQdVedcRLZkV"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" data-page-node-id="BQUQeOJ4LhZSDfEf4pOPfG"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" data-page-node-id="sKsw7CCw3Qk7jGyIEkgB1s"/></svg>
+        </span>
+        <span class="logo-text" data-page-node-id="svZwuwfv0jzOkfQMIcSsHq"><b data-page-node-id="EHU7HAJYd85YpXnPty94vH">课搭</b><span data-page-node-id="VqzWFQAyvrM50stV5rdkTc">大学生成长社区</span></span>
+      </div>
+      <p data-page-node-id="aAH9wYEUNo55uG5wwsxCbz">不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+      <p class="creed" data-page-node-id="0ScYQnM0AGMAUoFaopffYR">「愿课搭陪你走过每一次选方向的焦虑，需要时也总能搭把手。」</p>
+    </div>
+    <div class="foot-col" data-page-node-id="kKFvMwuJDyzkNmBvCakMcS"><h4 data-page-node-id="j0YZiZpYkwYMh607p2I6lw">探索</h4><a href="01-home.html" data-page-node-id="ClXvPayVH7ePo9xLPI1C1d">首页</a><a href="02-explore.html" data-page-node-id="Z8TJ2QmkU6RBxi2V2uaXis">探索路线</a><a href="04-survey.html" data-page-node-id="MOAroDys5TDsfKCMzwQwBk">定制路线</a><a href="08-library.html" data-page-node-id="Dzf34BUYvodAxwvwc9EOKv">资料库</a></div>
+    <div class="foot-col" data-page-node-id="GISUxjhhO6sobYnbMg4ElD"><h4 data-page-node-id="uXxQ3gDXO8jysoE3P7EXvI">结果服务</h4><a href="10-pricing.html" data-page-node-id="ebDET1poHlmehmDYSvTsvS">阶段验收</a><a href="09-cohort.html" data-page-node-id="lz4kHKqZ3QlYDAuwg7GiMz">项目组</a><a href="10-pricing.html" data-page-node-id="4JVGjVDAWh0BXycJkSJXO4">深度陪跑</a></div>
+    <div class="foot-col" data-page-node-id="Ekjc67ECmWgoZv712dUG7B"><h4 data-page-node-id="jztF4zQNoweEsbEXWN5eUc">关于</h4><a href="#" data-page-node-id="nvo0EwofH1uTCUGO2ROc8i">平台理念</a><a href="#" data-page-node-id="FzSkXDxx9WUBLGACrhyw6L">校园认证</a><a href="#" data-page-node-id="LFdpnyvJ1hvS99B7s7v1E4">联系我们</a></div>
+  </div>
+  <div class="foot-bottom" data-page-node-id="ZAflNF6Iqlnm7CtzPnCZBd">© 2026 课搭 · 知识在校园里流动</div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  /* ── ① 练：任务勾选 ── */
+  var tasks = [].slice.call(document.querySelectorAll('#taskList .task'));
+  var hint = document.getElementById('doneHint');
+
+  function syncTasks() {
+    var done = tasks.filter(function (t) { return t.classList.contains('done'); }).length;
+    document.getElementById('barTask').style.width = (done / tasks.length * 100) + '%';
+    document.getElementById('numTask').textContent = done + ' / ' + tasks.length;
+    hint.classList.toggle('show', done === tasks.length);
+    syncOverall();
+  }
+
+  tasks.forEach(function (t) {
+    t.querySelector('.tk-ck').addEventListener('click', function () {
+      t.classList.toggle('done');
+      var ck = t.querySelector('.tk-ck');
+      ck.setAttribute('aria-label', t.classList.contains('done') ? '取消完成' : '标记完成');
+      syncTasks();
+    });
+  });
+
+  /* ── ② 验：点亮验收标准 ── */
+  var rbs = [].slice.call(document.querySelectorAll('#rubric .rb'));
+  var note = document.getElementById('rubricNote');
+
+  function syncRings() {
+    var on = rbs.filter(function (r) { return r.classList.contains('on'); }).length;
+    document.getElementById('barRing').style.width = (on / rbs.length * 100) + '%';
+    document.getElementById('numRing').textContent = on + ' / ' + rbs.length;
+    var all = on === rbs.length;
+    note.classList.toggle('done', all);
+    note.querySelector('.rn-ico').textContent = all ? '✅' : '⭕';
+    document.getElementById('rubricNoteText').textContent = all
+      ? '三条都点亮了，这一关完成了。下一关「🎨 前端 · 让东西看得见」已解锁。'
+      : '三条都点亮后，这一关就完成了。';
+    syncOverall();
+  }
+
+  rbs.forEach(function (rb) {
+    rb.addEventListener('click', function () {
+      rb.classList.toggle('on');
+      var h = rb.querySelector('.rb-hint');
+      if (rb.classList.contains('on')) {
+        h.textContent = '✓ 已点亮';
+        var ring = document.createElement('span');
+        ring.className = 'ink-ring';
+        ring.style.cssText = 'width:26px;height:26px;left:-2px;top:-2px;';
+        rb.querySelector('.rb-ring').appendChild(ring);
+        setTimeout(function () { ring.remove(); }, 720);
+      } else {
+        h.textContent = '点我点亮';
+      }
+      syncRings();
+    });
+  });
+
+  /* ── ③ 本关总完成度 ── */
+  function syncOverall() {
+    var t = tasks.filter(function (x) { return x.classList.contains('done'); }).length;
+    var r = rbs.filter(function (x) { return x.classList.contains('on'); }).length;
+    var pct = Math.round((t + r) / (tasks.length + rbs.length) * 100);
+    document.getElementById('numAll').textContent = pct + '%';
+  }
+
+  /* ── ④ 提交面板：仓库 / 压缩包 / 部署地址 ── */
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var dlg = document.getElementById('submitDlg');
+  var kind = 'repo';
+  var picked = { zip: null };
+
+  function bindDrop(zoneId, inputId, onPick) {
+    var zone = document.getElementById(zoneId);
+    var input = document.getElementById(inputId);
+    if (!zone || !input) return;
+    zone.addEventListener('click', function () { input.click(); });
+    zone.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
+    });
+    ['dragenter', 'dragover'].forEach(function (t) {
+      zone.addEventListener(t, function (e) { e.preventDefault(); zone.classList.add('over'); });
+    });
+    ['dragleave', 'drop'].forEach(function (t) {
+      zone.addEventListener(t, function (e) { e.preventDefault(); zone.classList.remove('over'); });
+    });
+    zone.addEventListener('drop', function (e) {
+      var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) onPick(f, zone);
+    });
+    input.addEventListener('change', function () {
+      if (input.files[0]) onPick(input.files[0], zone);
+    });
+  }
+
+  function humanSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return Math.round(bytes / 1024) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+  }
+
+  function safeName(n) { return String(n).replace(/[<>&"]/g, ''); }
+
+  bindDrop('dropZone', 'fZip', function (f, zone) {
+    picked.zip = f;
+    zone.classList.add('has-file');
+    zone.innerHTML = '✓ 已选择 <b>' + safeName(f.name) + '</b>' +
+      '<small>' + humanSize(f.size) + ' · 点一下可以换一个</small>';
+  });
+
+  bindDrop('shotZone', 'fShots', function (f, zone) {
+    zone.classList.add('has-file');
+    zone.innerHTML = '✓ 已选择 <b>' + safeName(f.name) + '</b>' +
+      '<small>可以继续点，加更多截图</small>';
+  });
+
+  document.getElementById('btnSubmit').addEventListener('click', function () { dlg.showModal(); });
+  document.getElementById('btnCloseDlg').addEventListener('click', function () { dlg.close(); });
+  document.getElementById('vvAgain').addEventListener('click', function () { dlg.showModal(); });
+
+  document.getElementById('submitForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var need;
+    if (kind === 'repo') need = document.getElementById('fRepo');
+    if (kind === 'live') need = document.getElementById('fLive');
+    if (kind === 'zip') {
+      if (!picked.zip) {
+        var z = document.getElementById('dropZone');
+        z.style.borderColor = 'var(--pri)';
+        z.textContent = '先把压缩包选上，这一步不能空着';
+        z.focus();
+        return;
+      }
+    } else if (!need.value.trim()) {
+      need.style.borderColor = 'var(--pri)';
+      need.focus();
+      need.placeholder = kind === 'repo' ? '先把仓库地址填上，这一步不能空着' : '先把部署地址填上，这一步不能空着';
+      return;
+    }
+    dlg.close();
+    startVerify();
+  });
+
+  /* ── ⑤ 验收过程：逐条查，每条留证据 ── */
+  var VFY = [
+    { t: '打开你给的地址', ev: '仓库可访问，公开状态正常，默认分支 <code>main</code>' },
+    { t: '读一遍 README', ev: 'README.md 有 6 行，写了「这是什么 / 怎么跑 / 学到什么」' },
+    { t: '数提交记录', ev: '共 7 条，说明都在讲做了什么，没有清一色的 update' },
+    { t: '看有没有不该传的东西', ev: '没找到 .env、密钥文件、node_modules 或大文件' },
+    { t: '找分支合并', ev: '提交历史是一条直线，没有分叉。验收标准第 3 条要一次真的合并', no: true }
+  ];
+  var vfyTimers = [];
+
+  function startVerify() {
+    var box = document.getElementById('vfyBox');
+    var list = document.getElementById('vfyList');
+    var pct = document.getElementById('vfyPct');
+    var sub = document.getElementById('vfySub');
+    var verdict = document.getElementById('vfyVerdict');
+    var skip = document.getElementById('vfySkip');
+
+    // 第三拍：按钮换成状态行，卡片落章
+    var act = document.getElementById('makeAct');
+    if (act) {
+      var st = document.createElement('div');
+      st.className = 'mk-act mk-status pop-in';
+      st.innerHTML = '<span>✓ 已提交 · 系统正在把它打开看一遍</span>' +
+                     '<a href="10-pricing.html">想要真人署名？申请学长验收 →</a>';
+      act.replaceWith(st);
+    }
+    var card = document.getElementById('makeCard');
+    if (card && !card.querySelector('.stamp')) {
+      var stamp = document.createElement('div');
+      stamp.className = 'stamp slam';
+      stamp.innerHTML = '已提交<br />待验收';
+      card.appendChild(stamp);
+    }
+
+    list.innerHTML = VFY.map(function (s, i) {
+      return '<div class="vfy-row" data-i="' + i + '">' +
+        '<span class="vfy-dot">✓</span>' +
+        '<span class="vfy-body"><b>' + s.t + '</b><span class="vfy-ev">' + s.ev + '</span></span>' +
+        '<span class="vfy-st"></span>' +
+      '</div>';
+    }).join('');
+
+    var rows = [].slice.call(list.querySelectorAll('.vfy-row'));
+    box.hidden = false;
+    verdict.hidden = true;
+    verdict.classList.remove('pop-in');
+    document.getElementById('vfyClean').hidden = true;
+    pct.classList.remove('done');
+    pct.textContent = '0 / ' + VFY.length;
+    box.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+
+    function settle(i) {
+      var row = rows[i];
+      row.classList.remove('is-run');
+      row.classList.add(VFY[i].no ? 'is-no' : 'is-ok');
+      row.querySelector('.vfy-st').textContent = VFY[i].no ? '✕ 没过' : '✓ 过了';
+      pct.textContent = (i + 1) + ' / ' + VFY.length;
+    }
+
+    function finish() {
+      pct.classList.add('done');
+      sub.textContent = '跑完了，结论在下面';
+      var pass = VFY.filter(function (s) { return !s.no; }).length;
+      document.getElementById('vvK').textContent = '3 条标准过了 ' + pass + ' 条';
+      document.getElementById('vvD').innerHTML =
+        '差的是「有一次真实的分支合并」。补齐之后重新提交，<b>本次不计入你的免费次数</b>。';
+      verdict.hidden = false;
+      verdict.classList.add('pop-in');
+      document.getElementById('vfyClean').hidden = false;
+      skip.hidden = true;
+    }
+
+    function run(i) {
+      if (i>= rows.length) { finish(); return; }
+      rows[i].classList.add('is-run');
+      sub.textContent = VFY[i].t + '…';
+      vfyTimers.push(setTimeout(function () {
+        settle(i);
+        run(i + 1);
+      }, reduced ? 0 : 700));
+    }
+
+    skip.hidden = false;
+    skip.onclick = function () {
+      vfyTimers.forEach(clearTimeout);
+      vfyTimers = [];
+      rows.forEach(function (r, i) { settle(i); });
+      finish();
+    };
+
+    run(0);
+  }
+
+  /* ── ⑥ 免修申请 ── */
+  document.getElementById('btnWaive').addEventListener('click', function () {
+    document.getElementById('waiveNote').outerHTML =
+      '<div class="waive-done">✓ 免修申请已提交<br />' +
+      '<span style="color:var(--ink-2);font-weight:500">我们会在 1 个工作日内把这个关卡的小测验发给你，10 分钟，过了直接盖章。</span></div>';
+    this.remove();
+  });
+
+  syncTasks();
+  syncRings();
+})();
+</script>
+</body>
+</html>

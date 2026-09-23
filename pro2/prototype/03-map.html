@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>闯关地图 · 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  .mp-head { display: flex; align-items: flex-end; gap: 20px; flex-wrap: wrap; margin-bottom: 16px; }
+  .mp-head h1 { font-size: 27px; font-weight: 800; letter-spacing: -.8px; line-height: 1.2; }
+  .mp-head p { font-size: 13.5px; color: var(--ink-2); margin-top: 7px; max-width: 640px; line-height: 1.8; }
+  .mp-head .mp-r { margin-left: auto; display: flex; gap: 9px; flex: none; flex-wrap: wrap; }
+
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .tab {
+    font-size: 12.5px; font-weight: 700; padding: 6px 14px; border-radius: 999px;
+    border: 1px solid var(--line); background: #fff; color: var(--ink-2); transition: .14s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .tab:hover { border-color: var(--pri); color: var(--pri-600); }
+  .tab.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .tab .tb-n { font-size: 10.5px; opacity: .65; font-weight: 800; }
+
+  /* 原来侧栏的「这一关怎么走」「解锁规则」两张卡压成的一行提示 */
+  .mp-tip {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    font-size: 12.5px; color: var(--ink-2); line-height: 1.7;
+    background: var(--bg-soft); border: 1px solid var(--line);
+    border-radius: var(--r-lg); padding: 9px 14px; margin: -4px 0 16px;
+  }
+  .mp-tip b { color: var(--ink); font-weight: 800; }
+  .mp-tip .mp-tip-sep { color: var(--line); font-weight: 800; }
+
+  .mp-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; align-items: start; }
+  .mp-side { display: flex; flex-direction: column; gap: 16px; }
+  @media (max-width: 1080px) { .mp-grid { grid-template-columns: minmax(0, 1fr); } }
+
+  .info { border: 1px solid var(--line); border-radius: var(--r-lg); padding: 15px 16px; background: #fff; }
+  .info h3 { font-size: 13.5px; font-weight: 800; margin-bottom: 9px; display: flex; align-items: center; gap: 6px; }
+  .info ul { list-style: none; display: grid; gap: 8px; }
+  .info li { font-size: 12.5px; color: var(--ink-2); line-height: 1.65; display: flex; gap: 8px; }
+  .info li::before { content: '·'; font-weight: 800; color: var(--pri); flex: none; }
+  .info li b { color: var(--ink); }
+
+  .badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .bdg {
+    width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+    font-size: 18px; border: 2px dashed var(--line); color: var(--ink-faint); background: #fff;
+  }
+  .bdg.on { border-style: solid; border-color: var(--gold); background: var(--gold-50); }
+  .bdg-cap { font-size: 11px; color: var(--ink-soft); margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<div id="khNav"></div>
+<div id="khCrumb" data-crumb="首页,闯关路线,闯关地图"></div>
+
+<main class="page">
+
+  <header class="mp-head">
+    <div>
+      <h1 id="mpTitle">闯关地图</h1>
+      <p id="mpDesc">点开一个关卡，读讲解、做课堂练习、过检测。走完一关，下一关自动点亮。</p>
+    </div>
+    <div class="mp-r">
+      <a class="btn btn-light btn-sm" href="02-routes.html">← 全部路线</a>
+      <a class="btn btn-primary btn-sm" id="mpGo" href="#">继续闯关</a>
+    </div>
+  </header>
+
+  <nav class="tabs" id="mpTabs" aria-label="切换路线"></nav>
+
+  <!-- 关键信息收成一行：怎么走一关 + 解锁规则（原来是侧栏两张卡） -->
+  <div class="mp-tip">
+    <span>🧭 一关怎么走：<b>读讲解 → 做课堂练习（答对才解锁下一段）→ 过检测</b></span>
+    <span class="mp-tip-sep">·</span>
+    <span>完成当前关解锁下一关，<b>会员可开启自由解锁</b></span>
+  </div>
+
+  <div class="mp-grid">
+    <div id="mpMap"></div>
+
+    <aside class="mp-side">
+      <div class="mp-prog">
+        <h3>🎯 路线进度</h3>
+        <div class="pg-num"><span id="mpDoneN">0</span><small> / <span id="mpTotalN">9</span> 关已通关</small></div>
+        <div class="pg-bar"><i id="mpProgBar" style="width:0%"></i></div>
+        <div class="pg-tip" id="mpProgTip">完成当前关才能解锁下一关 · 会员可开启自由解锁</div>
+      </div>
+
+      <div class="info">
+        <h3>🏅 这一条的徽章</h3>
+        <div class="badge-row" id="mpBadges"></div>
+        <div class="bdg-cap" id="mpBadgeCap">走完这条路线全部关卡即可点亮</div>
+      </div>
+
+      <div class="info" style="background:var(--pri-50);border-color:#ffd9cd">
+        <h3>📚 这一站要用到的资料</h3>
+        <ul style="margin-bottom:10px">
+          <li>探索版：这一站的讲解正文</li>
+          <li>精通版：想再往下挖时看</li>
+        </ul>
+        <a class="btn btn-outline btn-sm btn-block" href="09-library.html">去资料库看</a>
+      </div>
+
+      <div class="vip-hint">
+        ♛ 会员可开启自由解锁、走专属进阶路线
+        <a href="11-member.html">了解一下</a>
+        <span style="color:var(--ink-faint)">· 基础路线永久免费</span>
+      </div>
+    </aside>
+  </div>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">
+        <span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      </div>
+      <p>找资料，先来课搭。然后，我们一起把它走完。</p>
+      <div class="creed">基础路线永久免费。</div>
+    </div>
+    <div class="foot-col"><h4>学习</h4><a href="02-routes.html">闯关路线</a><a href="03-map.html">闯关地图</a><a href="09-library.html">资料库</a><a href="05-direction.html">方向科普</a></div>
+    <div class="foot-col"><h4>会员</h4><a href="11-member.html">会员中心</a><a href="08-roadmap.html">专属进阶路线</a></div>
+    <div class="foot-col"><h4>开始</h4><a href="06-survey.html">路线引导问卷</a><a href="10-cohort.html">项目训练营</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 基础路线永久免费</div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  'use strict';
+  var KH = window.KH;
+
+  var q = new URLSearchParams(location.search);
+  var rid = q.get('route') || 'm1';
+  /* 所有地图一律开放，不设前置；找不到的 id 退回第一张 */
+  var route = KH.findRoute(rid) || KH.ROUTES[0];
+  rid = route.id;
+
+  /* 路线切换：基础地图 + 专题地图并排摆，随便换 */
+  var tabs = KH.allRoutes().map(function (r) {
+    var done = KH.done(r.id).length;
+    return '<a class="tab' + (r.id === rid ? ' on' : '') + '" href="' + KH.mapUrl(r.id) + '">' +
+      r.ico + ' ' + r.name + '<span class="tb-n">' + done + '/' + r.stations.length + '</span></a>';
+  }).join('');
+  document.getElementById('mpTabs').innerHTML = tabs;
+
+  /* 标题 */
+  document.getElementById('mpTitle').textContent = route.name + ' · 闯关地图';
+  document.getElementById('mpDesc').textContent = route.desc;
+
+  /* 地图 */
+  KH.renderMap({ el: '#mpMap', route: route });
+
+  /* 继续闯关按钮 */
+  var total = route.stations.length;
+  var cur = KH.current(rid, total);
+  var go = document.getElementById('mpGo');
+  if (KH.allDone(rid, total)) {
+    go.textContent = '已全部通关';
+    go.className = 'btn btn-light btn-sm';
+    go.href = '02-routes.html';
+  } else {
+    go.textContent = '继续第 ' + cur + ' 关 →';
+    go.href = KH.nodeUrl(rid, cur);
+  }
+
+  /* 侧栏进度卡：两个说明卡片删掉后，进度与解锁状态收在这一张里 */
+  var d = KH.done(rid).length;
+  document.getElementById('mpDoneN').textContent = d;
+  document.getElementById('mpTotalN').textContent = total;
+  document.getElementById('mpProgBar').style.width = Math.round(d * 100 / total) + '%';
+  document.getElementById('mpProgTip').textContent = KH.allDone(rid, total)
+    ? '整条路线已通关 · 自由浏览已开放，随时回来复习任意一关'
+    : (KH.canJump(rid, total)
+      ? '自由解锁可用 · 可以直接跳到任意一关'
+      : '完成当前关才能解锁下一关 · 会员可开启自由解锁');
+
+  /* 徽章 */
+  var badges = '';
+  for (var i = 0; i < total; i++) {
+    var on = KH.isDone(rid, i + 1);
+    badges += '<span class="bdg' + (on ? ' on' : '') + '">' + (on ? '✓' : (i + 1)) + '</span>';
+    if (i >= 11) break;
+  }
+  document.getElementById('mpBadges').innerHTML = badges;
+  document.getElementById('mpBadgeCap').textContent = d >= total
+    ? '已点亮 · 这条路线自由浏览已开放'
+    : '已走 ' + d + '/' + total + ' 关，走完点亮徽章';
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>课搭 2.0 原型导览 · 闯关式学习平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  .cv-hero { display: grid; grid-template-columns: 1fr 280px; gap: 30px; align-items: center; margin-bottom: 28px; }
+  .cv-hero .kicker { font-size: 11.5px; font-weight: 800; letter-spacing: 0.2em; color: var(--pri-600); text-transform: uppercase; margin-bottom: 10px; }
+  .cv-hero h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; }
+  .cv-hero h1 em { font-style: normal; color: var(--pri); }
+  .cv-hero p { font-size: 14px; color: var(--ink-2); margin-top: 13px; max-width: 660px; line-height: 1.85; }
+  .cv-hero .cv-stat { display: flex; gap: 24px; margin-top: 20px; flex-wrap: wrap; }
+  .cv-hero .cv-stat div b { display: block; font-size: 21px; font-weight: 800; letter-spacing: -0.6px; }
+  .cv-hero .cv-stat div span { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
+
+  .cv-dai { text-align: center; padding: 20px 18px 16px; }
+  .cv-dai .tip { font-size: 12.5px; color: var(--ink-2); font-weight: 600; margin-top: 10px; line-height: 1.7; }
+  .cv-dai .tip b { color: var(--pri-700); }
+
+  .cv-paths { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 34px; }
+  .cv-path { padding: 18px 18px 16px; }
+  .cv-path .ph { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; color: var(--pri-600); }
+  .cv-path h3 { font-size: 15px; font-weight: 800; letter-spacing: -0.3px; margin-top: 5px; }
+  .cv-path p { font-size: 12.5px; color: var(--ink-2); margin-top: 6px; line-height: 1.75; }
+  .cv-path .chain { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; margin-top: 10px; line-height: 1.9; }
+  .cv-path .chain a { color: var(--pri-700); font-weight: 700; }
+  .cv-path .chain a:hover { text-decoration: underline; }
+
+  .cv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .pg { padding: 16px 18px 15px; display: flex; flex-direction: column; gap: 5px; min-height: 142px; }
+  .pg .no { font-size: 10.5px; font-weight: 800; letter-spacing: 0.16em; color: var(--ink-faint); }
+  .pg .t { font-size: 14.5px; font-weight: 800; letter-spacing: -0.3px; margin-top: 1px; }
+  .pg .d { font-size: 12.5px; color: var(--ink-2); line-height: 1.72; flex: 1; }
+  .pg .tag { font-size: 10.5px; font-weight: 700; color: var(--ink-soft); background: var(--bg-soft); align-self: flex-start; padding: 2px 9px; border-radius: 999px; }
+  .pg.star { border-color: #ffd9cd; background: linear-gradient(180deg, var(--pri-50), #fff 62%); }
+  .pg.star .no { color: var(--pri-600); }
+  .pg.star .tag { background: #fff; color: var(--pri-700); }
+  .pg.gold-pg { border-color: var(--gold-line); background: linear-gradient(180deg, var(--gold-50), #fff 62%); }
+  .pg.gold-pg .no { color: var(--gold-600); }
+  .pg.gold-pg .tag { background: #fff; color: var(--gold-600); }
+  .pg:hover .t { color: var(--pri-600); }
+  .pg.new .no::after { content: ' · NEW'; color: var(--pri-600); }
+
+  .cv-note { margin-top: 36px; padding: 20px 22px; background: var(--bg-soft); border-radius: var(--r-toon); font-size: 13px; color: var(--ink-2); line-height: 1.9; }
+  .cv-note b { color: var(--ink); }
+  .cv-note code { background: #fff; padding: 1px 6px; border-radius: 4px; font-size: 12px; }
+
+  @media (max-width: 1080px) { .cv-hero { grid-template-columns: 1fr; } .cv-paths, .cv-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 680px) { .cv-paths, .cv-grid { grid-template-columns: 1fr; } .cv-hero h1 { font-size: 25px; } }
+</style>
+</head>
+<body>
+
+<div id="khNav"></div>
+
+<main class="page">
+
+  <header class="cv-hero">
+    <div>
+      <div class="kicker">Kedahub 2.0 · Hi-Fi Prototype · 2026-09 改版</div>
+      <h1>课搭 2.0 原型导览<br />布局重排 + <em>闯关式路线</em> + 会员增值</h1>
+      <p>
+        这一版改了三件事：<strong>全局布局统一</strong>（导航精简、全站面包屑、首页变工作台）、
+        <strong>学习路线改成多邻国式横向闯关地图</strong>（单关卡页内讲解 + 课堂练习 + 过关检测）、
+        <strong>新增会员增值特权模块</strong>。
+        硬性基线不变：<strong>基础路线永久全部免费</strong>，会员只做增值，严禁给基础内容上锁。
+      </p>
+      <div class="cv-stat">
+        <div><b>12</b><span>页面 · 纯 HTML 零构建</span></div>
+        <div><b>41</b><span>关基础路线 · 全部免费</span></div>
+        <div><b>12</b><span>关会员专属进阶路线</span></div>
+        <div><b>0</b><span>基础课程付费上锁项</span></div>
+      </div>
+    </div>
+
+    <div class="toon-card cv-dai">
+      <svg width="84" height="84" viewBox="0 0 64 64" class="dai-bob">
+        <rect x="19" y="47" width="9" height="11" rx="4.5" fill="#d04a2a" />
+        <rect x="36" y="47" width="9" height="11" rx="4.5" fill="#d04a2a" />
+        <rect x="8" y="9" width="48" height="44" rx="16" fill="#ff6b4a" />
+        <circle cx="24" cy="29" r="4.2" fill="#fff" /><circle cx="40" cy="29" r="4.2" fill="#fff" />
+        <circle cx="25" cy="30" r="2.2" fill="#1a1d23" /><circle cx="41" cy="30" r="2.2" fill="#1a1d23" />
+        <path d="M27 39q5 5 10 0" stroke="#1a1d23" stroke-width="2.4" fill="none" stroke-linecap="round" />
+      </svg>
+      <div class="tip">我是<b>小搭</b>，原型里的向导。<br />右下角可以切换<b>登录态 / 会员态</b>，看两种状态的区别。</div>
+    </div>
+  </header>
+
+  <div class="bm-rule"></div>
+
+  <!-- ══════════ 推荐动线 ══════════ -->
+  <section style="margin-top:28px">
+    <div class="blog-sec-head"><h2>只有十分钟？走这三条动线</h2></div>
+    <div class="blog-sec-sub">按你关心的问题选，不用按顺序看</div>
+
+    <div class="cv-paths">
+      <div class="toon-card cv-path">
+        <div class="ph">动线 A · 我想看闯关长什么样</div>
+        <h3>从地图点进去，走到通关</h3>
+        <p>03 页是横向蜿蜒的闯关地图，点一个节点进 04 页：读讲解、答课堂练习解锁下一段、最后做过关检测、弹庆祝窗。</p>
+        <div class="chain">
+          <a href="02-routes.html">闯关路线</a> → <a href="03-map.html">闯关地图</a> →
+          <a href="04-node.html?route=m1&n=1">单关卡</a> → <a href="03-map.html">回到地图</a>
+        </div>
+      </div>
+
+      <div class="toon-card cv-path">
+        <div class="ph">动线 B · 我想看会员怎么做的</div>
+        <h3>增值特权，不给基础内容上锁</h3>
+        <p>02 页有橘金色会员 Banner，非会员点了弹升级弹窗（不自动弹）。08 页是专属路线，进入前校验身份。11 页是会员中心。</p>
+        <div class="chain">
+          <a href="02-routes.html">会员 Banner</a> · <a href="08-roadmap.html">专属路线</a> ·
+          <a href="11-member.html">会员中心</a>
+        </div>
+      </div>
+
+      <div class="toon-card cv-path">
+        <div class="ph">动线 C · 我想看布局统一了什么</div>
+        <h3>导航四项 + 全站面包屑 + 首页工作台</h3>
+        <p>顶部只留首页 / 闯关路线 / 项目训练营 / 资料库，会员中心收进头像下拉。每个内页顶部都有面包屑。</p>
+        <div class="chain">
+          <a href="01-home.html">首页工作台</a> · <a href="10-cohort.html">项目训练营</a> ·
+          <a href="09-library.html">资料库</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 全部页面 ══════════ -->
+  <section>
+    <div class="blog-sec-head"><h2>全部十二页</h2><span class="bs-more">按用户旅程排序</span></div>
+    <div class="blog-sec-sub">带 ★ 的是这一版改动最大的旗舰页；NEW 是这一版新增的页面</div>
+
+    <div class="cv-grid">
+      <a class="toon-card hoverable pg star" href="01-home.html">
+        <span class="no">01 · 首页</span>
+        <span class="t">★ 登录即工作台</span>
+        <span class="d">登录后首屏是<strong>当前闯关进度卡</strong>（进度环 + 迷你进度条 + 继续按钮），下面是项目训练营、资料库/会员中心快捷入口，再往下才是推荐路线、推荐项目、热门资料。未登录是平台介绍 + 路线引导问卷。</span>
+        <span class="tag">公开层</span>
+      </a>
+
+      <a class="toon-card hoverable pg star" href="02-routes.html">
+        <span class="no">02 · 闯关路线</span>
+        <span class="t">★ 地图自由挑 + 更多闯关地图</span>
+        <span class="d">页面顺序严格按：标题说明 → <strong>橘金色会员 Banner</strong> → 分割线 → 六张基础地图 → <strong>更多闯关地图</strong>（5 张专题地图，折叠展开）。<strong>没有主干 / 选做之分</strong>，地图之间不互相解锁，随便挑一张就能开始；只有走进某张地图<strong>里面</strong>才是一关一关往下开。Banner 所有登录用户都可见；非会员点击弹升级模态，页面加载不自动弹窗。</span>
+        <span class="tag">免费 · 核心新增</span>
+      </a>
+
+      <a class="toon-card hoverable pg new star" href="03-map.html">
+        <span class="no">03 · 闯关地图 NEW</span>
+        <span class="t">★ 横向蜿蜒闯关地图</span>
+        <span class="d">节点三态：已通关点亮打勾 / 未解锁灰色锁 / 当前可挑战高亮带呼吸环。顺序解锁；会员可开<strong>自由解锁</strong>开关；普通用户整条走完后也会开放。可横滑，自动滚到当前关。</span>
+        <span class="tag">免费 · 核心新增</span>
+      </a>
+
+      <a class="toon-card hoverable pg new star" href="04-node.html?route=m1&n=1">
+        <span class="no">04 · 单关卡 NEW</span>
+        <span class="t">★ 讲解 + 课堂练习 + 过关检测</span>
+        <span class="d">点地图节点进入。讲解到关键处插一道<strong>课堂练习</strong>，答对才解锁后面的讲解，没答对就折叠隐藏。最后<strong>过关检测</strong>通过后弹轻量庆祝窗，可选「进入下一关」或「标记完成并返回」，节点状态同步更新。<strong>其中 30 关内容已全部录入</strong>（内容库在 <code>assets/levels.js</code>）。</span>
+        <span class="tag">免费 · 核心新增</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="05-direction.html">
+        <span class="no">05 · 方向科普</span>
+        <span class="t">信息差样板</span>
+        <span class="d">一个方向的真相：这行到底做什么、需要什么、不需要什么、常见误区。不注册可读，是拉新入口。</span>
+        <span class="tag">公开层 · SEO</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="06-survey.html">
+        <span class="no">06 · 路线引导问卷</span>
+        <span class="t">16 题 · 5 步</span>
+        <span class="d">未登录首页的引导出口。含多选与滑块，答完先出一屏「你的路线大概长这样」再生成。</span>
+        <span class="tag">免费层</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="07-generating.html">
+        <span class="no">07 · 生成中</span>
+        <span class="t">隐藏式 Agent 的前台</span>
+        <span class="d">路径逐段生长、工序日志逐条浮现。全程不出现「AI」字眼。</span>
+        <span class="tag">免费层</span>
+      </a>
+
+      <a class="toon-card hoverable pg gold-pg star" href="08-roadmap.html">
+        <span class="no">08 · 会员专属路线</span>
+        <span class="t">★ 复用同一套闯关地图</span>
+        <span class="d">由原「我的路线」改成的会员专属进阶路线：12 关、3 个阶段。进入前先校验会员身份，非会员看到锁态页与阶段预览，点按钮才弹升级窗。内部站点逻辑与普通路线完全一致。</span>
+        <span class="tag">会员增值</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="09-library.html">
+        <span class="no">09 · 资料库</span>
+        <span class="t">对所有用户免费开放</span>
+        <span class="d">分类、搜索、收藏、分页。<strong>关卡没解锁不影响资料解锁</strong>—— 资料库与闯关进度彻底解耦，这是硬规则。</span>
+        <span class="tag">公开层</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="10-cohort.html">
+        <span class="no">10 · 项目训练营</span>
+        <span class="t">原「项目组」改名</span>
+        <span class="d">同方向编组、按月滚动、四层验收漏斗、项目墙、进度星图。会员可解锁高阶选题与优先答疑。</span>
+        <span class="tag">部分付费</span>
+      </a>
+
+      <a class="toon-card hoverable pg gold-pg star" href="11-member.html">
+        <span class="no">11 · 会员中心 NEW</span>
+        <span class="t">★ 权益与套餐</span>
+        <span class="d">顶部会员有效期状态卡；月 ¥29 / 季 ¥79 / 学年 ¥239 三档；三大块权益清单（闯关路线 / 资料库 / 项目训练营）；专属资源入口；权益使用记录。底部写清「不开会员也能得到什么」。</span>
+        <span class="tag">会员增值</span>
+      </a>
+
+      <a class="toon-card hoverable pg" href="index.html">
+        <span class="no">— · 导览</span>
+        <span class="t">这一页</span>
+        <span class="d">页面索引与推荐动线。旧版 10 页原型已归档到 <code>prototype/_archive-v1/</code>，未删除。</span>
+        <span class="tag">原型说明</span>
+      </a>
+    </div>
+  </section>
+
+  <div class="cv-note">
+    <b>给评审的你：</b>纯 HTML / CSS / JS，共享 <code>assets/kh.css</code> 一套设计令牌，双击即可打开，<b>不需要构建</b>（只有字体走 CDN，断网会退回系统字体）。<br />
+    <b>右下角演示开关</b>可以切换「已登录 / 未登录」和「会员 / 非会员」，用来对比同一页面在两种状态下的差异 —— 尤其是 01、02、08、11 这四页。<br />
+    <b>三条硬规则</b>在页面里都能找到对应文案：基础入门路线严禁付费上锁；关卡未解锁不影响资料库；会员只做增值特权。<br />
+    所有数字（人数、通过率、价格、日期）均为演示占位。
+  </div>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo"><span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span></div>
+      <p>找资料，先来课搭。然后，我们一起把它走完。</p>
+      <div class="creed">基础路线永久免费，会员只做增值。</div>
+    </div>
+    <div class="foot-col"><h4>闯关</h4><a href="02-routes.html">闯关路线</a><a href="03-map.html">闯关地图</a><a href="04-node.html?route=m1&n=1">单关卡</a></div>
+    <div class="foot-col"><h4>资源</h4><a href="09-library.html">资料库</a><a href="05-direction.html">方向科普</a><a href="10-cohort.html">项目训练营</a></div>
+    <div class="foot-col"><h4>会员</h4><a href="11-member.html">会员中心</a><a href="08-roadmap.html">专属进阶路线</a></div>
+  </div>
+  <div class="foot-bottom">课搭 2.0 高保真原型 · 2026-09 改版 · 演示数据，非真实运营数字</div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

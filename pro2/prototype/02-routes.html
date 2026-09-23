@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>闯关路线 · 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  .rt-head { margin-bottom: 22px; }
+  .rt-head h1 { font-size: 30px; font-weight: 800; letter-spacing: -.9px; line-height: 1.2; }
+  .rt-head h1 em { font-style: normal; color: var(--pri); }
+  .rt-head p { font-size: 14px; color: var(--ink-2); margin-top: 10px; max-width: 720px; line-height: 1.9; }
+  .rt-rules { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 14px; font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+  .rt-rules span { display: flex; align-items: center; gap: 6px; }
+  .rt-rules b { color: var(--ink); font-weight: 800; }
+  @media (max-width: 640px) { .rt-head h1 { font-size: 24px; } }
+
+  .stat-strip { display: flex; gap: 26px; flex-wrap: wrap; padding: 14px 18px; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--bg-soft); margin-bottom: 22px; }
+  .stat-strip div b { display: block; font-size: 19px; font-weight: 800; letter-spacing: -.6px; }
+  .stat-strip div span { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
+
+  .rc-note { margin-top: 26px; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--bg-soft); font-size: 12.5px; color: var(--ink-2); line-height: 1.85; }
+  .rc-note b { color: var(--ink); }
+
+  /* ── 更多闯关地图：折叠区 ── */
+  .more-toggle { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 4px 0 2px; }
+  .more-toggle .mt-note { font-size: 12px; color: var(--ink-soft); line-height: 1.7; }
+  #btnMore.on { background: var(--bg-soft); border-color: var(--ink); color: var(--ink); }
+  #moreList[hidden] { display: none; }
+  #moreList { margin-bottom: 14px; }
+</style>
+</head>
+<body>
+
+<div id="khNav"></div>
+<div id="khCrumb" data-crumb="首页,闯关路线"></div>
+
+<main class="page">
+
+  <header class="rt-head">
+    <h1>闯关路线</h1>
+    <p>
+      你走哪条路我们管不着，也不该管。能做的是让你走的时候不孤单：
+      同一张地图上不止你一个人，卡在同一关的人看得见彼此。
+    </p>
+  </header>
+
+  <!-- ══════════ 会员专属路线 Banner（所有登录用户可见） ══════════ -->
+  <section class="gold">
+    <div class="gold-in">
+      <div class="gold-body">
+        <span class="gold-badge">♛ 会员专享</span>
+        <h3>会员专属进阶路线</h3>
+        <p>
+          免费路线带你进门，这条路线带你做出能被别人用起来的东西：
+          Git 协作、代码审查、CI、接口设计、RAG 实战、部署监控，12 关，每关一个可交付成果。
+        </p>
+        <div class="gold-perks">
+          <span class="gold-perk">专属拓展实操关卡</span>
+          <span class="gold-perk">自由解锁关卡特权</span>
+          <span class="gold-perk">学习复盘报告生成</span>
+          <span class="gold-perk">高阶专属资料</span>
+        </div>
+      </div>
+      <div class="gold-side">
+        <button class="btn btn-gold" id="vipEnter" type="button">进入专属路线 →</button>
+        <span class="gd-note" id="vipNote">基础路线仍全部免费</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="split">挑一张开始</div>
+
+  <div class="stat-strip">
+    <div><b id="stDone">0</b><span>已通关</span></div>
+    <div><b>41</b><span>总关卡</span></div>
+    <div><b id="stXp">0</b><span>累计 XP</span></div>
+    <div><b id="stLevel">Lv.1</b><span>学习等级</span></div>
+    <div><b id="stBadge">0</b><span>路线徽章</span></div>
+  </div>
+
+  <!-- 空状态：一张地图都还没开始 -->
+  <div class="toon-card" id="rtStart" hidden style="padding:16px 20px;margin-bottom:16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+    <span style="font-size:24px;flex:none">🎬</span>
+    <div style="flex:1;min-width:220px">
+      <b style="font-size:14.5px;font-weight:800;letter-spacing:-.25px;display:block">还没开始？挑一张地图，从它的第一关走起</b>
+      <span style="display:block;font-size:12.5px;color:var(--ink-2);margin-top:3px;line-height:1.7">
+        不确定就先从「计算机初识」第 1 关「电脑是怎么工作的」开始，约 45 分钟。走完一关点亮一个节点，随时可以换地图。
+      </span>
+    </div>
+    <a class="btn btn-primary btn-sm" href="04-node.html?route=m1&n=1">开始第 1 关 →</a>
+  </div>
+
+  <div class="rc" id="routeList"></div>
+
+  <!-- ══════════ 更多闯关地图：专题小地图 ══════════ -->
+  <div class="split">更多闯关地图</div>
+  <div class="rc" id="moreList" hidden></div>
+  <div class="more-toggle">
+    <button class="btn btn-outline btn-sm" type="button" id="btnMore">展开 5 张专题地图</button>
+  </div>
+
+  <div class="rc-note">
+    <b>关于挑地图：</b>六张基础地图 + 五张专题地图全部并排开放，你想先走哪张就先走哪张，没有「前置」这一说。
+    只有走到某一张地图<strong>里面</strong>，才是一关一关往下开。<br />
+    <b>关于内容：</b>计算机初识 9 关 + 前后端初识 11 关 + AI 初识 10 关的讲解、课堂练习、过关检测已全部录入；
+    其余关卡目前是示例结构，交互与真实关卡一致，正文待补。<br />
+    <b>关于资料：</b>后面关卡没解锁，<strong>不影响</strong>资料库里对应资料的查看。资料库对所有用户免费开放，与闯关进度无关。<br />
+    <b>关于会员：</b>会员只做增值特权 —— 专属路线、自由解锁、高阶资料、训练营特权。基础路线永久免费。
+  </div>
+
+  <div class="vip-hint" style="margin-top:16px">
+    ♛ 想要跳过关卡顺序锁、走会员专属进阶路线？
+    <a href="11-member.html">看看会员有什么</a>
+    <span style="color:var(--ink-faint)">· 基础路线永久免费，不开会员也能全部走完</span>
+  </div>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">
+        <span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      </div>
+      <p>找资料，先来课搭。然后，我们一起把它走完。</p>
+      <div class="creed">基础路线永久免费。</div>
+    </div>
+    <div class="foot-col"><h4>学习</h4><a href="02-routes.html">闯关路线</a><a href="03-map.html">闯关地图</a><a href="09-library.html">资料库</a><a href="05-direction.html">方向科普</a></div>
+    <div class="foot-col"><h4>会员</h4><a href="11-member.html">会员中心</a><a href="08-roadmap.html">专属进阶路线</a></div>
+    <div class="foot-col"><h4>开始</h4><a href="06-survey.html">路线引导问卷</a><a href="10-cohort.html">项目训练营</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 基础路线永久免费</div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  'use strict';
+  var KH = window.KH;
+  var routes = KH.ROUTES;
+
+  var HOURS = { m1: '约 7 小时', m2: '约 8 小时', m3: '约 6 小时', m4: '约 3 小时', m5: '约 2 小时', m6: '约 2 小时',
+                x1: '约 9 小时', x2: '约 6 小时', x3: '约 5 小时', x4: '约 12 小时', x5: '约 4 小时' };
+
+  /* 所有地图一律开放：没有主干 / 选做之分，也不用先走完谁 */
+  function cardHtml(r) {
+    var total = r.stations.length;
+    var done = KH.done(r.id).length;
+    var cur = KH.current(r.id, total);
+    var pct = Math.round(done / total * 100);
+    var tag = '<span class="rc-tag main">永久免费</span>';
+    var btn = '<a class="btn ' + (done ? 'btn-outline' : 'btn-primary') + ' btn-sm" href="03-map.html?route=' + r.id + '">' +
+      (done === 0 ? '进入闯关地图' : (done >= total ? '再看一遍' : '继续第 ' + cur + ' 关')) + ' →</a>';
+    var note = done === 0 ? '还没开始'
+      : (done >= total ? '已全部通关 · 自由浏览已开放' : '进行中 · 地图内顺序解锁');
+
+    return '<div class="toon-card hoverable rc-card">' +
+      '<div class="rc-top"><span class="rc-ico">' + r.ico + '</span>' +
+      '<span class="rc-name">' + r.name + '</span>' + tag + '</div>' +
+      '<div class="rc-desc">' + r.desc + '</div>' +
+      '<div class="rc-bar"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="rc-meta"><span>' + total + ' 关</span><span>已通关 ' + done + '</span><span>' + (HOURS[r.id] || '待估') + '</span></div>' +
+      '<div class="rc-foot">' + btn + '<span class="rf-note">' + note + '</span></div>' +
+      '</div>';
+  }
+
+  document.getElementById('routeList').innerHTML = routes.map(cardHtml).join('');
+  document.getElementById('moreList').innerHTML = KH.MORE_ROUTES.map(cardHtml).join('');
+
+  /* 「更多闯关地图」折叠 */
+  var moreList = document.getElementById('moreList');
+  var btnMore = document.getElementById('btnMore');
+  function moreLabel() {
+    btnMore.textContent = moreList.hidden
+      ? '展开 ' + KH.MORE_ROUTES.length + ' 张专题地图'
+      : '收起专题地图';
+    btnMore.classList.toggle('on', !moreList.hidden);
+  }
+  moreLabel();
+  btnMore.addEventListener('click', function () {
+    moreList.hidden = !moreList.hidden;
+    moreLabel();
+  });
+
+  /* 顶部统计（六张基础地图，共 41 关） */
+  var allDone = 0;
+  routes.forEach(function (r) { allDone += KH.done(r.id).length; });
+  var badges = routes.filter(function (r) { return KH.done(r.id).length >= r.stations.length; }).length;
+  if (allDone === 0) document.getElementById('rtStart').hidden = false;
+  document.getElementById('stDone').textContent = allDone;
+  document.getElementById('stXp').textContent = KH.xp();
+  document.getElementById('stLevel').textContent = KH.levelName();
+  document.getElementById('stBadge').textContent = badges;
+
+  /* 会员 Banner：会员跳转，非会员弹升级模态（只在手动点击时） */
+  var vipBtn = document.getElementById('vipEnter');
+  var vipNote = document.getElementById('vipNote');
+  if (KH.isVip()) {
+    vipBtn.textContent = '进入专属路线 →';
+    vipNote.textContent = '有效期至 2027-03-20';
+  } else {
+    vipBtn.textContent = '进入专属路线 →';
+    vipNote.textContent = '会员专享 · 点击查看';
+  }
+  vipBtn.addEventListener('click', function () {
+    if (KH.isVip()) location.href = '08-roadmap.html';
+    else KH.openVip();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>课搭 · 大学生成长社区</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  .wb-sec { margin-bottom: 34px; }
+  .wb-sec-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+  .wb-sec-head h2 { font-size: 18px; font-weight: 800; letter-spacing: -.4px; }
+  .wb-sec-head .bs-more { margin-left: auto; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); }
+  .wb-sec-head .bs-more:hover { color: var(--pri-600); }
+  .wb-sec-sub { font-size: 12.5px; color: var(--ink-soft); margin: -8px 0 14px; }
+
+  .mini-map { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin-top: 12px; }
+  .mm {
+    width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+    font-size: 12px; font-weight: 800; border: 2px solid #fff; flex: none;
+  }
+  .mm.done { background: linear-gradient(150deg, var(--pri), var(--pri-600)); color: #fff; }
+  .mm.now { background: #fff; border-color: var(--pri); color: var(--pri-700); box-shadow: 0 0 0 3px rgba(255,107,74,.16); }
+  .mm.lock { background: var(--bg-deep); color: var(--ink-faint); }
+  .mm-line { width: 12px; height: 3px; background: var(--line); flex: none; }
+  .mm-line.done { background: var(--pri); }
+
+  .camp-card { padding: 18px 20px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+  .camp-card .cc-ico { font-size: 30px; flex: none; }
+  .camp-card .cc-b { flex: 1; min-width: 220px; }
+  .camp-card .cc-b b { font-size: 15.5px; font-weight: 800; letter-spacing: -.3px; display: block; }
+  .camp-card .cc-b span { font-size: 12.5px; color: var(--ink-2); display: block; margin-top: 3px; line-height: 1.65; }
+  .camp-card .cc-bar { height: 6px; border-radius: 999px; background: var(--bg-deep); overflow: hidden; margin-top: 10px; }
+  .camp-card .cc-bar i { display: block; height: 100%; background: var(--mint); }
+  .camp-card .cc-r { flex: none; text-align: right; font-size: 11.5px; color: var(--ink-soft); line-height: 1.8; }
+
+  .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .c3 { padding: 16px 18px; display: flex; flex-direction: column; gap: 5px; }
+  .c3 .c3-t { font-size: 14.5px; font-weight: 800; letter-spacing: -.25px; }
+  .c3 .c3-d { font-size: 12.5px; color: var(--ink-2); line-height: 1.7; flex: 1; }
+  .c3 .c3-m { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; display: flex; gap: 12px; flex-wrap: wrap; }
+  @media (max-width: 980px) { .cards-3 { grid-template-columns: 1fr; } }
+
+  /* 未登录 */
+  .guest { text-align: center; padding: 46px 20px 34px; }
+  .guest h1 { font-size: 33px; font-weight: 800; letter-spacing: -1px; line-height: 1.2; }
+  .guest h1 em { font-style: normal; color: var(--pri); }
+  .guest p { font-size: 14.5px; color: var(--ink-2); margin: 14px auto 0; max-width: 620px; line-height: 1.9; }
+  .guest .g-acts { display: flex; gap: 10px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
+  .g-stats { display: flex; gap: 30px; justify-content: center; margin-top: 32px; flex-wrap: wrap; }
+  .g-stats div b { display: block; font-size: 24px; font-weight: 800; letter-spacing: -.8px; }
+  .g-stats div span { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
+  @media (max-width: 640px) { .guest h1 { font-size: 25px; } }
+
+  /* ── 热门资料：左侧橙色装饰与序号 01/02/03 拉开距离，不再叠在一起 ──
+     .feed-row::before 是贴左边的 3px 橙色条；行内把 padding 归零后它正好压在
+     .feed-date 的序号上，所以这里把它整体外移到卡片内边距里。 */
+  .hot-card { padding: 4px 16px; }
+  .hot-card .feed-row { padding-left: 0; padding-right: 0; }
+  .hot-card .feed-row::before { left: -5px; width: 3px; border-radius: 0 3px 3px 0; }
+  .hot-card .feed-row:last-child { border-bottom: none; }
+
+  /* ── 已登录也能做路线引导问卷 ── */
+  .svy-entry { padding: 14px 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 30px; }
+  .svy-entry .se-ico { font-size: 24px; flex: none; }
+  .svy-entry .se-b { flex: 1; min-width: 240px; }
+  .svy-entry .se-b b { display: block; font-size: 14.5px; font-weight: 800; letter-spacing: -.25px; }
+  .svy-entry .se-b span { display: block; font-size: 12.5px; color: var(--ink-2); margin-top: 3px; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<div id="khNav"></div>
+
+<main class="page">
+
+  <!-- ══════════ 已登录：个性化工作台 ══════════ -->
+  <div id="wbLogged" hidden>
+
+    <section class="wb-hero">
+      <div class="wb-ring">
+        <svg width="92" height="92" viewBox="0 0 92 92">
+          <circle cx="46" cy="46" r="40" fill="none" stroke="#ffd9cd" stroke-width="9" />
+          <circle id="wbRing" cx="46" cy="46" r="40" fill="none" stroke="#ff6b4a" stroke-width="9"
+                  stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="251.3" />
+        </svg>
+        <span class="wb-num"><span id="wbPct">0</span><small>已通关</small></span>
+      </div>
+      <div class="wb-body">
+        <div class="wb-k">继续闯关</div>
+        <h2 id="wbTitle">计算机初识 · 第 1 关</h2>
+        <p id="wbDesc">这一站讲清楚 CPU、内存、硬盘各自负责什么。</p>
+        <div class="mini-map" id="wbMini"></div>
+        <div class="wb-bar"><i id="wbBar" style="width:0%"></i></div>
+      </div>
+      <div class="wb-side">
+        <a class="btn btn-primary" id="wbGo" href="03-map.html">继续闯关 →</a>
+        <a class="btn btn-outline btn-sm" href="03-map.html">看整条地图</a>
+      </div>
+    </section>
+
+    <div class="wb-quick">
+      <a class="toon-card hoverable wb-q" href="02-routes.html">
+        <span class="wq-ico">🎯</span>
+        <span><b>我的闯关</b><span id="qLevel">6 条路线 · 41 关</span></span>
+      </a>
+      <a class="toon-card hoverable wb-q" href="10-cohort.html">
+        <span class="wq-ico">🧑‍🤝‍🧑</span>
+        <span><b>我的项目</b><span>1 个进行中</span></span>
+      </a>
+      <a class="toon-card hoverable wb-q" href="09-library.html">
+        <span class="wq-ico">📚</span>
+        <span><b>资料库</b><span>136 份 · 全部免费</span></span>
+      </a>
+      <a class="toon-card hoverable wb-q" href="05-direction.html">
+        <span class="wq-ico">🧭</span>
+        <span><b>方向科普</b><span id="qDir">8 个方向 · 先看看再选</span></span>
+      </a>
+    </div>
+
+    <!-- 路线引导问卷：登录用户也能做，做完更新推荐 -->
+    <div class="toon-card svy-entry" id="svyEntry">
+      <span class="se-ico">🧭</span>
+      <div class="se-b">
+        <b id="svyTitle">做一份路线引导问卷</b>
+        <span id="svyDesc">16 道题，大约 5 分钟。做完会按你的情况推荐一张先走的地图</span>
+      </div>
+      <a class="btn btn-outline btn-sm" id="svyGo" href="06-survey.html">做一下 →</a>
+    </div>
+
+    <!-- 在参与的项目训练营 -->
+    <section class="wb-sec">
+      <div class="wb-sec-head"><h2>在参与的项目训练营</h2><a class="bs-more" href="10-cohort.html">全部训练营 →</a></div>
+      <div class="toon-card camp-card">
+        <span class="cc-ico">🚀</span>
+        <div class="cc-b">
+          <b>AI 应用开发训练营 · 第 6 期</b>
+          <span>同方向 28 人编在一组，按月滚动。当前阶段：做一个能跑起来的 RAG 小应用。</span>
+          <div class="cc-bar"><i style="width:62%"></i></div>
+        </div>
+        <div class="cc-r">
+          第 3 / 5 阶段<br />
+          下次答辩 09-28<br />
+          <b style="color:var(--pri-600)">6 人和你卡在同一关</b>
+        </div>
+        <a class="btn btn-outline btn-sm" href="10-cohort.html">进入 →</a>
+      </div>
+    </section>
+
+    <!-- 推荐路线 -->
+    <section class="wb-sec">
+      <div class="wb-sec-head"><h2>推荐路线</h2><a class="bs-more" href="02-routes.html">全部路线 →</a></div>
+      <div class="cards-3">
+        <a class="toon-card hoverable c3" href="03-map.html?route=m2">
+          <span class="c3-t">🌐 前后端初识</span>
+          <span class="c3-d">从地址栏回车到页面出现，中间发生了什么。11 关，随时可以开始。</span>
+          <span class="c3-m"><span>11 关</span><span>约 7 小时</span><span>未开始</span></span>
+        </a>
+        <a class="toon-card hoverable c3" href="03-map.html?route=m3">
+          <span class="c3-t">🤖 AI 初识</span>
+          <span class="c3-d">AI、机器学习、深度学习、大模型是什么关系。10 关，不写公式先建直觉。</span>
+          <span class="c3-m"><span>10 关</span><span>约 6 小时</span><span>未开始</span></span>
+        </a>
+        <a class="toon-card hoverable c3" href="03-map.html?route=m4">
+          <span class="c3-t">📐 产品初识</span>
+          <span class="c3-d">看看产品经理每天在干什么。5 关，不写代码的那条路长什么样。</span>
+          <span class="c3-m"><span>5 关</span><span>约 3 小时</span><span>未开始</span></span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 推荐项目 -->
+    <section class="wb-sec">
+      <div class="wb-sec-head"><h2>推荐项目</h2><a class="bs-more" href="10-cohort.html">全部项目 →</a></div>
+      <div class="cards-3">
+        <a class="toon-card hoverable c3" href="10-cohort.html">
+          <span class="c3-t">校园二手交易小程序</span>
+          <span class="c3-d">前端 + 后端 + 数据库打通，第一做成能给别人用的东西。</span>
+          <span class="c3-m"><span>约 3 周</span><span>412 人做过</span></span>
+        </a>
+        <a class="toon-card hoverable c3" href="10-cohort.html">
+          <span class="c3-t">课程表提醒 Bot</span>
+          <span class="c3-d">接一个模型 API，把自然语言变成结构化的提醒。</span>
+          <span class="c3-m"><span>约 10 天</span><span>268 人做过</span></span>
+        </a>
+        <a class="toon-card hoverable c3" href="10-cohort.html">
+          <span class="c3-t">个人博客 + 自动部署</span>
+          <span class="c3-d">写完推上去自动上线，把 Git 和部署一次性用熟。</span>
+          <span class="c3-m"><span>约 1 周</span><span>596 人做过</span></span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 热门资料 -->
+    <section class="wb-sec">
+      <div class="wb-sec-head"><h2>热门资料</h2><a class="bs-more" href="09-library.html">全部 136 份 →</a></div>
+      <div class="toon-card hot-card">
+        <div class="feed-row">
+          <div class="feed-date"><b>01</b><small>方向科普</small></div>
+          <div>
+            <div class="feed-eyebrow">🧭 方向科普 · 免费</div>
+            <div class="feed-title">计算机方向全景图</div>
+            <div class="feed-desc">后端、前端、AI、安全、测试的技能要求与前景对比。</div>
+            <div class="feed-meta"><b>温昊璇</b><span>👁 1,284</span><span>⭐ 96</span><span class="tag">#方向选择</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </div>
+        <div class="feed-row">
+          <div class="feed-date"><b>02</b><small>课程学习</small></div>
+          <div>
+            <div class="feed-eyebrow">📖 课程学习 · 免费</div>
+            <div class="feed-title">C语言基础练习题：66 题从 Hello World 到课程设计</div>
+            <div class="feed-desc">每题带可直接编译运行的参考代码，全部用 gcc 实测通过。</div>
+            <div class="feed-meta"><b>温昊璇</b><span>👁 903</span><span>⭐ 71</span><span class="tag">#C语言</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </div>
+        <div class="feed-row">
+          <div class="feed-date"><b>03</b><small>求职实习</small></div>
+          <div>
+            <div class="feed-eyebrow">💼 求职实习 · 免费</div>
+            <div class="feed-title">大厂暑期实习真实时间表</div>
+            <div class="feed-desc">春招秋招、暑期实习、日常实习的时间线，错过一次等于晚一年。</div>
+            <div class="feed-meta"><b>陈学长</b><span>👁 662</span><span>⭐ 54</span><span class="tag">#实习</span></div>
+          </div>
+          <div class="feed-arrow">›</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ══════════ 未登录：平台介绍 + 路线引导问卷 ══════════ -->
+  <div id="wbGuest" hidden>
+    <section class="guest">
+      <div class="notice" style="display:inline-flex;margin-bottom:20px">
+        <span class="nt-tag">新生</span>
+        <span>还没想好学哪个方向？挑一张地图走几关，再决定往哪边深入。</span>
+        <a href="02-routes.html">开始闯关 →</a>
+      </div>
+      <h1>找资料，先来<em>课搭</em>。<br />然后，我们一起把它<em>走完</em>。</h1>
+      <p>
+        课搭是面向大学生的计算机学习平台。基础闯关路线<strong>永久全部免费</strong>，
+        41 关从终端黑窗口一路摸到 AI 应用，每一关都要动手做出一个东西。
+        会员只做增值特权，<strong>不会给基础内容上锁</strong>。
+      </p>
+      <div class="g-acts">
+        <a class="btn btn-primary btn-lg" href="06-survey.html">做一份路线引导问卷 →</a>
+        <a class="btn btn-outline btn-lg" href="02-routes.html">先看看有什么路线</a>
+      </div>
+      <div class="g-stats">
+        <div><b>41</b><span>关基础路线 · 免费</span></div>
+        <div><b>136</b><span>份学长资料 · 免费</span></div>
+        <div><b>20h</b><span>走完三张基础地图</span></div>
+        <div><b>1,284</b><span>人已走完至少一张</span></div>
+      </div>
+    </section>
+
+    <div class="split">三条入口，先挑一个</div>
+    <div class="cards-3">
+      <a class="toon-card hoverable c3" href="02-routes.html">
+        <span class="c3-t">🎯 闯关路线</span>
+        <span class="c3-d">多邻国式横向闯关地图。顺序解锁，答对课堂练习才解锁下一段讲解，最后过关检测。</span>
+        <span class="c3-m"><span>免费</span><span>41 关</span></span>
+      </a>
+      <a class="toon-card hoverable c3" href="09-library.html">
+        <span class="c3-t">📚 资料库</span>
+        <span class="c3-d">课程真题、路线资料、方向科普，全部免费开放，不需要先通关。</span>
+        <span class="c3-m"><span>免费</span><span>136 份</span></span>
+      </a>
+      <a class="toon-card hoverable c3" href="10-cohort.html">
+        <span class="c3-t">🧑‍🤝‍🧑 项目训练营</span>
+        <span class="c3-d">同方向的人编在一组，按月滚动。做出能被别人用起来的东西。</span>
+        <span class="c3-m"><span>部分免费</span><span>5 期在跑</span></span>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">
+        <span class="logo-mark">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span>
+      </div>
+      <p>不是资料下载站，而是大学生成长平台。让知识在校园里流动，让每个愿意分享的人被看见。</p>
+      <div class="creed">基础路线永久免费，会员只做增值。</div>
+    </div>
+    <div class="foot-col"><h4>学习</h4><a href="02-routes.html">闯关路线</a><a href="09-library.html">资料库</a><a href="05-direction.html">方向科普</a><a href="10-cohort.html">项目训练营</a></div>
+    <div class="foot-col"><h4>会员</h4><a href="11-member.html">会员中心</a><a href="08-roadmap.html">专属进阶路线</a><a href="02-routes.html">免费路线</a></div>
+    <div class="foot-col"><h4>开始</h4><a href="06-survey.html">路线引导问卷</a><a href="03-map.html">闯关地图</a><a href="07-generating.html">看看生成过程</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 基础路线永久免费</div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  'use strict';
+  var KH = window.KH;
+  var logged = KH.isLogged();
+
+  document.getElementById('wbLogged').hidden = !logged;
+  document.getElementById('wbGuest').hidden = logged;
+  if (!logged) return;
+
+  /* ── 当前闯关：取第一条还没走完的路线 ── */
+  var routes = KH.ROUTES;
+  var cur = null, curTotal = 0, curN = 0;
+  routes.forEach(function (r) {
+    if (cur) return;
+    var n = KH.current(r.id, r.stations.length);
+    if (!KH.allDone(r.id, r.stations.length)) { cur = r; curTotal = r.stations.length; curN = n; }
+  });
+  if (!cur) { cur = routes[0]; curTotal = cur.stations.length; curN = curTotal; }
+
+  var doneList = KH.done(cur.id);
+  var totalDone = 0;
+  routes.forEach(function (r) { totalDone += KH.done(r.id).length; });
+
+  var pct = Math.round(doneList.length / curTotal * 100);
+  document.getElementById('wbPct').textContent = doneList.length + '/' + curTotal;
+  document.getElementById('wbBar').style.width = pct + '%';
+  document.getElementById('wbRing').style.strokeDashoffset = 251.3 * (1 - pct / 100);
+  document.getElementById('wbGo').href = KH.nodeUrl(cur.id, curN);
+
+  if (totalDone === 0) {
+    /* ── 空状态：一条路线都还没开始 ── */
+    document.querySelector('.wb-k').textContent = '还没开始闯关';
+    document.querySelector('.wb-body h2').textContent = '从第一关开始，走一步亮一步';
+    document.querySelector('.wb-body p').textContent =
+      '边学边练，看到自己的成长。';
+    document.getElementById('wbGo').textContent = '开始第 1 关 →';
+    document.getElementById('wbMini').style.opacity = '.55';
+    document.getElementById('qLevel').textContent = '41 关等你点亮 · Lv.1 入门';
+  } else {
+    document.getElementById('wbTitle').textContent = cur.name + ' · 第 ' + curN + ' 关';
+    document.getElementById('wbDesc').textContent = cur.stations[curN - 1] + ' · 这一关约 45 分钟';
+    document.getElementById('wbGo').textContent = '继续第 ' + curN + ' 关 →';
+  }
+
+  /* ── 迷你进度条 ── */
+  var mini = '';
+  for (var i = 1; i <= curTotal; i++) {
+    var cls = KH.isDone(cur.id, i) ? 'done' : (i === curN ? 'now' : 'lock');
+    if (i > 1) mini += '<span class="mm-line' + (KH.isDone(cur.id, i - 1) ? ' done' : '') + '"></span>';
+    mini += '<span class="mm ' + cls + '" title="第 ' + i + ' 关">' + (cls === 'done' ? '✓' : (cls === 'lock' ? '🔒' : i)) + '</span>';
+    if (i > 9) break;
+  }
+  document.getElementById('wbMini').innerHTML = mini;
+
+  /* ── 快捷入口的小字 ── */
+  if (totalDone > 0) {
+    document.getElementById('qLevel').textContent = '已通关 ' + totalDone + ' 关 · ' + KH.levelName();
+  }
+  /* ── 路线引导问卷：登录用户也能做，做过就显示上次的结果 ── */
+  var DIR = {
+    '前端': '前端成长', '后端': '后端成长', '算法与数据结构': '算法与数据结构',
+    'AI 应用': 'AI 应用开发', '数据': '数据工程', '测试与运维': '测试与运维',
+    '安全': 'Web 安全', '我还不太确定': '计算机探索'
+  };
+  var sv = KH.get('survey', null);
+  if (sv && sv.dir) {
+    /* 快捷入口「方向科普」也跟着推荐方向走 */
+    document.getElementById('qDir').textContent = '先看「' + (DIR[sv.dir] || sv.dir) + '」';
+  }
+  if (sv && (sv.dir || sv.goal)) {
+    document.getElementById('svyTitle').textContent = '重做一次路线引导问卷';
+    document.getElementById('svyDesc').textContent =
+      '上次做完推荐你先走「' + (DIR[sv.dir] || sv.dir || '计算机探索') + '」。想换方向或者时间变了，随时重做 —— 已经通关的关不会因此重置。';
+    document.getElementById('svyGo').textContent = '重做 →';
+  }
+})();
+</script>
+</body>
+</html>

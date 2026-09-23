@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>会员中心 · 课搭</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/kh.css" />
+<style>
+  .mb-sec { margin-top: 34px; }
+  .mb-sec-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+  .mb-sec-head h2 { font-size: 19px; font-weight: 800; letter-spacing: -.4px; }
+  .mb-sec-sub { font-size: 12.5px; color: var(--ink-soft); margin: -8px 0 16px; }
+
+  .res-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .res { padding: 16px 18px; display: flex; gap: 12px; align-items: flex-start; }
+  .res .rs-i { font-size: 21px; flex: none; line-height: 1.2; }
+  .res b { display: block; font-size: 14px; font-weight: 800; letter-spacing: -.2px; }
+  .res span { display: block; font-size: 12px; color: var(--ink-2); margin-top: 3px; line-height: 1.65; }
+  .res .rs-go { font-size: 11.5px; font-weight: 800; color: var(--gold-600); margin-top: 7px; display: inline-block; }
+  @media (max-width: 900px) { .res-grid { grid-template-columns: 1fr; } }
+
+  .pledge { margin-top: 30px; border: 2px dashed var(--line); border-radius: var(--r-toon); padding: 18px 20px; background: var(--bg-soft); font-size: 12.5px; color: var(--ink-2); line-height: 1.9; }
+  .pledge b { color: var(--ink); font-weight: 800; }
+</style>
+</head>
+<body>
+
+<div id="khNav"></div>
+<div id="khCrumb" data-crumb="首页,会员中心"></div>
+
+<main class="page">
+
+  <!-- ══════════ 顶部：会员有效期状态 ══════════ -->
+  <section class="mem-hero" id="memHero">
+    <div class="mh-row">
+      <div class="mhc">
+        <div class="mh-kick" id="mhKick">Kedahub Membership</div>
+        <h2 id="mhTitle">你还没有开通会员</h2>
+        <p id="mhDesc">基础路线永久免费。会员只做增值特权，不会给基础课程上锁。</p>
+        <div class="mh-days" id="mhDays">41 关基础路线 · 136 份资料 · 全部免费</div>
+      </div>
+      <div class="mh-side" id="mhSide"></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 套餐 ══════════ -->
+  <section class="mb-sec">
+    <div class="mb-sec-head"><h2>选择套餐</h2></div>
+    <div class="mb-sec-sub">按学期走的话，学年最划算。随时可取消，到期不自动续费。</div>
+    <div class="plans" id="plans"></div>
+  </section>
+
+  <!-- ══════════ 权益清单 ══════════ -->
+  <section class="mb-sec">
+    <div class="mb-sec-head"><h2>会员权益清单</h2></div>
+    <div class="mb-sec-sub">三块增值：闯关路线、资料库、项目训练营。基础路线始终免费。</div>
+    <div class="ben">
+      <div class="toon-card ben-card">
+        <div class="bn-h"><span class="bn-ico">🎯</span><span><b>闯关路线特权</b><span class="bn-sub">让免费路线走得更自由</span></span></div>
+        <ul>
+          <li>闯关自由解锁，跳过关卡顺序锁</li>
+          <li>每条路线的会员专属拓展实操关卡</li>
+          <li>学习复盘报告生成（按季度）</li>
+          <li>会员专属进阶路线 12 关</li>
+        </ul>
+      </div>
+      <div class="toon-card ben-card">
+        <div class="bn-h"><span class="bn-ico">📚</span><span><b>资料库特权</b><span class="bn-sub">基础资料本来就免费</span></span></div>
+        <ul>
+          <li>会员高阶专属资料文件夹</li>
+          <li>每关配一份「精通版」延伸阅读</li>
+          <li>学长项目的完整源码与评审记录</li>
+        </ul>
+      </div>
+      <div class="toon-card ben-card">
+        <div class="bn-h"><span class="bn-ico">🧑‍🤝‍🧑</span><span><b>项目训练营特权</b><span class="bn-sub">做出能被别人用的东西</span></span></div>
+        <ul>
+          <li>解锁更多高阶进阶项目选题</li>
+          <li>学长答疑优先预约</li>
+          <li>月度答辩排位优先</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ 会员专属资源入口 ══════════ -->
+  <section class="mb-sec">
+    <div class="mb-sec-head"><h2>会员专属资源</h2></div>
+    <div class="res-grid">
+      <a class="toon-card hoverable res" href="08-roadmap.html">
+        <span class="rs-i">♛</span>
+        <span><b>专属进阶路线</b><span>12 关，每关一个可交付成果。复用同一套闯关地图。</span><span class="rs-go">进入路线 →</span></span>
+      </a>
+      <a class="toon-card hoverable res" href="09-library.html">
+        <span class="rs-i">🗂️</span>
+        <span><b>高阶专属资料夹</b><span>源码、评审记录、延伸阅读，按路线归档。</span><span class="rs-go">打开资料夹 →</span></span>
+      </a>
+      <a class="toon-card hoverable res" href="10-cohort.html">
+        <span class="rs-i">🚀</span>
+        <span><b>高阶项目选题库</b><span>24 个进阶选题，含学长答疑优先预约。</span><span class="rs-go">看选题 →</span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══════════ 权益使用记录 ══════════ -->
+  <section class="mb-sec">
+    <div class="mb-sec-head"><h2>权益使用记录</h2></div>
+    <div class="mb-sec-sub" id="logSub">最近 30 天</div>
+    <div class="log" id="logBox"></div>
+  </section>
+
+  <div class="pledge">
+    <b>我们的承诺：</b>基础入门路线<strong>永久全部免费</strong>，不会给基础课程内容上锁。
+    会员买的只是增值特权：专属路线、自由解锁、高阶资料、训练营优先。
+    你是大一新生、只想把基础过一遍，那开不开会员，体验是完全一样的。<br />
+    <b>不开会员你能得到：</b>41 关基础闯关路线（顺序解锁，全部走完后也会开放自由浏览）、
+    136 份资料库全部资料、全部的闯关讲解与过关检测。
+  </div>
+
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo"><span class="logo-mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="logo-text"><b>课搭</b><span>大学生成长社区</span></span></div>
+      <p>找资料，先来课搭。然后，我们一起把它走完。</p>
+      <div class="creed">基础路线永久免费。</div>
+    </div>
+    <div class="foot-col"><h4>学习</h4><a href="02-routes.html">闯关路线</a><a href="03-map.html">闯关地图</a><a href="09-library.html">资料库</a></div>
+    <div class="foot-col"><h4>会员</h4><a href="11-member.html">会员中心</a><a href="08-roadmap.html">专属进阶路线</a></div>
+  </div>
+  <div class="foot-bottom">© 2026 课搭 · 基础路线永久免费</div>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  'use strict';
+  var KH = window.KH;
+  var vip = KH.isVip();
+  var m = KH.member();
+
+  /* ── 顶部状态 ── */
+  var hero = document.getElementById('memHero');
+  var side = document.getElementById('mhSide');
+  if (vip) {
+    hero.classList.add('on');
+    document.getElementById('mhKick').textContent = '会员生效中 · ' + m.plan + '套餐';
+    document.getElementById('mhTitle').textContent = '会员有效期至 ' + m.until;
+    document.getElementById('mhDesc').textContent = '自由解锁、专属进阶路线、高阶资料夹、训练营优先，都已开通。';
+    var days = Math.max(0, Math.round((new Date(m.until).getTime() - Date.now()) / 86400000));
+    document.getElementById('mhDays').textContent = '还剩 ' + days + ' 天 · 到期不自动续费';
+    side.innerHTML =
+      '<a class="btn btn-outline btn-sm btn-on-gold" href="08-roadmap.html">进入专属路线 →</a>' +
+      '<span style="font-size:11.5px;text-align:center;opacity:.75">基础路线仍然全部免费</span>';
+  } else {
+    document.getElementById('mhKick').textContent = 'Kedahub Membership';
+    document.getElementById('mhTitle').textContent = '你还没有开通会员';
+    document.getElementById('mhDesc').textContent = '基础路线永久免费。会员只做增值特权，不会给基础课程上锁。';
+    document.getElementById('mhDays').textContent = '41 关基础路线 · 136 份资料 · 全部免费';
+    side.innerHTML =
+      '<a class="btn btn-on-dark btn-sm" href="#plans">看看套餐 ↓</a>' +
+      '<a class="btn btn-outline btn-sm" style="border-color:rgba(255,255,255,.3);color:#fff;background:transparent" href="02-routes.html">先走免费路线</a>';
+  }
+
+  /* ── 套餐 ── */
+  var PLANS = [
+    { name: '月付', price: 29, per: '每月', save: '', note: '先试一个月，看看用不用得上。', pick: false },
+    { name: '季付', price: 79, per: '每季度', save: '省 ¥8', note: '一个学期左右，走完一条进阶路线的节奏。', pick: false },
+    { name: '学年', price: 239, per: '每学年', save: '省 ¥109', note: '覆盖一整学年，平均每月不到 ¥20。', pick: true }
+  ];
+  document.getElementById('plans').innerHTML = PLANS.map(function (p) {
+    return '<div class="toon-card plan' + (p.pick ? ' pick' : '') + '">' +
+      (p.pick ? '<span class="pl-badge">最划算</span>' : '') +
+      '<span class="pl-name">' + p.name + '</span>' +
+      '<span class="pl-price">¥' + p.price + '<small> / ' + p.per + '</small></span>' +
+      (p.save ? '<span class="pl-save">' + p.save + '</span>' : '<span class="pl-per">按 ' + p.per + '计费</span>') +
+      '<span class="pl-note">' + p.note + '</span>' +
+      '<button class="btn ' + (p.pick ? 'btn-gold' : 'btn-outline') + ' btn-sm" type="button" data-plan="' + p.name + '">' +
+      (vip ? '续费 / 换套餐' : '开通' + p.name) + '</button>' +
+      '</div>';
+  }).join('');
+
+  document.querySelectorAll('#plans button[data-plan]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      KH.set('member', { vip: true, until: '2027-03-20', plan: b.dataset.plan });
+      KH.toast('已开通' + b.dataset.plan + '会员（原型演示）');
+      setTimeout(function () { location.reload(); }, 700);
+    });
+  });
+
+  /* ── 权益使用记录 ── */
+  var LOGS = vip ? [
+    { d: '09-19', t: '自由解锁', s: '计算机初识 · 直接跳到第 7 关', v: '已使用' },
+    { d: '09-17', t: '高阶资料夹', s: '下载 RAG 实战源码包', v: '已使用' },
+    { d: '09-12', t: '学长答疑', s: '预约陈学长 · 接口设计 30 分钟', v: '优先排位' },
+    { d: '09-05', t: '专属路线', s: '走完第 4 关 · CI 流水线', v: '已通关' },
+    { d: '09-01', t: '复盘报告', s: '生成 8 月学习复盘', v: '已生成' }
+  ] : [
+    { d: '—', t: '暂无记录', s: '开通会员后，这里会记下每一次权益使用', v: '' }
+  ];
+  document.getElementById('logSub').textContent = vip ? '最近 30 天 · 共使用 5 次' : '开通会员后开始记录';
+  document.getElementById('logBox').innerHTML = LOGS.map(function (l) {
+    return '<div class="log-row"><span class="lg-d">' + l.d + '</span>' +
+      '<span class="lg-t"><b>' + l.t + '</b><span>' + l.s + '</span></span>' +
+      '<span class="lg-v">' + l.v + '</span></div>';
+  }).join('');
+})();
+</script>
+</body>
+</html>
